@@ -1,0 +1,47 @@
+{
+  "name": "ramot-online",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/aos": "^3.0.7",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/socket.io": "^3.0.2",
+    "@types/socket.io-client": "^3.0.0",
+    "@vercel/analytics": "^1.3.1",
+    "aos": "^3.0.0-beta.6",
+    "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "cors": "^2.8.5",
+    "gsap": "^3.12.5",
+    "joi": "^17.13.3",
+    "jose": "^5.6.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.4",
+    "next": "14.2.4",
+    "react": "^18",
+    "react-bootstrap": "^2.10.4",
+    "react-dom": "^18",
+    "react-fast-marquee": "^1.6.4",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
