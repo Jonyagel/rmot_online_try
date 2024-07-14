@@ -36,8 +36,6 @@ export default function AddQuestion(props:any) {
         console.log(topic, tittle, description);
         openForm()
         router.push('/forum');
-        window.location.reload();
-        router.refresh();
     }
 
 
