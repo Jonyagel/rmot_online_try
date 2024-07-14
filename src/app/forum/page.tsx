@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 // import axios from 'axios';
 import AddQuestion from '../forum/components/addQuestion';
@@ -11,30 +11,16 @@ export const dynamic = 'auto';
 
 export default async function Forum() {
 
-    const [callApi, setCallApi] = useState(false);
 
     let forum_ar:any
 
+    
     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
     const resp = await fetch(url);
     const data = await resp.json();
     console.log(data);
     forum_ar = data;
 
-
- const doApi = async () => {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-    const resp = await fetch(url);
-    const data = await resp.json();
-    console.log(data);
-    forum_ar = data;
-    setCallApi(false);
- }
- if (callApi) {
-    doApi();
- }
- 
-   
 
 
 
@@ -57,7 +43,7 @@ export default async function Forum() {
                 <p> תושבי רמות אחד בשביל השני<br />
                     שואלים, עונים...וכו וכו מילים של רחלי...</p>
             </div>
-            <AddQuestion callApiState={callApi}/>
+            <AddQuestion />
             <div>
                 {forum_ar.map((item: any) => {
                     return (
