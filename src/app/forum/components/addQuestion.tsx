@@ -36,7 +36,7 @@ export default function AddQuestion(props:any) {
         console.log(topic, tittle, description);
         openForm()
         router.push('/forum');
-        props.doApiFunc();
+        props.callApiState(true)
     }
 
 
