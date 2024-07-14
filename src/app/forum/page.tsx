@@ -7,7 +7,7 @@ import AddQuestion from './components/addQuestion';
 import Link from 'next/link';
 
 
-export const dynamic = 'auto';
+// export const dynamic = 'auto';
 
 export default async function Forum() {
 
