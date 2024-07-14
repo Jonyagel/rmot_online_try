@@ -9,16 +9,21 @@ import Link from 'next/link';
 
 export const dynamic = 'auto';
 
-export default async function Forum() {
+export default function Forum() {
 
     let forum_ar:any
+useEffect(() => {
+doApi();
+},[])
 
-
+ const doApi = async () => {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
     const resp = await fetch(url);
     const data = await resp.json();
     console.log(data);
     forum_ar = data;
+ }
+   
 
 
 
