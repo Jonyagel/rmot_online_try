@@ -24,20 +24,18 @@ export default function AddQuestion(props:any) {
 
         console.log(topic, tittle, description);
 
-        const resp = await axios({
-            url: `${process.env.NEXT_PUBLIC_API_URL}/api/forum`,
+        const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum`,{
             method: 'POST',
-            data: { topic, tittle, description },
+            body: JSON.stringify({ topic, tittle, description }),
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        console.log(resp.data);
+        const data = await resp.json();
+        console.log(data);
         console.log(topic, tittle, description);
         openForm()
         router.push('/forum');
-        window.location.reload();
-        router.refresh();
     }
 
 
