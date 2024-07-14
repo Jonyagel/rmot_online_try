@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 // import axios from 'axios';
-import AddQuestion from './components/addQuestion';
+import AddQuestion from '../forum/components/addQuestion';
 import Link from 'next/link';
 
 
@@ -14,38 +14,40 @@ export default async function Forum() {
     let forum_ar
 
 
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-
-    try {
-      const resp = await fetch(url);
-      
-      // בדוק אם התגובה אינה תקינה
-      if (!resp.ok) {
-        throw new Error(`HTTP error! status: ${resp.status}`);
-      }
-      
-      const text = await resp.text();
-      let data;
-      
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        console.error('Response is not valid JSON:', text);
-        throw new Error('Response is not valid JSON');
-      }
-      
-      console.log(data);
-      forum_ar = data;
-      
-    } catch (error) {
-      console.error('Error fetching forum data:', error);
-      forum_ar = null; // או להחזיר נתונים חלופיים במקרה של שגיאה
-    }
     // let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-    // const resp = await fetch(url);
-    // const data = await resp.json();
-    // console.log(data);
-    // forum_ar = data;
+
+    // try {
+    //   const resp = await fetch(url);
+      
+    //   // בדוק אם התגובה אינה תקינה
+    //   if (!resp.ok) {
+    //     throw new Error(`HTTP error! status: ${resp.status}`);
+    //   }
+      
+    //   const text = await resp.text();
+    //   let data;
+      
+    //   try {
+    //     data = JSON.parse(text);
+    //   } catch (e) {
+    //     console.error('Response is not valid JSON:', text);
+    //     throw new Error('Response is not valid JSON');
+    //   }
+      
+    //   console.log(data);
+    //   forum_ar = data;
+      
+    // } catch (error) {
+    //   console.error('Error fetching forum data:', error);
+    //   forum_ar = null; // או להחזיר נתונים חלופיים במקרה של שגיאה
+    // }
+
+
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    console.log(data);
+    forum_ar = data;
 
 
 
