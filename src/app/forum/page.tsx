@@ -2,7 +2,7 @@
 
 import React from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import axios from 'axios';
+// import axios from 'axios';
 import AddQuestion from '../forum/components/addQuestion';
 import Link from 'next/link';
 
@@ -14,16 +14,16 @@ export default async function Forum() {
 
     let forum_ar:any
 
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-    const resp = await axios.get(url);
-    forum_ar = resp.data;
+ //   let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
+ //   const resp = await axios.get(url);
+ //   forum_ar = resp.data;
 
 
-    // let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-    // const resp = await fetch(url);
-    // const data = await resp.json();
-    // console.log(data);
-    // forum_ar = data;
+     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
+     const resp = await fetch(url);
+     const data = await resp.json();
+     console.log(data);
+     forum_ar = data;
 
 
 
