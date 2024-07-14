@@ -9,12 +9,16 @@ import Link from 'next/link';
 
 export const dynamic = 'auto';
 
-export default function Forum() {
+export default async function Forum() {
 
     let forum_ar:any
-useEffect(() => {
-doApi();
-},[])
+
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    console.log(data);
+    forum_ar = data;
+
 
  const doApi = async () => {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
@@ -23,6 +27,7 @@ doApi();
     console.log(data);
     forum_ar = data;
  }
+ 
    
 
 
@@ -46,7 +51,7 @@ doApi();
                 <p> תושבי רמות אחד בשביל השני<br />
                     שואלים, עונים...וכו וכו מילים של רחלי...</p>
             </div>
-            <AddQuestion />
+            <AddQuestion doApiFunc={doApi}/>
             <div>
                 {forum_ar.map((item: any) => {
                     return (

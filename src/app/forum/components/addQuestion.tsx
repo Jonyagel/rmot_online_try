@@ -6,7 +6,7 @@ import React, { useRef, useState } from 'react'
 
 
 export const dynamic = 'auto';
-export default function AddQuestion() {
+export default function AddQuestion(props:any) {
     const router = useRouter();
     const topicRef: any = useRef();
     const tittleRef: any = useRef();
@@ -36,6 +36,7 @@ export default function AddQuestion() {
         console.log(topic, tittle, description);
         openForm()
         router.push('/forum');
+        props.doApiFunc();
     }
 
 
