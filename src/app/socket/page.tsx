@@ -12,7 +12,7 @@ export default function Home() {
 
   let socket: any;
   // socket = io("http://localhost:3001");
-  socket = io("https://rmot-online-try.vercel.app/api/socket");
+  socket = io("https://rmot-online-try.vercel.app:3001");
 
   const handleJoin = () => {
     if (userName !== "" && roomId !== "") {
