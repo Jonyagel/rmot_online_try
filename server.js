@@ -33,6 +33,6 @@ io.on('connection', (socket) => {
 })
 
 const PORT = process.env.PORT || 3001
-httpServer.listen(PORT, () => {
+httpServer.listen('https://rmot-online-try.vercel.app:3001', () => {
   console.log(`Socket.io server is running on port ${PORT}`)
 })
