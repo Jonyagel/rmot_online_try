@@ -1,29 +1,30 @@
+"use client"
 
-
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
-// import axios from 'axios';
 import AddQuestion from '../forum/components/addQuestion';
 import Link from 'next/link';
 
 
 export const dynamic = 'auto';
 
-export default async function Forum() {
+export default function Forum() {
+    const [addForum, setAddForum] = useState(false);
+    const [forum_ar, setForum_ar] = useState([]);
 
 
-    let forum_ar:any
+    useEffect(() => {
+        doApi();
+    }, [addForum])
 
-    // let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-    // const resp = await axios.get(url);
-    // forum_ar = resp.data;
+    const doApi = async () => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        console.log(data);
+        setForum_ar(data);
+    }
 
-
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-    const resp = await fetch(url);
-    const data = await resp.json();
-    console.log(data);
-    forum_ar = data;
 
 
 
@@ -47,12 +48,12 @@ export default async function Forum() {
                 <p> תושבי רמות אחד בשביל השני<br />
                     שואלים, עונים...וכו וכו מילים של רחלי...</p>
             </div>
-            <AddQuestion />
+            <AddQuestion setAddForum={setAddForum} addForum={addForum}/>
             <div>
                 {forum_ar.map((item: any) => {
                     return (
-                        <Link href={`/forum/comment/${item._id}`} className='link-underline link-underline-opacity-0 text-black'>
-                            <div key={item._id} className='bg-info rounded bg-opacity-25 pb-2 px-2 h-auto mb-4'>
+                        <Link key={item._id} href={`/forum/comment/${item._id}`} className='link-underline link-underline-opacity-0 text-black'>
+                            <div  className='bg-info rounded bg-opacity-25 pb-2 px-2 h-auto mb-4'>
                                 <span className="text-dark top-0 start-100 translate-middle badge shadow-sm rounded-pill bg-white text-muted" style={{ zIndex: 1 }}>
                                     {item.topic}
                                 </span>
@@ -78,7 +79,7 @@ export default async function Forum() {
                                         <p className='mb-0'>
                                             {formatPostAgo(item.date)}
                                         </p>
-                                        <i className="bi bi-chat"> 0 </i>
+                                        <i className="bi bi-chat"> {item.numOfComments} </i>
                                     </div>
                                 </div>
                             </div>

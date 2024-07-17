@@ -4,6 +4,7 @@ import { ForumModel, validateForum } from "@/src/app/models/forumModel";
 import { cookies } from "next/headers";
 import { UserModel } from "@/src/app/models/userModel";
 import jwt from 'jsonwebtoken';
+import { CommentsForumModel } from "../../models/commentForumModel";
 
 
 export const dynamic = 'auto';
@@ -34,10 +35,6 @@ export async function POST(req: any, route: any) {
         const token: any = cookies().get("token")?.value;
         const decodeToken: any = jwt.verify(token, "jonySecret")
         const user = await UserModel.findOne({ _id: decodeToken._id }, { password: 0 });
-
-        //   user.password = await bcrypt.hash(user.password,10);
-        //   user.password = "****";
-    
         const forum = new ForumModel(bodyData);
         forum.userId = user._id;
         forum.userName = user.name;

@@ -7,6 +7,9 @@ const forumSchema = new mongoose.Schema({
     tittle: String,
     description: String,
     date: String,
+    numOfComments:{ 
+       type: Number, default:0
+    },
     topic:{
         type:String, default:"---"
       }
@@ -21,6 +24,7 @@ export const validateForum = (_body: any) => {
         tittle: Joi.string().min(2).max(100).required(),
         description: Joi.string().min(2).max(2000),
         topic: Joi.string().min(2).max(20),
+        numOfComments: Joi.number().min(0).max(9999).required(),
     })
     return joiSchema.validate(_body)
 }
