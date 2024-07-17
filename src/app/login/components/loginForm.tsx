@@ -24,10 +24,10 @@ export default function LoginForm() {
 
     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login`,{
       method: 'POST',
+      body:JSON.stringify({ email, password }),
       headers: {
         'Content-Type': 'application/json'
-      },
-      body:JSON.stringify({ email, password }),
+      }
     })
     const data = await resp.json();
     console.log(data);

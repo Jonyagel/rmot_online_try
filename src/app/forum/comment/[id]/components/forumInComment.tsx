@@ -1,3 +1,4 @@
+"use client"
 
 import React, { useEffect, useState } from 'react'
 
@@ -32,8 +33,12 @@ export default function ForumInComment(props: any) {
         const hoursAgo = Math.floor(minutesAgo / 60);
         if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
         const daysAgo = Math.floor(hoursAgo / 24);
-        return `לפני ${daysAgo} ימים`;
-    }
+        if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
+        
+        const postDate = new Date(date);
+        const formattedDate = postDate.toLocaleDateString("he-IL");
+        return formattedDate;
+      }
 
 
 
@@ -66,7 +71,7 @@ export default function ForumInComment(props: any) {
                         <p className='mb-0'>
                             {formatPostAgo(dataForum.date)}
                         </p>
-                        <i className="bi bi-chat"> 0 </i>
+                        <i className="bi bi-chat"> {dataForum.numOfComments} </i>
                     </div>
                 </div>
             </div>
