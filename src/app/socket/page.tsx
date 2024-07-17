@@ -10,9 +10,9 @@ export default function Home() {
   const [showSpinner, setShowSpinner] = useState(false);
   const [roomId, setroomId] = useState("");
 
-  var socket: any;
+  let socket: any;
   // socket = io("http://localhost:3001");
-  socket = io("https://rmot-online-try.vercel.app");
+  socket = io("https://rmot-online-try.vercel.app/api/socket");
 
   const handleJoin = () => {
     if (userName !== "" && roomId !== "") {
