@@ -6,23 +6,24 @@ import Carousel from 'react-bootstrap/Carousel';
 export default function StripCarousel() {
     return (
         <div className='container'>
-            <Carousel>
+            <div className='mt-2' >
+            <Carousel className='w-75 rounded shadow mx-auto' >
                 <Carousel.Item>
-                    <img src='/images/car1.jpg' className='d-block w-100' height={'500vh'}></img>
+                    <img src='/images/strip/neighborhood1.jpg' className='d-block w-100 rounded' style={{height:"50vh"}}></img>
                     <Carousel.Caption className='bg-light bg-opacity-50 rounded text-dark'>
                         <h3>First slide label</h3>
                         <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <img src='/images/car2.jpg' className='d-block w-100' height={'500vh'}></img>
+                    <img src='/images/strip/neighborhood2.jpg' className='d-block w-100 rounded' style={{height:"50vh"}}></img>
                     <Carousel.Caption className='bg-light bg-opacity-50 rounded text-dark'>
                         <h3>Second slide label</h3>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                     </Carousel.Caption>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <img src='/images/car3.jpg' className='d-block w-100' height={'500vh'}></img>
+                    <img src='/images/strip/neighborhood3.jpg' className='d-block w-100 rounded' style={{height:"50vh"}}></img>
 
                     <Carousel.Caption className='bg-light bg-opacity-50 rounded text-dark'>
                         <h3>Third slide label</h3>
@@ -32,6 +33,7 @@ export default function StripCarousel() {
                     </Carousel.Caption>
                 </Carousel.Item>
             </Carousel>
+            </div>
         </div>
     )
 }

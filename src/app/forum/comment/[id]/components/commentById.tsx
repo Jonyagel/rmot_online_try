@@ -11,7 +11,9 @@ export default function CommentById(props: any) {
   const [dataComment, setDataComment] = useState([]);
   // const [isHovered, setIsHovered] = useState(false);
   const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null);
-  const [commentReplying, setCommentReplying] = useState();
+  const [commentReplying, setCommentReplying] = useState({});
+  const [replay, setReplay] = useState(false);
+
 
   useEffect(() => {
     doApi();
@@ -54,8 +56,8 @@ export default function CommentById(props: any) {
     return formattedDate;
   }
 
-  const handleCommentReply = (dataComment:any) => {
-    setCommentReplying(dataComment)
+  const handleCommentReply = (dataComment: any, userComment: any, commentId: any) => {
+    setCommentReplying({ dataComment, userComment, commentId })
   }
 
 
@@ -99,7 +101,10 @@ export default function CommentById(props: any) {
             onMouseLeave={() => setHoveredCommentId(null)}
             key={item._id} className='d-flex rounded bg-opacity-25 px-2 h-auto mb-2 me-auto justify-content-between w-100' style={{ width: "92%" }}>
             <div className='align-content-center w-25 text-start ps-3'>
-              <button onClick={()=>{handleCommentReply(item.comment)}} className='comment_on_comment btn rounded-circle' style={{ opacity: hoveredCommentId === item._id ? 1 : 0 }}><i className="bi bi-arrow-90deg-left"></i></button>
+              <button onClick={() => {
+                handleCommentReply(item.comment, item.userName, item._id);
+                setReplay(true)
+              }} className='comment_on_comment btn rounded-circle' style={{ opacity: hoveredCommentId === item._id ? 1 : 0 }}><i className="bi bi-arrow-90deg-left"></i></button>
             </div>
             <div className='d-flex col-10 pt-2 rounded bg-light'>
               <div className='name col-1 d-block text-center mt-4'>
@@ -126,7 +131,7 @@ export default function CommentById(props: any) {
         )
 
       })}
-      <AddComment idForum={props.idForum} doApiProps={doApi} doApiForum={doApiForum} commentReplying={commentReplying}/>
+      <AddComment idForum={props.idForum} doApiProps={doApi} doApiForum={doApiForum} commentReplying={commentReplying} replay={replay} setReplay={setReplay} />
     </div>
   )
 }

@@ -10,15 +10,15 @@ export default function Header() {
                 <Link href={"/login"}><button className='btn btn-dark'>כניסה/הרשמה</button></Link>
                 <nav className='d-flex align-items-center'>
                     <Link className='mx-3 text-dark link-underline link-underline-opacity-0' href={'/'}>דף הבית</Link>
-                    <Link className='mx-3 text-dark link-underline link-underline-opacity-0' href={'/'}>מידע שכונתי</Link>
+                    <Link className='mx-3 text-dark link-underline link-underline-opacity-0' href={'/neighborhoodInfo'}>מידע שכונתי</Link>
                     <Link className='mx-3 text-dark link-underline link-underline-opacity-0' href={'/forum'}>פורומים</Link>
                     <Link className='mx-3 text-dark link-underline link-underline-opacity-0' href={'/'}>לכל המשפחה</Link>
                     <Link className='mx-3 text-dark link-underline link-underline-opacity-0' href={'/'}>נדלן</Link>
                     <Link className='mx-3 text-dark link-underline link-underline-opacity-0' href={'/'}>לוח</Link>
                     <Link className='mx-3 text-dark link-underline link-underline-opacity-0' href={'/'}>צור קשר</Link>
                 </nav>
-                <div className='logo bg-info'>
-                    logo
+                <div className='logo'>
+                    <img src='/images/logo.jpg' width={50} className='rounded-circle'/>
                 </div>
             </div>
             <Marquee className='bg-dark text-light' pauseOnHover={true} direction='right' autoFill={true} style={{ direction: 'ltr' }}>
