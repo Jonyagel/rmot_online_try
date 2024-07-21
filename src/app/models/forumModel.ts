@@ -11,7 +11,7 @@ const forumSchema = new mongoose.Schema({
        type: Number, default:0
     },
     fileName:{ 
-       type: Array, default:""
+       type: String, default:""
     },
     topic:{
         type:String, default:"---"
