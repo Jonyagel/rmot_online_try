@@ -94,7 +94,7 @@ export default function Forum() {
                                                         source: true
                                                     }}
                                                     alt='#'
-                                                    priority
+                                                  //  priority
                                                     onClick={handleShow}
                                                 />
                                             }
