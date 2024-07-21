@@ -4,13 +4,21 @@ import React, { useEffect, useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddQuestion from '../forum/components/addQuestion';
 import Link from 'next/link';
+import { CldImage } from 'next-cloudinary';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 
-export const dynamic = 'auto';
+export const dynamic = 'force-dynamic';
 
 export default function Forum() {
     const [addForum, setAddForum] = useState(false);
     const [forum_ar, setForum_ar] = useState([]);
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
 
     useEffect(() => {
@@ -48,12 +56,12 @@ export default function Forum() {
                 <p> תושבי רמות אחד בשביל השני<br />
                     שואלים, עונים...וכו וכו מילים של רחלי...</p>
             </div>
-            <AddQuestion setAddForum={setAddForum} addForum={addForum}/>
+            <AddQuestion setAddForum={setAddForum} addForum={addForum} />
             <div>
                 {forum_ar.map((item: any) => {
                     return (
                         <Link key={item._id} href={`/forum/comment/${item._id}`} className='link-underline link-underline-opacity-0 text-black'>
-                            <div  className='bg-info rounded bg-opacity-25 pb-2 px-2 h-auto mb-4'>
+                            <div className='bg-info rounded bg-opacity-25 pb-2 px-2 h-auto mb-4'>
                                 <span className="text-dark top-0 start-100 translate-middle badge shadow-sm rounded-pill bg-white text-muted" style={{ zIndex: 1 }}>
                                     {item.topic}
                                 </span>
@@ -74,6 +82,23 @@ export default function Forum() {
                                         <p>
                                             {item.description}
                                         </p>
+                                        <div className='flex'>
+                                            {item.fileName &&
+                                                <CldImage
+                                                    src={item.fileName} // Use this sample image or upload your own via the Media Explorer
+                                                    width="100" // Transform the image: auto-crop to square aspect_ratio
+                                                    height="100"
+                                                    sizes="100vw"
+                                                    crop={{
+                                                        type: 'fill',
+                                                        source: true
+                                                    }}
+                                                    alt='#'
+                                                    priority
+                                                    onClick={handleShow}
+                                                />
+                                            }
+                                        </div>
                                     </div>
                                     <div className='time-msg col-2 d-flex justify-content-between px-4 align-items-end mb-2'>
                                         <p className='mb-0'>
@@ -84,10 +109,12 @@ export default function Forum() {
                                 </div>
                             </div>
                         </Link>
+
                     )
                 })}
 
             </div>
+
         </div>
     )
 }

@@ -6,7 +6,7 @@ import CommentById from './components/commentById';
 
 
 
-// export const dynamic = 'auto';
+export const dynamic = 'force-dynamic';
 
 export default function Comment(props: any) {
 

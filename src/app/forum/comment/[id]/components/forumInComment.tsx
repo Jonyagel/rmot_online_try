@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { CldImage } from 'next-cloudinary';
 
 
 
@@ -21,7 +22,7 @@ export default function ForumInComment(props: any) {
         console.log(data);
 
     }
-   
+
 
 
 
@@ -34,11 +35,11 @@ export default function ForumInComment(props: any) {
         if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
         const daysAgo = Math.floor(hoursAgo / 24);
         if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
-        
+
         const postDate = new Date(date);
         const formattedDate = postDate.toLocaleDateString("he-IL");
         return formattedDate;
-      }
+    }
 
 
 
@@ -66,6 +67,22 @@ export default function ForumInComment(props: any) {
                         <p>
                             {dataForum.description}
                         </p>
+                        <div className='flex'>
+                            {dataForum.fileName &&
+                                <CldImage
+                                    src={dataForum.fileName} // Use this sample image or upload your own via the Media Explorer
+                                    width="100" // Transform the image: auto-crop to square aspect_ratio
+                                    height="100"
+                                    crop={{
+                                        type: 'auto',
+                                        source: true
+                                    }}
+                                    alt='#'
+                                    priority
+
+                                />
+                            }
+                        </div>
                     </div>
                     <div className='time-msg col-2 d-flex justify-content-between px-4 align-items-end mb-2'>
                         <p className='mb-0'>

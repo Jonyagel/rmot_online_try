@@ -1,7 +1,10 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
+import { CldImage } from 'next-cloudinary';
+import { CldUploadButton } from 'next-cloudinary';
+import { sources } from 'next/dist/compiled/webpack/webpack';
 
 
 export const dynamic = 'auto';
@@ -12,6 +15,10 @@ export default function AddQuestion(props: any) {
     const descriptionRef: any = useRef();
 
     const [addForum, setAddForum] = useState(false);
+    // const [fileNameAr, setFileName] = useState([]);
+    const [fileName, setFileName] = useState("");
+    // let fileNameAr:any = [];
+
 
 
     const doApi = async (e: any) => {
@@ -26,7 +33,7 @@ export default function AddQuestion(props: any) {
         try {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum`, {
                 method: 'POST',
-                body: JSON.stringify({ topic, tittle, description, numOfComments }),
+                body: JSON.stringify({ topic, tittle, description, numOfComments, fileName }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -38,76 +45,90 @@ export default function AddQuestion(props: any) {
             router.push('/forum');
             props.setAddForum(!props.addForum)
         }
-    catch (error) {
-        console.error('Error:', error);
+        catch (error) {
+            console.error('Error:', error);
+        }
     }
-}
+
+    const handleUpload = (result:any) => {
+        if (result.event === 'success') {
+            const publicId = result.info.public_id;
+            // Extract the file name from the public_id
+            const fileName = publicId.split('/').pop(); // Extracts the file name
+            console.log('Uploaded file name:', fileName);
+            // setFileName(fileName);
+            setFileName(fileName);
+            // fileNameAr.push(fileName);
+            // console.log('File uploaded successfully' + fileNameAr);
+        }
+    };
+
+    const closeForm = () => {
+        setAddForum(false);
+    }
 
 
-const closeForm = () => {
-    setAddForum(false);
-}
+    const openForm = () => {
+        setAddForum(!addForum);
+    }
 
+    return (
+        <div>
+            <button onClick={openForm} className='btn btn-info rounded-circle shadow-sm m-4 w-auto'>
+                <h2 className=" bi bi-plus-lg w-auto m-2"></h2>
+            </button>
 
-const openForm = () => {
-    setAddForum(!addForum);
-}
+            {addForum && (
+                <div className='position-fixed top-0 start-0 bg-dark bg-opacity-25 vw-100 vh-100 container-fluid justify-content-center align-content-center z-2'>
+                    <div className='bg-info w-25 vh-50 mx-auto text-center p-5 rounded-4 shadow position-relative'>
+                        <button onClick={closeForm} className="btn-close position-absolute top-0 end-0 m-2" aria-label="Close"></button>
+                        <form onSubmit={doApi}>
+                            <div className="form-floating m-4">
+                                <select ref={topicRef} className="form-select">
+                                    <option defaultValue="שאלה">שאלה</option>
+                                    <option defaultValue="עזרה">עזרה</option>
+                                    <option defaultValue="בעיה">בעיה</option>
+                                    <option defaultValue="תקלה">תקלה</option>
+                                </select>
+                                <label >בחר נושא</label>
+                            </div>
+                            <div className="form-floating mb-3 m-4">
+                                <input ref={tittleRef} type="text" className="form-control" />
+                                <label >כותרת</label>
+                            </div>
+                            <div className="form-floating m-4">
+                                <textarea ref={descriptionRef} className="form-control" ></textarea>
+                                <label>תוכן</label>
+                            </div>
 
-return (
-    <div>
-        <button onClick={openForm} className='btn btn-info rounded-circle shadow-sm m-4 w-auto'>
-            <h2 className=" bi bi-plus-lg w-auto m-2"></h2>
-        </button>
+                            <div className="container text-center m-2">
+                                <div className="row">
+                                    <div className="col">
+                                         <CldUploadButton className='btn btn-info' uploadPreset="my_upload_test" onSuccess={handleUpload}
+                                            options={{ sources: ['local'] }} // לאפשר העלאה מקובץ מקומי בלבד
+                                        />
+                                    </div>
+                                    <div className="col">
 
-        {addForum && (
-            <div className='position-fixed top-0 start-0 bg-dark bg-opacity-25 vw-100 vh-100 container-fluid justify-content-center align-content-center z-2'>
-                <div className='bg-info w-25 vh-50 mx-auto text-center p-5 rounded-4 shadow position-relative'>
-                    <button onClick={closeForm} className="btn-close position-absolute top-0 end-0 m-2" aria-label="Close"></button>
-                    <form onSubmit={doApi}>
-                        <div className="form-floating m-4">
-                            <select ref={topicRef} className="form-select">
-                                <option defaultValue="שאלה">שאלה</option>
-                                <option defaultValue="עזרה">עזרה</option>
-                                <option defaultValue="בעיה">בעיה</option>
-                                <option defaultValue="תקלה">תקלה</option>
-                            </select>
-                            <label >בחר נושא</label>
-                        </div>
-                        <div className="form-floating mb-3 m-4">
-                            <input ref={tittleRef} type="text" className="form-control" />
-                            <label >כותרת</label>
-                        </div>
-                        <div className="form-floating m-4">
-                            <textarea ref={descriptionRef} className="form-control" ></textarea>
-                            <label>תוכן</label>
-                        </div>
-
-                        <div className="container text-center m-2">
-                            <div className="row">
-                                <div className="col">
-                                    <input type='file' className='form-control' multiple></input>
+                                    </div>
                                 </div>
-                                <div className="col">
+                                <div className="row">
+                                    <div className="col">
 
+                                    </div>
+                                    <div className="col">
+
+                                    </div>
+                                    <div className="col">
+                                       <button type="submit" className="btn btn-info w-100">שלח</button>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="row">
-                                <div className="col">
+                        </form>
+                    </div>
 
-                                </div>
-                                <div className="col">
-
-                                </div>
-                                <div className="col">
-                                    <button className='btn btn-primary'>שלח</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
                 </div>
-
-            </div>
-        )}
-    </div>
-)
+            )}
+        </div>
+    )
 }

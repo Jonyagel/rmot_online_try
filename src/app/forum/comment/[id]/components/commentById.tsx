@@ -2,6 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddComment from './addComment';
+import { CldImage } from 'next-cloudinary';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+
 // import './style.css';
 
 export const dynamic = 'auto';
@@ -14,6 +18,10 @@ export default function CommentById(props: any) {
   const [commentReplying, setCommentReplying] = useState({});
   const [replay, setReplay] = useState(false);
 
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     doApi();
@@ -64,7 +72,28 @@ export default function CommentById(props: any) {
 
 
   return (
-    <div className=''>
+    <div className=''>   <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        </Modal.Header>
+      <CldImage
+        src={dataForum.fileName} // Use this sample image or upload your own via the Media Explorer
+        width="500" // Transform the image: auto-crop to square aspect_ratio
+        height="500"
+        sizes="100vw"
+        crop={{
+          type: 'fill',
+          source: true
+        }}
+        alt='#'
+        priority
+        onClick={handleShow}
+      />
+      {/* <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+      </Modal.Footer> */}
+    </Modal>
       <div key={dataForum._id} className='rounded bg-opacity-25 px-2 h-auto mt-4 mb-2'>
         <span className="text-dark top-0 start-100 translate-middle badge shadow-sm rounded-pill bg-white text-muted" style={{ zIndex: 1 }}>
           {dataForum.topic}
@@ -86,6 +115,23 @@ export default function CommentById(props: any) {
             <p>
               {dataForum.description}
             </p>
+            <div className='flex'>
+              {dataForum.fileName &&
+                <CldImage
+                  src={dataForum.fileName} // Use this sample image or upload your own via the Media Explorer
+                  width="100" // Transform the image: auto-crop to square aspect_ratio
+                  height="100"
+                  sizes="100vw"
+                  crop={{
+                    type: 'fill',
+                    source: true
+                  }}
+                  alt='#'
+                  priority
+                  onClick={() => { handleShow() }}
+                />
+              }
+            </div>
           </div>
           <div className='time-msg col-2 d-flex justify-content-between px-4 align-items-end mb-2'>
             <p className='mb-0'>
@@ -106,28 +152,40 @@ export default function CommentById(props: any) {
                 setReplay(true)
               }} className='comment_on_comment btn rounded-circle' style={{ opacity: hoveredCommentId === item._id ? 1 : 0 }}><i className="bi bi-arrow-90deg-left"></i></button>
             </div>
-            <div className='d-flex col-10 pt-2 rounded bg-light'>
-              <div className='name col-1 d-block text-center mt-4'>
-                <h1 className='mb-0'>
-                  <i className="bi bi-person-circle "></i>
-                </h1>
-                <p>
-                  {item.userName}
-                </p>
-              </div>
-              <div className='content col-9 p-2'>
-                <p>
-                  {item.comment}
-                </p>
-              </div>
-              <div className='time-msg col-2 d-flex justify-content-between px-4 align-items-end mb-2'>
-                <p className='mb-0'>
-                  {formatPostAgo(item.date)}
-                </p>
+            <div className='bg-light rounded col-10 p-2'>
+              {item.commentReplayId &&
+                <div className='bg-opacity-25 rounded shadow-sm mb-2 justify-content-between d-flex' style={{ background: 'rgb(230, 230, 230)', marginRight: "7.5%" }}>
+                  <div className='d-flex'>
+                    <div className='bg-dark rounded ms-2' style={{ width: "4px", height: "100%" }}> </div>
+                    <div className=''>
+                      <p className='fw-bold m-0'>{item.commentReplayUserName}</p>
+                      <p className='m-0'>{item.commentReplayContent}</p>
+                    </div>
+                  </div>
+                </div>
+              }
+              <div className='d-flex '>
+                <div className='name col-1 d-block text-center mt-4'>
+                  <h1 className='mb-0'>
+                    <i className="bi bi-person-circle "></i>
+                  </h1>
+                  <p>
+                    {item.userName}
+                  </p>
+                </div>
+                <div className='content col-9 p-2'>
+                  <p>
+                    {item.comment}
+                  </p>
+                </div>
+                <div className='time-msg col-2 d-flex justify-content-between px-4 align-items-end mb-2'>
+                  <p className='mb-0'>
+                    {formatPostAgo(item.date)}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-
         )
 
       })}

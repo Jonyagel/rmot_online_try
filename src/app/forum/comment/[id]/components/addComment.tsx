@@ -30,7 +30,9 @@ export default function AddComment(props: any) {
       body: JSON.stringify({
         forumMsgId: props.idForum,
         comment: commentBody,
-        commentReplayId: props.commentReplying.commentId
+        commentReplayId: props.commentReplying.commentId,
+        commentReplayContent: props.commentReplying.dataComment,
+        commentReplayUserName: props.commentReplying.userComment,
       }),
     });
     const data = await resp.json();
@@ -77,6 +79,7 @@ export default function AddComment(props: any) {
       doApi(comment);
       router.refresh();
       console.log(comment);
+      props.setReplay(false);
     }
   }
 
