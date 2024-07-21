@@ -30,7 +30,7 @@ export default function Page() {
                     source: true
                 }}
                 alt='hello'
-                priority
+                // priority
             />
 
 
