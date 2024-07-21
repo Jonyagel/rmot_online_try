@@ -22,7 +22,7 @@ export default function Page() {
     return (
         <div>
             <CldImage
-                src="car2_rv6atp" // Use this sample image or upload your own via the Media Explorer
+                src="car1_gulhke" // Use this sample image or upload your own via the Media Explorer
                 width="500" // Transform the image: auto-crop to square aspect_ratio
                 height="500"
                 crop={{
