@@ -74,7 +74,7 @@ export default function ForumInComment(props: any) {
                                     width="100" // Transform the image: auto-crop to square aspect_ratio
                                     height="100"
                                     crop={{
-                                        type: 'auto',
+                                        type: 'fill',
                                         source: true
                                     }}
                                     alt='#'

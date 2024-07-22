@@ -1,15 +1,16 @@
 "use client"
 import React from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+import './style.css';
 
 
 export default function StripCarousel() {
     return (
-        <div className='container'>
+        <div className='container strip'>
             <div className='mt-2' >
             <Carousel className='w-75 rounded shadow mx-auto' >
                 <Carousel.Item>
-                    <img src='/images/strip/neighborhood1.jpg' className='d-block w-100 rounded' style={{height:"50vh"}}></img>
+                    <img src='/images/strip/neighborhood1.jpg' className='d-block w-100 rounded' style={{height:"50vh" }}></img>
                     <Carousel.Caption className='bg-light bg-opacity-50 rounded text-dark'>
                         <h3>First slide label</h3>
                         <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>

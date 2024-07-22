@@ -4,7 +4,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddComment from './addComment';
 import { CldImage } from 'next-cloudinary';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 
 // import './style.css';
 
@@ -59,9 +58,14 @@ export default function CommentById(props: any) {
     const daysAgo = Math.floor(hoursAgo / 24);
     if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
 
-    const postDate = new Date(date);
-    const formattedDate = postDate.toLocaleDateString("he-IL");
-    return formattedDate;
+    const dateTest = new Date(date * 1000); // מכפיל ב-1000 אם הזמן בשניות
+    const formatter = new Intl.DateTimeFormat('he-IL', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+
+    return formatter.format(date);
   }
 
   const handleCommentReply = (dataComment: any, userComment: any, commentId: any) => {
@@ -74,16 +78,17 @@ export default function CommentById(props: any) {
   return (
     <div className=''>   <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        </Modal.Header>
+      </Modal.Header>
       <CldImage
         src={dataForum.fileName} // Use this sample image or upload your own via the Media Explorer
-        width="500" // Transform the image: auto-crop to square aspect_ratio
+        width="700" // Transform the image: auto-crop to square aspect_ratio
         height="500"
         sizes="100vw"
         crop={{
           type: 'fill',
           source: true
         }}
+        radius={30}
         alt='#'
         priority
         onClick={handleShow}
@@ -126,8 +131,9 @@ export default function CommentById(props: any) {
                     type: 'fill',
                     source: true
                   }}
+                  radius={100}
                   alt='hi'
-                 // priority
+                  // priority
                   onClick={() => { handleShow() }}
                 />
               }

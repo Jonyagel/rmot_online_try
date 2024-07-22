@@ -170,7 +170,18 @@ export default function AddComment(props: any) {
         }
         <div className='d-flex'>
           <CldUploadButton className='btn btn-light' uploadPreset="my_upload_test" onSuccess={handleUpload}
-            options={{ sources: ['local'] }} // לאפשר העלאה מקובץ מקומי בלבד
+            onError={(error) => {
+              console.error('Upload error:', error);
+              // Here you can show an error message to the user
+              alert('Upload failed. The file might be too large or of an unsupported format.');
+            }}
+            options={{
+              sources: ['local'],
+              maxFileSize: 5000000, // 5MB in bytes
+              maxImageWidth: 2000, // Optional: limit image width
+              maxImageHeight: 2000, // Optional: limit image height
+              clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'], // Optional: limit file types
+            }}
           > <i className="bi bi-paperclip"></i></CldUploadButton>
           <OverlayTrigger trigger="click" placement="top" overlay={popover}>
             <Button className='btn btn-light'><i className="bi bi-emoji-smile"></i></Button>

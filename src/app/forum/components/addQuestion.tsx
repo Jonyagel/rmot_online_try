@@ -132,8 +132,19 @@ export default function AddQuestion(props: any) {
                             <div className="container text-center m-2">
                                 <div className="row">
                                     <div className="col">
-                                        <CldUploadButton className='btn btn-info' uploadPreset="my_upload_test" onSuccess={handleUpload}
-                                            options={{ sources: ['local'] }} // לאפשר העלאה מקובץ מקומי בלבד
+                                        <CldUploadButton className='btn btn-light' uploadPreset="my_upload_test" onSuccess={handleUpload}
+                                            onError={(error) => {
+                                                console.error('Upload error:', error);
+                                                // Here you can show an error message to the user
+                                                alert('Upload failed. The file might be too large or of an unsupported format.');
+                                            }}
+                                            options={{
+                                                sources: ['local'],
+                                                maxFileSize: 5000000, // 5MB in bytes
+                                                maxImageWidth: 2000, // Optional: limit image width
+                                                maxImageHeight: 2000, // Optional: limit image height
+                                                clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'], // Optional: limit file types
+                                            }}
                                         />
                                     </div>
                                     <div className="col">
@@ -148,7 +159,7 @@ export default function AddQuestion(props: any) {
 
                                     </div>
                                     <div className="col">
-                                        <button type="submit" className="btn btn-info w-100">שלח</button>
+                                        <button type="submit" className="btn btn-light w-100">שלח</button>
                                     </div>
                                 </div>
                             </div>

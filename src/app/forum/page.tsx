@@ -45,8 +45,17 @@ export default function Forum() {
         const hoursAgo = Math.floor(minutesAgo / 60);
         if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
         const daysAgo = Math.floor(hoursAgo / 24);
-        return `לפני ${daysAgo} ימים`;
-    }
+        if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
+    
+        const dateTest = new Date(date * 1000); // מכפיל ב-1000 אם הזמן בשניות
+        const formatter = new Intl.DateTimeFormat('he-IL', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+
+        return formatter.format(date);
+      }
 
 
     return (
@@ -93,6 +102,7 @@ export default function Forum() {
                                                         type: 'fill',
                                                         source: true
                                                     }}
+                                                    radius={100}
                                                     alt='#'
                                                     priority
                                                     onClick={handleShow}
