@@ -59,12 +59,13 @@ export default function AddQuestion(props: any) {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
             const data = await resp.json();
             console.log(data);
-            if(data.status === 401){
+            if (data.status === 401) {
                 notify();
                 setSignIn(false);
             }
-            else{
+            else {
                 setSignIn(true);
+                openForm();
             }
         }
         catch (error) {
@@ -97,13 +98,11 @@ export default function AddQuestion(props: any) {
     return (
         <div>
             <button onClick={() => {
-                if(!signIn){
-                    checkSignIn();
-                }
-                else{
+                checkSignIn();
+                if (signIn) {
                     openForm();
                 }
-                }} className='btn btn-info rounded-circle shadow-sm m-4 w-auto'>
+            }} className='btn btn-info rounded-circle shadow-sm m-4 w-auto'>
                 <h2 className=" bi bi-plus-lg w-auto m-2"></h2>
             </button>
 
@@ -158,7 +157,7 @@ export default function AddQuestion(props: any) {
 
                 </div>
             )}
-                <ToastContainer theme="colored" />
+            <ToastContainer theme="colored" />
         </div>
     )
 }
