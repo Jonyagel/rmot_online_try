@@ -1,10 +1,12 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CldImage } from 'next-cloudinary';
 import { CldUploadButton } from 'next-cloudinary';
 import { sources } from 'next/dist/compiled/webpack/webpack';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export const dynamic = 'auto';
@@ -13,12 +15,14 @@ export default function AddQuestion(props: any) {
     const topicRef: any = useRef();
     const tittleRef: any = useRef();
     const descriptionRef: any = useRef();
+    const [signIn, setSignIn] = useState(false);
 
     const [addForum, setAddForum] = useState(false);
     // const [fileNameAr, setFileName] = useState([]);
     const [fileName, setFileName] = useState("");
     // let fileNameAr:any = [];
 
+    const notify = () => toast.error("אתה צריך להירשם");
 
 
     const doApi = async (e: any) => {
@@ -50,7 +54,25 @@ export default function AddQuestion(props: any) {
         }
     }
 
-    const handleUpload = (result:any) => {
+    const checkSignIn = async () => {
+        try {
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
+            const data = await resp.json();
+            console.log(data);
+            if(data.status === 401){
+                notify();
+                setSignIn(false);
+            }
+            else{
+                setSignIn(true);
+            }
+        }
+        catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const handleUpload = (result: any) => {
         if (result.event === 'success') {
             const publicId = result.info.public_id;
             // Extract the file name from the public_id
@@ -74,7 +96,14 @@ export default function AddQuestion(props: any) {
 
     return (
         <div>
-            <button onClick={openForm} className='btn btn-info rounded-circle shadow-sm m-4 w-auto'>
+            <button onClick={() => {
+                if(!signIn){
+                    checkSignIn();
+                }
+                else{
+                    openForm();
+                }
+                }} className='btn btn-info rounded-circle shadow-sm m-4 w-auto'>
                 <h2 className=" bi bi-plus-lg w-auto m-2"></h2>
             </button>
 
@@ -104,7 +133,7 @@ export default function AddQuestion(props: any) {
                             <div className="container text-center m-2">
                                 <div className="row">
                                     <div className="col">
-                                         <CldUploadButton className='btn btn-info' uploadPreset="my_upload_test" onSuccess={handleUpload}
+                                        <CldUploadButton className='btn btn-info' uploadPreset="my_upload_test" onSuccess={handleUpload}
                                             options={{ sources: ['local'] }} // לאפשר העלאה מקובץ מקומי בלבד
                                         />
                                     </div>
@@ -120,7 +149,7 @@ export default function AddQuestion(props: any) {
 
                                     </div>
                                     <div className="col">
-                                       <button type="submit" className="btn btn-info w-100">שלח</button>
+                                        <button type="submit" className="btn btn-info w-100">שלח</button>
                                     </div>
                                 </div>
                             </div>
@@ -129,6 +158,7 @@ export default function AddQuestion(props: any) {
 
                 </div>
             )}
+                <ToastContainer theme="colored" />
         </div>
     )
 }

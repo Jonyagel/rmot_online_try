@@ -85,7 +85,7 @@ export default function CommentById(props: any) {
           source: true
         }}
         alt='#'
-      //  priority
+        priority
         onClick={handleShow}
       />
       {/* <Modal.Footer>
@@ -126,8 +126,8 @@ export default function CommentById(props: any) {
                     type: 'fill',
                     source: true
                   }}
-                  alt='#'
-                  priority
+                  alt='hi'
+                 // priority
                   onClick={() => { handleShow() }}
                 />
               }
