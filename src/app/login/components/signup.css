@@ -1,0 +1,86 @@
+/* Centering the signup form */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f8f9fa; /* Light grey background */
+}
+
+/* Styling the signup form */
+.signup-form {
+    width: 100%;
+    max-width: 400px;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling the form title */
+.signup-form h2 {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+/* Styling the form subtitle */
+.signup-form p {
+    font-family: 'Arial', sans-serif;
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+/* Additional styling for form elements */
+.form-label {
+    font-weight: bold;
+    color: #555;
+}
+
+.form-control {
+    border-radius: 5px;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Styling the buttons */
+.btn-primary {
+    background-color: #000;
+    border-color: #000;
+    border-radius: 5px;
+    padding: 0.75rem;
+    font-weight: bold;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #333;
+    border-color: #333;
+}
+
+.btn-primary:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.btn-outline-dark {
+    border-radius: 5px;
+    padding: 0.75rem;
+    font-weight: bold;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-outline-dark img {
+    vertical-align: middle;
+}
+
+/* Styling the "Sign up" link */
+.signup-form a {
+    color: #007bff;
+    font-weight: bold;
+}

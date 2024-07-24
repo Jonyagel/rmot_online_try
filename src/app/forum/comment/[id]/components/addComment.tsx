@@ -24,6 +24,7 @@ export default function AddComment(props: any) {
   const [chosenEmoji, setChosenEmoji] = useState(false);
   const [fileName, setFileName] = useState("");
   const [signIn, setSignIn] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
 
 
 
@@ -43,7 +44,7 @@ export default function AddComment(props: any) {
     <Popover id="popover-basic">
       <Popover.Header></Popover.Header>
       {/* <Picker data={data} onEmojiSelect={onEmojiSelect}/> */}
-      <EmojiPicker onEmojiClick={onEmojiSelect} emojiStyle={EmojiStyle.GOOGLE} searchDisabled={true} />
+      <EmojiPicker onEmojiClick={onEmojiSelect} emojiStyle={EmojiStyle.GOOGLE} searchDisabled={true}/>
     </Popover>
   );
 
@@ -152,8 +153,30 @@ export default function AddComment(props: any) {
     checkSignIn();
     if (signIn) {
       addComment();
+      // setShowEmoji(false);
     }
   };
+
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // מונע מעבר שורה רגיל
+      handleSubmit(e); // קורא לפונקציית השליחה שלך
+    }
+  };
+
+
+  const handleExpand = (e: any) => {
+    e.target.style.height = 'auto';
+    e.target.style.height = `${Math.min(e.target.scrollHeight, 96)}px`;
+  };
+
+  
+    window.addEventListener('scroll', () => {
+      setShowEmoji(false);
+    });
+
+
+
 
   return (
     <div className='sticky-bottom'>
@@ -185,12 +208,18 @@ export default function AddComment(props: any) {
               clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'], // Optional: limit file types
             }}
           > <i className="bi bi-paperclip"></i></CldUploadButton>
-          <OverlayTrigger trigger="click" placement="top" overlay={popover}>
-            <Button className='btn btn-light'><i className="bi bi-emoji-smile"></i></Button>
+          <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
+            <Button className='btn btn-light' onClick={() => {
+              setShowEmoji(!showEmoji);
+            }}><i className="bi bi-emoji-smile"></i></Button>
           </OverlayTrigger>
           <form className='d-flex w-100' onSubmit={handleSubmit}>
-            <textarea ref={commentRef}  placeholder='add a comment' className='form-control border-0 bg-light' maxLength={1000} rows={1} />
-            <button className='btn btn-light me-4'><p className="bi bi-send m-0" style={{ transform: 'rotate(225deg)' }}></p></button>
+            <textarea ref={commentRef} onClick={() => {
+              setShowEmoji(false);
+            }} onChange={handleExpand} onKeyDown={handleKeyDown} placeholder='add a comment' className='form-control border-0 bg-light' maxLength={1000} rows={1} />
+            <button onClick={() => {
+              setShowEmoji(false);
+            }} className='btn btn-light me-4'><p className="bi bi-send m-0" style={{ transform: 'rotate(225deg)' }}></p></button>
           </form>
         </div>
       </div>
