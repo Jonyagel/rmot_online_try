@@ -13,14 +13,7 @@ import ShowForum from './components/showForum';
 
 export const dynamic = 'force-dynamic';
 
-async function doApi ()  {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-    const resp = await fetch(url);
-    const data = await resp.json();
-    console.log(data);
-    // setForum_ar(data);
-    return data;
-}
+
 
 export default async function Forum() {
     // const [addForum, setAddForum] = useState(false);
@@ -36,7 +29,14 @@ export default async function Forum() {
     //     doApi();
     // }, [addForum])
 
-    
+  const  doApi = async () => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        console.log(data);
+        // setForum_ar(data);
+        return data;
+    }
 
 
     const initialData = await doApi();
