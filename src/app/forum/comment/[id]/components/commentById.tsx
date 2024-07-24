@@ -22,10 +22,10 @@ export default function CommentById(props: any) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // useEffect(() => {
-  //   // doApi();
-  //   // doApiForum();
-  // }, [])
+   useEffect(() => {
+   doApiGet();
+     // doApiForum();
+   }, [])
 
 
   const doApiGet = async () => {
