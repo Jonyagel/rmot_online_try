@@ -186,7 +186,7 @@ export const dynamic = 'auto';
 export default function AddQuestion(props: any) {
     const router = useRouter();
     const topicRef = useRef<HTMLSelectElement>(null);
-    const titleRef = useRef<HTMLInputElement>(null);
+    const tittleRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
     const [signIn, setSignIn] = useState(false);
     const [addForum, setAddForum] = useState(false);
@@ -198,14 +198,14 @@ export default function AddQuestion(props: any) {
         e.preventDefault();
 
         const topic = topicRef.current?.value;
-        const title = titleRef.current?.value;
+        const tittle = tittleRef.current?.value;
         const description = descriptionRef.current?.value;
         const numOfComments = 0;
 
         try {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum`, {
                 method: 'POST',
-                body: JSON.stringify({ topic, title, description, numOfComments, fileName }),
+                body: JSON.stringify({ topic, tittle, description, numOfComments, fileName }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -257,7 +257,7 @@ export default function AddQuestion(props: any) {
             {addForum && (
                 <div className='position-fixed top-0 start-0 bg-dark bg-opacity-25 vw-100 vh-100 d-flex justify-content-center align-items-center z-2'>
                     <div className='bg-info p-4 rounded-4 shadow position-relative' style={{ maxWidth: '90%', width: '500px' }}>
-                        <button onClick={closeForm} className="btn-close position-absolute top-0 end-0 m-3" aria-label="Close"></button>
+                        <button onClick={closeForm} className="btn-close  top-0 end-0" aria-label="Close"></button>
                         <form onSubmit={doApi} className="needs-validation" noValidate>
                             <div className="mb-3">
                                 <label htmlFor="topic" className="form-label">בחר נושא</label>
@@ -269,8 +269,8 @@ export default function AddQuestion(props: any) {
                                 </select>
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="title" className="form-label">כותרת</label>
-                                <input ref={titleRef} type="text" className="form-control" id="title" required />
+                                <label htmlFor="tittle" className="form-label">כותרת</label>
+                                <input ref={tittleRef} type="text" className="form-control" id="tittle" required />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="description" className="form-label">תוכן</label>

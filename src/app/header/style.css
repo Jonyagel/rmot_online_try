@@ -1,20 +1,33 @@
 /* style.css */
 @media (max-width: 767.98px) {
     .navbar-collapse {
+        display: none;
         position: absolute;
         top: 100%;
-        right: 0;
-        left: 0;
+        right: 20px;
+        width: 250px;
         background-color: white;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         z-index: 1000;
         padding: 1rem;
-        transform: translateY(-100%);
-        transition: transform 0.3s ease-in-out;
+        overflow-y: auto;
+        max-height: 80vh;
     }
 
     .navbar-collapse.show {
-        transform: translateY(0);
+        display: block;
+    }
+
+    .navbar-collapse .nav-link {
+        font-size: 1rem;
+        margin: 0.5rem 0;
+        padding: 0.5rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .navbar-collapse .nav-link:last-child {
+        border-bottom: none;
     }
 }
 
@@ -22,11 +35,12 @@
     text-decoration: none;
     padding: 0.5rem 1rem;
     color: #343a40;
-    transition: color 0.3s;
+    transition: color 0.3s, background-color 0.3s;
 }
 
 .nav-link:hover {
     color: #68b1ff;
+    background-color: #f8f9fa;
 }
 
 @media (min-width: 768px) {
@@ -43,3 +57,14 @@
     transform: rotate(360deg);
 }
 
+.menu-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.menu-toggle:hover {
+    color: #68b1ff;
+}
