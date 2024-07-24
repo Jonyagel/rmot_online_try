@@ -11,7 +11,6 @@ export const dynamic = 'auto';
 
 export async function GET(req: any, route: any) {
     try {
-        route.setHeader('Cache-Control', 'no-store, max-age=0');
         await connectDb();
         const data = await ForumModel.find({});
         return NextResponse.json(data);
