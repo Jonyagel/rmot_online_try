@@ -30,7 +30,7 @@ export default function CommentById(props: any) {
 
   const doApiGet = async () => {
     let urlGet = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${props.idForum}`
-    const respGet = await fetch(urlGet);
+    const respGet = await fetch(urlGet, { cache: 'no-store' });
     const dataGet = await respGet.json();
     let commentAr = dataGet;
     console.log(dataGet);
