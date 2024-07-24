@@ -22,10 +22,10 @@ export default function CommentById(props: any) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-   useEffect(() => {
-   doApiGet();
-      doApiForum();
-   }, [])
+  useEffect(() => {
+    doApiGet();
+    doApiForum();
+  }, [])
 
 
   const doApiGet = async () => {
@@ -37,15 +37,15 @@ export default function CommentById(props: any) {
     setDataComment(commentAr);
   }
 
- const doApiForum = async () => {
-     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`
-     const resp = await fetch(url);
-     const data = await resp.json();
-     const ForumAr = data;
+  const doApiForum = async () => {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`
+    const resp = await fetch(url);
+    const data = await resp.json();
+    const ForumAr = data;
     setDataForum(ForumAr);
-     console.log(data);
+    console.log(data);
 
-   }
+  }
 
 
   const formatPostAgo = (date: number): string => {
@@ -196,7 +196,7 @@ export default function CommentById(props: any) {
 
       })}
       {/* <AddComment idForum={props.idForum} doApiProps={doApi} doApiForum={doApiForum} commentReplying={commentReplying} replay={replay} setReplay={setReplay} /> */}
-      <AddComment doApiGet={doApiGet} idForum={props.idForum} dataComment={dataComment} doApiForum={dataForum} commentReplying={commentReplying} replay={replay} setReplay={setReplay} />
+      <AddComment doApiGet={doApiGet} doApiForum={doApiForum} idForum={props.idForum} dataComment={dataComment} dataForum={dataForum} commentReplying={commentReplying} replay={replay} setReplay={setReplay} />
     </div>
   )
 }

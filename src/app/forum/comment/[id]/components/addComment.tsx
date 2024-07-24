@@ -69,6 +69,7 @@ export default function AddComment(props: any) {
     const data = await resp.json();
     console.log(data);
     props.doApiGet();
+    // props.doApiForum();
     getForum();
   }
 
@@ -98,7 +99,7 @@ export default function AddComment(props: any) {
     });
     const data = await resp.json();
     console.log(data);
-    // props.doApiForum();
+    props.doApiForum();
   }
 
 
