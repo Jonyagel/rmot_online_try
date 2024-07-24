@@ -76,7 +76,7 @@ export default function StripCarousel() {
                                     alt={`Slide ${index + 1}`}
                                 />
                             </div>
-                            <Carousel.Caption className='bg-light bg-opacity-75 rounded text-dark'>
+                            <Carousel.Caption className='bg-light bg-opacity-50 rounded text-dark'>
                                 <h3>{item.title}</h3>
                                 <p>{item.description}</p>
                             </Carousel.Caption>

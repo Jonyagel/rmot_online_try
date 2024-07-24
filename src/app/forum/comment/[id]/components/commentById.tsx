@@ -273,7 +273,7 @@ export default function CommentById(props: any) {
   }
 
   return (
-    <div className='container-fluid px-2'>
+    <div className='container-fluid px-2 px-md-3'>
       <Modal show={show} onHide={handleClose} centered>
         <button onClick={handleClose} className="btn-close position-absolute top-0 end-0 m-2 z-3" aria-label="Close"></button>
         <CldImage

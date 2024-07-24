@@ -35,7 +35,7 @@ const doApi = async () => {
   const initialForumData = await doApiForum();
 
   return (
-    <div className='container w-75 bg-info bg-opacity-25 rounded pb-2'>
+    <div className='container bg-info bg-opacity-25 rounded pb-2'>
       {/* <ForumInComment idForum={props.params.id}/> */}
       <CommentById idForum={props.params.id} commentAr={initialData} forumData={initialForumData}/>
     </div>
