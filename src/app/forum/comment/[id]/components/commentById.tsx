@@ -17,6 +17,7 @@ export default function CommentById(props: any) {
   const [commentReplying, setCommentReplying] = useState({});
   const [replay, setReplay] = useState(false);
 
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -74,40 +75,44 @@ export default function CommentById(props: any) {
 
 
 
-
   return (
-    <div className=''>   <Modal show={show} onHide={handleClose}>
-      <Modal.Header closeButton>
-      </Modal.Header>
-      <CldImage
-        src={dataForum.fileName} // Use this sample image or upload your own via the Media Explorer
-        width="700" // Transform the image: auto-crop to square aspect_ratio
-        height="500"
-        sizes="100vw"
-        crop={{
-          type: 'fill',
-          source: true
-        }}
-        radius={30}
-        alt='#'
-        priority
-        onClick={handleShow}
-      />
-      {/* <Modal.Footer>
+    <div className=''>
+      <Modal show={show} onHide={handleClose}>
+        {/* <Modal.Header closeButton>
+      </Modal.Header> */}
+        <button onClick={handleClose} className="btn-close position-absolute top-0 end-0 m-2" aria-label="Close"></button>
+        <CldImage
+          src={dataForum.fileName} // Use this sample image or upload your own via the Media Explorer
+          width="900" // Transform the image: auto-crop to square aspect_ratio
+          height="900"
+          sizes="100vw"
+          crop={{
+            type: 'fill',
+            source: true
+          }}
+          radius={30}
+          alt='#'
+          priority
+          onClick={handleShow}
+        />
+        {/* <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
       </Modal.Footer> */}
-    </Modal>
+      </Modal>
       <div key={dataForum._id} className='rounded bg-opacity-25 px-2 h-auto mt-4 mb-2'>
         <span className="text-dark top-0 start-100 translate-middle badge shadow-sm rounded-pill bg-white text-muted" style={{ zIndex: 1 }}>
           {dataForum.topic}
         </span>
         <div className='d-flex h-75 pt-2 rounded bg-light'>
           <div className='name col-1 d-block text-center mt-4'>
-            <h1 className='mb-0'>
+            <div className='bg-indigo-400 rounded-full w-9 h-9 mx-auto text-center'>
+              <p>{dataForum.userName[0]}</p>
+            </div>
+            {/* <h1 className='mb-0'>
               <i className="bi bi-person-circle "></i>
-            </h1>
+            </h1> */}
             <p>
               {dataForum.userName}
             </p>
@@ -117,7 +122,7 @@ export default function CommentById(props: any) {
               {dataForum.tittle}
             </h5>
             <hr className='z-1' />
-            <p>
+            <p style={{ whiteSpace: "pre-wrap" }}>
               {dataForum.description}
             </p>
             <div className='flex'>
@@ -172,15 +177,18 @@ export default function CommentById(props: any) {
               }
               <div className='d-flex '>
                 <div className='name col-1 d-block text-center mt-4'>
-                  <h1 className='mb-0'>
+                  <div className='bg-indigo-400 rounded-full w-9 h-9 mx-auto text-center'>
+                    <p>{item.userName[0]}</p>
+                  </div>
+                  {/* <h1 className='mb-0'>
                     <i className="bi bi-person-circle "></i>
-                  </h1>
+                  </h1> */}
                   <p>
                     {item.userName}
                   </p>
                 </div>
                 <div className='content col-9 p-2'>
-                  <p>
+                  <p style={{ whiteSpace: "pre-wrap" }}>
                     {item.comment}
                   </p>
                 </div>

@@ -189,7 +189,7 @@ export default function AddComment(props: any) {
             <Button className='btn btn-light'><i className="bi bi-emoji-smile"></i></Button>
           </OverlayTrigger>
           <form className='d-flex w-100' onSubmit={handleSubmit}>
-            <input ref={commentRef} type="text" placeholder='add a comment' className='form-control border-0 bg-light' />
+            <textarea ref={commentRef}  placeholder='add a comment' className='form-control border-0 bg-light' maxLength={1000} rows={1} />
             <button className='btn btn-light me-4'><p className="bi bi-send m-0" style={{ transform: 'rotate(225deg)' }}></p></button>
           </form>
         </div>
