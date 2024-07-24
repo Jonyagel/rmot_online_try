@@ -31,7 +31,7 @@ export default async function Forum() {
 
   const  doApi = async () => {
         let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-        const resp = await fetch(url);
+        const resp = await fetch(url, { cache: 'no-store' });
         const data = await resp.json();
         console.log(data);
         // setForum_ar(data);
