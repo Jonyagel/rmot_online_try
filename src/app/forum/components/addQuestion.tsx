@@ -46,6 +46,7 @@ export default function AddQuestion(props: any) {
             console.log(data);
             // console.log(topic, tittle, description);
             openForm()
+            props.doApi();
             router.push('/forum');
             props.setAddForum(!props.addForum)
         }

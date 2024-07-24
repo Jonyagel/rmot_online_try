@@ -68,7 +68,7 @@ export default function AddComment(props: any) {
     });
     const data = await resp.json();
     console.log(data);
-    props.doApiProps();
+    props.doApiGet();
     getForum();
   }
 
@@ -98,7 +98,7 @@ export default function AddComment(props: any) {
     });
     const data = await resp.json();
     console.log(data);
-    props.doApiForum();
+    // props.doApiForum();
   }
 
 
@@ -107,6 +107,7 @@ export default function AddComment(props: any) {
     if (comment) {
       commentRef.current.value = null;
       doApi(comment);
+      props.doApiGet();
       router.refresh();
       console.log(comment);
       props.setReplay(false);

@@ -1,67 +1,72 @@
-"use client"
+// "use client"
 
-import React, { useEffect, useState } from 'react'
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import AddQuestion from '../forum/components/addQuestion';
-import Link from 'next/link';
-import { CldImage } from 'next-cloudinary';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+// import React, { useEffect, useState } from 'react'
+// import 'bootstrap-icons/font/bootstrap-icons.css';
+// import AddQuestion from '../forum/components/addQuestion';
+// import Link from 'next/link';
+// import { CldImage } from 'next-cloudinary';
+// import Modal from 'react-bootstrap/Modal';
+// import Button from 'react-bootstrap/Button';
 
+import React from 'react';
+import ShowForum from './components/showForum';
 
 export const dynamic = 'force-dynamic';
 
-export default function Forum() {
-    const [addForum, setAddForum] = useState(false);
-    const [forum_ar, setForum_ar] = useState([]);
+async function doApi ()  {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    console.log(data);
+    // setForum_ar(data);
+    return data;
+}
 
-    const [show, setShow] = useState(false);
+export default async function Forum() {
+    // const [addForum, setAddForum] = useState(false);
+    // const [forum_ar, setForum_ar] = useState([]);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    // const [show, setShow] = useState(false);
 
-
-    useEffect(() => {
-        doApi();
-    }, [addForum])
-
-    const doApi = async () => {
-        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum`;
-        const resp = await fetch(url);
-        const data = await resp.json();
-        console.log(data);
-        setForum_ar(data);
-    }
+    // const handleClose = () => setShow(false);
+    // const handleShow = () => setShow(true);
 
 
+    // useEffect(() => {
+    //     doApi();
+    // }, [addForum])
 
-
-
-    const formatPostAgo = (date: number): string => {
-        const timePosted = Date.now() - date;
-        const minutesAgo = Math.floor(timePosted / (1000 * 60));
-        if (minutesAgo < 1) return "עכשיו";
-        if (minutesAgo < 60) return `לפני ${minutesAgo} דקות`;
-        const hoursAgo = Math.floor(minutesAgo / 60);
-        if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
-        const daysAgo = Math.floor(hoursAgo / 24);
-        if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
     
-        const dateTest = new Date(date * 1000); // מכפיל ב-1000 אם הזמן בשניות
-        const formatter = new Intl.DateTimeFormat('he-IL', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        });
 
-        return formatter.format(date);
-      }
+
+    const initialData = await doApi();
+
+
+    // const formatPostAgo = (date: number): string => {
+    //     const timePosted = Date.now() - date;
+    //     const minutesAgo = Math.floor(timePosted / (1000 * 60));
+    //     if (minutesAgo < 1) return "עכשיו";
+    //     if (minutesAgo < 60) return `לפני ${minutesAgo} דקות`;
+    //     const hoursAgo = Math.floor(minutesAgo / 60);
+    //     if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
+    //     const daysAgo = Math.floor(hoursAgo / 24);
+    //     if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
+
+    //     const dateTest = new Date(date * 1000); // מכפיל ב-1000 אם הזמן בשניות
+    //     const formatter = new Intl.DateTimeFormat('he-IL', {
+    //         year: 'numeric',
+    //         month: '2-digit',
+    //         day: '2-digit'
+    //     });
+
+    //     return formatter.format(date);
+    //   }
 
 
     return (
         <div className='container'>
-
-            <div className='tittle text-center d-flex align-items-center justify-content-center z-1 mt-3'>
+            <ShowForum forumData={initialData}/>
+            {/* <div className='tittle text-center d-flex align-items-center justify-content-center z-1 mt-3'>
                 <p> תושבי רמות אחד בשביל השני<br />
                     שואלים, עונים...וכו וכו מילים של רחלי...</p>
             </div>
@@ -123,7 +128,7 @@ export default function Forum() {
                     )
                 })}
 
-            </div>
+            </div> */}
 
         </div>
     )

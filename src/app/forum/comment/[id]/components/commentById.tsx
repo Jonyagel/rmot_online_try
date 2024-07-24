@@ -10,8 +10,8 @@ import Modal from 'react-bootstrap/Modal';
 export const dynamic = 'auto';
 
 export default function CommentById(props: any) {
-  const [dataForum, setDataForum] = useState<any | []>([]);
-  const [dataComment, setDataComment] = useState([]);
+  const [dataForum, setDataForum] = useState(props.forumData);
+  const [dataComment, setDataComment] = useState(props.commentAr);
   // const [isHovered, setIsHovered] = useState(false);
   const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null);
   const [commentReplying, setCommentReplying] = useState({});
@@ -22,13 +22,13 @@ export default function CommentById(props: any) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    doApi();
-    doApiForum();
-  }, [])
+  // useEffect(() => {
+  //   // doApi();
+  //   // doApiForum();
+  // }, [])
 
 
-  const doApi = async () => {
+  const doApiGet = async () => {
     let urlGet = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${props.idForum}`
     const respGet = await fetch(urlGet);
     const dataGet = await respGet.json();
@@ -37,15 +37,15 @@ export default function CommentById(props: any) {
     setDataComment(commentAr);
   }
 
-  const doApiForum = async () => {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`
-    const resp = await fetch(url);
-    const data = await resp.json();
-    const ForumAr = data;
-    setDataForum(ForumAr);
-    console.log(data);
+  // const doApiForum = async () => {
+  //   let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`
+  //   const resp = await fetch(url);
+  //   const data = await resp.json();
+  //   const ForumAr = data;
+  //   setDataForum(ForumAr);
+  //   console.log(data);
 
-  }
+  // }
 
 
   const formatPostAgo = (date: number): string => {
@@ -195,7 +195,8 @@ export default function CommentById(props: any) {
         )
 
       })}
-      <AddComment idForum={props.idForum} doApiProps={doApi} doApiForum={doApiForum} commentReplying={commentReplying} replay={replay} setReplay={setReplay} />
+      {/* <AddComment idForum={props.idForum} doApiProps={doApi} doApiForum={doApiForum} commentReplying={commentReplying} replay={replay} setReplay={setReplay} /> */}
+      <AddComment doApiGet={doApiGet} idForum={props.idForum} dataComment={dataComment} doApiForum={dataForum} commentReplying={commentReplying} replay={replay} setReplay={setReplay} />
     </div>
   )
 }
