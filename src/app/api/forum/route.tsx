@@ -10,9 +10,16 @@ import { CommentsForumModel } from "../../models/commentForumModel";
 export const dynamic = 'auto';
 
 export async function GET(req: any, route: any) {
+    const q = new URL(req.url);
+    const pageQuery: any = q.searchParams.get("page");
+    const perPage = 5;
+    const page = pageQuery ? parseInt(pageQuery) - 1 : 0; // חישוב ערך הדף
+
     try {
         await connectDb();
-        const data = await ForumModel.find({});
+        const data = await ForumModel.find({})
+            // .limit(perPage)
+            // .skip(page * perPage)
         return NextResponse.json(data);
     }
     catch (err) {

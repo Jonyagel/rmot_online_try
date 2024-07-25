@@ -12,6 +12,9 @@ const commentsForumSchema = new mongoose.Schema({
     commentReplayId: {
         type: String, default: ""
     },
+    fileName:{ 
+        type: String, default:""
+     },
 }, { timestamps: true })
 
 export const CommentsForumModel = mongoose.models["commentsForums"] || mongoose.model("commentsForums", commentsForumSchema);
@@ -25,6 +28,7 @@ export const validateCommentsForum = (_body: any) => {
         commentReplayId: Joi.string().min(0).max(2000).allow("", null),
         commentReplayContent: Joi.string().min(0).max(2000).allow("", null),
         commentReplayUserName: Joi.string().min(0).max(2000).allow("", null),
+        fileName: Joi.string().min(0).max(200).allow("",null),
     })
     return joiSchema.validate(_body)
 }

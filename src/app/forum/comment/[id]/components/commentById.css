@@ -28,3 +28,12 @@
     border: none;
     border-radius: 15px;
   }
+
+  .highlight {
+    animation: highlight 2s ease-out;
+  }
+  
+  @keyframes highlight {
+    0% { background-color: #ffff99; }
+    100% { background-color: transparent; }
+  }
