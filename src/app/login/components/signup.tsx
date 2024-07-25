@@ -94,29 +94,29 @@ export default function Signup() {
   return (
     <div className='signup-container'>
       <div className='signup-form bg-light shadow p-5 rounded'>
-        <h2 className='text-center mb-2'>Join us today</h2>
-        <p className='text-center mb-4'>Please enter your details to create an account.</p>
+        <h2 className='text-center mb-2'>הצטרף אלינו היום</h2>
+        <p className='text-center mb-4'>אנא הכנס את פרטיך כדי ליצור חשבון</p>
         <form onSubmit={doApi}>
           <div className='mb-3'>
-            <label className='form-label'>Name</label>
-            <input ref={nameRef} className='form-control' type='text' placeholder='Enter your name' required />
+            <label className='form-label'>שם</label>
+            <input ref={nameRef} className='form-control' type='text' placeholder='הכנס שם...' required />
           </div>
           <div className='mb-3'>
-            <label className='form-label'>Email</label>
-            <input ref={emailRef} className='form-control' type='email' placeholder='Enter your email' required />
+            <label className='form-label'>מייל</label>
+            <input ref={emailRef} className='form-control' type='email' placeholder='הכנס אימייל...' required />
           </div>
           <div className='mb-3'>
-            <label className='form-label'>Password</label>
-            <input ref={passRef} className='form-control' type='password' placeholder='Password' required />
+            <label className='form-label'>סיסמא</label>
+            <input ref={passRef} className='form-control' type='password' placeholder='סיסמא...' required />
           </div>
-          <button className='btn btn-primary w-100 mb-3' type='submit'>Sign Up</button>
+          <button className='btn btn-primary w-100 mb-3' type='submit'>הירשם</button>
           <button className='btn btn-outline-dark w-100 block' type='button'>
             <i className="bi bi-google"></i>
-            <p className='m-0'>Sign up with Google</p>  
+            <p className='m-0'>הירשם עם גוגל</p>  
           </button>
         </form>
         <p className='text-center mt-3'>
-          Already have an account? <Link href='/login' className='text-decoration-none'>Login here</Link>
+          כבר יש לך חשבון? <Link href='/login' className='text-decoration-none'>הכנס פה</Link>
         </p>
       </div>
     </div>

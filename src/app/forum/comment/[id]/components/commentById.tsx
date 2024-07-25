@@ -209,12 +209,194 @@
 //   )
 // }
 
+// "use client"
+// import React, { useEffect, useState } from 'react'
+// import 'bootstrap-icons/font/bootstrap-icons.css';
+// import AddComment from './addComment';
+// import { CldImage } from 'next-cloudinary';
+// import Modal from 'react-bootstrap/Modal';
+
+// export const dynamic = 'auto';
+
+// export default function CommentById(props: any) {
+//   const [dataForum, setDataForum] = useState(props.forumData);
+//   const [dataComment, setDataComment] = useState(props.commentAr);
+//   const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null);
+//   const [commentReplying, setCommentReplying] = useState({});
+//   const [replay, setReplay] = useState(false);
+//   const [show, setShow] = useState(false);
+
+//   const handleClose = () => setShow(false);
+//   const handleShow = () => setShow(true);
+
+//   useEffect(() => {
+//     doApiGet();
+//     doApiForum();
+//   }, [])
+
+//   const doApiGet = async () => {
+//     let urlGet = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${props.idForum}`
+//     const respGet = await fetch(urlGet, { cache: 'no-store' });
+//     const dataGet = await respGet.json();
+//     setDataComment(dataGet);
+//   }
+
+//   const doApiForum = async () => {
+//     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`
+//     const resp = await fetch(url);
+//     const data = await resp.json();
+//     setDataForum(data);
+//   }
+
+//   const formatPostAgo = (date: number): string => {
+//     const timePosted = Date.now() - date;
+//     const minutesAgo = Math.floor(timePosted / (1000 * 60));
+//     if (minutesAgo < 1) return "עכשיו";
+//     if (minutesAgo < 60) return `לפני ${minutesAgo} דקות`;
+//     const hoursAgo = Math.floor(minutesAgo / 60);
+//     if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
+//     const daysAgo = Math.floor(hoursAgo / 24);
+//     if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
+
+//     const dateTest = new Date(date);
+//     const formatter = new Intl.DateTimeFormat('he-IL', {
+//       year: 'numeric',
+//       month: '2-digit',
+//       day: '2-digit'
+//     });
+
+//     return formatter.format(dateTest);
+//   }
+
+//   const handleCommentReply = (dataComment: any, userComment: any, commentId: any) => {
+//     setCommentReplying({ dataComment, userComment, commentId })
+//   }
+
+//   return (
+//     <div className='container-fluid px-2 px-md-3'>
+//       <Modal show={show} onHide={handleClose} centered>
+//         <button onClick={handleClose} className="btn-close position-absolute top-0 end-0 m-2 z-3" aria-label="Close"></button>
+//         <CldImage
+//           src={dataForum.fileName}
+//           width="900"
+//           height="900"
+//           sizes="100vw"
+//           crop={{
+//             type: 'fill',
+//             source: true
+//           }}
+//           radius={30}
+//           alt='Forum Image'
+//           priority
+//         />
+//       </Modal>
+
+//       <div key={dataForum._id} className='rounded bg-opacity-25 px-2 h-auto mt-4 mb-2'>
+//         <span className="text-dark top-0 start-100 translate-middle badge shadow-sm rounded-pill bg-white text-muted" style={{ zIndex: 1 }}>
+//           {dataForum.topic}
+//         </span>
+//         <div className='row pt-2 rounded bg-light'>
+//           <div className='col-12 col-md-1 text-center mt-4'>
+//             <div className='bg-indigo-400 rounded-circle d-inline-block' style={{ width: '2.5rem', height: '2.5rem', lineHeight: '2.5rem' }}>
+//               <p className='m-0'>{dataForum.userName[0]}</p>
+//             </div>
+//             <p className='mt-2'>{dataForum.userName}</p>
+//           </div>
+//           <div className='col-12 col-md-9 p-2'>
+//             <h5 className='mb-0 fw-bold'>{dataForum.tittle}</h5>
+//             <hr />
+//             <p style={{ whiteSpace: "pre-wrap" }}>{dataForum.description}</p>
+//             {dataForum.fileName &&
+//               <div className='text-center'>
+//                 <CldImage
+//                   src={dataForum.fileName} // Use this sample image or upload your own via the Media Explorer
+//                   width="100" // Transform the image: auto-crop to square aspect_ratio
+//                   height="100"
+//                   sizes="100vw"
+//                   crop={{
+//                     type: 'fill',
+//                     source: true
+//                   }}
+//                   radius={100}
+//                   alt='hi'
+//                   // priority
+//                   onClick={() => { handleShow() }}
+//                 />
+//               </div>
+//             }
+//           </div>
+//           <div className='col-12 col-md-2 d-flex justify-content-between px-4 align-items-end mb-2'>
+//             <p className='mb-0'>{formatPostAgo(dataForum.date)}</p>
+//             <i className="bi bi-chat"> {dataForum.numOfComments} </i>
+//           </div>
+//         </div>
+//       </div>
+
+//       {dataComment && dataComment.map((item: any) => (
+//         <div
+//           key={item._id}
+//           className='row rounded bg-opacity-25 px-2 h-auto mb-2 mx-0'
+//           onMouseEnter={() => setHoveredCommentId(item._id)}
+//           onMouseLeave={() => setHoveredCommentId(null)}
+//         >
+//           <div className='col-12 col-md-2 text-start ps-3 mb-2 mb-md-0 flex align-items-center justify-content-end'>
+//             <button
+//               onClick={() => {
+//                 handleCommentReply(item.comment, item.userName, item._id);
+//                 setReplay(true);
+//               }}
+//               className='comment_on_comment btn rounded-circle '
+//               style={{ opacity: hoveredCommentId === item._id ? 1 : 0 }}
+//             >
+//               <i className="bi bi-arrow-90deg-left"></i>
+//             </button>
+//           </div>
+//           <div className='col-12 col-md-10 bg-light rounded p-2'>
+//             {item.commentReplayId &&
+//               <div className='bg-opacity-25 rounded shadow-sm mb-2 p-2' style={{ background: 'rgb(230, 230, 230)' }}>
+//                 <p className='fw-bold m-0'>{item.commentReplayUserName}</p>
+//                 <p className='m-0'>{item.commentReplayContent}</p>
+//               </div>
+//             }
+//             <div className='row'>
+//               <div className='col-2 col-md-1 text-center'>
+//                 <div className='bg-indigo-400 rounded-circle d-inline-block' style={{ width: '2rem', height: '2rem', lineHeight: '2rem' }}>
+//                   <p className='m-0'>{item.userName[0]}</p>
+//                 </div>
+//                 <p className='mt-1 small'>{item.userName}</p>
+//               </div>
+//               <div className='col-10 col-md-9'>
+//                 <p style={{ whiteSpace: "pre-wrap" }}>{item.comment}</p>
+//               </div>
+//               <div className='col-12 col-md-2 text-end'>
+//                 <p className='mb-0 small'>{formatPostAgo(item.date)}</p>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       ))}
+
+//       <AddComment
+//         doApiGet={doApiGet}
+//         doApiForum={doApiForum}
+//         idForum={props.idForum}
+//         dataComment={dataComment}
+//         dataForum={dataForum}
+//         commentReplying={commentReplying}
+//         replay={replay}
+//         setReplay={setReplay}
+//       />
+//     </div>
+//   )
+// }
+
 "use client"
 import React, { useEffect, useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddComment from './addComment';
 import { CldImage } from 'next-cloudinary';
-import Modal from 'react-bootstrap/Modal';
+import { Card, Badge, Button, Modal } from 'react-bootstrap';
+import './commentById.css'
 
 export const dynamic = 'auto';
 
@@ -235,157 +417,163 @@ export default function CommentById(props: any) {
   }, [])
 
   const doApiGet = async () => {
-    let urlGet = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${props.idForum}`
-    const respGet = await fetch(urlGet, { cache: 'no-store' });
-    const dataGet = await respGet.json();
-    setDataComment(dataGet);
-  }
+        let urlGet = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${props.idForum}`
+        const respGet = await fetch(urlGet, { cache: 'no-store' });
+        const dataGet = await respGet.json();
+        setDataComment(dataGet);
+      }
+    
+      const doApiForum = async () => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`
+        const resp = await fetch(url);
+        const data = await resp.json();
+        setDataForum(data);
+      }
+    
+      const formatPostAgo = (date: number): string => {
+        const timePosted = Date.now() - date;
+        const minutesAgo = Math.floor(timePosted / (1000 * 60));
+        if (minutesAgo < 1) return "עכשיו";
+        if (minutesAgo < 60) return `לפני ${minutesAgo} דקות`;
+        const hoursAgo = Math.floor(minutesAgo / 60);
+        if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
+        const daysAgo = Math.floor(hoursAgo / 24);
+        if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
+    
+        const dateTest = new Date(date);
+        const formatter = new Intl.DateTimeFormat('he-IL', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+    
+        return formatter.format(dateTest);
+      }
+    
+      const handleCommentReply = (dataComment: any, userComment: any, commentId: any) => {
+        setCommentReplying({ dataComment, userComment, commentId })
+      }
 
-  const doApiForum = async () => {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`
-    const resp = await fetch(url);
-    const data = await resp.json();
-    setDataForum(data);
-  }
-
-  const formatPostAgo = (date: number): string => {
-    const timePosted = Date.now() - date;
-    const minutesAgo = Math.floor(timePosted / (1000 * 60));
-    if (minutesAgo < 1) return "עכשיו";
-    if (minutesAgo < 60) return `לפני ${minutesAgo} דקות`;
-    const hoursAgo = Math.floor(minutesAgo / 60);
-    if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
-    const daysAgo = Math.floor(hoursAgo / 24);
-    if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
-
-    const dateTest = new Date(date);
-    const formatter = new Intl.DateTimeFormat('he-IL', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
-
-    return formatter.format(dateTest);
-  }
-
-  const handleCommentReply = (dataComment: any, userComment: any, commentId: any) => {
-    setCommentReplying({ dataComment, userComment, commentId })
-  }
-
-  return (
-    <div className='container-fluid px-2 px-md-3'>
-      <Modal show={show} onHide={handleClose} centered>
-        <button onClick={handleClose} className="btn-close position-absolute top-0 end-0 m-2 z-3" aria-label="Close"></button>
-        <CldImage
-          src={dataForum.fileName}
-          width="900"
-          height="900"
-          sizes="100vw"
-          crop={{
-            type: 'fill',
-            source: true
-          }}
-          radius={30}
-          alt='Forum Image'
-          priority
-        />
-      </Modal>
-
-      <div key={dataForum._id} className='rounded bg-opacity-25 px-2 h-auto mt-4 mb-2'>
-        <span className="text-dark top-0 start-100 translate-middle badge shadow-sm rounded-pill bg-white text-muted" style={{ zIndex: 1 }}>
-          {dataForum.topic}
-        </span>
-        <div className='row pt-2 rounded bg-light'>
-          <div className='col-12 col-md-1 text-center mt-4'>
-            <div className='bg-indigo-400 rounded-circle d-inline-block' style={{ width: '2.5rem', height: '2.5rem', lineHeight: '2.5rem' }}>
-              <p className='m-0'>{dataForum.userName[0]}</p>
-            </div>
-            <p className='mt-2'>{dataForum.userName}</p>
-          </div>
-          <div className='col-12 col-md-9 p-2'>
-            <h5 className='mb-0 fw-bold'>{dataForum.tittle}</h5>
-            <hr />
-            <p style={{ whiteSpace: "pre-wrap" }}>{dataForum.description}</p>
-            {dataForum.fileName &&
-              <div className='text-center'>
-                <CldImage
-                  src={dataForum.fileName} // Use this sample image or upload your own via the Media Explorer
-                  width="100" // Transform the image: auto-crop to square aspect_ratio
-                  height="100"
-                  sizes="100vw"
-                  crop={{
-                    type: 'fill',
-                    source: true
-                  }}
-                  radius={100}
-                  alt='hi'
-                  // priority
-                  onClick={() => { handleShow() }}
-                />
-              </div>
-            }
-          </div>
-          <div className='col-12 col-md-2 d-flex justify-content-between px-4 align-items-end mb-2'>
-            <p className='mb-0'>{formatPostAgo(dataForum.date)}</p>
-            <i className="bi bi-chat"> {dataForum.numOfComments} </i>
-          </div>
-        </div>
-      </div>
-
-      {dataComment && dataComment.map((item: any) => (
-        <div
-          key={item._id}
-          className='row rounded bg-opacity-25 px-2 h-auto mb-2 mx-0'
-          onMouseEnter={() => setHoveredCommentId(item._id)}
-          onMouseLeave={() => setHoveredCommentId(null)}
-        >
-          <div className='col-12 col-md-2 text-start ps-3 mb-2 mb-md-0 flex align-items-center justify-content-end'>
-            <button
-              onClick={() => {
-                handleCommentReply(item.comment, item.userName, item._id);
-                setReplay(true);
-              }}
-              className='comment_on_comment btn rounded-circle '
-              style={{ opacity: hoveredCommentId === item._id ? 1 : 0 }}
-            >
-              <i className="bi bi-arrow-90deg-left"></i>
-            </button>
-          </div>
-          <div className='col-12 col-md-10 bg-light rounded p-2'>
-            {item.commentReplayId &&
-              <div className='bg-opacity-25 rounded shadow-sm mb-2 p-2' style={{ background: 'rgb(230, 230, 230)' }}>
-                <p className='fw-bold m-0'>{item.commentReplayUserName}</p>
-                <p className='m-0'>{item.commentReplayContent}</p>
-              </div>
-            }
-            <div className='row'>
-              <div className='col-2 col-md-1 text-center'>
-                <div className='bg-indigo-400 rounded-circle d-inline-block' style={{ width: '2rem', height: '2rem', lineHeight: '2rem' }}>
-                  <p className='m-0'>{item.userName[0]}</p>
+      return (
+        <div className='container mt-5'>
+          <Modal show={show} onHide={handleClose} centered size="lg">
+            <Modal.Body className="p-0">
+              <button onClick={handleClose} className="btn-close position-absolute top-0 end-0 m-3 z-3" aria-label="Close"></button>
+              <CldImage
+                src={dataForum.fileName}
+                width="900"
+                height="900"
+                sizes="100vw"
+                crop={{
+                  type: 'fill',
+                  source: true
+                }}
+                className="rounded"
+                alt='Forum Image'
+                priority
+              />
+            </Modal.Body>
+          </Modal>
+    
+          <Card className="mb-4 shadow-sm">
+            <Card.Body>
+              <Badge bg="info" className="mb-2">{dataForum.topic}</Badge>
+              <div className="d-flex align-items-center mb-3">
+                <div className='bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3' style={{ width: '50px', height: '50px' }}>
+                  <h4 className='m-0'>{dataForum.userName[0]}</h4>
                 </div>
-                <p className='mt-1 small'>{item.userName}</p>
+                <div>
+                  <h4 className="mb-0 fw-bold">{dataForum.tittle}</h4>
+                  <small className="text-muted">{formatPostAgo(dataForum.date)}</small>
+                </div>
               </div>
-              <div className='col-10 col-md-9'>
-                <p style={{ whiteSpace: "pre-wrap" }}>{item.comment}</p>
+              <Card.Text style={{ whiteSpace: "pre-wrap" }}>{dataForum.description}</Card.Text>
+              {dataForum.fileName &&
+                <div className='text-center mt-3'>
+                  <CldImage
+                    src={dataForum.fileName}
+                    width="200"
+                    height="200"
+                    sizes="100vw"
+                    crop={{
+                      type: 'fill',
+                      source: true
+                    }}
+                    className="rounded cursor-pointer"
+                    alt='Forum Image'
+                    onClick={handleShow}
+                  />
+                </div>
+              }
+              <div className='d-flex justify-content-between align-items-center mt-3'>
+                <Button variant="outline-primary" size="sm">
+                  <i className="bi bi-chat-dots me-2"></i>
+                  {dataForum.numOfComments} תגובות
+                </Button>
+                <small className='text-muted'>
+                  <i className="bi bi-clock me-1"></i>
+                  {formatPostAgo(dataForum.date)}
+                </small>
               </div>
-              <div className='col-12 col-md-2 text-end'>
-                <p className='mb-0 small'>{formatPostAgo(item.date)}</p>
-              </div>
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
+    
+          {dataComment && dataComment.map((item: any) => (
+            <Card 
+              key={item._id} 
+              className="mb-3 shadow-sm hover-card"
+              onMouseEnter={() => setHoveredCommentId(item._id)}
+              onMouseLeave={() => setHoveredCommentId(null)}
+            >
+              <Card.Body>
+                {item.commentReplayId &&
+                  <Card className="bg-light mb-3">
+                    <Card.Body>
+                      <Card.Title>{item.commentReplayUserName}</Card.Title>
+                      <Card.Text>{item.commentReplayContent}</Card.Text>
+                    </Card.Body>
+                  </Card>
+                }
+                <div className="d-flex">
+                  <div className="me-3">
+                    <div className='bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center' style={{ width: '40px', height: '40px' }}>
+                      <h5 className='m-0'>{item.userName[0]}</h5>
+                    </div>
+                  </div>
+                  <div className="flex-grow-1">
+                    <h6 className="mb-1 font-bold">{item.userName}</h6>
+                    <p className="mb-1" style={{ whiteSpace: "pre-wrap" }}>{item.comment}</p>
+                    <small className="text-muted">{formatPostAgo(item.date)}</small>
+                  </div>
+                  <div>
+                    <Button
+                      variant="outline-secondary"
+                      size="sm"
+                      className="float-end"
+                      style={{ opacity: hoveredCommentId === item._id ? 1 : 0 }}
+                      onClick={() => {
+                        handleCommentReply(item.comment, item.userName, item._id);
+                        setReplay(true);
+                      }}
+                    >
+                      <i className="bi bi-reply"></i> הגב
+                    </Button>
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          ))}
+    
+          <AddComment
+            doApiGet={doApiGet}
+            doApiForum={doApiForum}
+            idForum={props.idForum}
+            dataComment={dataComment}
+            dataForum={dataForum}
+            commentReplying={commentReplying}
+            replay={replay}
+            setReplay={setReplay}
+          />
         </div>
-      ))}
-
-      <AddComment
-        doApiGet={doApiGet}
-        doApiForum={doApiForum}
-        idForum={props.idForum}
-        dataComment={dataComment}
-        dataForum={dataForum}
-        commentReplying={commentReplying}
-        replay={replay}
-        setReplay={setReplay}
-      />
-    </div>
-  )
-}
+      )
+    }

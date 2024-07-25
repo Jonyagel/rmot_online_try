@@ -1,0 +1,61 @@
+.modal-content {
+    border-radius: 15px;
+    border: none;
+  }
+  
+  .modal-header {
+    border-bottom: none;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .form-control:focus, .form-select:focus {
+    box-shadow: none;
+    border-color: #80bdff;
+  }
+  .modal-header {
+    border-bottom: none;
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .close-button {
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #000;
+    opacity: 0.5;
+    transition: opacity 0.15s;
+  }
+  
+  .close-button:hover {
+    opacity: 1;
+    color: #000;
+  }
+  .img-thumbnail {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+}
+
+.btn-danger.rounded-circle {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+}

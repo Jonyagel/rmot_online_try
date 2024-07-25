@@ -1,0 +1,26 @@
+.sticky-bottom {
+    position: sticky;
+    bottom: 0;
+    z-index: 1000;
+    background-color: #f8f9fa;
+    padding: 1rem 0;
+  }
+  
+  textarea {
+    resize: none;
+    overflow: hidden;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 15px;
+  }
+  
+  .btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+  }
