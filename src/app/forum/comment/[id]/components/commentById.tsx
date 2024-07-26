@@ -485,7 +485,6 @@ export default function CommentById(props: any) {
         </Modal.Body>
       </Modal>
 
-
         <Card className='shadow-sm hover-card mb-3'>
           <Card.Body>
             <div className='d-flex justify-content-between align-items-start mb-3'>
@@ -519,6 +518,7 @@ export default function CommentById(props: any) {
                   className="rounded"
                   alt='תמונה מצורפת'
                   priority
+                  onClick={handleShow}
                 />
               </div>
             )}
