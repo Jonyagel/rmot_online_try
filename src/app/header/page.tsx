@@ -89,7 +89,7 @@ export default function Header() {
             <Link className='nav-link' href={'/'} onClick={() => setIsNavOpen(false)}>לכל המשפחה</Link>
             <Link className='nav-link' href={'/nadlan'} onClick={() => setIsNavOpen(false)}>נדלן</Link>
             <Link className='nav-link' href={'/board'} onClick={() => setIsNavOpen(false)}>לוח</Link>
-            <Link className='nav-link' href={'/'} onClick={() => setIsNavOpen(false)}>צור קשר</Link>
+            <Link className='nav-link' href={'/contactUs'} onClick={() => setIsNavOpen(false)}>צור קשר</Link>
         </>
     );
 
