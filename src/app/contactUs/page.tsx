@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Form, Button, Card, Row, Col, Alert, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
-import './ContactUs.css';
+import './contactUs.css';
 
 interface ContactForm {
   name: string;

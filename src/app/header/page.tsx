@@ -86,7 +86,7 @@ export default function Header() {
             <Link className='nav-link' href={'/'} onClick={() => setIsNavOpen(false)}>דף הבית</Link>
             <Link className='nav-link' href={'/neighborhoodInfo'} onClick={() => setIsNavOpen(false)}>מידע שכונתי</Link>
             <Link className='nav-link' href={'/forum'} onClick={() => setIsNavOpen(false)}>פורומים</Link>
-            <Link className='nav-link' href={'/'} onClick={() => setIsNavOpen(false)}>לכל המשפחה</Link>
+            <Link className='nav-link' href={'/allFamily'} onClick={() => setIsNavOpen(false)}>לכל המשפחה</Link>
             <Link className='nav-link' href={'/nadlan'} onClick={() => setIsNavOpen(false)}>נדלן</Link>
             <Link className='nav-link' href={'/board'} onClick={() => setIsNavOpen(false)}>לוח</Link>
             <Link className='nav-link' href={'/contactUs'} onClick={() => setIsNavOpen(false)}>צור קשר</Link>
