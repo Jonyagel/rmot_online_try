@@ -109,7 +109,7 @@ export default function Signup() {
             <label className='form-label'>סיסמא</label>
             <input ref={passRef} className='form-control' type='password' placeholder='סיסמא...' required />
           </div>
-          <button className='btn btn-primary w-100 mb-3' type='submit'>הירשם</button>
+          <button className='signupBtn btn btn-primary w-100 mb-3' type='submit'>הירשם</button>
           <button className='btn btn-outline-dark w-100 block' type='button'>
             <i className="bi bi-google"></i>
             <p className='m-0'>הירשם עם גוגל</p>  

@@ -10,17 +10,21 @@ import { CommentsForumModel } from "../../models/commentForumModel";
 export const dynamic = 'auto';
 
 export async function GET(req: any, route: any) {
-    const q = new URL(req.url);
-    const pageQuery: any = q.searchParams.get("page");
-    const perPage = 5;
-    const page = pageQuery ? parseInt(pageQuery) - 1 : 0; // חישוב ערך הדף
+    const { searchParams } = new URL(req.url);
+    const pageQuery = searchParams.get('page');
+    const perPage = 10;
+    const page = pageQuery ? parseInt(pageQuery) : 0;
 
     try {
         await connectDb();
+
+        const totalDocuments = await ForumModel.countDocuments();
+        const totalPages = Math.ceil(totalDocuments / perPage);
         const data = await ForumModel.find({})
-            // .limit(perPage)
-            // .skip(page * perPage)
-        return NextResponse.json(data);
+            .sort({ createdAt: -1 })
+            .limit(perPage)
+            .skip(page * perPage)
+        return NextResponse.json({ data, totalPages: totalPages, });
     }
     catch (err) {
         console.log(err);

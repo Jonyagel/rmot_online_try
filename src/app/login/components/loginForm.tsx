@@ -102,7 +102,7 @@ export default function LoginForm() {
           <div className='text-end mb-3'>
             <Link href='#' className='text-decoration-none'>שכחת סיסמא?</Link>
           </div>
-          <button className='btn btn-primary w-100 mb-3' type='submit'>הכנס</button>
+          <button className='loginBtn btn btn-primary w-100 mb-3' type='submit'>הכנס</button>
           <button className='btn btn-outline-dark w-100 block'>
           <i className="bi bi-google"></i>
           <p className='m-0'>הכנס עם גוגל</p>  

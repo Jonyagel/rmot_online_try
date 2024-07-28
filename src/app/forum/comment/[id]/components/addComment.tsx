@@ -1,459 +1,3 @@
-// "use client"
-
-// import { useRouter } from 'next/navigation';
-// import React, { useEffect, useRef, useState } from 'react'
-// import 'bootstrap-icons/font/bootstrap-icons.css';
-// import Button from 'react-bootstrap/Button';
-// import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-// import Popover from 'react-bootstrap/Popover';
-// // import data from '@emoji-mart/data'
-// // import Picker from '@emoji-mart/react'
-// import { CldUploadButton } from 'next-cloudinary';
-// import EmojiPicker from 'emoji-picker-react';
-// import { EmojiStyle } from 'emoji-picker-react';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// // import { HiddenEmoji } from 'emoji-picker-react';
-
-// export const dynamic = 'auto';
-
-// export default function AddComment(props: any) {
-
-//   const router = useRouter();
-//   const commentRef: any = useRef();
-//   const [chosenEmoji, setChosenEmoji] = useState(false);
-//   const [fileName, setFileName] = useState("");
-//   const [signIn, setSignIn] = useState(false);
-//   const [showEmoji, setShowEmoji] = useState(false);
-
-
-
-
-//   useEffect(() => {
-
-//   }, [])
-
-//   const onEmojiSelect = (emoji: any) => {
-//     console.log(emoji);
-//     commentRef.current.value += emoji.emoji;
-//   };
-
-//   const notify = () => toast.error("אתה צריך להירשם");
-
-//   const popover = (
-//     <Popover id="popover-basic">
-//       <Popover.Header></Popover.Header>
-//       {/* <Picker data={data} onEmojiSelect={onEmojiSelect}/> */}
-//       <EmojiPicker onEmojiClick={onEmojiSelect} emojiStyle={EmojiStyle.GOOGLE} searchDisabled={true}/>
-//     </Popover>
-//   );
-
-
-
-//   const doApi = async (commentBody: any) => {
-//     if (props.replay === false) {
-//       props.commentReplying.commentId = null;
-//     }
-//     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         forumMsgId: props.idForum,
-//         comment: commentBody,
-//         commentReplayId: props.commentReplying.commentId,
-//         commentReplayContent: props.commentReplying.dataComment,
-//         commentReplayUserName: props.commentReplying.userComment,
-//       }),
-//     });
-//     const data = await resp.json();
-//     console.log(data);
-//     props.doApiGet();
-//     // props.doApiForum();
-//     getForum();
-//   }
-
-
-//   const getForum = async () => {
-//     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`
-//     const resp = await fetch(url);
-//     const data = await resp.json();
-//     const ForumAr = data;
-//     // setDataForum(ForumAr.numOfComments + 1);
-//     putForum(ForumAr.numOfComments + 1)
-//     // console.log(dataForum);
-//     // console.log(data);
-//     // console.log((ForumAr.numOfComments + 1) + "fffffffff");
-
-//   }
-
-//   const putForum = async (updateForum: any) => {
-//     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`, {
-//       method: 'PUT',
-//       body: JSON.stringify({
-//         numOfComments: updateForum
-//       }),
-//       headers: {
-//         'Content-Type': 'application/json',
-//       }
-//     });
-//     const data = await resp.json();
-//     console.log(data);
-//     props.doApiForum();
-//   }
-
-
-//   const addComment = () => {
-//     const comment = commentRef.current.value;
-//     if (comment) {
-//       commentRef.current.value = null;
-//       doApi(comment);
-//       props.doApiGet();
-//       router.refresh();
-//       console.log(comment);
-//       props.setReplay(false);
-//     }
-//   }
-
-//   const handleUpload = (result: any) => {
-//     if (result.event === 'success') {
-//       const publicId = result.info.public_id;
-//       // Extract the file name from the public_id
-//       const fileName = publicId.split('/').pop(); // Extracts the file name
-//       console.log('Uploaded file name:', fileName);
-//       // setFileName(fileName);
-//       setFileName(fileName);
-//       // fileNameAr.push(fileName);
-//       // console.log('File uploaded successfully' + fileNameAr);
-//     }
-//   };
-
-//   const checkSignIn = async () => {
-//     try {
-//       const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
-//       const data = await resp.json();
-//       console.log(data);
-//       if (data.status === 401) {
-//         notify();
-//         setSignIn(false);
-//       }
-//       else if (data.status === 200) {
-//         setSignIn(true);
-//         addComment();
-//       }
-//     }
-//     catch (error) {
-//       console.error('Error:', error);
-//     }
-//   }
-
-//   const handleSubmit = (e: any) => {
-//     e.preventDefault(); // מונע את ברירת המחדל של שליחת הטופס
-//     checkSignIn();
-//     if (signIn) {
-//       addComment();
-//       // setShowEmoji(false);
-//     }
-//   };
-
-//   const handleKeyDown = (e: any) => {
-//     if (e.key === 'Enter' && !e.shiftKey) {
-//       e.preventDefault(); // מונע מעבר שורה רגיל
-//       handleSubmit(e); // קורא לפונקציית השליחה שלך
-//     }
-//   };
-
-
-//   const handleExpand = (e: any) => {
-//     e.target.style.height = 'auto';
-//     e.target.style.height = `${Math.min(e.target.scrollHeight, 96)}px`;
-//   };
-
-
-//     window.addEventListener('scroll', () => {
-//       setShowEmoji(false);
-//     });
-
-
-
-
-//   return (
-//     <div className='sticky-bottom'>
-//       <div className='bg-light rounded px-2 p-2 mx-2 shadow'>
-//         {props.replay &&
-//           <div className='bg-opacity-25 rounded shadow-sm mb-2 justify-content-between d-flex' style={{ background: 'rgb(230, 230, 230)', marginRight: "7.5%" }}>
-//             <div className='d-flex'>
-//               <div className='bg-dark rounded ms-2' style={{ width: "4px", height: "100%" }}> </div>
-//               <div className=''>
-//                 <p className='fw-bold m-0'>{props.commentReplying.userComment}</p>
-//                 <p className='m-0'>{props.commentReplying.dataComment}</p>
-//               </div>
-//             </div>
-//             <button onClick={() => { props.setReplay(false) }} className='btn mx-1' ><i className="bi bi-x-circle"></i></button>
-//           </div>
-//         }
-//         <div className='d-flex'>
-//           <CldUploadButton className='btn btn-light' uploadPreset="my_upload_test" onSuccess={handleUpload}
-//             onError={(error) => {
-//               console.error('Upload error:', error);
-//               // Here you can show an error message to the user
-//               alert('Upload failed. The file might be too large or of an unsupported format.');
-//             }}
-//             options={{
-//               sources: ['local'],
-//               maxFileSize: 5000000, // 5MB in bytes
-//               maxImageWidth: 2000, // Optional: limit image width
-//               maxImageHeight: 2000, // Optional: limit image height
-//               clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'], // Optional: limit file types
-//             }}
-//           > <i className="bi bi-paperclip"></i></CldUploadButton>
-//           <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
-//             <Button className='btn btn-light' onClick={() => {
-//               setShowEmoji(!showEmoji);
-//             }}><i className="bi bi-emoji-smile"></i></Button>
-//           </OverlayTrigger>
-//           <form className='d-flex w-100' onSubmit={handleSubmit}>
-//             <textarea ref={commentRef} onClick={() => {
-//               setShowEmoji(false);
-//             }} onChange={handleExpand} onKeyDown={handleKeyDown} placeholder='add a comment' className='form-control border-0 bg-light' maxLength={1000} rows={1} />
-//             <button onClick={() => {
-//               setShowEmoji(false);
-//             }} className='btn btn-light me-4'><p className="bi bi-send m-0" style={{ transform: 'rotate(225deg)' }}></p></button>
-//           </form>
-//         </div>
-//       </div>
-//       <ToastContainer theme="colored" />
-//     </div >
-//   )
-// }
-
-// "use client"
-
-// import { useRouter } from 'next/navigation';
-// import React, { useRef, useState } from 'react'
-// import { Button, OverlayTrigger, Popover, Card } from 'react-bootstrap';
-// import { CldUploadButton } from 'next-cloudinary';
-// import EmojiPicker from 'emoji-picker-react';
-// import { EmojiStyle } from 'emoji-picker-react';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import 'bootstrap-icons/font/bootstrap-icons.css';
-
-// export const dynamic = 'auto';
-
-// export default function AddComment(props: any) {
-//   const router = useRouter();
-//   const commentRef: any = useRef();
-//   const [fileName, setFileName] = useState("");
-//   const [signIn, setSignIn] = useState(false);
-//   const [showEmoji, setShowEmoji] = useState(false);
-
-//   const onEmojiSelect = (emoji: any) => {
-//     commentRef.current.value += emoji.emoji;
-//   };
-
-//   const notify = () => toast.error("אתה צריך להירשם");
-
-//   const popover = (
-//     <Popover id="popover-basic">
-//       <Popover.Body>
-//         <EmojiPicker onEmojiClick={onEmojiSelect} emojiStyle={EmojiStyle.GOOGLE} searchDisabled={true}/>
-//       </Popover.Body>
-//     </Popover>
-//   );
-
-//   const doApi = async (commentBody: any) => {
-//     if (props.replay === false) {
-//       props.commentReplying.commentId = null;
-//     }
-//     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         forumMsgId: props.idForum,
-//         comment: commentBody,
-//         commentReplayId: props.commentReplying.commentId,
-//         commentReplayContent: props.commentReplying.dataComment,
-//         commentReplayUserName: props.commentReplying.userComment,
-//       }),
-//     });
-//     const data = await resp.json();
-//     console.log(data);
-//     props.doApiGet();
-//     // props.doApiForum();
-//     getForum();
-//   }
-
-
-//   const getForum = async () => {
-//     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`
-//     const resp = await fetch(url);
-//     const data = await resp.json();
-//     const ForumAr = data;
-//     // setDataForum(ForumAr.numOfComments + 1);
-//     putForum(ForumAr.numOfComments + 1)
-//     // console.log(dataForum);
-//     // console.log(data);
-//     // console.log((ForumAr.numOfComments + 1) + "fffffffff");
-
-//   }
-
-//   const putForum = async (updateForum: any) => {
-//     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum/${props.idForum}`, {
-//       method: 'PUT',
-//       body: JSON.stringify({
-//         numOfComments: updateForum
-//       }),
-//       headers: {
-//         'Content-Type': 'application/json',
-//       }
-//     });
-//     const data = await resp.json();
-//     console.log(data);
-//     props.doApiForum();
-//   }
-
-
-//   const addComment = () => {
-//     const comment = commentRef.current.value;
-//     if (comment) {
-//       commentRef.current.value = null;
-//       doApi(comment);
-//       props.doApiGet();
-//       router.refresh();
-//       console.log(comment);
-//       props.setReplay(false);
-//     }
-//   }
-
-//   const handleUpload = (result: any) => {
-//     if (result.event === 'success') {
-//       const publicId = result.info.public_id;
-//       // Extract the file name from the public_id
-//       const fileName = publicId.split('/').pop(); // Extracts the file name
-//       console.log('Uploaded file name:', fileName);
-//       // setFileName(fileName);
-//       setFileName(fileName);
-//       // fileNameAr.push(fileName);
-//       // console.log('File uploaded successfully' + fileNameAr);
-//     }
-//   };
-
-//   const checkSignIn = async () => {
-//     try {
-//       const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
-//       const data = await resp.json();
-//       console.log(data);
-//       if (data.status === 401) {
-//         notify();
-//         setSignIn(false);
-//       }
-//       else if (data.status === 200) {
-//         setSignIn(true);
-//         addComment();
-//       }
-//     }
-//     catch (error) {
-//       console.error('Error:', error);
-//     }
-//   }
-
-//   const handleSubmit = (e: any) => {
-//     e.preventDefault(); // מונע את ברירת המחדל של שליחת הטופס
-//     checkSignIn();
-//     if (signIn) {
-//       addComment();
-//       // setShowEmoji(false);
-//     }
-//   };
-
-//   const handleKeyDown = (e: any) => {
-//     if (e.key === 'Enter' && !e.shiftKey) {
-//       e.preventDefault(); // מונע מעבר שורה רגיל
-//       handleSubmit(e); // קורא לפונקציית השליחה שלך
-//     }
-//   };
-
-
-//   const handleExpand = (e: any) => {
-//     e.target.style.height = 'auto';
-//     e.target.style.height = `${Math.min(e.target.scrollHeight, 96)}px`;
-//   };
-
-
-//     window.addEventListener('scroll', () => {
-//       setShowEmoji(false);
-//     });
-
-//   return (
-//     <div className='sticky-bottom mt-4'>
-//       <Card className='shadow-sm'>
-//         <Card.Body>
-//           {props.replay && (
-//             <Card className='mb-3 bg-light'>
-//               <Card.Body>
-//                 <div className='d-flex justify-content-between align-items-center'>
-//                   <div>
-//                     <Card.Title>{props.commentReplying.userComment}</Card.Title>
-//                     <Card.Text>{props.commentReplying.dataComment}</Card.Text>
-//                   </div>
-//                   <Button variant="light" onClick={() => props.setReplay(false)}>
-//                     <i className="bi bi-x-lg"></i>
-//                   </Button>
-//                 </div>
-//               </Card.Body>
-//             </Card>
-//           )}
-//           <div className='d-flex align-items-center'>
-//             <CldUploadButton 
-//               className='btn btn-outline-secondary me-2' 
-//               uploadPreset="my_upload_test" 
-//               onSuccess={handleUpload}
-//               onError={(error) => {
-//                 console.error('Upload error:', error);
-//                 toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
-//               }}
-//               options={{
-//                 sources: ['local'],
-//                 maxFileSize: 5000000,
-//                 maxImageWidth: 2000,
-//                 maxImageHeight: 2000,
-//                 clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-//               }}
-//             > 
-//               <i className="bi bi-paperclip"></i>
-//             </CldUploadButton>
-//             <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
-//               <Button variant="outline-secondary" className='me-2' onClick={() => setShowEmoji(!showEmoji)}>
-//                 <i className="bi bi-emoji-smile"></i>
-//               </Button>
-//             </OverlayTrigger>
-//             <form className='d-flex flex-grow-1' onSubmit={handleSubmit}>
-//               <textarea 
-//                 ref={commentRef} 
-//                 onClick={() => setShowEmoji(false)} 
-//                 onChange={handleExpand} 
-//                 onKeyDown={handleKeyDown} 
-//                 placeholder='הוסף תגובה' 
-//                 className='form-control me-2' 
-//                 maxLength={1000} 
-//                 rows={1} 
-//               />
-//               <Button type="submit" variant="primary">
-//                 <i className="bi bi-send" style={{ transform: 'rotate(45deg)' }}></i>
-//               </Button>
-//             </form>
-//           </div>
-//         </Card.Body>
-//       </Card>
-//       <ToastContainer position="bottom-center" theme="colored" />
-//     </div>
-//   )
-// }
-
 "use client"
 
 import { useRouter } from 'next/navigation';
@@ -465,6 +9,7 @@ import { EmojiStyle } from 'emoji-picker-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import './addComment.css'
 
 export const dynamic = 'auto';
 
@@ -477,14 +22,18 @@ export default function AddComment(props: any) {
 
   const onEmojiSelect = (emoji: any) => {
     commentRef.current.value += emoji.emoji;
+    console.log(emoji);
   };
 
   const notify = () => toast.error("אתה צריך להירשם");
 
   const popover = (
-    <Popover id="popover-basic">
+    <Popover id="popover-basic" className=''>
       <Popover.Body>
-        <EmojiPicker onEmojiClick={onEmojiSelect} emojiStyle={EmojiStyle.GOOGLE} searchDisabled={true} />
+        <EmojiPicker onEmojiClick={onEmojiSelect} emojiStyle={EmojiStyle.GOOGLE} searchDisabled={true} width={240}
+          height={400} 
+          // hiddenEmojis={[ '1f600' ,  '1f601' ,  '1f602' ,"1f607","1f970"]}
+          />
       </Popover.Body>
     </Popover>
   );
@@ -631,54 +180,61 @@ export default function AddComment(props: any) {
               </Card.Body>
             </Card>
           )}
-          <div className='d-flex align-items-center'>
-            <CldUploadButton
-              className='btn btn-outline-secondary me-2 border-0'
-              uploadPreset="my_upload_test"
-              onSuccess={handleUpload}
-              onError={(error) => {
-                console.error('Upload error:', error);
-                toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
-              }}
-              options={{
-                sources: ['local'],
-                maxFileSize: 5000000,
-                maxImageWidth: 2000,
-                maxImageHeight: 2000,
-                clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-              }}
-            >
-              <i className="bi bi-paperclip"></i>
-            </CldUploadButton>
-            <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
-              <Button variant="outline-secondary border-0" className='me-2' onClick={() => setShowEmoji(!showEmoji)}>
-                <i className="bi bi-emoji-smile"></i>
-              </Button>
-            </OverlayTrigger>
-            <form className='d-flex flex-grow-1' onSubmit={handleSubmit}>
-              <textarea
-                ref={commentRef}
-                onClick={() => setShowEmoji(false)}
-                onChange={handleExpand}
-                onKeyDown={handleKeyDown}
-                placeholder='הוסף תגובה'
-                className='form-control me-2'
-                maxLength={1000}
-                rows={1}
-              />
-              <Button type="submit" variant="primary">
-                <i className="bi bi-send" style={{ transform: 'rotate(45deg)' }}></i>
-              </Button>
-            </form>
-          </div>
-          {fileName && (
-            <div className="mt-2">
-              <small className="text-muted">
-                <i className="bi bi-file-earmark-image me-1"></i>
-                קובץ מצורף: {fileName}
-              </small>
+          <div className='d-flex flex-column'>
+            <div className='d-flex align-items-end mb-2'>
+              <div className='d-flex align-items-center ms-2'>
+                <CldUploadButton
+                  className='btn btn-outline-primary me-2 border-0'
+                  uploadPreset="my_upload_test"
+                  onSuccess={handleUpload}
+                  onError={(error) => {
+                    console.error('Upload error:', error);
+                    toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
+                  }}
+                  options={{
+                    sources: ['local'],
+                    maxFileSize: 5000000,
+                    maxImageWidth: 2000,
+                    maxImageHeight: 2000,
+                    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                  }}
+                >
+                  <i className="bi bi-paperclip"></i>
+                </CldUploadButton>
+                <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
+                  <Button variant="btn btn-outline-primary border-0" className='me-2' onClick={() => setShowEmoji(!showEmoji)}>
+                    <i className="bi bi-emoji-smile"></i>
+                  </Button>
+                </OverlayTrigger>
+              </div>
+              <div className='flex-grow-1'>
+                <textarea
+                  ref={commentRef}
+                  onClick={() => setShowEmoji(false)}
+                  onChange={handleExpand}
+                  onKeyDown={handleKeyDown}
+                  placeholder='הוסף תגובה'
+                  className='form-control'
+                  maxLength={1000}
+                  rows={1}
+                  style={{ resize: 'none', minHeight: '38px', maxHeight: '200px', overflowY: 'auto' }}
+                />
+              </div>
+              <div className='d-flex align-items-center ms-2'>
+                <Button type="submit" variant="primary" onClick={handleSubmit}>
+                  <i className="bi bi-send" style={{ transform: 'rotate(45deg)' }}></i>
+                </Button>
+              </div>
             </div>
-          )}
+            {fileName && (
+              <div className="mt-2">
+                <small className="text-muted">
+                  <i className="bi bi-file-earmark-image me-1"></i>
+                  קובץ מצורף: {fileName}
+                </small>
+              </div>
+            )}
+          </div>
         </Card.Body>
       </Card>
       <ToastContainer position="bottom-center" theme="colored" />
