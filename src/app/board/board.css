@@ -1,0 +1,26 @@
+.hover-card {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .hover-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .card-img-top {
+    object-fit: cover;
+    height: 200px;
+  }
+  
+  .badge {
+    font-size: 0.8rem;
+  }
+  
+  .btn-light {
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+  }
+  
+  .btn-light:hover {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+  }

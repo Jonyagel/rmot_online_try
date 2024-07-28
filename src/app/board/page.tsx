@@ -1,0 +1,240 @@
+"use client"
+import React, { useEffect, useState } from 'react'
+import { CldImage } from 'next-cloudinary';
+import { Card, Badge, Button, Modal, Form, Row, Col, Tabs, Tab, InputGroup, FormControl } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faHeart, faShare, faPlus } from '@fortawesome/free-solid-svg-icons';
+import './board.css'; // נניח שיצרנו קובץ CSS נפרד
+
+export const dynamic = 'auto';
+
+interface BoardItem {
+  id: number;
+  type: 'sale' | 'lost-found' | 'gmach' | 'class';
+  title: string;
+  description: string;
+  price?: number;
+  contact: string;
+  image?: string;
+  date: string;
+  likes: number;
+}
+
+export default function CommunityBoard() {
+  const [items, setItems] = useState<BoardItem[]>([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<BoardItem | null>(null);
+  const [activeTab, setActiveTab] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [sortBy, setSortBy] = useState<'date' | 'likes'>('date');
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fetchItems = async () => {
+    // כאן תוכל להוסיף קריאת API אמיתית
+    const mockData: BoardItem[] = [
+      { id: 1, type: 'sale', title: 'אופניים למכירה', description: 'אופניים במצב מצוין', price: 500, contact: '050-1234567', image: 'bicycle_wvuwcc', date: '2024-07-28', likes: 5 },
+      { id: 2, type: 'lost-found', title: 'נמצא ארנק', description: 'נמצא ארנק ברחוב הרצל', contact: '052-7654321', date: '2024-07-27', likes: 2 },
+      { id: 3, type: 'gmach', title: 'גמ"ח כלי עבודה', description: 'השאלת כלי עבודה לתושבי השכונה', contact: 'gmach@example.com', date: '2024-07-26', likes: 10 },
+      { id: 4, type: 'class', title: 'חוג יוגה', description: 'חוג יוגה בימי שלישי בערב', price: 40, contact: '053-9876543', image: 'yoga_inydwp', date: '2024-07-25', likes: 8 },
+    ];
+    setItems(mockData);
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    setSelectedItem(null);
+  };
+
+  const handleShow = (item: BoardItem) => {
+    setSelectedItem(item);
+    setShowModal(true);
+  };
+
+  const getItemTypeName = (type: string) => {
+    switch (type) {
+      case 'sale': return 'מכירה';
+      case 'lost-found': return 'אבידה ומציאה';
+      case 'gmach': return 'גמ"ח';
+      case 'class': return 'חוג';
+      default: return type;
+    }
+  };
+
+  const handleLike = (id: number) => {
+    setItems(prevItems =>
+      prevItems.map(item =>
+        item.id === id ? { ...item, likes: item.likes + 1 } : item
+      )
+    );
+  };
+
+  const handleShare = (item: BoardItem) => {
+    // כאן תוכל להוסיף לוגיקה לשיתוף, לדוגמה:
+    if (navigator.share) {
+      navigator.share({
+        title: item.title,
+        text: item.description,
+        url: window.location.href,
+      }).then(() => {
+        console.log('Successful share');
+      }).catch((error) => {
+        console.log('Error sharing', error);
+      });
+    } else {
+      console.log('Web Share API not supported');
+      // כאן תוכל להוסיף אלטרנטיבה לדפדפנים שלא תומכים ב-Web Share API
+    }
+  };
+
+  const filteredAndSortedItems = items
+    .filter(item => activeTab === 'all' || item.type === activeTab)
+    .filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                    item.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => {
+      if (sortBy === 'date') {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      } else {
+        return b.likes - a.likes;
+      }
+    });
+
+  return (
+    <div className='container mt-5'>
+      <h1 className="mb-4 text-center">לוח קהילתי</h1>
+      
+      <div className="mb-4">
+        <InputGroup>
+          <FormControl
+            placeholder="חיפוש..."
+            aria-label="חיפוש"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <InputGroup.Text>
+            <FontAwesomeIcon icon={faSearch} />
+          </InputGroup.Text>
+        </InputGroup>
+      </div>
+
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <Tabs
+          activeKey={activeTab}
+          onSelect={(k:any) => setActiveTab(k)}
+          className="mb-3"
+        >
+          <Tab eventKey="all" title="הכל" />
+          <Tab eventKey="sale" title="מכירה" />
+          <Tab eventKey="lost-found" title="אבידה ומציאה" />
+          <Tab eventKey="gmach" title='גמ"ח' />
+          <Tab eventKey="class" title="חוגים" />
+        </Tabs>
+        
+        <Form.Select 
+          style={{width: 'auto'}}
+          value={sortBy} 
+          onChange={(e) => setSortBy(e.target.value as 'date' | 'likes')}
+        >
+          <option value="date">מיון לפי תאריך</option>
+          <option value="likes">מיון לפי לייקים</option>
+        </Form.Select>
+      </div>
+
+      <Row>
+        {filteredAndSortedItems.map(item => (
+          <Col key={item.id} md={4} className="mb-4">
+            <Card className='shadow-sm hover-card h-100'>
+              {item.image ? (
+                <CldImage
+                  src={item.image}
+                  width="400"
+                  height="300"
+                  crop="fill"
+                  alt={item.title}
+                  className="card-img-top"
+                />
+              ) : (
+                <div className="card-img-top d-flex align-items-center justify-content-center bg-light" style={{height: '200px'}}>
+                  <FontAwesomeIcon icon={faPlus} size="3x" color="#adb5bd" />
+                </div>
+              )}
+              <Card.Body className="d-flex flex-column">
+                <Card.Title>{item.title}</Card.Title>
+                <Card.Text>{item.description}</Card.Text>
+                {item.price && <Card.Text>מחיר: {item.price} ₪</Card.Text>}
+                <Badge bg="info" className="mb-2">
+                  {getItemTypeName(item.type)}
+                </Badge>
+                <small className="text-muted mb-2">{new Date(item.date).toLocaleDateString('he-IL')}</small>
+                <div className="mt-auto d-flex justify-content-between align-items-center">
+                  <Button variant="outline-primary" onClick={() => handleShow(item)}>
+                    פרטים נוספים
+                  </Button>
+                  <div>
+                    <Button variant="light" onClick={() => handleLike(item.id)}>
+                      <FontAwesomeIcon icon={faHeart} /> {item.likes}
+                    </Button>
+                    <Button variant="light" onClick={() => handleShare(item)}>
+                      <FontAwesomeIcon icon={faShare} />
+                    </Button>
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+
+      <Modal show={showModal} onHide={handleClose} centered size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedItem?.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedItem && (
+            <>
+              {selectedItem.image ? (
+                <CldImage
+                  src={selectedItem.image}
+                  width="800"
+                  height="600"
+                  crop="fill"
+                  alt={selectedItem.title}
+                  className="img-fluid mb-3"
+                />
+              ) : (
+                <div className="d-flex align-items-center justify-content-center bg-light mb-3" style={{height: '300px'}}>
+                  <FontAwesomeIcon icon={faPlus} size="5x" color="#adb5bd" />
+                </div>
+              )}
+              <p><strong>סוג:</strong> {getItemTypeName(selectedItem.type)}</p>
+              <p><strong>תיאור:</strong> {selectedItem.description}</p>
+              {selectedItem.price && <p><strong>מחיר:</strong> {selectedItem.price} ₪</p>}
+              <p><strong>יצירת קשר:</strong> {selectedItem.contact}</p>
+              <p><strong>תאריך פרסום:</strong> {new Date(selectedItem.date).toLocaleDateString('he-IL')}</p>
+              <p><strong>לייקים:</strong> {selectedItem.likes}</p>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            סגור
+          </Button>
+          <Button variant="primary">
+            יצירת קשר
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  )
+}
+
+
+
+// const mockData: BoardItem[] = [
+//     { id: 1, type: 'sale', title: 'אופניים למכירה', description: 'אופניים במצב מצוין', price: 500, contact: '050-1234567', image: 'bicycle_wvuwcc', date: '2024-07-28' },
+//     { id: 2, type: 'lost-found', title: 'נמצא ארנק', description: 'נמצא ארנק ברחוב הרצל', contact: '052-7654321', image: 'Purse_hxsdo3', date: '2024-07-27' },
+//     { id: 3, type: 'gmach', title: 'גמ"ח כלי עבודה', description: 'השאלת כלי עבודה לתושבי השכונה', contact: 'gmach@example.com', image: 'tools_hnozjm', date: '2024-07-26' },
+//     { id: 4, type: 'class', title: 'חוג יוגה', description: 'חוג יוגה בימי שלישי בערב', price: 40, contact: '053-9876543', image: 'yoga_inydwp', date: '2024-07-25' },
+//   ];
