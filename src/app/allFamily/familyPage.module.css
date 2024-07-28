@@ -1,0 +1,85 @@
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.tabs {
+    margin-bottom: 2rem;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    padding: 1rem;
+    margin: 0;
+    color: white;
+}
+
+.riddleCard h3 {
+    background-color: #007bff;
+}
+
+.puzzleCard h3 {
+    background-color: #28a745;
+}
+
+.button {
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    transform: scale(1.05);
+}
+
+.answer {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #d4edda;
+    border-radius: 5px;
+}
+
+.fadeIn {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.parashImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* מדיה קווריז לתצוגה רספונסיבית */
+@media (max-width: 768px) {
+    .gridContainer {
+        grid-template-columns: 1fr;
+    }
+}

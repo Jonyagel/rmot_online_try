@@ -55,73 +55,48 @@
 // }
 "use client"
 import Link from 'next/link'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import Marquee from 'react-fast-marquee'
 import './style.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function Header() {
     const [isNavOpen, setIsNavOpen] = useState(false);
-    const navRef = useRef<HTMLDivElement>(null);
 
     const toggleNav = () => {
         setIsNavOpen(!isNavOpen);
     };
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (navRef.current && !navRef.current.contains(event.target as Node)) {
-                setIsNavOpen(false);
-            }
-        }
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [navRef]);
-
-    const NavLinks = () => (
-        <>
-            <Link className='nav-link' href={'/'} onClick={() => setIsNavOpen(false)}>דף הבית</Link>
-            <Link className='nav-link' href={'/neighborhoodInfo'} onClick={() => setIsNavOpen(false)}>מידע שכונתי</Link>
-            <Link className='nav-link' href={'/forum'} onClick={() => setIsNavOpen(false)}>פורומים</Link>
-            <Link className='nav-link' href={'/allFamily'} onClick={() => setIsNavOpen(false)}>לכל המשפחה</Link>
-            <Link className='nav-link' href={'/nadlan'} onClick={() => setIsNavOpen(false)}>נדלן</Link>
-            <Link className='nav-link' href={'/board'} onClick={() => setIsNavOpen(false)}>לוח</Link>
-            <Link className='nav-link' href={'/contactUs'} onClick={() => setIsNavOpen(false)}>צור קשר</Link>
-        </>
-    );
-
     return (
-        <div className='bg-light sticky-top shadow-sm'>
-            <div className='container py-2'>
-                <div className='row align-items-center'>
-                    <div className='col-4 col-md-2 order-md-3 text-end text-md-start'>
-                        <Link href={"/login"}><button className='btn btn-dark btn-sm'>כניסה/הרשמה</button></Link>
-                    </div>
-                    <div className='col-4 col-md-8 order-md-2 text-center position-relative'>
-                        <div className='d-md-none'>
-                            <button className='menu-toggle' onClick={toggleNav}>
-                                <i className={`bi ${isNavOpen ? 'bi-x' : 'bi-list'}`}></i>
-                            </button>
-                        </div>
-                        <div ref={navRef} className={`navbar-collapse ${isNavOpen ? 'show' : ''} d-md-block`}>
-                            <nav className='d-flex flex-column flex-md-row justify-content-md-center align-items-center mx-auto'>
-                                <NavLinks />
-                            </nav>
-                        </div>
-                    </div>
-                    <div className='col-4 col-md-2 order-md-1 text-start'>
-                        <div className='logo'>
-                            <img src='/images/logo.jpg' width={50} className='rounded-circle' alt="Logo" />
-                        </div>
+        <header className="header">
+            <div className="container">
+                <div className="header-content">
+                    <Link href="/" className="logo-link">
+                        <img src='/images/logo.jpg' width={40} className="logo" alt="Logo" />
+                    </Link>
+                    <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`} onMouseLeave={() => {
+                        setIsNavOpen(false);
+                    }}>
+                        <Link className='nav-link' href='/'>בית</Link>
+                        <Link className='nav-link' href='/neighborhoodInfo'>מידע</Link>
+                        <Link className='nav-link' href='/forum'>פורום</Link>
+                        <Link className='nav-link' href='/allFamily'>משפחה</Link>
+                        <Link className='nav-link' href='/nadlan'>נדל"ן</Link>
+                        <Link className='nav-link' href='/board'>לוח</Link>
+                        <Link className='nav-link' href='/contactUs'>צור קשר</Link>
+                    </nav>
+
+                    <div className="header-actions">
+                        <Link href="/login" className="login-link">כניסה/הרשמה</Link>
+                        <button className="menu-toggle" onClick={toggleNav}>
+                            <i className={`bi ${isNavOpen ? 'bi-x' : 'bi-list'}`}></i>
+                        </button>
                     </div>
                 </div>
             </div>
-            <Marquee className='bg-dark text-light' pauseOnHover={true} direction='right' autoFill={true} style={{ direction: 'ltr' }}>
+            <Marquee className="marquee" pauseOnHover={true} direction='right' speed={50} autoFill={true} style={{ direction: 'ltr' }}>
                 הודעות חשובות למשתמשים יופיעו כאן
             </Marquee>
-        </div>
+        </header>
     )
 }
