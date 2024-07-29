@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { CldImage } from 'next-cloudinary';
 import { Card, Badge, Button, Modal, Form, Row, Col, Tabs, Tab, InputGroup, FormControl } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +8,7 @@ import './board.css'; // נניח שיצרנו קובץ CSS נפרד
 import { CldUploadButton } from 'next-cloudinary';
 import { toast } from 'react-toastify';
 import { faCloudUploadAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/navigation';
 
 export const dynamic = 'auto';
 
@@ -20,7 +21,6 @@ interface BoardItem {
   contact: string;
   image?: string;
   date: string;
-  likes: number;
 }
 
 export default function CommunityBoard() {
@@ -32,27 +32,68 @@ export default function CommunityBoard() {
   const [sortBy, setSortBy] = useState<'date' | 'likes'>('date');
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
-  const [fileName, setFileName] = useState<string>("");
-
+  // const [fileName, setFileName] = useState<string>("");
+  const [image, setImage] = useState("");
+  // const [boardAr, setBoardAr] = useState([]);
+  const router = useRouter();
   useEffect(() => {
     fetchItems();
   }, []);
 
+  const typeRef = useRef<HTMLSelectElement>(null);
+  const tittleRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const priceRef = useRef<HTMLInputElement>(null);
+  const contactRef = useRef<HTMLInputElement>(null);
+
   const fetchItems = async () => {
-    // כאן תוכל להוסיף קריאת API אמיתית
-    const mockData: BoardItem[] = [
-      { id: 1, type: 'sale', title: 'אופניים למכירה', description: 'אופניים במצב מצוין', price: 500, contact: '050-1234567', image: 'bicycle_wvuwcc', date: '2024-07-28', likes: 5 },
-      { id: 2, type: 'lost-found', title: 'נמצא ארנק', description: 'נמצא ארנק ברחוב הרצל', contact: '052-7654321', date: '2024-07-27', likes: 2 },
-      { id: 3, type: 'gmach', title: 'גמ"ח כלי עבודה', description: 'השאלת כלי עבודה לתושבי השכונה', contact: 'gmach@example.com', date: '2024-07-26', likes: 10 },
-      { id: 4, type: 'class', title: 'חוג יוגה', description: 'חוג יוגה בימי שלישי בערב', price: 40, contact: '053-9876543', image: 'yoga_inydwp', date: '2024-07-25', likes: 8 },
-    ];
-    setItems(mockData);
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/board`;
+    const resp = await fetch(url, { cache: 'no-store' })
+    const data = await resp.json();
+    console.log(data);
+    setItems(data);
+
   };
 
+  const handleAddItem = () => {
+    doApiPost();
+    setShowAddModal(false);
+  };
+
+  const doApiPost = async () => {
+    const type = typeRef.current?.value;
+    const tittle = tittleRef.current?.value;
+    const description = descriptionRef.current?.value;
+    const price = priceRef.current?.value;
+    const contact = contactRef.current?.value;
+
+    try {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/board`, {
+        method: 'POST',
+        body: JSON.stringify({ type, tittle, description, price, contact, image }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await resp.json();
+      console.log(data);
+      handleClose();
+      fetchItems();
+      router.push('/board');
+    } catch (error: any) {
+      console.error('Error:', error);
+    }
+  }
+
   const handleUpload = (result: any) => {
-    setUploadedImageUrl(result.info.secure_url);
-    setFileName(result.info.original_filename);
-    toast.success('התמונה הועלתה בהצלחה');
+    if (result.event === 'success') {
+      const publicId = result.info.public_id;
+      const fileName = publicId.split('/').pop();
+      setImage(fileName);
+      setUploadedImageUrl(result.info.secure_url);
+      // setImage(result.info.original_filename);
+      toast.success('התמונה הועלתה בהצלחה');
+    }
   };
 
   const handleClose = () => {
@@ -60,18 +101,7 @@ export default function CommunityBoard() {
     setSelectedItem(null);
   };
 
-  const handleAddItem = (newItem: Omit<BoardItem, 'id' | 'likes' | 'date'>) => {
-    const currentDate = new Date().toISOString().split('T')[0];
-    const newId = Math.max(...items.map(item => item.id)) + 1;
-    const itemToAdd: BoardItem = {
-      ...newItem,
-      id: newId,
-      likes: 0,
-      date: currentDate
-    };
-    setItems(prevItems => [...prevItems, itemToAdd]);
-    setShowAddModal(false);
-  };
+
 
   const handleShow = (item: BoardItem) => {
     setSelectedItem(item);
@@ -88,13 +118,13 @@ export default function CommunityBoard() {
     }
   };
 
-  const handleLike = (id: number) => {
-    setItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, likes: item.likes + 1 } : item
-      )
-    );
-  };
+  // const handleLike = (id: number) => {
+  //   setItems(prevItems =>
+  //     prevItems.map(item =>
+  //       item.id === id ? { ...item, likes: item.likes + 1 } : item
+  //     )
+  //   );
+  // };
 
   const handleShare = (item: BoardItem) => {
     // כאן תוכל להוסיף לוגיקה לשיתוף, לדוגמה:
@@ -115,17 +145,22 @@ export default function CommunityBoard() {
   };
 
   const filteredAndSortedItems = items
+    // סינון לפי הלשונית הפעילה
     .filter(item => activeTab === 'all' || item.type === activeTab)
-    .filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase()))
-    .sort((a, b) => {
-      if (sortBy === 'date') {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      } else {
-        return b.likes - a.likes;
-      }
-    });
 
+    // סינון לפי מונחי החיפוש
+    .filter(item => {
+      const searchTermLower = searchTerm.toLowerCase();
+      return (
+        (item.title && item.title.toLowerCase().includes(searchTermLower)) ||
+        (item.description && item.description.toLowerCase().includes(searchTermLower))
+      );
+    })
+
+    // מיון לפי תאריך או לייקים
+    .sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
   return (
     <div className='container mt-5'>
       <h1 className="mb-4 text-center text-7xl text-primary">לוח קהילתי</h1>
@@ -197,15 +232,12 @@ export default function CommunityBoard() {
                 <Badge bg="info" className="mb-2">
                   {getItemTypeName(item.type)}
                 </Badge>
-                <small className="text-muted mb-2">{new Date(item.date).toLocaleDateString('he-IL')}</small>
+                <small className="text-muted mb-2">{new Date(Number(item.date)).toLocaleDateString('he-IL')}</small>
                 <div className="mt-auto d-flex justify-content-between align-items-center">
                   <Button variant="outline-primary" onClick={() => handleShow(item)}>
                     פרטים נוספים
                   </Button>
                   <div>
-                    <Button variant="light" onClick={() => handleLike(item.id)}>
-                      <FontAwesomeIcon icon={faHeart} /> {item.likes}
-                    </Button>
                     <Button variant="light" onClick={() => handleShare(item)}>
                       <FontAwesomeIcon icon={faShare} />
                     </Button>
@@ -242,8 +274,7 @@ export default function CommunityBoard() {
               <p><strong>תיאור:</strong> {selectedItem.description}</p>
               {selectedItem.price && <p><strong>מחיר:</strong> {selectedItem.price} ₪</p>}
               <p><strong>יצירת קשר:</strong> {selectedItem.contact}</p>
-              <p><strong>תאריך פרסום:</strong> {new Date(selectedItem.date).toLocaleDateString('he-IL')}</p>
-              <p><strong>לייקים:</strong> {selectedItem.likes}</p>
+              <p><strong>תאריך פרסום:</strong> {new Date(Number(selectedItem.date)).toLocaleDateString('he-IL')}</p>
             </>
           )}
         </Modal.Body>
@@ -263,22 +294,22 @@ export default function CommunityBoard() {
         <Modal.Body>
           <Form onSubmit={(e) => {
             e.preventDefault();
-            const formData = new FormData(e.currentTarget);
-            const newItem = {
-              type: formData.get('type') as 'sale' | 'lost-found' | 'gmach' | 'class',
-              title: formData.get('title') as string,
-              description: formData.get('description') as string,
-              price: formData.get('price') ? Number(formData.get('price')) : undefined,
-              contact: formData.get('contact') as string,
-              image: uploadedImageUrl
-            };
-            handleAddItem(newItem);
+            // const formData = new FormData(e.currentTarget);
+            // const newItem = {
+            //   type: formData.get('type') as 'sale' | 'lost-found' | 'gmach' | 'class',
+            //   title: formData.get('title') as string,
+            //   description: formData.get('description') as string,
+            //   price: formData.get('price') ? Number(formData.get('price')) : undefined,
+            //   contact: formData.get('contact') as string,
+            //   image: uploadedImageUrl
+            // };
+            handleAddItem();
           }}>
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>סוג</Form.Label>
-                  <Form.Select name="type" required className="form-control-lg">
+                  <Form.Select ref={typeRef} name="type" required className="form-control-lg">
                     <option value="sale">מכירה</option>
                     <option value="lost-found">אבידה ומציאה</option>
                     <option value="gmach">גמ"ח</option>
@@ -289,25 +320,25 @@ export default function CommunityBoard() {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>כותרת</Form.Label>
-                  <Form.Control type="text" name="title" required className="form-control-lg" />
+                  <Form.Control ref={tittleRef} type="text" name="title" required className="form-control-lg" />
                 </Form.Group>
               </Col>
             </Row>
             <Form.Group className="mb-3">
               <Form.Label>תיאור</Form.Label>
-              <Form.Control as="textarea" rows={3} name="description" required className="form-control-lg" />
+              <Form.Control ref={descriptionRef} as="textarea" rows={3} name="description" required className="form-control-lg" />
             </Form.Group>
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>מחיר (אופציונלי)</Form.Label>
-                  <Form.Control type="number" name="price" className="form-control-lg" />
+                  <Form.Control ref={priceRef} type="number" name="price" className="form-control-lg" />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>פרטי התקשרות</Form.Label>
-                  <Form.Control type="text" name="contact" required className="form-control-lg" />
+                  <Form.Control ref={contactRef} type="text" name="contact" required className="form-control-lg" />
                 </Form.Group>
               </Col>
             </Row>
@@ -347,7 +378,7 @@ export default function CommunityBoard() {
                       className="position-absolute top-0 start-100 translate-middle rounded-circle p-1"
                       onClick={() => {
                         setUploadedImageUrl("");
-                        setFileName("");
+                        setImage("");
                       }}
                     >
                       <FontAwesomeIcon icon={faTimes} />

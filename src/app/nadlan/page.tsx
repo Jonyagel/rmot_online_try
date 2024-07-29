@@ -33,19 +33,12 @@ export default function RealEstate() {
     priceRange: 'all'
   });
   const [showAddModal, setShowAddModal] = useState(false);
-  // const [newProperty, setNewProperty] = useState<Property>({
-  //   id: 0,
-  //   type: '',
-  //   rooms: 0,
-  //   price: 0,
-  //   address: '',
-  //   image: ''
-  // });
+
   const typeRef = useRef<HTMLSelectElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
-  // const imageRef = useRef<HTMLTextAreaElement>(null);
+
 
   useEffect(() => {
     fetchProperties();
@@ -53,14 +46,7 @@ export default function RealEstate() {
 
   const handleAddModalClose = () => {
     setShowAddModal(false);
-    // setNewProperty({
-    //   id: 0,
-    //   type: '',
-    //   rooms: 0,
-    //   price: 0,
-    //   address: '',
-    //   image: ''
-    // });
+
   };
 
   const handleAddModalShow = () => {
@@ -68,24 +54,11 @@ export default function RealEstate() {
   };
 
   const handleNewPropertyChange = (e: any) => {
-    // setNewProperty({ ...newProperty, [e.target.name]: e.target.value });
+
   };
 
   const handleAddProperty = () => {
-    //  e.preventDefault();
     doApiPost()
-    // const newId = properties.length > 0 ? Math.max(...properties.map((p: any) => p.id)) + 1 : 1;
-    // const propertyToAdd: Property = {
-    //   id: newId,
-    //   type: newProperty.type,
-    //   rooms: newProperty.rooms,
-    //   price: newProperty.price,
-    //   address: newProperty.address,
-    //   image: newProperty.image
-    // };
-
-    // setProperties(prevProperties => [...prevProperties, propertyToAdd]);
-    // doApiPost()
   };
 
   const fetchProperties = async () => {
@@ -93,24 +66,16 @@ export default function RealEstate() {
     const resp = await fetch(url, { cache: 'no-store' })
     const data = await resp.json();
     console.log(data);
-    // const mockData: any = [
-    //   { id: 1, type: 'מכירה', rooms: 3, price: 1500000, address: 'רחוב הרצל 10', image: 'house1_hsfjft' },
-    //   { id: 2, type: 'השכרה', rooms: 2, price: 4000, address: 'רחוב ויצמן 5', image: 'house2_hgpkdz' },
-    // ];
     setNadlanAr(data)
     setProperties(data);
     
   };
 
   const doApiPost = async () => {
-    // e.preventDefault();
-
     const type = typeRef.current?.value;
     const rooms = roomsRef.current?.value;
     const price = priceRef.current?.value;
     const address = addressRef.current?.value;
-    // const image = imageRef.current?.value;
-
     try {
       const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`, {
         method: 'POST',
@@ -122,10 +87,8 @@ export default function RealEstate() {
       const data = await resp.json();
       console.log(data);
       handleClose();
-      // props.doApi();
       fetchProperties();
       router.push('/nadlan');
-      // props.setAddForum(!props.addForum);
     } catch (error: any) {
       console.error('Error:', error);
     }
@@ -162,13 +125,7 @@ export default function RealEstate() {
       setUploadedImageUrl(result.info.secure_url); // שמירת ה-URL של התמונה שהועלתה
       toast.success('התמונה הועלתה בהצלחה');
     }
-    // setNewProperty(prev => ({ ...prev, image: result.info.secure_url }));
   };
-
-  // const handleRemoveImage = () => {
-  
-  //   // setNewProperty(prev => ({ ...prev, image: '' }));
-  // };
 
   return (
     <div className='container-fluid'>

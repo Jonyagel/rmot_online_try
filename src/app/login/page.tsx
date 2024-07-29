@@ -15,10 +15,6 @@ export default function LoginPage() {
         isCookies = true
     }
 
-
-
-
-
     return (
         <div className=''>
             {isCookies ? <LoginForm /> : <Signup />

@@ -70,8 +70,8 @@ export default function LoginForm() {
   const doApi = async (e:any) => {
     e.preventDefault();
 
-    const email = emailRef.current.value;
-    const password = passRef.current.value;
+    const email:any = emailRef.current.value;
+    const password:any = passRef.current.value;
 
     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login`, {
       method: 'POST',

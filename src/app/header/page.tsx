@@ -55,10 +55,11 @@
 // }
 "use client"
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Marquee from 'react-fast-marquee'
 import './style.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { cookies } from 'next/headers'
 
 export default function Header() {
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -66,6 +67,7 @@ export default function Header() {
     const toggleNav = () => {
         setIsNavOpen(!isNavOpen);
     };
+
 
     return (
         <header className="header">
