@@ -43,8 +43,8 @@ export default function RealEstate() {
   // });
   const typeRef = useRef<HTMLSelectElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
-  const priceRef = useRef<HTMLElement>(null);
-  const addressRef = useRef<HTMLElement>(null);
+  const priceRef = useRef<HTMLInputElement>(null);
+  const addressRef = useRef<HTMLInputElement>(null);
   // const imageRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
