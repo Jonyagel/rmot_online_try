@@ -123,51 +123,51 @@ export default function AddQuestion(props: any) {
                             <Form.Control ref={descriptionRef} as="textarea" rows={3} required />
                         </Form.Group>
                         <div className="d-flex justify-content-between align-items-center">
-                        <Form.Group className="mb-3">
-        <Form.Label>תמונה</Form.Label>
-        <div className="d-flex align-items-center">
-            <CldUploadButton
-                className='btn btn-outline-secondary me-2'
-                uploadPreset="my_upload_test"
-                onSuccess={handleUploadTwo}
-                onError={(error) => {
-                    console.error('Upload error:', error);
-                    toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
-                }}
-                options={{
-                    sources: ['local'],
-                    maxFileSize: 5000000,
-                    maxImageWidth: 2000,
-                    maxImageHeight: 2000,
-                    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-                }}
-            >
-                <i className="bi bi-image me-2"></i>
-                העלאת תמונה
-            </CldUploadButton>
-            {uploadedImageUrl && (
-                <div className="position-relative ms-2">
-                    <img 
-                        src={uploadedImageUrl} 
-                        alt="תמונה שהועלתה" 
-                        className="img-thumbnail" 
-                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                    />
-                    <Button 
-                        variant="danger" 
-                        size="sm" 
-                        className="position-absolute top-0 start-100 translate-middle rounded-circle p-1"
-                        onClick={() => {
-                            setUploadedImageUrl("");
-                            setFileName("");
-                        }}
-                    >
-                        <i className="bi bi-x-lg"></i>
-                    </Button>
-                </div>
-            )}
-        </div>
-    </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>תמונה</Form.Label>
+                                <div className="d-flex align-items-center">
+                                    <CldUploadButton
+                                        className='btn btn-outline-secondary me-2'
+                                        uploadPreset="my_upload_test"
+                                        onSuccess={handleUploadTwo}
+                                        onError={(error) => {
+                                            console.error('Upload error:', error);
+                                            toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
+                                        }}
+                                        options={{
+                                            sources: ['local'],
+                                            maxFileSize: 5000000,
+                                            maxImageWidth: 2000,
+                                            maxImageHeight: 2000,
+                                            clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                                        }}
+                                    >
+                                        <i className="bi bi-image me-2"></i>
+                                        העלאת תמונה
+                                    </CldUploadButton>
+                                    {uploadedImageUrl && (
+                                        <div className="position-relative ms-2">
+                                            <img
+                                                src={uploadedImageUrl}
+                                                alt="תמונה שהועלתה"
+                                                className="img-thumbnail"
+                                                style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                                            />
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
+                                                className="position-absolute top-0 start-100 translate-middle rounded-circle p-1"
+                                                onClick={() => {
+                                                    setUploadedImageUrl("");
+                                                    setFileName("");
+                                                }}
+                                            >
+                                                <i className="bi bi-x-lg"></i>
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
+                            </Form.Group>
                             <Button type="submit" variant="primary">
                                 <i className="bi bi-send me-2"></i>
                                 שלח

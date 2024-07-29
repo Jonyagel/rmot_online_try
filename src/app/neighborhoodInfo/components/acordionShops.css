@@ -1,0 +1,80 @@
+.styled-accordion {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  .styled-accordion-item {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .styled-accordion-item:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .styled-accordion-header button {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    width: 100%;
+    text-align: right;
+    transition: all 0.3s ease;
+  }
+  
+  .styled-accordion-header button:not(.collapsed) {
+    background-color: #e9ecef;
+  }
+  
+  .styled-accordion-header button:focus {
+    box-shadow: none;
+  }
+  
+  .styled-accordion-body {
+    padding: 1.5rem;
+  }
+  
+  .shop-logo {
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .shop-logo:hover {
+    transform: scale(1.1);
+  }
+  
+  .shop-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+  }
+  
+  .shop-details {
+    text-align: right;
+    margin-right: 1rem;
+  }
+  
+  .shop-name {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
+  
+  .shop-description {
+    margin-bottom: 0;
+    color: #6c757d;
+  }
+  
+  .contact-info-acordion {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .contact-info-acordion i {
+    margin-left: 0.5rem;
+    color: #007bff;
+  }

@@ -12,10 +12,10 @@ const Footer = () => {
           <Col md={3} className="mb-3">
             <h5 className="mb-3">ניווט מהיר</h5>
             <ul className="list-unstyled">
-              <li><Link href="/forums">פורומים</Link></li>
-              <li><Link href="/real-estate">נדל"ן</Link></li>
-              <li><Link href="/gemachs">גמח"ים</Link></li>
-              <li><Link href="/lost-and-found">אבידות ומציאות</Link></li>
+              <li><Link href="/forum">פורומים</Link></li>
+              <li><Link href="/nadlan">נדל"ן</Link></li>
+              <li><Link href="/board">גמח"ים</Link></li>
+              <li><Link href="/board">אבידות ומציאות</Link></li>
             </ul>
           </Col>
           <Col md={3} className="mb-3">

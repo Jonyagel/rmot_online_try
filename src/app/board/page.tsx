@@ -5,6 +5,9 @@ import { Card, Badge, Button, Modal, Form, Row, Col, Tabs, Tab, InputGroup, Form
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faHeart, faShare, faPlus } from '@fortawesome/free-solid-svg-icons';
 import './board.css'; // נניח שיצרנו קובץ CSS נפרד
+import { CldUploadButton } from 'next-cloudinary';
+import { toast } from 'react-toastify';
+import { faCloudUploadAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export const dynamic = 'auto';
 
@@ -27,6 +30,9 @@ export default function CommunityBoard() {
   const [activeTab, setActiveTab] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'date' | 'likes'>('date');
+  const [showAddModal, setShowAddModal] = useState<boolean>(false);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("");
 
   useEffect(() => {
     fetchItems();
@@ -43,9 +49,28 @@ export default function CommunityBoard() {
     setItems(mockData);
   };
 
+  const handleUpload = (result: any) => {
+    setUploadedImageUrl(result.info.secure_url);
+    setFileName(result.info.original_filename);
+    toast.success('התמונה הועלתה בהצלחה');
+  };
+
   const handleClose = () => {
     setShowModal(false);
     setSelectedItem(null);
+  };
+
+  const handleAddItem = (newItem: Omit<BoardItem, 'id' | 'likes' | 'date'>) => {
+    const currentDate = new Date().toISOString().split('T')[0];
+    const newId = Math.max(...items.map(item => item.id)) + 1;
+    const itemToAdd: BoardItem = {
+      ...newItem,
+      id: newId,
+      likes: 0,
+      date: currentDate
+    };
+    setItems(prevItems => [...prevItems, itemToAdd]);
+    setShowAddModal(false);
   };
 
   const handleShow = (item: BoardItem) => {
@@ -91,8 +116,8 @@ export default function CommunityBoard() {
 
   const filteredAndSortedItems = items
     .filter(item => activeTab === 'all' || item.type === activeTab)
-    .filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                    item.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter(item => item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchTerm.toLowerCase()))
     .sort((a, b) => {
       if (sortBy === 'date') {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
@@ -103,8 +128,13 @@ export default function CommunityBoard() {
 
   return (
     <div className='container mt-5'>
-      <h1 className="mb-4 text-center">לוח קהילתי</h1>
-      
+      <h1 className="mb-4 text-center text-7xl text-primary">לוח קהילתי</h1>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <Button variant="primary" onClick={() => setShowAddModal(true)}>
+          <FontAwesomeIcon icon={faPlus} className="me-2" />
+          הוסף פריט חדש
+        </Button>
+      </div>
       <div className="mb-4">
         <InputGroup>
           <FormControl
@@ -122,7 +152,7 @@ export default function CommunityBoard() {
       <div className="d-flex justify-content-between align-items-center mb-4">
         <Tabs
           activeKey={activeTab}
-          onSelect={(k:any) => setActiveTab(k)}
+          onSelect={(k: any) => setActiveTab(k)}
           className="mb-3"
         >
           <Tab eventKey="all" title="הכל" />
@@ -131,10 +161,10 @@ export default function CommunityBoard() {
           <Tab eventKey="gmach" title='גמ"ח' />
           <Tab eventKey="class" title="חוגים" />
         </Tabs>
-        
-        <Form.Select 
-          style={{width: 'auto'}}
-          value={sortBy} 
+
+        <Form.Select
+          style={{ width: 'auto' }}
+          value={sortBy}
           onChange={(e) => setSortBy(e.target.value as 'date' | 'likes')}
         >
           <option value="date">מיון לפי תאריך</option>
@@ -156,7 +186,7 @@ export default function CommunityBoard() {
                   className="card-img-top"
                 />
               ) : (
-                <div className="card-img-top d-flex align-items-center justify-content-center bg-light" style={{height: '200px'}}>
+                <div className="card-img-top d-flex align-items-center justify-content-center bg-light" style={{ height: '200px' }}>
                   <FontAwesomeIcon icon={faPlus} size="3x" color="#adb5bd" />
                 </div>
               )}
@@ -204,7 +234,7 @@ export default function CommunityBoard() {
                   className="img-fluid mb-3"
                 />
               ) : (
-                <div className="d-flex align-items-center justify-content-center bg-light mb-3" style={{height: '300px'}}>
+                <div className="d-flex align-items-center justify-content-center bg-light mb-3" style={{ height: '300px' }}>
                   <FontAwesomeIcon icon={faPlus} size="5x" color="#adb5bd" />
                 </div>
               )}
@@ -225,6 +255,117 @@ export default function CommunityBoard() {
             יצירת קשר
           </Button>
         </Modal.Footer>
+      </Modal>
+      <Modal show={showAddModal} onHide={() => setShowAddModal(false)} centered size="lg">
+        <Modal.Header closeButton className="bg-primary text-white">
+          <Modal.Title>הוספת פריט חדש</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            const newItem = {
+              type: formData.get('type') as 'sale' | 'lost-found' | 'gmach' | 'class',
+              title: formData.get('title') as string,
+              description: formData.get('description') as string,
+              price: formData.get('price') ? Number(formData.get('price')) : undefined,
+              contact: formData.get('contact') as string,
+              image: uploadedImageUrl
+            };
+            handleAddItem(newItem);
+          }}>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>סוג</Form.Label>
+                  <Form.Select name="type" required className="form-control-lg">
+                    <option value="sale">מכירה</option>
+                    <option value="lost-found">אבידה ומציאה</option>
+                    <option value="gmach">גמ"ח</option>
+                    <option value="class">חוג</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>כותרת</Form.Label>
+                  <Form.Control type="text" name="title" required className="form-control-lg" />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Form.Group className="mb-3">
+              <Form.Label>תיאור</Form.Label>
+              <Form.Control as="textarea" rows={3} name="description" required className="form-control-lg" />
+            </Form.Group>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>מחיר (אופציונלי)</Form.Label>
+                  <Form.Control type="number" name="price" className="form-control-lg" />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>פרטי התקשרות</Form.Label>
+                  <Form.Control type="text" name="contact" required className="form-control-lg" />
+                </Form.Group>
+              </Col>
+            </Row>
+            <Form.Group className="mb-3">
+              <Form.Label>תמונה</Form.Label>
+              <div className="d-flex align-items-center">
+                <CldUploadButton
+                  className='btn btn-outline-primary me-2'
+                  uploadPreset="my_upload_test"
+                  onSuccess={handleUpload}
+                  onError={(error) => {
+                    console.error('Upload error:', error);
+                    toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
+                  }}
+                  options={{
+                    sources: ['local'],
+                    maxFileSize: 5000000,
+                    maxImageWidth: 2000,
+                    maxImageHeight: 2000,
+                    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                  }}
+                >
+                  <FontAwesomeIcon icon={faCloudUploadAlt} className="me-2" />
+                  העלאת תמונה
+                </CldUploadButton>
+                {uploadedImageUrl && (
+                  <div className="position-relative ms-2">
+                    <img
+                      src={uploadedImageUrl}
+                      alt="תמונה שהועלתה"
+                      className="img-thumbnail"
+                      style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                    />
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      className="position-absolute top-0 start-100 translate-middle rounded-circle p-1"
+                      onClick={() => {
+                        setUploadedImageUrl("");
+                        setFileName("");
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTimes} />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </Form.Group>
+            <div className="text-end">
+              <Button variant="secondary" onClick={() => setShowAddModal(false)} className="me-2">
+                ביטול
+              </Button>
+              <Button variant="primary" type="submit">
+                הוסף פריט
+              </Button>
+            </div>
+          </Form>
+        </Modal.Body>
       </Modal>
     </div>
   )
