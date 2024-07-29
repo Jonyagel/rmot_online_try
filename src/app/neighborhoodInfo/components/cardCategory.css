@@ -1,0 +1,35 @@
+.styled-card-category {
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .styled-card-category:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  
+  .category-title {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .category-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+  
+  /* Uncomment if you want to use the styled button */
+  /*
+  .styled-button {
+    background-color: #007bff;
+    border: none;
+    transition: all 0.3s ease;
+  }
+  
+  .styled-button:hover,
+  .styled-button:focus {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  */

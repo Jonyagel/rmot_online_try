@@ -96,38 +96,9 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Container, Row, Col } from 'react-bootstrap';
 import { motion } from 'framer-motion';
-import styled from 'styled-components';
+import './cardCategory.css';
 
-const StyledCard = styled(motion(Card))`
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  }
-`;
-
-const CategoryTitle = styled.h3`
-  font-weight: bold;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-`;
-
-const CategoryText = styled.p`
-  font-size: 0.9rem;
-  color: #6c757d;
-`;
-
-// const StyledButton = styled(Button)`
-//   background-color: #007bff;
-//   border: none;
-//   transition: all 0.3s ease;
-
-//   &:hover, &:focus {
-//     background-color: #0056b3;
-//     transform: scale(1.05);
-//   }
-// `;
+const MotionCard = motion(Card);
 
 export default function CardCategory() {
     const categories = [
@@ -144,22 +115,22 @@ export default function CardCategory() {
             <Row className="justify-content-center">
                 {categories.map((category, index) => (
                     <Col key={index} xs={12} sm={6} md={4} lg={3} xl={2} className="mb-4">
-                        <StyledCard
-                            className="h-100 border-0 rounded-lg overflow-hidden"
+                        <MotionCard
+                            className="h-100 border-0 rounded-lg overflow-hidden styled-card-category"
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.98 }}
                         >
                             <Card.Img variant="top" src={category.image} />
                             <Card.Body className="d-flex flex-column">
-                                <CategoryTitle>{category.title}</CategoryTitle>
-                                <CategoryText className="flex-grow-1">
+                                <h3 className="category-title">{category.title}</h3>
+                                <p className="category-text flex-grow-1">
                                     {category.text}
-                                </CategoryText>
+                                </p>
                                 <Button variant="primary" className="mt-auto">
                                     גלה עוד
                                 </Button>
                             </Card.Body>
-                        </StyledCard>
+                        </MotionCard>
                     </Col>
                 ))}
             </Row>
