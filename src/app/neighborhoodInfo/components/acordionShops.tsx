@@ -55,6 +55,7 @@
 import React, { useState }  from 'react'
 import Accordion from 'react-bootstrap/Accordion';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe } from 'react-icons/fa';
 import './acordionShops.css';
 
 export default function AcordionShops() {
@@ -141,16 +142,20 @@ export default function AcordionShops() {
     }
 
     return (
-           <div className="shop-cards-container">
+          <div className="shop-cards-container">
             {shopData.map((shop) => (
                 <motion.div
                     key={shop.id}
                     className={`shop-card ${expandedShop === shop.id ? 'expanded' : ''}`}
                     layoutId={`card-container-${shop.id}`}
                     onClick={() => toggleExpand(shop.id)}
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ type: "spring", stiffness: 300 }}
                 >
                     <motion.div className="card-header" layoutId={`card-header-${shop.id}`}>
-                        <img src={shop.logo} alt={`${shop.name} logo`} className="shop-logo" />
+                        <div className="logo-container">
+                            <img src={shop.logo} alt={`${shop.name} logo`} className="shop-logo" />
+                        </div>
                         <h3>{shop.name}</h3>
                         <p>{shop.description}</p>
                     </motion.div>
@@ -159,24 +164,25 @@ export default function AcordionShops() {
                         {expandedShop === shop.id && (
                             <motion.div
                                 className="card-content"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
                             >
                                 <div className="content-section">
                                     <h4>תיאור</h4>
                                     <p>{shop.content}</p>
                                 </div>
                                 <div className="content-section">
-                                    <h4>שעות פתיחה</h4>
+                                    <h4><FaClock /> שעות פתיחה</h4>
                                     <p>{shop.hours}</p>
                                 </div>
                                 <div className="content-section">
                                     <h4>פרטי התקשרות</h4>
-                                    <p><i className="bi bi-geo-alt-fill"></i> {shop.address}</p>
-                                    <p><i className="bi bi-telephone-fill"></i> {shop.phone}</p>
-                                    <p><i className="bi bi-envelope-fill"></i> {shop.email}</p>
-                                    <p><i className="bi bi-globe"></i> {shop.website}</p>
+                                    <p><FaMapMarkerAlt /> {shop.address}</p>
+                                    <p><FaPhone /> {shop.phone}</p>
+                                    <p><FaEnvelope /> {shop.email}</p>
+                                    <p><FaGlobe /> {shop.website}</p>
                                 </div>
                             </motion.div>
                         )}
