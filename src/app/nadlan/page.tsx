@@ -255,8 +255,8 @@ export default function RealEstate() {
                           <div><FontAwesomeIcon icon={faBed} className="mr-2 text-primary" /> {item.rooms} חדרים</div>
                           <div><FontAwesomeIcon icon={faRulerCombined} className="mr-2 text-primary" /> {item.size} מ"ר</div>
                           <div><FontAwesomeIcon icon={faBuilding} className="mr-2 text-primary" /> קומה {item.floor}</div>
-                          <div><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> {item.elevator ? 'יש מעלית' : 'אין מעלית'}</div>
-                          <div><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> {item.parking ? 'יש חניה' : 'אין חניה'}</div>
+                          <div><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> {item.elevator=="true" ? 'יש מעלית' : 'אין מעלית'}</div>
+                          <div><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> {item.parking=="true" ? 'יש חניה' : 'אין חניה'}</div>
                           <div><FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-primary" /> כניסה: {item.entryDate}</div>
                         </div>
                         <div className="mt-2 font-bold text-lg text-primary">
@@ -357,10 +357,10 @@ export default function RealEstate() {
                     <p><FontAwesomeIcon icon={faBuilding} className="mr-2 text-primary" /> <strong>קומה:</strong> {selectedProperty.floor}</p>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> <strong>מעלית:</strong> {selectedProperty.elevator ? 'יש' : 'אין'}</p>
+                    <p><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> <strong>מעלית:</strong> {selectedProperty.elevator=="true" ? 'יש' : 'אין'}</p>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> <strong>חניה:</strong> {selectedProperty.parking ? 'יש' : 'אין'}</p>
+                    <p><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> <strong>חניה:</strong> {selectedProperty.parking=="true" ? 'יש' : 'אין'}</p>
                   </div>
                   <div className="col-md-6 mb-3">
                     <p><FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-primary" /> <strong>תאריך כניסה:</strong> {selectedProperty.entryDate}</p>
