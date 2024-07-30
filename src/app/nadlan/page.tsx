@@ -1,13 +1,24 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
 import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Button, Modal, Form, Row, Col, Container } from 'react-bootstrap';
+import { Card, Badge, Button, Modal, Form, Row, Col, Container , Carousel} from 'react-bootstrap';
 import Link from 'next/link';
-import { faCloudUploadAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHistory, faHome, faPhone, faRulerCombined, faSun, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CldUploadButton } from 'next-cloudinary';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import 'bootstrap/dist/css/bootstrap.min.css';
+// import Slider from "react-slick";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+// import { Swiper, SwiperSlide } from 'swiper/react';
+// import { Navigation, Pagination } from 'swiper/modules';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
+// import { Carousel } from 'react-responsive-carousel';
+// import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 export const dynamic = 'auto';
 
@@ -19,11 +30,20 @@ export default function RealEstate() {
     rooms: number;
     price: number;
     address: string;
-    image: string;
+    size: number;
+    floor: number;
+    elevator: string;
+    parking: string;
+    entryDate: string;
+    direction: string;
+    condition: string;
+    description: string;
+    images: [string];
   }
   const [properties, setProperties] = useState<Property[]>([]);
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState<string[]>([]);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [nadlanAr, setNadlanAr] = useState([]);
@@ -37,7 +57,15 @@ export default function RealEstate() {
   const typeRef = useRef<HTMLSelectElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
+  const elevatorRef = useRef<HTMLSelectElement>(null);
+  const parkingRef = useRef<HTMLSelectElement>(null);
+  const sizeRef = useRef<HTMLInputElement>(null);
+  const floorRef = useRef<HTMLInputElement>(null);
+  const entryDateRef = useRef<HTMLInputElement>(null);
+  const directionRef = useRef<HTMLInputElement>(null);
+  const conditionRef = useRef<HTMLSelectElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement >(null);
 
 
   useEffect(() => {
@@ -57,6 +85,14 @@ export default function RealEstate() {
 
   };
 
+  // const handleUploadSuccess = (result:any) => {
+  //   setUploadedImageUrls(prev => [...prev, result.info.secure_url]);
+  // };
+
+  const removeImage = (index: any) => {
+    setUploadedImageUrls(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleAddProperty = () => {
     doApiPost()
   };
@@ -68,7 +104,7 @@ export default function RealEstate() {
     console.log(data);
     setNadlanAr(data)
     setProperties(data);
-    
+
   };
 
   const doApiPost = async () => {
@@ -76,10 +112,18 @@ export default function RealEstate() {
     const rooms = roomsRef.current?.value;
     const price = priceRef.current?.value;
     const address = addressRef.current?.value;
+    const size = sizeRef.current?.value;
+    const floor = floorRef.current?.value;
+    const elevator = elevatorRef.current?.value;
+    const parking =parkingRef.current?.value;
+    const entryDate = entryDateRef.current?.value;
+    const direction = directionRef.current?.value;
+    const condition = conditionRef.current?.value;
+    const description = descriptionRef.current?.value;
     try {
       const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`, {
         method: 'POST',
-        body: JSON.stringify({ type, rooms, price, address, image }),
+        body: JSON.stringify({ type, rooms, price, address, images, size, floor, elevator, parking, entryDate, direction, condition, description}),
         headers: {
           'Content-Type': 'application/json'
         }
@@ -121,8 +165,8 @@ export default function RealEstate() {
     if (result.event === 'success') {
       const publicId = result.info.public_id;
       const fileName = publicId.split('/').pop();
-      setImage(fileName);
-      setUploadedImageUrl(result.info.secure_url); // שמירת ה-URL של התמונה שהועלתה
+      setImages(prev => [...prev, fileName]);
+      setUploadedImageUrls(prev => [...prev, result.info.secure_url]); // שמירת ה-URL של התמונה שהועלתה
       toast.success('התמונה הועלתה בהצלחה');
     }
   };
@@ -192,12 +236,12 @@ export default function RealEstate() {
           </Form>
 
           <Row>
-            {nadlanAr.map((item:any, index:any) => (
+            {nadlanAr.map((item: any, index: any) => (
               <React.Fragment key={item._id}>
                 <Col md={4} className="mb-4">
-                  <Card className='shadow-sm hover-card h-100'>
+                  <Card className='shadow-sm hover-card h-100 transition-all duration-300 transform hover:scale-105'>
                     <CldImage
-                      src={item.image}
+                      src={item.images[0]} // השתמש בתמונה הראשונה מהמערך
                       width="400"
                       height="300"
                       crop="fill"
@@ -205,18 +249,26 @@ export default function RealEstate() {
                       className="card-img-top"
                     />
                     <Card.Body className="d-flex flex-column">
-                      <Card.Title>{item.address}</Card.Title>
+                      <Card.Title className="font-bold text-xl mb-2">{item.address}</Card.Title>
                       <Card.Text>
-                        {item.rooms} חדרים
-                        <br />
-                        מחיר: {item.type === 'מכירה' ?
-                          `${item.price.toLocaleString()} ₪` :
-                          `${item.price.toLocaleString()} ₪ לחודש`}
+                        <div className="grid grid-cols-2 gap-2">
+                          <div><FontAwesomeIcon icon={faBed} className="mr-2 text-primary" /> {item.rooms} חדרים</div>
+                          <div><FontAwesomeIcon icon={faRulerCombined} className="mr-2 text-primary" /> {item.size} מ"ר</div>
+                          <div><FontAwesomeIcon icon={faBuilding} className="mr-2 text-primary" /> קומה {item.floor}</div>
+                          <div><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> {item.elevator ? 'יש מעלית' : 'אין מעלית'}</div>
+                          <div><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> {item.parking ? 'יש חניה' : 'אין חניה'}</div>
+                          <div><FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-primary" /> כניסה: {item.entryDate}</div>
+                        </div>
+                        <div className="mt-2 font-bold text-lg text-primary">
+                          מחיר: {item.type === 'מכירה' ?
+                            `${item.price.toLocaleString()} ₪` :
+                            `${item.price.toLocaleString()} ₪ לחודש`}
+                        </div>
                       </Card.Text>
-                      <Badge bg={item.type === 'מכירה' ? 'primary' : 'success'} className="mb-2">
+                      <Badge bg={item.type === 'מכירה' ? 'primary' : 'success'} className="mb-2 text-sm">
                         {item.type}
                       </Badge>
-                      <Button variant="outline-primary" className="mt-auto" onClick={() => handleShow(item)}>
+                      <Button variant="outline-primary" className="mt-auto hover:bg-primary hover:text-white transition-all duration-300" onClick={() => handleShow(item)}>
                         פרטים נוספים
                       </Button>
                     </Card.Body>
@@ -266,28 +318,74 @@ export default function RealEstate() {
       </Row>
 
       {/* מודל לפרטי הנכס */}
-      <Modal show={showModal} onHide={handleClose} centered size="lg">
-        <Modal.Header closeButton>
+      <Modal show={showModal} onHide={handleClose} centered size="xl">
+        <Modal.Header closeButton className="bg-primary text-white">
           <Modal.Title>{selectedProperty?.address}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedProperty && (
-            <>
-              <CldImage
-                src={selectedProperty.image}
-                width="800"
-                height="600"
-                crop="fill"
-                alt={`תמונה של ${selectedProperty.address}`}
-                className="img-fluid mb-3"
-              />
-              <p><strong>סוג עסקה:</strong> {selectedProperty.type}</p>
-              <p><strong>מספר חדרים:</strong> {selectedProperty.rooms}</p>
-              <p><strong>מחיר:</strong> {selectedProperty.type === 'מכירה' ?
-                `${selectedProperty.price.toLocaleString()} ₪` :
-                `${selectedProperty.price.toLocaleString()} ₪ לחודש`}</p>
-              <p><strong>כתובת:</strong> {selectedProperty.address}</p>
-            </>
+            <div className="row">
+              <div className="col-md-6">
+                <Carousel>
+                  {selectedProperty.images.map((image, index) => (
+                      <Carousel.Item key={index}>
+                      <CldImage
+                        src={image}
+                        width={600}
+                        height={400}
+                        crop="fill"
+                        alt={`תמונה ${index + 1} של ${selectedProperty.address}`}
+                        className="img-fluid rounded shadow"
+                      />
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              </div>
+              <div className="col-md-6">
+                <h3 className="mb-4 text-primary">פרטי הנכס</h3>
+                <div className="row">
+                  <div className="col-md-6 mb-3">
+                    <p><FontAwesomeIcon icon={faHome} className="mr-2 text-primary" /> <strong>סוג עסקה:</strong> {selectedProperty.type}</p>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <p><FontAwesomeIcon icon={faBed} className="mr-2 text-primary" /> <strong>מספר חדרים:</strong> {selectedProperty.rooms}</p>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <p><FontAwesomeIcon icon={faRulerCombined} className="mr-2 text-primary" /> <strong>שטח:</strong> {selectedProperty.size} מ"ר</p>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <p><FontAwesomeIcon icon={faBuilding} className="mr-2 text-primary" /> <strong>קומה:</strong> {selectedProperty.floor}</p>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <p><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> <strong>מעלית:</strong> {selectedProperty.elevator ? 'יש' : 'אין'}</p>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <p><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> <strong>חניה:</strong> {selectedProperty.parking ? 'יש' : 'אין'}</p>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <p><FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-primary" /> <strong>תאריך כניסה:</strong> {selectedProperty.entryDate}</p>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <p><FontAwesomeIcon icon={faSun} className="mr-2 text-primary" /> <strong>כיוון אוויר:</strong> {selectedProperty.direction}</p>
+                  </div>
+                  <div className="col-md-6 mb-3">
+                    <p><FontAwesomeIcon icon={faCouch} className="mr-2 text-primary" /> <strong>מצב הנכס:</strong> {selectedProperty.condition}</p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h4 className="text-primary mb-3">תיאור הנכס</h4>
+                  <p>{selectedProperty.description}</p>
+                </div>
+                <div className="mt-4">
+                  <h4 className="text-primary mb-3">מחיר</h4>
+                  <p className="h3 text-success">
+                    {selectedProperty.type === 'מכירה'
+                      ? `${selectedProperty.price.toLocaleString()} ₪`
+                      : `${selectedProperty.price.toLocaleString()} ₪ לחודש`}
+                  </p>
+                </div>
+              </div>
+            </div>
           )}
         </Modal.Body>
         <Modal.Footer>
@@ -295,7 +393,7 @@ export default function RealEstate() {
             סגור
           </Button>
           <Button variant="primary">
-            צור קשר עם המוכר
+            <FontAwesomeIcon icon={faPhone} className="mr-2" /> צור קשר עם המוכר
           </Button>
         </Modal.Footer>
       </Modal>
@@ -342,14 +440,77 @@ export default function RealEstate() {
                 </Form.Group>
               </Col>
             </Row>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>גודל במ"ר</Form.Label>
+                  <Form.Control type="number" name="size" required className="form-control-lg"  ref={sizeRef}/>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>קומה</Form.Label>
+                  <Form.Control type="number" name="floor" required className="form-control-lg"  ref={floorRef}/>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>מעלית</Form.Label>
+                  <Form.Select name="elevator" required className="form-control-lg"  ref={elevatorRef}>
+                    <option value="true">יש</option>
+                    <option value="false">אין</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>חניה</Form.Label>
+                  <Form.Select name="parking" required className="form-control-lg"  ref={parkingRef}>
+                    <option value="true">יש</option>
+                    <option value="false">אין</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <Form.Group className="mb-3">
+                  <Form.Label>תאריך כניסה</Form.Label>
+                  <Form.Control type="date" name="entryDate" required className="form-control-lg"  ref={entryDateRef}/>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+              </Col>
+            </Row>
             <Form.Group className="mb-3">
-              <Form.Label>תמונה</Form.Label>
-              <div className="d-flex align-items-center">
+              <Form.Label>כיוון אוויר</Form.Label>
+              <Form.Control type="text" name="direction" required className="form-control-lg"  ref={directionRef}/>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>מצב הנכס</Form.Label>
+              <Form.Select name="condition" required className="form-control-lg"  ref={conditionRef}>
+                <option value="">בחר מצב</option>
+                <option value="חדש">חדש</option>
+                <option value="משופץ">משופץ</option>
+                <option value="במצב טוב">במצב טוב</option>
+                <option value="דורש שיפוץ">דורש שיפוץ</option>
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>תיאור הנכס</Form.Label>
+              <Form.Control as="textarea" rows={3} name="description" className="form-control-lg"  ref={descriptionRef}/>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>תמונות</Form.Label>
+              <div className="d-flex flex-wrap align-items-center">
                 <CldUploadButton
-                  className='btn btn-outline-primary me-2'
+                  className='btn btn-outline-primary me-2 mb-2'
                   uploadPreset="my_upload_test"
                   onSuccess={(result) => {
-                    // הנח שיש לך פונקציה שמטפלת בהצלחת ההעלאה
                     handleUploadSuccess(result);
                   }}
                   onError={(error) => {
@@ -362,16 +523,17 @@ export default function RealEstate() {
                     maxImageWidth: 2000,
                     maxImageHeight: 2000,
                     clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                    multiple: true
                   }}
                 >
                   <FontAwesomeIcon icon={faCloudUploadAlt} className="me-2" />
-                  העלאת תמונה
+                  העלאת תמונות
                 </CldUploadButton>
-                {uploadedImageUrl && (
-                  <div className="position-relative ms-2">
+                {uploadedImageUrls.map((url: any, index: any) => (
+                  <div key={index} className="position-relative me-2 mb-2">
                     <img
-                      src={uploadedImageUrl}
-                      alt="תמונה שהועלתה"
+                      src={url}
+                      alt={`תמונה שהועלתה ${index + 1}`}
                       className="img-thumbnail"
                       style={{ width: '50px', height: '50px', objectFit: 'cover' }}
                     />
@@ -379,16 +541,12 @@ export default function RealEstate() {
                       variant="danger"
                       size="sm"
                       className="position-absolute top-0 start-100 translate-middle rounded-circle p-1"
-                      onClick={() => {
-                        // הנח שיש לך פונקציה שמטפלת במחיקת התמונה
-                        setUploadedImageUrl("");
-                        setImage("");
-                      }}
+                      onClick={() => removeImage(index)}
                     >
                       <FontAwesomeIcon icon={faTimes} />
                     </Button>
                   </div>
-                )}
+                ))}
               </div>
             </Form.Group>
             <div className="text-end">
