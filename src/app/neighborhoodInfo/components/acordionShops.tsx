@@ -88,7 +88,7 @@ export default function AcordionShops() {
         // ... (יתר נתוני החנויות)
     ];
 
-         const toggleExpand = (id) => {
+         const toggleExpand = (id:any) => {
         setExpandedShop(expandedShop === id ? null : id);
     }
 
