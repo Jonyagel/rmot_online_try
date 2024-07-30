@@ -5,49 +5,49 @@
 // export default function AcordionShops() {
 //     return (
 //        <Accordion className="styled-accordion mt-5">
-            <AnimatePresence>
-                {shopData.map((shop) => (
-                    <motion.div
-                        key={shop.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <Accordion.Item eventKey={shop.id} className="styled-accordion-item mb-3">
-                            <Accordion.Header className="styled-accordion-header">
-                                <div className="shop-info d-flex align-items-center">
-                                    <img src={shop.logo} width="60" height="60" alt={`${shop.name} logo`} className="shop-logo me-3" />
-                                    <div className="shop-details">
-                                        <h4 className="shop-name mb-0">{shop.name}</h4>
-                                        <p className="shop-description mb-0 d-none d-sm-block">{shop.description}</p>
-                                    </div>
-                                </div>
-                            </Accordion.Header>
-                            <Accordion.Body className="styled-accordion-body">
-                                <div className='row'>
-                                    <div className='col-12 col-md-4 mb-3 mb-md-0'>
-                                        <p className="shop-content">{shop.content}</p>
-                                    </div>
-                                    <div className='col-12 col-md-4 mb-3 mb-md-0'>
-                                        <h5 className="font-weight-bold">שעות פתיחה:</h5>
-                                        <p className="shop-hours">{shop.hours}</p>
-                                    </div>
-                                    <div className='col-12 col-md-4'>
-                                        <div className="contact-info">
-                                            <p><i className="bi bi-geo-alt-fill me-2"></i>{shop.address}</p>
-                                            <p><i className="bi bi-telephone-fill me-2"></i>{shop.phone}</p>
-                                            <p><i className="bi bi-envelope-fill me-2"></i>{shop.email}</p>
-                                            <p><i className="bi bi-globe me-2"></i>{shop.website}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </motion.div>
-                ))}
-            </AnimatePresence>
-        </Accordion>
+       //     <AnimatePresence>
+        //        {shopData.map((shop) => (
+      //              <motion.div
+    //                    key={shop.id}
+      //                  initial={{ opacity: 0, y: 20 }}
+     //                   animate={{ opacity: 1, y: 0 }}
+      //                  exit={{ opacity: 0, y: -20 }}
+      //                  transition={{ duration: 0.3 }}
+      //              >
+      //                  <Accordion.Item eventKey={shop.id} className="styled-accordion-item mb-3">
+     //                       <Accordion.Header className="styled-accordion-header">
+     //                           <div className="shop-info d-flex align-items-center">
+     //                               <img src={shop.logo} width="60" height="60" alt={`${shop.name} logo`} className="shop-logo me-3" />
+    //                                <div className="shop-details">
+      //                                  <h4 className="shop-name mb-0">{shop.name}</h4>
+      //                                  <p className="shop-description mb-0 d-none d-sm-block">{shop.description}</p>
+     //                               </div>
+    //                            </div>
+    //                        </Accordion.Header>
+    //                        <Accordion.Body className="styled-accordion-body">
+     //                           <div className='row'>
+     //                               <div className='col-12 col-md-4 mb-3 mb-md-0'>
+      //                                  <p className="shop-content">{shop.content}</p>
+       //                             </div>
+       //                             <div className='col-12 col-md-4 mb-3 mb-md-0'>
+       //                                 <h5 className="font-weight-bold">שעות פתיחה:</h5>
+       //                                 <p className="shop-hours">{shop.hours}</p>
+         //                           </div>
+           //                         <div className='col-12 col-md-4'>
+             //                           <div className="contact-info">
+               //                             <p><i className="bi bi-geo-alt-fill me-2"></i>{shop.address}</p>
+                 //                           <p><i className="bi bi-telephone-fill me-2"></i>{shop.phone}</p>
+                   //                         <p><i className="bi bi-envelope-fill me-2"></i>{shop.email}</p>
+                     //                       <p><i className="bi bi-globe me-2"></i>{shop.website}</p>
+                       //                 </div>
+                           //         </div>
+                         //       </div>
+                  //          </Accordion.Body>
+                  //      </Accordion.Item>
+                //    </motion.div>
+            //    ))}
+         //   </AnimatePresence>
+    //    </Accordion>
 //     )
 // }
 
@@ -87,51 +87,41 @@ export default function AcordionShops() {
     ];
 
     return (
-        <Accordion className="styled-accordion mt-5">
-        <AnimatePresence>
-            {shopData.map((shop) => (
-                <motion.div
-                    key={shop.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    <Accordion.Item eventKey={shop.id} className="styled-accordion-item">
-                        <Accordion.Header className="styled-accordion-header bg-info">
-                            <div className="shop-info justify-content-start">
-                                <img src={shop.logo} width="60" height="60" alt={`${shop.name} logo`} className="shop-logo" />
-                                <div className="shop-details">
-                                    <h4 className="shop-name">{shop.name}</h4>
-                                    <p className="shop-description d-none d-sm-block">{shop.description}</p>
+           <Accordion className="styled-accordion mt-5">
+            <AnimatePresence>
+                {shopData.map((shop) => (
+                    <motion.div
+                        key={shop.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <Accordion.Item eventKey={shop.id} className="styled-accordion-item mb-3">
+                            <Accordion.Header className="styled-accordion-header">
+                                <div className="shop-info d-flex align-items-center">
+                                    <img src={shop.logo} width="60" height="60" alt={`${shop.name} logo`} className="shop-logo me-3" />
+                                    <div className="shop-details">
+                                        <h4 className="shop-name mb-0">{shop.name}</h4>
+                                        <p className="shop-description mb-0 d-none d-sm-block">{shop.description}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </Accordion.Header>
-                        <Accordion.Body className="styled-accordion-body">
+                            </Accordion.Header>
+                            <Accordion.Body className="styled-accordion-body">
                                 <div className='row'>
-                                    <div className='col-12 col-md-4 mb-3 mb-md-0 text-end'>
-                                        <p>{shop.content}</p>
+                                    <div className='col-12 col-md-4 mb-3 mb-md-0'>
+                                        <p className="shop-content">{shop.content}</p>
                                     </div>
                                     <div className='col-12 col-md-4 mb-3 mb-md-0'>
-                                        <p className='font-bold'>שעות פתיחה:</p>
-                                        <p>{shop.hours}</p>
+                                        <h5 className="font-weight-bold">שעות פתיחה:</h5>
+                                        <p className="shop-hours">{shop.hours}</p>
                                     </div>
                                     <div className='col-12 col-md-4'>
-                                        <div className="contact-info-acordion">
-                                            <i className="bi bi-geo-alt"></i>
-                                            <p className='mb-0'>{shop.address}</p>
-                                        </div>
-                                        <div className="contact-info-acordion">
-                                            <i className="bi bi-telephone"></i>
-                                            <p className='mb-0'>{shop.phone}</p>
-                                        </div>
-                                        <div className="contact-info-acordion">
-                                            <i className="bi bi-envelope"></i>
-                                            <p className='mb-0'>{shop.email}</p>
-                                        </div>
-                                        <div className="contact-info-acordion">
-                                            <i className="bi bi-globe"></i>
-                                            <p className='mb-0'>{shop.website}</p>
+                                        <div className="contact-info">
+                                            <p><i className="bi bi-geo-alt-fill me-2"></i>{shop.address}</p>
+                                            <p><i className="bi bi-telephone-fill me-2"></i>{shop.phone}</p>
+                                            <p><i className="bi bi-envelope-fill me-2"></i>{shop.email}</p>
+                                            <p><i className="bi bi-globe me-2"></i>{shop.website}</p>
                                         </div>
                                     </div>
                                 </div>
