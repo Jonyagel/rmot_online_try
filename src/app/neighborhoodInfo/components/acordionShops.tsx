@@ -118,7 +118,7 @@
 // import './acordionShops.css';
 
 // export default function AcordionShops() {
-//     const shopData = [
+//     const shopsAr = [
 //         {
 //             id: "0",
 //             name: "אפקטיבי הדברות",
@@ -149,7 +149,7 @@
 //     return (
 //         <Accordion className="styled-accordion mt-5">
 //         <AnimatePresence>
-//             {shopData.map((shop) => (
+//             {shopsAr.map((shop) => (
 //                 <motion.div
 //                     key={shop.id}
 //                     initial={{ opacity: 0, y: 20 }}
@@ -205,7 +205,7 @@
 // }
 
 "use client"
-import React, { useState, useMemo, useRef } from 'react'
+import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload } from 'react-icons/fa';
 import { Button, Modal, Form } from 'react-bootstrap';
@@ -213,6 +213,8 @@ import { CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './acordionShops.css';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface Shop {
     id: string;
@@ -233,12 +235,16 @@ interface Shop {
 }
 
 export default function ShopCards() {
+    const router = useRouter();
+
     const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
-    const [uploadedLogoUrl, setUploadedLogoUrl] = useState('');
-    const [uploadedImageUrl, setUploadedImageUrl] = useState('');
+    const [logo, setLogo] = useState('');
+    const [image, setImage] = useState('');
+    const [shopsAr, setShopsAr] = useState([]);
+
 
     const nameRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -248,53 +254,57 @@ export default function ShopCards() {
     const phoneRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
     const websiteRef = useRef<HTMLInputElement>(null);
-    const categoriesRef = useRef<HTMLInputElement>(null);
+    const categoryRef = useRef<HTMLInputElement>(null);
 
-    const shopData: Shop[] = [
-        {
-            id: "1",
-            name: "מכולת השכונה",
-            description: "מכולת קטנה עם מבחר גדול",
-            logo: "/images/strip/neighborhood1.jpg",
-            content: "מכולת השכונה היא חנות קטנה עם לב גדול. אנו מציעים מגוון רחב של מוצרים טריים ואיכותיים.",
-            hours: "א'-ה': 7:00-22:00, ו': 7:00-15:00, שבת: סגור",
-            address: "רחוב הראשונים 10, תל אביב",
-            phone: "03-1234567",
-            email: "info@neighborhood-grocery.com",
-            website: "www.neighborhood-grocery.com",
-            categories: ["מזון", "מוצרי ניקיון"],
-            image: "/images/strip/neighborhood1.jpg",
-            category: "foods",
-            features: ["hello", "world",],
-            specialOffer: "/images/saleAds.gif",
-        },
-        {
-            id: "2",
-            name: "מכולת השכונה",
-            description: "מכולת קטנה עם מבחר גדול",
-            logo: "/images/strip/neighborhood1.jpg",
-            content: "מכולת השכונה היא חנות קטנה עם לב גדול. אנו מציעים מגוון רחב של מוצרים טריים ואיכותיים.",
-            hours: "א'-ה': 7:00-22:00, ו': 7:00-15:00, שבת: סגור",
-            address: "רחוב הראשונים 10, תל אביב",
-            phone: "03-1234567",
-            email: "info@neighborhood-grocery.com",
-            website: "www.neighborhood-grocery.com",
-            categories: ["מזון", "מוצרי ניקיון"],
-            image: "/images/strip/neighborhood1.jpg",
-            category: "foods",
-            features: ["hello", "world",],
-            specialOffer: "/images/saleAds.gif",
-        },
-        // ... הוסף עוד חנויות כאן
-    ];
+    // const shopsAr: Shop[] = [
+    //     {
+    //         id: "1",
+    //         name: "מכולת השכונה",
+    //         description: "מכולת קטנה עם מבחר גדול",
+    //         logo: "/images/strip/neighborhood1.jpg",
+    //         content: "מכולת השכונה היא חנות קטנה עם לב גדול. אנו מציעים מגוון רחב של מוצרים טריים ואיכותיים.",
+    //         hours: "א'-ה': 7:00-22:00, ו': 7:00-15:00, שבת: סגור",
+    //         address: "רחוב הראשונים 10, תל אביב",
+    //         phone: "03-1234567",
+    //         email: "info@neighborhood-grocery.com",
+    //         website: "www.neighborhood-grocery.com",
+    //         categories: ["מזון", "מוצרי ניקיון"],
+    //         image: "/images/strip/neighborhood1.jpg",
+    //         category: "foods",
+    //         features: ["hello", "world",],
+    //         specialOffer: "/images/saleAds.gif",
+    //     },
+    //     {
+    //         id: "2",
+    //         name: "מכולת השכונה",
+    //         description: "מכולת קטנה עם מבחר גדול",
+    //         logo: "/images/strip/neighborhood1.jpg",
+    //         content: "מכולת השכונה היא חנות קטנה עם לב גדול. אנו מציעים מגוון רחב של מוצרים טריים ואיכותיים.",
+    //         hours: "א'-ה': 7:00-22:00, ו': 7:00-15:00, שבת: סגור",
+    //         address: "רחוב הראשונים 10, תל אביב",
+    //         phone: "03-1234567",
+    //         email: "info@neighborhood-grocery.com",
+    //         website: "www.neighborhood-grocery.com",
+    //         categories: ["מזון", "מוצרי ניקיון"],
+    //         image: "/images/strip/neighborhood1.jpg",
+    //         category: "foods",
+    //         features: ["hello", "world",],
+    //         specialOffer: "/images/saleAds.gif",
+    //     },
+    //     // ... הוסף עוד חנויות כאן
+    // ];
 
-    // const handleShopClick = (shop: Shop) => {
-    //     setSelectedShop(shop);
-    // };
+    useEffect(() => {
+        doApi();
+    }, []);
 
-    // const closeModal = () => {
-    //     setSelectedShop(null);
-    // };
+    const doApi = async () => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/shops`;
+        const resp = await fetch(url, { cache: 'no-store' })
+        const data = await resp.json();
+        console.log(data);
+        setShopsAr(data)
+    }
 
     const formAnimation = {
         hidden: { opacity: 0, y: 50 },
@@ -315,7 +325,7 @@ export default function ShopCards() {
     };
 
     const filteredShops = useMemo(() => {
-        return shopData.filter(shop =>
+        return shopsAr.filter((shop: any) =>
             (shop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 shop.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
             (!selectedCategory || shop.categories.includes(selectedCategory))
@@ -323,7 +333,7 @@ export default function ShopCards() {
     }, [searchTerm, selectedCategory]);
 
     const allCategories = useMemo(() => {
-        return Array.from(new Set(shopData.flatMap(shop => shop.categories)));
+        return Array.from(new Set(shopsAr.flatMap((shop: any) => shop.categories)));
     }, []);
 
     const handleShopClick = (shop: Shop) => {
@@ -337,22 +347,45 @@ export default function ShopCards() {
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => {
         setShowModal(false);
-        setUploadedLogoUrl('');
-        setUploadedImageUrl('');
+        setLogo('');
+        setImage('');
     };
 
     const handleUploadLogo = (result: any) => {
-        setUploadedLogoUrl(result.info.secure_url);
+        setLogo(result.info.secure_url);
     };
 
     const handleUploadImage = (result: any) => {
-        setUploadedImageUrl(result.info.secure_url);
+        setImage(result.info.secure_url);
     };
 
-    const handleAddShop = (e: React.FormEvent) => {
+    const handleAddShop = async (e: React.FormEvent) => {
         e.preventDefault();
-        // כאן הוסף את הלוגיקה להוספת חנות חדשה
-        // השתמש בערכים מה-refs והכתובות URL של התמונות שהועלו
+        const name = nameRef.current?.value;
+        const description = descriptionRef.current?.value;
+        const content = contentRef.current?.value;
+        const address = addressRef.current?.value;
+        const hours = hoursRef.current?.value;
+        const phone = phoneRef.current?.value;
+        const email = emailRef.current?.value;
+        const website = websiteRef.current?.value;
+        const category = categoryRef.current?.value;
+        try {
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/shops`, {
+                method: 'POST',
+                body: JSON.stringify({ name, description, content, hours, address, phone, email, website, category,logo,image }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await resp.json();
+            console.log(data);
+            doApi();
+            handleCloseModal();
+            router.push('/neighborhoodInfo');
+        } catch (error: any) {
+            console.error('Error:', error);
+        }
         toast.success('החנות נוספה בהצלחה!');
         handleCloseModal();
     };
@@ -369,7 +402,7 @@ export default function ShopCards() {
             </motion.button>
             <div className="shop-container">
                 <div className="shop-grid">
-                    {shopData.map((shop) => (
+                    {shopsAr.map((shop: any) => (
                         <motion.div
                             key={shop.id}
                             className="shop-card"
@@ -424,7 +457,7 @@ export default function ShopCards() {
                                         </div>
                                         <div className="info-item">
                                             <FaPhone className="info-icon" />
-                                            <p>{selectedShop.phone}</p>
+                                            <Link href={`tel:${selectedShop.phone}`}>{selectedShop.phone}</Link>
                                         </div>
                                         <div className="info-item">
                                             <FaEnvelope className="info-icon" />
@@ -432,7 +465,7 @@ export default function ShopCards() {
                                         </div>
                                         <div className="info-item">
                                             <FaGlobe className="info-icon" />
-                                            <p>{selectedShop.website}</p>
+                                            <Link href={selectedShop.website}>{selectedShop.website}</Link>
                                         </div>
                                     </div>
                                     <div className="shop-features">
@@ -445,7 +478,7 @@ export default function ShopCards() {
                                     </div>
                                     <div className="shop-ad">
                                         <h3>מבצע מיוחד!</h3>
-                                        <img src={selectedShop.specialOffer}/>
+                                        <img src={selectedShop.specialOffer} />
                                     </div>
                                 </div>
                             </motion.div>
@@ -518,8 +551,8 @@ export default function ShopCards() {
                         </motion.div>
                         <motion.div variants={itemAnimation}>
                             <Form.Group className="mb-3">
-                                <Form.Label>קטגוריות (מופרדות בפסיקים)</Form.Label>
-                                <Form.Control ref={categoriesRef} type="text" required />
+                                <Form.Label>קטגוריה</Form.Label>
+                                <Form.Control ref={categoryRef} type="text" required />
                             </Form.Group>
                         </motion.div>
                         <motion.div variants={itemAnimation}>
@@ -527,15 +560,29 @@ export default function ShopCards() {
                                 <Form.Label>לוגו</Form.Label>
                                 <div className="upload-container">
                                     <CldUploadButton
-                                        className='upload-button'
-                                        uploadPreset="your_upload_preset"
-                                        onSuccess={handleUploadLogo}
+                                        className='btn btn-outline-primary me-2 mb-2'
+                                        uploadPreset="my_upload_test"
+                                        onSuccess={(result) => {
+                                            handleUploadLogo(result);
+                                        }}
+                                        onError={(error) => {
+                                            console.error('Upload error:', error);
+                                            toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
+                                        }}
+                                        options={{
+                                            sources: ['local'],
+                                            maxFileSize: 5000000,
+                                            maxImageWidth: 2000,
+                                            maxImageHeight: 2000,
+                                            clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                                            multiple: true
+                                        }}
                                     >
                                         <FaUpload /> העלאת לוגו
                                     </CldUploadButton>
-                                    {uploadedLogoUrl && (
+                                    {logo && (
                                         <motion.img
-                                            src={uploadedLogoUrl}
+                                            src={logo}
                                             alt="לוגו"
                                             className="uploaded-image"
                                             initial={{ opacity: 0, scale: 0.5 }}
@@ -551,16 +598,30 @@ export default function ShopCards() {
                             <Form.Group className="mb-3">
                                 <Form.Label>תמונה</Form.Label>
                                 <div className="upload-container">
-                                    <CldUploadButton
-                                        className='upload-button'
-                                        uploadPreset="your_upload_preset"
-                                        onSuccess={handleUploadImage}
+                                <CldUploadButton
+                                        className='btn btn-outline-primary me-2 mb-2'
+                                        uploadPreset="my_upload_test"
+                                        onSuccess={(result) => {
+                                            handleUploadImage(result);
+                                        }}
+                                        onError={(error) => {
+                                            console.error('Upload error:', error);
+                                            toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
+                                        }}
+                                        options={{
+                                            sources: ['local'],
+                                            maxFileSize: 5000000,
+                                            maxImageWidth: 2000,
+                                            maxImageHeight: 2000,
+                                            clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                                            multiple: true
+                                        }}
                                     >
                                         <FaImage /> העלאת תמונה
                                     </CldUploadButton>
-                                    {uploadedImageUrl && (
+                                    {image && (
                                         <motion.img
-                                            src={uploadedImageUrl}
+                                            src={image}
                                             alt="תמונה"
                                             className="uploaded-image"
                                             initial={{ opacity: 0, scale: 0.5 }}
