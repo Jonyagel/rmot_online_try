@@ -357,10 +357,10 @@ export default function RealEstate() {
                     <p><FontAwesomeIcon icon={faBuilding} className="mr-2 text-primary" /> <strong>קומה:</strong> {selectedProperty.floor}</p>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> <strong>מעלית:</strong> {selectedProperty.elevator=="true" ? 'יש' : 'אין'}</p>
+                    <p><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> <strong>מעלית:</strong> {selectedProperty.elevator ? 'יש' : 'אין'}</p>
                   </div>
                   <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> <strong>חניה:</strong> {selectedProperty.parking=="true" ? 'יש' : 'אין'}</p>
+                    <p><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> <strong>חניה:</strong> {selectedProperty.parking ? 'יש' : 'אין'}</p>
                   </div>
                   <div className="col-md-6 mb-3">
                     <p><FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-primary" /> <strong>תאריך כניסה:</strong> {selectedProperty.entryDate}</p>
