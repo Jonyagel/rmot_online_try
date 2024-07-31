@@ -89,7 +89,7 @@ export default function AddQuestion(props: any) {
     const handleShow = () => setShowModal(true);
 
     return (
-        <>
+        <div>
             <Button variant="primary" className="rounded-circle shadow-sm m-4" onClick={checkSignIn}>
                 <i className="bi bi-plus-lg fs-4"></i>
             </Button>
@@ -177,6 +177,6 @@ export default function AddQuestion(props: any) {
                 </Modal.Body>
             </Modal>
             <ToastContainer position="bottom-center" theme="colored" />
-        </>
+        </div>
     )
 }
