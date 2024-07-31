@@ -1,8 +1,9 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Form, Button, Card, Row, Col, Alert, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone, faMapMarkerAlt, faClock } from '@fortawesome/free-solid-svg-icons';
+import emailjs from '@emailjs/browser';
 import './contactUs.css';
 
 interface ContactForm {
@@ -20,6 +21,12 @@ export default function ContactUs() {
     message: ''
   });
   const [showAlert, setShowAlert] = useState(false);
+  const [status, setStatus] = useState<string>('');
+  const form = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -31,10 +38,25 @@ export default function ContactUs() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setShowAlert(true);
+
+    if (form.current) {
+      try {
+        const result = await emailjs.sendForm(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+          form.current,
+          process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+        );
+        setStatus('הודעה נשלחה בהצלחה!');
+        setShowAlert(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } catch (error) {
+        console.error('שגיאה בשליחת האימייל:', error);
+        setStatus('אירעה שגיאה בשליחת ההודעה. אנא נסה שוב.');
+        setShowAlert(true);
+      }
+    }
     setTimeout(() => setShowAlert(false), 5000);
-    setFormData({ name: '', email: '', subject: '', message: '' });
   };
 
   return (
@@ -46,9 +68,9 @@ export default function ContactUs() {
 
       <Container className="py-5">
         {showAlert && (
-          <Alert variant="success" onClose={() => setShowAlert(false)} dismissible className="mb-4">
-            <Alert.Heading>תודה שפנית אלינו!</Alert.Heading>
-            <p>הודעתך נשלחה בהצלחה. נחזור אליך בהקדם האפשרי.</p>
+          <Alert variant={status.includes('בהצלחה') ? "success" : "danger"} onClose={() => setShowAlert(false)} dismissible className="mb-4">
+            <Alert.Heading>{status.includes('בהצלחה') ? "תודה שפנית אלינו!" : "שגיאה"}</Alert.Heading>
+            <p>{status}</p>
           </Alert>
         )}
 
@@ -59,15 +81,15 @@ export default function ContactUs() {
                 <Row>
                   <Col md={6} className="mb-4 mb-md-0">
                     <h3 className="h4 mb-4 text-primary">שלח לנו הודעה</h3>
-                    <Form onSubmit={handleSubmit}>
+                    <Form ref={form} onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="formName">
                         <Form.Label>שם מלא</Form.Label>
                         <Form.Control
                           type="text"
                           placeholder="הכנס את שמך המלא"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
+                          name="from_name"
+                          // value={formData.name}
+                          // onChange={handleInputChange}
                           required
                           className="rounded-pill"
                         />
@@ -78,9 +100,9 @@ export default function ContactUs() {
                         <Form.Control
                           type="email"
                           placeholder="הכנס את כתובת האימייל שלך"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
+                          name="email_id"
+                          // value={formData.email}
+                          // onChange={handleInputChange}
                           required
                           className="rounded-pill"
                         />
@@ -92,8 +114,8 @@ export default function ContactUs() {
                           type="text"
                           placeholder="נושא ההודעה"
                           name="subject"
-                          value={formData.subject}
-                          onChange={handleInputChange}
+                          // value={formData.subject}
+                          // onChange={handleInputChange}
                           required
                           className="rounded-pill"
                         />
@@ -105,9 +127,9 @@ export default function ContactUs() {
                           as="textarea"
                           rows={5}
                           placeholder="כתוב את הודעתך כאן"
-                          name="message"
-                          value={formData.message}
-                          onChange={handleInputChange}
+                          name="content"
+                          // value={formData.message}
+                          // onChange={handleInputChange}
                           required
                           className="rounded"
                         />
@@ -155,12 +177,12 @@ export default function ContactUs() {
           <Col>
             <Card className="shadow-lg border-0 rounded-lg overflow-hidden">
               <Card.Body className="p-0">
-                <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381.380753924691!2d34.77977881547096!3d32.06438358119007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151d4b82a6148a07%3A0x1074b63ef7e111be!2z16jXl9eV15Eg15TXqNeQ15w!5e0!3m2!1siw!2sil!4v1627910358029!5m2!1siw!2sil" 
-                  width="100%" 
-                  height="400" 
-                  style={{border:0}} 
-                  allowFullScreen={true} 
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381.380753924691!2d34.77977881547096!3d32.06438358119007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151d4b82a6148a07%3A0x1074b63ef7e111be!2z16jXl9eV15Eg15TXqNeQ15w!5e0!3m2!1siw!2sil!4v1627910358029!5m2!1siw!2sil"
+                  width="100%"
+                  height="400"
+                  style={{ border: 0 }}
+                  allowFullScreen={true}
                   loading="lazy">
                 </iframe>
               </Card.Body>
