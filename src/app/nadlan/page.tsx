@@ -202,7 +202,7 @@ const sendEmailToUser = async (dadaPosted: any, emails: string[]) => {
   const resp = await fetch(url, { cache: 'no-store' })
   const data = await resp.json();
   console.log(data);
-  const emails = data.map(item => item.to_email);
+  const emails = data.map((item:any) => item.to_email);
   setSendemailAr(data)
   return emails;
 };
