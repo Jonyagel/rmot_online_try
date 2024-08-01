@@ -1,510 +1,392 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react';
-import { Container, Row, Col, Card, Button, Tabs, Tab, Modal, ListGroup, Form, Accordion } from 'react-bootstrap';
-import { CldImage } from 'next-cloudinary';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import React, { useRef, useState } from 'react';
+import { Container, Row, Col, Card, Button, Accordion, ListGroup, Form, Nav, Modal, Dropdown } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faSynagogue, faClock, faPuzzlePiece, faLightbulb, faCalendarAlt, faQuestionCircle, faUtensils, faRunning, faGuitar, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { motion } from 'framer-motion';
+import { faCalendarAlt, faBook, faSynagogue, faUtensils, faQuestionCircle, faRunning, faLightbulb, faSearch } from '@fortawesome/free-solid-svg-icons';
+import styled from 'styled-components';
+import SynagogueCard from './components/synagogue'
+
+const SynagogueItem = styled.div`
+  margin-bottom: 2rem;
+`;
+
+const SynagogueName = styled.h4`
+  color: #2c3e50;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+`;
+
+const SynagogueAddress = styled.p`
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+`;
+
+const PrayerTimes = styled.div`
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+`;
+
+const PrayerTimesTitle = styled.h5`
+  color: #34495e;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+`;
+
+const PrayerTimesGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+`;
+
+const PrayerTime = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  span {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin: 0.3rem 0;
+  }
+
+  strong {
+    font-size: 1.1rem;
+    color: #2c3e50;
+  }
+`;
+
+const SynagogueDivider = styled.hr`
+  margin: 2rem 0;
+  border-top: 1px solid #ecf0f1;
+`;
+
+const StyledContainer = styled(Container)`
+  background-color: #f0f4f8;
+  padding: 2rem 0;
+`;
+
+const StyledCard = styled(Card)`
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  }
+`;
+
+const CardHeader = styled(Card.Header)`
+  background: linear-gradient(45deg, #3498db, #2980b9);
+  color: white;
+  font-weight: bold;
+  padding: 1rem;
+`;
+
+const SectionTitle = styled.h2`
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  position: relative;
+  
+  &:after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: #3498db;
+    margin: 10px auto;
+  }
+`;
+
+const StyledNav = styled(Nav)`
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+
+  @media (max-width: 768px) {
+  display: none;
+  }
+
+  .nav-link {
+    color: #2c3e50;
+    font-weight: bold;
+    padding: 10px 15px;
+    
+    &:hover, &.active {
+      color: #3498db;
+    }
+  }
+`;
+const StyledNavLink = styled(Nav.Link)`
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 100%;
+`;
 
 const FamilyPage = () => {
-    const colors = {
-        primary: '#3498db',
-        secondary: '#2ecc71',
-        accent: '#e74c3c',
-        background: '#f8f9fa',
-        text: '#333333'
-    };
-
-    interface PrayerTimes {
-        shacharit: string;
-        mincha: string;
-        arvit: string;
-    }
-
-    interface Synagogue {
-        name: string;
-        address: string;
-        prayerTimes: PrayerTimes;
-    }
-
-    interface Recipe {
-        name: string;
-        ingredients: string[];
-        instructions: string[];
-    }
-
     interface LostFoundItem {
         type: 'מציאה' | 'אבידה';
         description: string;
         location: string;
         date: string;
         contact: string;
-      }
-
-    const [showAnswer, setShowAnswer] = useState(false);
+    }
     const [showSynagogueModal, setShowSynagogueModal] = useState(false);
-    const [selectedSynagogue, setSelectedSynagogue] = useState<Synagogue | null>(null);
-    const [recipe, setRecipe] = useState<Recipe>({
-        name: '',
-        ingredients: [],
-        instructions: []
-    });
     const [lostAndFound, setLostAndFound] = useState<LostFoundItem[]>([]);
     const [showLostFoundModal, setShowLostFoundModal] = useState(false);
-
+    // const [selectedSynagogue, setSelectedSynagogue] = useState(synagogues);
     const itemTypeRef = useRef<HTMLSelectElement>(null);
     const itemDescriptionRef = useRef<HTMLTextAreaElement>(null);
     const itemLocationRef = useRef<HTMLInputElement>(null);
-    const itemDateRef = useRef<HTMLInputElement >(null);
-    const contactInfoRef = useRef<HTMLInputElement >(null);
+    const itemDateRef = useRef<HTMLInputElement>(null);
+    const contactInfoRef = useRef<HTMLInputElement>(null);
 
     const handleAddLostFoundItem = () => {
         if (
-          itemTypeRef.current &&
-          itemDescriptionRef.current &&
-          itemLocationRef.current &&
-          itemDateRef.current &&
-          contactInfoRef.current
+            itemTypeRef.current &&
+            itemDescriptionRef.current &&
+            itemLocationRef.current &&
+            itemDateRef.current &&
+            contactInfoRef.current
         ) {
-          const newItem: LostFoundItem = {
-            type: itemTypeRef.current.value as 'מציאה' | 'אבידה',
-            description: itemDescriptionRef.current.value,
-            location: itemLocationRef.current.value,
-            date: itemDateRef.current.value,
-            contact: contactInfoRef.current.value
-          };
-          setLostAndFound(prevItems => [...prevItems, newItem]);
-          setShowLostFoundModal(false);
+            const newItem: LostFoundItem = {
+                type: itemTypeRef.current.value as 'מציאה' | 'אבידה',
+                description: itemDescriptionRef.current.value,
+                location: itemLocationRef.current.value,
+                date: itemDateRef.current.value,
+                contact: contactInfoRef.current.value
+            };
+            setLostAndFound(prevItems => [...prevItems, newItem]);
+            setShowLostFoundModal(false);
         }
-      };
+    };
 
-    useEffect(() => {
-        setRecipe({
-            name: 'חלה מתוקה לשבת',
-            ingredients: ['3 כוסות קמח', '1/4 כוס סוכר', '1 כף שמרים יבשים', '1 כוס מים פושרים', '1/4 כוס שמן', '1 ביצה', '1 כפית מלח'],
-            instructions: ['ערבבו את כל המרכיבים היבשים', 'הוסיפו את הנוזלים וערבבו עד לקבלת בצק חלק', 'הניחו לתפיחה במשך שעה', 'צרו צמה מהבצק והניחו על תבנית אפייה', 'אפו ב-180 מעלות במשך 25-30 דקות']
-        });
-    }, []);
+
+    const [activeTab, setActiveTab] = useState('daily');
+    const [showAnswer, setShowAnswer] = useState(false);
+    // const [lostAndFound, setLostAndFound] = useState([
+    //     { type: 'מציאה', description: 'מפתחות עם מחזיק של אייפל', location: 'גן העיר', date: '2023-07-20' },
+    //     { type: 'אבידה', description: 'תיק יד כחול', location: 'אוטובוס קו 5', date: '2023-07-19' }
+    // ]);
 
     const toggleAnswer = () => setShowAnswer(!showAnswer);
-
-
-    const WeeklyTrivia = () => {
-        const [question, setQuestion] = useState("מי היה הכהן הגדול הראשון?");
-        const [options, setOptions] = useState(["משה", "אהרון", "יהושע", "שמואל"]);
-
-        return (
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                <Card className="custom-card">
-                    <Card.Header as="h3" className="card-header-custom">
-                        <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" /> טריוויה שבועית
-                    </Card.Header>
-                    <Card.Body>
-                        <p>{question}</p>
-                        {options.map((option, index) => (
-                            <Button key={index} variant="outline-secondary" className="m-1">{option}</Button>
-                        ))}
-                    </Card.Body>
-                </Card>
-            </motion.div>
-        );
-    };
-
-    const HebrewCalendar = () => {
-        return (
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                <Card className="custom-card">
-                    <Card.Header as="h3" className="card-header-custom">
-                        <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> לוח שנה עברי
-                    </Card.Header>
-                    <Card.Body>
-                        <p>היום: כ"ג בתמוז תשפ"ג</p>
-                        <p>פרשת השבוע: פנחס</p>
-                        <p>חג קרוב: תשעה באב (01.08.2023)</p>
-                    </Card.Body>
-                </Card>
-            </motion.div>
-        );
-    };
-
-    const DailyLearning = () => {
-        const [verse, setVerse] = useState("בראשית ברא אלוהים את השמים ואת הארץ");
-
-        return (
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                <Card className="custom-card">
-                    <Card.Header as="h3" className="card-header-custom">
-                        <FontAwesomeIcon icon={faBook} className="mr-2" /> פינת לימוד יומית
-                    </Card.Header>
-                    <Card.Body>
-                        <blockquote className="blockquote">
-                            <p>{verse}</p>
-                        </blockquote>
-                        <Button variant="outline-primary">דיון משפחתי</Button>
-                    </Card.Body>
-                </Card>
-            </motion.div>
-        );
-    };
 
     const synagogues = [
         {
             name: "בית הכנסת הגדול",
             address: "רחוב הרצל 1",
             prayerTimes: {
-                shacharit: "06:30",
-                mincha: "13:30",
-                arvit: "19:00"
+                weekday: { shacharit: "06:30", mincha: "13:30", arvit: "19:00" },
+                saturday: { shacharit: "08:00", mincha: "17:30", arvit: "20:00" }
             }
         },
         {
             name: "בית כנסת אוהל יצחק",
             address: "רחוב בן גוריון 15",
             prayerTimes: {
-                shacharit: "07:00",
-                mincha: "13:45",
-                arvit: "19:15"
+                weekday: { shacharit: "07:00", mincha: "13:45", arvit: "19:15" },
+                saturday: { shacharit: "08:30", mincha: "18:00", arvit: "20:15" }
             }
         },
         {
-            name: "בית כנסת שערי רחמים",
-            address: "רחוב ויצמן 8",
+            name: "בית כנסת אוהל יצחק",
+            address: "רחוב בן גוריון 15",
             prayerTimes: {
-                shacharit: "06:45",
-                mincha: "13:15",
-                arvit: "18:45"
+                weekday: { shacharit: "07:00", mincha: "13:45", arvit: "19:15" },
+                saturday: { shacharit: "08:30", mincha: "18:00", arvit: "20:15" }
             }
-        }
+        },
+        {
+            name: "בית כנסת אוהל יצחק",
+            address: "רחוב בן גוריון 15",
+            prayerTimes: {
+                weekday: { shacharit: "07:00", mincha: "13:45", arvit: "19:15" },
+                saturday: { shacharit: "08:30", mincha: "18:00", arvit: "20:15" }
+            }
+        },
+        // ... יותר בתי כנסת
     ];
 
-    const handleSynagogueClick = (synagogue: any) => {
-        setSelectedSynagogue(synagogue);
-        setShowSynagogueModal(true);
+    const recipe = {
+        name: "חלה מתוקה",
+        ingredients: ["3 כוסות קמח", "1/4 כוס סוכר", "1 כף שמרים יבשים", "1 כוס מים פושרים", "1/4 כוס שמן", "1 ביצה", "1 כפית מלח"],
+        instructions: [
+            "ערבבו את הקמח, הסוכר והשמרים בקערה גדולה.",
+            "הוסיפו את המים, השמן, הביצה והמלח וערבבו עד שנוצר בצק חלק.",
+            "כסו את הקערה ותנו לבצק לתפוח במשך שעה.",
+            "צרו צמה מהבצק והניחו בתבנית.",
+            "הניחו לתפוח שוב למשך 30 דקות.",
+            "אפו ב-180 מעלות למשך 25-30 דקות עד להזהבה."
+        ]
     };
 
-    const FamilyActivities = () => (
-        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-            <Card className="custom-card">
-                <Card.Header as="h3" className="card-header-custom">
-                    <FontAwesomeIcon icon={faRunning} className="mr-2" /> פעילויות משפחתיות
-                </Card.Header>
-                <Card.Body>
-                    <Accordion>
-                        <Accordion.Item eventKey="0">
-                            <Accordion.Header>טיול משפחתי</Accordion.Header>
-                            <Accordion.Body>
-                                מסלול מומלץ: נחל השופט - טיול קליל לכל המשפחה עם נקודות עניין רבות ומעיינות בדרך.
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        <Accordion.Item eventKey="1">
-                            <Accordion.Header>ערב משחקי קופסה</Accordion.Header>
-                            <Accordion.Body>
-                                המלצה למשחק: "קטאן" - משחק אסטרטגיה מהנה לכל המשפחה, מגיל 10 ומעלה.
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
-                </Card.Body>
-            </Card>
-        </motion.div>
-    );
-
-    const ShabbatRecipe = () => (
-        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-            <Card className="custom-card">
-                <Card.Header as="h3" className="card-header-custom">
-                    <FontAwesomeIcon icon={faUtensils} className="mr-2" /> מתכון לשבת
-                </Card.Header>
-                <Card.Body>
-                    <h4>{recipe.name}</h4>
-                    <h5>מצרכים:</h5>
-                    <ul>
-                        {recipe.ingredients.map((ingredient, index) => (
-                            <li key={index}>{ingredient}</li>
-                        ))}
-                    </ul>
-                    <h5>הוראות הכנה:</h5>
-                    <ol>
-                        {recipe.instructions.map((instruction, index) => (
-                            <li key={index}>{instruction}</li>
-                        ))}
-                    </ol>
-                </Card.Body>
-            </Card>
-        </motion.div>
-    );
-
-    const WeeklyChallenge = () => (
-        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-            <Card className="custom-card">
-                <Card.Header as="h3" className="card-header-custom">
-                    <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> אתגר שבועי
-                </Card.Header>
-                <Card.Body>
-                    <h5>השבוע: מעשה טוב יומי</h5>
-                    <p>כל יום, עשו מעשה טוב אחד לפחות. בסוף השבוע, שתפו את המעשים הטובים שעשיתם עם המשפחה.</p>
-                    <Form>
-                        <Form.Group>
-                            <Form.Control as="textarea" rows={3} placeholder="רשמו כאן את המעשים הטובים שלכם" />
-                        </Form.Group>
-                        <Button variant="primary" className="mt-3">שתפו את המעשים הטובים</Button>
-                    </Form>
-                </Card.Body>
-            </Card>
-        </motion.div>
-    );
-
     return (
-        <Container className="my-5">
-            <style jsx global>{`
-                body {
-                    font-family: 'Heebo', sans-serif;
-                    background-image: url('path_to_subtle_pattern.png');
-                    background-repeat: repeat;
-                    color: ${colors.text};
-                }
-                h1 { font-size: 2.5rem; font-weight: 700; }
-                h2 { font-size: 2rem; font-weight: 600; }
-                h3 { font-size: 1.75rem; font-weight: 600; }
-                p { font-size: 1rem; line-height: 1.6; }
-                .custom-card {
-                    border-radius: 15px;
-                    overflow: hidden;
-                    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-                    transition: all 0.3s ease-in-out;
-                }
-                .custom-card:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-                }
-                .card-header-custom {
-                    background: linear-gradient(45deg, ${colors.primary}, ${colors.secondary});
-                    color: white;
-                    padding: 15px;
-                }
-                .nav-tabs {
-                    border-bottom: none;
-                }
-                .nav-tabs .nav-link {
-                    border: none;
-                    color: ${colors.text};
-                    font-weight: 600;
-                    padding: 15px 25px;
-                    border-radius: 10px 10px 0 0;
-                    transition: all 0.3s ease;
-                }
-                .nav-tabs .nav-link.active {
-                    color: white;
-                    background: linear-gradient(45deg, ${colors.primary}, ${colors.secondary});
-                }
-                .modal-content {
-                    border-radius: 15px;
-                    overflow: hidden;
-                }
-                .modal-header {
-                    background: linear-gradient(45deg, ${colors.primary}, ${colors.secondary});
-                    color: white;
-                }
-                .grid-container {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                    gap: 25px;
-                }
-                @media (max-width: 768px) {
-                    .grid-container {
-                        grid-template-columns: 1fr;
-                    }
-                }
-                .btn {
-                    border-radius: 25px;
-                    padding: 10px 20px;
-                    font-weight: 600;
-                    transition: all 0.3s ease;
-                }
-                .btn:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-                }
-            `}</style>
+        <StyledContainer fluid>
+            <Container>
+                <SectionTitle>לכל המשפחה</SectionTitle>
 
-            <motion.h1
-                className="text-center mb-5 display-4"
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                לכל המשפחה
-            </motion.h1>
+                <StyledNav variant="pills" activeKey={activeTab} onSelect={(k: any) => setActiveTab(k)} className="flex-column flex-md-row">
+                    <Nav.Item>
+                        <Nav.Link eventKey="daily">
+                            <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> יומי
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link eventKey="weekly">
+                            <FontAwesomeIcon icon={faRunning} className="mr-2" /> שבועי
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link eventKey="community">
+                            <FontAwesomeIcon icon={faSynagogue} className="mr-2" /> קהילה
+                        </Nav.Link>
+                    </Nav.Item>
+                </StyledNav>
+                <Dropdown className="d-md-none mb-3">
+                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                        {activeTab === 'daily' ? 'יומי' : activeTab === 'weekly' ? 'שבועי' : 'קהילה'}
+                    </Dropdown.Toggle>
 
-            <Tabs defaultActiveKey="activities" id="family-tabs" className="mb-4">
-                <Tab eventKey="activities" title={<><FontAwesomeIcon icon={faPuzzlePiece} className="mr-2" /> פעילויות משפחתיות</>}>
-                    <div className="grid-container">
-                        <HebrewCalendar />
-                        <DailyLearning />
-                        <WeeklyTrivia />
-                        <FamilyActivities />
-                        <WeeklyChallenge />
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                            <Card className="custom-card">
-                                <Card.Header as="h3" className="card-header-custom">
-                                    <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> חידה שבועית
-                                </Card.Header>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => setActiveTab('daily')}>יומי</Dropdown.Item>
+                        <Dropdown.Item onClick={() => setActiveTab('weekly')}>שבועי</Dropdown.Item>
+                        <Dropdown.Item onClick={() => setActiveTab('community')}>קהילה</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+                {activeTab === 'daily' && (
+                    <Row>
+                        <Col md={6}>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> לוח שנה עברי
+                                </CardHeader>
                                 <Card.Body>
-                                    <Card.Title>מה הולך על ארבע בבוקר, על שתיים בצהריים, ועל שלוש בערב?</Card.Title>
-                                    <Button variant="outline-primary" onClick={toggleAnswer} className="mt-3">
+                                    <p>היום: כ"ג בתמוז תשפ"ג</p>
+                                    <p>פרשת השבוע: פנחס</p>
+                                    <p>חג קרוב: תשעה באב (01.08.2023)</p>
+                                </Card.Body>
+                            </StyledCard>
+                        </Col>
+                        <Col md={6}>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faBook} className="mr-2" /> פינת לימוד יומית
+                                </CardHeader>
+                                <Card.Body>
+                                    <blockquote className="blockquote">
+                                        <p>"בראשית ברא אלוהים את השמים ואת הארץ"</p>
+                                    </blockquote>
+                                    <Button variant="outline-primary">דיון משפחתי</Button>
+                                </Card.Body>
+                            </StyledCard>
+                        </Col>
+                    </Row>
+                )}
+
+                {activeTab === 'weekly' && (
+                    <Row>
+                        <Col md={6}>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" /> טריוויה שבועית
+                                </CardHeader>
+                                <Card.Body>
+                                    <p>מה הולך על ארבע בבוקר, על שתיים בצהריים, ועל שלוש בערב?</p>
+                                    <Button variant="outline-primary" onClick={toggleAnswer}>
                                         {showAnswer ? 'הסתר תשובה' : 'הצג תשובה'}
                                     </Button>
                                     {showAnswer && (
-                                        <Card.Text className="mt-3 alert alert-success">
+                                        <p className="mt-3 alert alert-success">
                                             התשובה: האדם. בילדותו הוא זוחל על ארבע, כמבוגר הוא הולך על שתיים, ובזקנתו נעזר במקל (שלוש).
-                                        </Card.Text>
+                                        </p>
                                     )}
                                 </Card.Body>
-                            </Card>
-                        </motion.div>
-                    </div>
-                </Tab>
-
-                <Tab eventKey="stories" title={<><FontAwesomeIcon icon={faBook} className="mr-2" /> סיפורים וערכים</>}>
-                    <div className="grid-container">
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                            <Card className="custom-card">
-                                <Card.Header as="h3" className="card-header-custom">
-                                    <FontAwesomeIcon icon={faBook} className="mr-2" /> סיפור לשבת
-                                </Card.Header>
+                            </StyledCard>
+                        </Col>
+                        <Col md={6}>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faUtensils} className="mr-2" /> מתכון לשבת
+                                </CardHeader>
                                 <Card.Body>
-                                    <h4>מעשה בחסיד</h4>
-                                    <p>
-                                        מעשה בחסיד אחד שהיה רגיל לומר תהילים בכל יום. פעם אחת, בדרכו לבית המדרש, ראה אדם נופל ברחוב.
-                                        במקום להמשיך בדרכו, עצר החסיד לעזור לאיש. בגלל זה, איחר לתפילה ולא הספיק לומר את התהילים כהרגלו.
-                                        בלילה, חלם החסיד שאומרים לו מן השמיים: "דע לך, שהעזרה שהגשת לאותו אדם ברחוב שווה יותר מכל פרקי
-                                        התהילים שהיית אומר באותו יום."
-                                    </p>
-                                    <Button variant="info">קרא עוד</Button>
-                                </Card.Body>
-                            </Card>
-                        </motion.div>
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                            <Card className="custom-card">
-                                <Card.Header as="h3" className="card-header-custom">
-                                    <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> טיפ יומי
-                                </Card.Header>
-                                <Card.Body>
-                                    <blockquote className="blockquote mb-0">
-                                        <p>"אל תדון את חברך עד שתגיע למקומו"</p>
-                                        <footer className="blockquote-footer">פרקי אבות</footer>
-                                    </blockquote>
-                                </Card.Body>
-                            </Card>
-                        </motion.div>
-                        <ShabbatRecipe />
-                    </div>
-                </Tab>
-
-                <Tab eventKey="community" title={<><FontAwesomeIcon icon={faSynagogue} className="mr-2" /> קהילה ומידע</>}>
-                    <div className="grid-container">
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                            <Card className="custom-card">
-                                <Card.Header as="h3" className="card-header-custom">
-                                    <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> זמני שבת
-                                </Card.Header>
-                                <Card.Body>
-                                    <p><strong>כניסת השבת:</strong> 18:30</p>
-                                    <p><strong>יציאת השבת:</strong> 19:45</p>
-                                    <small className="text-muted">* הזמנים לפי אזור המרכז</small>
-                                </Card.Body>
-                            </Card>
-                        </motion.div>
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                            <Card className="custom-card">
-                                <Card.Header as="h3" className="card-header-custom">
-                                    <FontAwesomeIcon icon={faSynagogue} className="mr-2" /> בתי כנסת באזור
-                                </Card.Header>
-                                <Card.Body>
-                                    <ListGroup>
-                                        {synagogues.map((synagogue, index) => (
-                                            <ListGroup.Item
-                                                key={index}
-                                                action
-                                                onClick={() => handleSynagogueClick(synagogue)}
-                                                className="d-flex justify-content-between align-items-center"
-                                            >
-                                                <span>🕍 {synagogue.name}</span>
-                                                <Button variant="outline-primary" size="sm">זמני תפילות</Button>
-                                            </ListGroup.Item>
+                                    <h4>{recipe.name}</h4>
+                                    <h5>מצרכים:</h5>
+                                    <ul>
+                                        {recipe.ingredients.map((ingredient, index) => (
+                                            <li key={index}>{ingredient}</li>
                                         ))}
-                                    </ListGroup>
+                                    </ul>
+                                    <h5>הוראות הכנה:</h5>
+                                    <ol>
+                                        {recipe.instructions.map((instruction, index) => (
+                                            <li key={index}>{instruction}</li>
+                                        ))}
+                                    </ol>
                                 </Card.Body>
-                            </Card>
-                        </motion.div>
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                            <Card className="custom-card">
-                                <Card.Header as="h3" className="card-header-custom">
-                                    <FontAwesomeIcon icon={faGuitar} className="mr-2" /> אירועים קהילתיים
-                                </Card.Header>
+                            </StyledCard>
+                        </Col>
+                        <Col md={12}>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> אתגר שבועי
+                                </CardHeader>
+                                <Card.Body>
+                                    <h5>השבוע: מעשה טוב יומי</h5>
+                                    <p>כל יום, עשו מעשה טוב אחד לפחות. בסוף השבוע, שתפו את המעשים הטובים שעשיתם עם המשפחה.</p>
+                                    <Form>
+                                        <Form.Group>
+                                            <Form.Control as="textarea" rows={3} placeholder="רשמו כאן את המעשים הטובים שלכם" />
+                                        </Form.Group>
+                                        <Button variant="primary" className="mt-3">שתפו את המעשים הטובים</Button>
+                                    </Form>
+                                </Card.Body>
+                            </StyledCard>
+                        </Col>
+                    </Row>
+                )}
+
+                {activeTab === 'community' && (
+                    <Row>
+
+                        <SynagogueCard synagogues={synagogues} />
+                        <Col md={6}>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faSearch} className="mr-2" /> מציאות ואבידות
+                                </CardHeader>
                                 <Card.Body>
                                     <ListGroup>
-                                        <ListGroup.Item>
-                                            <h5>ערב שירה בציבור</h5>
-                                            <p>יום שלישי, 20:00, בגינה הקהילתית</p>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item>
-                                            <h5>שיעור תורה שבועי</h5>
-                                            <p>יום חמישי, 19:30, בבית הכנסת המרכזי</p>
-                                        </ListGroup.Item>
-                                    </ListGroup>
-                                </Card.Body>
-                            </Card>
-                        </motion.div>
-                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                            <Card className="custom-card">
-                                <Card.Header as="h3" className="card-header-custom">
-                                    <FontAwesomeIcon icon={faSearch} className="mr-2" /> מציאות ואבידות
-                                </Card.Header>
-                                <Card.Body>
-                                    <ListGroup className="mb-3">
-                                        {lostAndFound.map((item: any, index: any) => (
+                                        {lostAndFound.map((item, index) => (
                                             <ListGroup.Item key={index}>
                                                 <strong>{item.type}: </strong>{item.description}
                                                 <br />
                                                 <small>נמצא/אבד ב: {item.location}, {item.date}</small>
-                                                <br />
-                                                <Button variant="outline-info" size="sm" className="mt-2">
-                                                    יצירת קשר
-                                                </Button>
                                             </ListGroup.Item>
                                         ))}
                                     </ListGroup>
-                                    <Button variant="primary" onClick={() => setShowLostFoundModal(true)}>
-                                        הוסף פריט חדש
-                                    </Button>
+                                    <Button variant="outline-primary" className="mt-3" onClick={() => {
+                                        setShowLostFoundModal(true)
+                                    }}>הוסף פריט חדש</Button>
                                 </Card.Body>
-                            </Card>
-                        </motion.div>
-                    </div>
-                </Tab>
-            </Tabs>
-
-            <motion.div
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                className="mt-4"
-            >
-                <Card className="custom-card">
-                    <Card.Header as="h3" className="card-header-custom">תמונה מהפרשה</Card.Header>
-                    <Card.Body className="text-center">
-                        <CldImage
-                            src="url_to_your_image" // החלף זאת עם ה-public ID של התמונה שלך בCloudinary
-                            width="400"
-                            height="300"
-                            alt="תמונה מפרשת השבוע"
-                            className="img-fluid rounded"
-                        />
-                    </Card.Body>
-                </Card>
-            </motion.div>
-
-            <Modal show={showSynagogueModal} onHide={() => setShowSynagogueModal(false)}>
+                            </StyledCard>
+                        </Col>
+                    </Row>
+                )}
+            </Container>
+            {/* <Modal show={showSynagogueModal} onHide={() => setShowSynagogueModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>{selectedSynagogue?.name}</Modal.Title>
                 </Modal.Header>
@@ -522,7 +404,7 @@ const FamilyPage = () => {
                         סגור
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */}
             <Modal show={showLostFoundModal} onHide={() => setShowLostFoundModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>הוספת פריט מציאה/אבידה</Modal.Title>
@@ -563,7 +445,7 @@ const FamilyPage = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </Container>
+        </StyledContainer>
     );
 };
 

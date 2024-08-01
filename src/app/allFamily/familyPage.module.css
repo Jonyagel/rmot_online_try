@@ -1,4 +1,4 @@
-.container {
+/* .container {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
@@ -76,10 +76,10 @@
     height: auto;
     border-radius: 5px;
 }
-
+*/
 /* מדיה קווריז לתצוגה רספונסיבית */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .gridContainer {
         grid-template-columns: 1fr;
     }
-}
+}  */
