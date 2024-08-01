@@ -1,24 +1,14 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
-import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Button, Modal, Form, Row, Col, Container , Carousel} from 'react-bootstrap';
-import Link from 'next/link';
-import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHistory, faHome, faPhone, faRulerCombined, faSun, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { CldImage, CldUploadButton } from 'next-cloudinary';
+import { Card, Badge, Button, Modal, Form, Row, Col, Container, Carousel, Alert } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CldUploadButton } from 'next-cloudinary';
+import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHome, faPhone, faRulerCombined, faSun, faTimes, faBell } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import Slider from "react-slick";
-// import "slick-carousel/slick/slick.css";
-// import "slick-carousel/slick/slick-theme.css";
-// import { Swiper, SwiperSlide } from 'swiper/react';
-// import { Navigation, Pagination } from 'swiper/modules';
-// import 'swiper/css';
-// import 'swiper/css/navigation';
-// import 'swiper/css/pagination';
-// import { Carousel } from 'react-responsive-carousel';
-// import "react-responsive-carousel/lib/styles/carousel.min.css";
+import emailjs from '@emailjs/browser';
+
 
 export const dynamic = 'auto';
 
@@ -40,19 +30,32 @@ export default function RealEstate() {
     description: string;
     images: [string];
   }
+  interface NadlanItem {
+    rooms: number;
+    price: number;
+    type: string;
+    address: string;
+    // הוסף שדות נוספים אם יש
+  }
   const [properties, setProperties] = useState<Property[]>([]);
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [images, setImages] = useState<string[]>([]);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [sendemailAr, setSendemailAr] = useState([]);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
-  const [nadlanAr, setNadlanAr] = useState([]);
+  const [nadlanAr, setNadlanAr] = useState<NadlanItem[]>([]);
   const [filters, setFilters] = useState({
     type: 'all',
     rooms: 'all',
     priceRange: 'all'
   });
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showAlertForm, setShowAlertForm] = useState(false);
+  const [userEmail, setUserEmail] = useState([]);
+  const [nadlanPosted, setNadlanPosted] = useState();
+  const [showAlert, setShowAlert] = useState(false);
+  const [status, setStatus] = useState<string>('');
 
   const typeRef = useRef<HTMLSelectElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
@@ -65,10 +68,17 @@ export default function RealEstate() {
   const directionRef = useRef<HTMLInputElement>(null);
   const conditionRef = useRef<HTMLSelectElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
-  const descriptionRef = useRef<HTMLTextAreaElement >(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
+  const emailAlertRef = useRef<HTMLInputElement>(null);
+  const typeAlertRef = useRef<HTMLSelectElement>(null);
+  const roomsAlertRef = useRef<HTMLInputElement>(null);
+  const priceAlertRef = useRef<HTMLInputElement>(null);
+  const addressAlertRef = useRef<HTMLInputElement>(null);
 
 
   useEffect(() => {
+    emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!);
     fetchProperties();
   }, []);
 
@@ -81,9 +91,94 @@ export default function RealEstate() {
     setShowAddModal(true);
   };
 
-  const handleNewPropertyChange = (e: any) => {
+  // const handleNewPropertyChange = (e: any) => {
 
+  // };
+
+
+  const sendEmailToUser = async (dadaPosted: any, email: any) => {
+    try {
+      const templateParams = {
+        to_email: email,
+        from_name: "Ramot Online Try",
+        property_type: dadaPosted.type,
+        property_rooms: dadaPosted.rooms,
+        property_price: dadaPosted.price,
+        property_address: dadaPosted.address,
+        // property_link: `${process.env.NEXT_PUBLIC_SITE_URL}/nadlan/${newProperty.id}` // Assuming you have a page for individual properties
+      };
+
+      const result = await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID2!,
+        templateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+      );
+
+      console.log('Email sent successfully:', result.text);
+    } catch (error) {
+      console.error('Error sending email:', error);
+    }
   };
+
+  // const checkAndSendAlerts = async (newProperty: any) => {
+  //   try {
+  //     const response = await fetch('/api/matchingAlerts', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(newProperty),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+
+  //     const matchingUsers = await response.json();
+
+  //     // Send email to each matching user
+  //     for (const user of matchingUsers) {
+  //       await sendEmailToUser(user.to_email, newProperty);
+  //     }
+
+  //     console.log(`Sent alerts to ${matchingUsers.length} users`);
+  //   } catch (error) {
+  //     console.error('Error checking and sending alerts:', error);
+  //   }
+  // };
+
+  const handleAlertFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const alertData = {
+      to_email: emailAlertRef.current?.value,
+      type: typeAlertRef.current?.value,
+      rooms: roomsAlertRef.current?.value,
+      price: priceAlertRef.current?.value,
+      address: addressAlertRef.current?.value,
+    };
+    console.log(alertData);
+    try {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/alertMachingNadlan`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(alertData),
+      });
+
+
+      setStatus('הודעה נשלחה בהצלחה!');
+      setShowAlert(true);
+      setShowAlertForm(false);
+    } catch (error) {
+      console.error('Error submitting alert form:', error);
+      setStatus('אירעה שגיאה בשליחת ההודעה. אנא נסה שוב.');
+      setShowAlert(true);
+    }
+    setTimeout(() => setShowAlert(false), 5000);
+  };
+
 
   // const handleUploadSuccess = (result:any) => {
   //   setUploadedImageUrls(prev => [...prev, result.info.secure_url]);
@@ -97,6 +192,19 @@ export default function RealEstate() {
     doApiPost()
   };
 
+  const doApiGetEmail = async () => {
+    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/alertMachingNadlan?rooms=${nadlanAr[0].rooms}&price=${nadlanAr[0].price}`;
+    const resp = await fetch(url, { cache: 'no-store' })
+    const data = await resp.json();
+    console.log(data);
+    console.log(data[0].to_email);
+    setUserEmail(data[0].to_email);
+    // sendEmailToUser(data[0].to_email)
+    setSendemailAr(data)
+    return data[0].to_email
+    // setProperties(data);
+  };
+
   const fetchProperties = async () => {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`;
     const resp = await fetch(url, { cache: 'no-store' })
@@ -104,7 +212,6 @@ export default function RealEstate() {
     console.log(data);
     setNadlanAr(data)
     setProperties(data);
-
   };
 
   const doApiPost = async () => {
@@ -115,7 +222,7 @@ export default function RealEstate() {
     const size = sizeRef.current?.value;
     const floor = floorRef.current?.value;
     const elevator = elevatorRef.current?.value;
-    const parking =parkingRef.current?.value;
+    const parking = parkingRef.current?.value;
     const entryDate = entryDateRef.current?.value;
     const direction = directionRef.current?.value;
     const condition = conditionRef.current?.value;
@@ -123,19 +230,28 @@ export default function RealEstate() {
     try {
       const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`, {
         method: 'POST',
-        body: JSON.stringify({ type, rooms, price, address, images, size, floor, elevator, parking, entryDate, direction, condition, description}),
+        body: JSON.stringify({ type, rooms, price, address, images, size, floor, elevator, parking, entryDate, direction, condition, description }),
         headers: {
           'Content-Type': 'application/json'
         }
       });
       const data = await resp.json();
       console.log(data);
-      handleClose();
+      setNadlanPosted(data);
+      const email = await doApiGetEmail();
+      sendEmailToUser(data, email);
+      setStatus('הודעה נשלחה בהצלחה!');
+      setShowAlert(true);
+      handleAddModalClose();
       fetchProperties();
+      // await checkAndSendAlerts(data);
       router.push('/nadlan');
     } catch (error: any) {
       console.error('Error:', error);
+      setStatus('אירעה שגיאה בשליחת ההודעה. אנא נסה שוב.');
+      setShowAlert(true);
     }
+    setTimeout(() => setShowAlert(false), 5000);
   }
 
   const handleClose = () => {
@@ -171,8 +287,41 @@ export default function RealEstate() {
     }
   };
 
+
+
+  // const checkAndSendAlerts = async (newProperty:any) => {
+  //   try {
+  //     const response = await fetch('/api/matchingAlerts', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(newProperty),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok');
+  //     }
+
+  //     const matchingUsers = await response.json();
+
+  //     // שליחת מייל לכל משתמש מתאים
+  //     for (const user of matchingUsers) {
+  //       await (user.to_email, newProperty);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error checking and sending alerts:', error);
+  //   }
+  // };
+
   return (
     <div className='container-fluid'>
+      {showAlert && (
+          <Alert variant={status.includes('בהצלחה') ? "success" : "danger"} onClose={() => setShowAlert(false)} dismissible className="mb-4">
+            <Alert.Heading>{status.includes('בהצלחה') ? "תודה שפנית אלינו!" : "שגיאה"}</Alert.Heading>
+            <p>{status}</p>
+          </Alert>
+        )}
       <Row>
         {/* מקום לפרסומת בצד שמאל */}
         <Col md={2} className="d-none d-md-block">
@@ -196,6 +345,10 @@ export default function RealEstate() {
           <h1 className="mb-4 text-7xl text-primary">נדל"ן בשכונה</h1>
           <Button variant="primary" className="mb-3" onClick={handleAddModalShow}>
             הוסף נכס חדש
+          </Button>
+          <Button variant="info" className="mb-3" onClick={() => setShowAlertForm(true)}>
+            <FontAwesomeIcon icon={faBell} className="me-2" />
+            הירשם להתראות
           </Button>
           <Form className="mb-4">
             <Row>
@@ -255,8 +408,8 @@ export default function RealEstate() {
                           <div><FontAwesomeIcon icon={faBed} className="mr-2 text-primary" /> {item.rooms} חדרים</div>
                           <div><FontAwesomeIcon icon={faRulerCombined} className="mr-2 text-primary" /> {item.size} מ"ר</div>
                           <div><FontAwesomeIcon icon={faBuilding} className="mr-2 text-primary" /> קומה {item.floor}</div>
-                          <div><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> {item.elevator=="true" ? 'יש מעלית' : 'אין מעלית'}</div>
-                          <div><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> {item.parking=="true" ? 'יש חניה' : 'אין חניה'}</div>
+                          <div><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> {item.elevator == "true" ? 'יש מעלית' : 'אין מעלית'}</div>
+                          <div><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> {item.parking == "true" ? 'יש חניה' : 'אין חניה'}</div>
                           <div><FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-primary" /> כניסה: {item.entryDate}</div>
                         </div>
                         <div className="mt-2 font-bold text-lg text-primary">
@@ -328,7 +481,7 @@ export default function RealEstate() {
               <div className="col-md-6">
                 <Carousel>
                   {selectedProperty.images.map((image, index) => (
-                      <Carousel.Item key={index}>
+                    <Carousel.Item key={index}>
                       <CldImage
                         src={image}
                         width={600}
@@ -412,7 +565,7 @@ export default function RealEstate() {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>סוג עסקה</Form.Label>
-                  <Form.Select ref={typeRef} name="type" required className="form-control-lg" onChange={handleNewPropertyChange}>
+                  <Form.Select ref={typeRef} name="type" required className="form-control-lg">
                     <option value="">בחר סוג עסקה</option>
                     <option value="מכירה">מכירה</option>
                     <option value="השכרה">השכרה</option>
@@ -422,7 +575,7 @@ export default function RealEstate() {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>מספר חדרים</Form.Label>
-                  <Form.Control ref={roomsRef} type="number" name="rooms" required className="form-control-lg" onChange={handleNewPropertyChange} />
+                  <Form.Control ref={roomsRef} type="number" name="rooms" required className="form-control-lg" />
                 </Form.Group>
               </Col>
             </Row>
@@ -430,13 +583,13 @@ export default function RealEstate() {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>מחיר</Form.Label>
-                  <Form.Control type="number" name="price" required className="form-control-lg" ref={priceRef} onChange={handleNewPropertyChange} />
+                  <Form.Control type="number" name="price" required className="form-control-lg" ref={priceRef} />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>כתובת</Form.Label>
-                  <Form.Control type="text" name="address" required className="form-control-lg" ref={addressRef} onChange={handleNewPropertyChange} />
+                  <Form.Control type="text" name="address" required className="form-control-lg" ref={addressRef} />
                 </Form.Group>
               </Col>
             </Row>
@@ -444,13 +597,13 @@ export default function RealEstate() {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>גודל במ"ר</Form.Label>
-                  <Form.Control type="number" name="size" required className="form-control-lg"  ref={sizeRef}/>
+                  <Form.Control type="number" name="size" required className="form-control-lg" ref={sizeRef} />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>קומה</Form.Label>
-                  <Form.Control type="number" name="floor" required className="form-control-lg"  ref={floorRef}/>
+                  <Form.Control type="number" name="floor" required className="form-control-lg" ref={floorRef} />
                 </Form.Group>
               </Col>
             </Row>
@@ -458,7 +611,7 @@ export default function RealEstate() {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>מעלית</Form.Label>
-                  <Form.Select name="elevator" required className="form-control-lg"  ref={elevatorRef}>
+                  <Form.Select name="elevator" required className="form-control-lg" ref={elevatorRef}>
                     <option value="true">יש</option>
                     <option value="false">אין</option>
                   </Form.Select>
@@ -467,7 +620,7 @@ export default function RealEstate() {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>חניה</Form.Label>
-                  <Form.Select name="parking" required className="form-control-lg"  ref={parkingRef}>
+                  <Form.Select name="parking" required className="form-control-lg" ref={parkingRef}>
                     <option value="true">יש</option>
                     <option value="false">אין</option>
                   </Form.Select>
@@ -478,7 +631,7 @@ export default function RealEstate() {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>תאריך כניסה</Form.Label>
-                  <Form.Control type="date" name="entryDate" required className="form-control-lg"  ref={entryDateRef}/>
+                  <Form.Control type="date" name="entryDate" required className="form-control-lg" ref={entryDateRef} />
                 </Form.Group>
               </Col>
               <Col md={6}>
@@ -486,12 +639,12 @@ export default function RealEstate() {
             </Row>
             <Form.Group className="mb-3">
               <Form.Label>כיוון אוויר</Form.Label>
-              <Form.Control type="text" name="direction" required className="form-control-lg"  ref={directionRef}/>
+              <Form.Control type="text" name="direction" required className="form-control-lg" ref={directionRef} />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>מצב הנכס</Form.Label>
-              <Form.Select name="condition" required className="form-control-lg"  ref={conditionRef}>
+              <Form.Select name="condition" required className="form-control-lg" ref={conditionRef}>
                 <option value="">בחר מצב</option>
                 <option value="חדש">חדש</option>
                 <option value="משופץ">משופץ</option>
@@ -502,7 +655,7 @@ export default function RealEstate() {
 
             <Form.Group className="mb-3">
               <Form.Label>תיאור הנכס</Form.Label>
-              <Form.Control as="textarea" rows={3} name="description" className="form-control-lg"  ref={descriptionRef}/>
+              <Form.Control as="textarea" rows={3} name="description" className="form-control-lg" ref={descriptionRef} />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>תמונות</Form.Label>
@@ -557,6 +710,42 @@ export default function RealEstate() {
                 הוסף נכס
               </Button>
             </div>
+          </Form>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showAlertForm} onHide={() => setShowAlertForm(false)} centered>
+        <Modal.Header closeButton className="bg-info text-white">
+          <Modal.Title>הרשמה לקבלת התראות</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleAlertFormSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>כתובת אימייל</Form.Label>
+              <Form.Control type="email" ref={emailAlertRef} required />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>סוג עסקה</Form.Label>
+              <Form.Select ref={typeAlertRef}>
+                <option value="">כל הסוגים</option>
+                <option value="מכירה">מכירה</option>
+                <option value="השכרה">השכרה</option>
+              </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>מספר חדרים מינימלי</Form.Label>
+              <Form.Control type="number" ref={roomsAlertRef} min="1" />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>מחיר מקסימלי</Form.Label>
+              <Form.Control type="number" ref={priceAlertRef} min="0" />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>אזור מבוקש</Form.Label>
+              <Form.Control type="text" ref={addressAlertRef} />
+            </Form.Group>
+            <Button variant="info" type="submit" className="w-100">
+              הירשם להתראות
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>

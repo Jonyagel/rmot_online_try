@@ -1,10 +1,10 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Card, Button, Tabs, Tab, Modal, ListGroup, Form, Accordion } from 'react-bootstrap';
 import { CldImage } from 'next-cloudinary';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faSynagogue, faClock, faPuzzlePiece, faLightbulb, faCalendarAlt, faQuestionCircle, faUtensils, faRunning, faGuitar } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faSynagogue, faClock, faPuzzlePiece, faLightbulb, faCalendarAlt, faQuestionCircle, faUtensils, faRunning, faGuitar, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
 
 const FamilyPage = () => {
@@ -32,27 +32,63 @@ const FamilyPage = () => {
         name: string;
         ingredients: string[];
         instructions: string[];
+    }
+
+    interface LostFoundItem {
+        type: 'מציאה' | 'אבידה';
+        description: string;
+        location: string;
+        date: string;
+        contact: string;
       }
 
     const [showAnswer, setShowAnswer] = useState(false);
     const [showSynagogueModal, setShowSynagogueModal] = useState(false);
     const [selectedSynagogue, setSelectedSynagogue] = useState<Synagogue | null>(null);
-    const [recipe, setRecipe] = useState<Recipe>({ 
-        name: '', 
-        ingredients: [], 
-        instructions: [] 
-      });
+    const [recipe, setRecipe] = useState<Recipe>({
+        name: '',
+        ingredients: [],
+        instructions: []
+    });
+    const [lostAndFound, setLostAndFound] = useState<LostFoundItem[]>([]);
+    const [showLostFoundModal, setShowLostFoundModal] = useState(false);
+
+    const itemTypeRef = useRef<HTMLSelectElement>(null);
+    const itemDescriptionRef = useRef<HTMLTextAreaElement>(null);
+    const itemLocationRef = useRef<HTMLInputElement>(null);
+    const itemDateRef = useRef<HTMLInputElement >(null);
+    const contactInfoRef = useRef<HTMLInputElement >(null);
+
+    const handleAddLostFoundItem = () => {
+        if (
+          itemTypeRef.current &&
+          itemDescriptionRef.current &&
+          itemLocationRef.current &&
+          itemDateRef.current &&
+          contactInfoRef.current
+        ) {
+          const newItem: LostFoundItem = {
+            type: itemTypeRef.current.value as 'מציאה' | 'אבידה',
+            description: itemDescriptionRef.current.value,
+            location: itemLocationRef.current.value,
+            date: itemDateRef.current.value,
+            contact: contactInfoRef.current.value
+          };
+          setLostAndFound(prevItems => [...prevItems, newItem]);
+          setShowLostFoundModal(false);
+        }
+      };
 
     useEffect(() => {
-        // Симуляция загрузки рецепта
         setRecipe({
             name: 'חלה מתוקה לשבת',
             ingredients: ['3 כוסות קמח', '1/4 כוס סוכר', '1 כף שמרים יבשים', '1 כוס מים פושרים', '1/4 כוס שמן', '1 ביצה', '1 כפית מלח'],
             instructions: ['ערבבו את כל המרכיבים היבשים', 'הוסיפו את הנוזלים וערבבו עד לקבלת בצק חלק', 'הניחו לתפיחה במשך שעה', 'צרו צמה מהבצק והניחו על תבנית אפייה', 'אפו ב-180 מעלות במשך 25-30 דקות']
-          });
+        });
     }, []);
 
     const toggleAnswer = () => setShowAnswer(!showAnswer);
+
 
     const WeeklyTrivia = () => {
         const [question, setQuestion] = useState("מי היה הכהן הגדול הראשון?");
@@ -291,7 +327,7 @@ const FamilyPage = () => {
                 }
             `}</style>
 
-            <motion.h1 
+            <motion.h1
                 className="text-center mb-5 display-4"
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -339,9 +375,9 @@ const FamilyPage = () => {
                                 <Card.Body>
                                     <h4>מעשה בחסיד</h4>
                                     <p>
-                                        מעשה בחסיד אחד שהיה רגיל לומר תהילים בכל יום. פעם אחת, בדרכו לבית המדרש, ראה אדם נופל ברחוב. 
+                                        מעשה בחסיד אחד שהיה רגיל לומר תהילים בכל יום. פעם אחת, בדרכו לבית המדרש, ראה אדם נופל ברחוב.
                                         במקום להמשיך בדרכו, עצר החסיד לעזור לאיש. בגלל זה, איחר לתפילה ולא הספיק לומר את התהילים כהרגלו.
-                                        בלילה, חלם החסיד שאומרים לו מן השמיים: "דע לך, שהעזרה שהגשת לאותו אדם ברחוב שווה יותר מכל פרקי 
+                                        בלילה, חלם החסיד שאומרים לו מן השמיים: "דע לך, שהעזרה שהגשת לאותו אדם ברחוב שווה יותר מכל פרקי
                                         התהילים שהיית אומר באותו יום."
                                     </p>
                                     <Button variant="info">קרא עוד</Button>
@@ -420,12 +456,37 @@ const FamilyPage = () => {
                                 </Card.Body>
                             </Card>
                         </motion.div>
+                        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                            <Card className="custom-card">
+                                <Card.Header as="h3" className="card-header-custom">
+                                    <FontAwesomeIcon icon={faSearch} className="mr-2" /> מציאות ואבידות
+                                </Card.Header>
+                                <Card.Body>
+                                    <ListGroup className="mb-3">
+                                        {lostAndFound.map((item: any, index: any) => (
+                                            <ListGroup.Item key={index}>
+                                                <strong>{item.type}: </strong>{item.description}
+                                                <br />
+                                                <small>נמצא/אבד ב: {item.location}, {item.date}</small>
+                                                <br />
+                                                <Button variant="outline-info" size="sm" className="mt-2">
+                                                    יצירת קשר
+                                                </Button>
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                    <Button variant="primary" onClick={() => setShowLostFoundModal(true)}>
+                                        הוסף פריט חדש
+                                    </Button>
+                                </Card.Body>
+                            </Card>
+                        </motion.div>
                     </div>
                 </Tab>
             </Tabs>
 
-            <motion.div 
-                whileHover={{ scale: 1.03 }} 
+            <motion.div
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
                 className="mt-4"
             >
@@ -459,6 +520,46 @@ const FamilyPage = () => {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowSynagogueModal(false)}>
                         סגור
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={showLostFoundModal} onHide={() => setShowLostFoundModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>הוספת פריט מציאה/אבידה</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="itemType">
+                            <Form.Label>סוג</Form.Label>
+                            <Form.Select ref={itemTypeRef}>
+                                <option>מציאה</option>
+                                <option>אבידה</option>
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group controlId="itemDescription">
+                            <Form.Label>תיאור הפריט</Form.Label>
+                            <Form.Control as="textarea" rows={3} ref={itemDescriptionRef} />
+                        </Form.Group>
+                        <Form.Group controlId="itemLocation">
+                            <Form.Label>מיקום</Form.Label>
+                            <Form.Control type="text" ref={itemLocationRef} />
+                        </Form.Group>
+                        <Form.Group controlId="itemDate">
+                            <Form.Label>תאריך</Form.Label>
+                            <Form.Control type="date" ref={itemDateRef} />
+                        </Form.Group>
+                        <Form.Group controlId="contactInfo">
+                            <Form.Label>פרטי התקשרות</Form.Label>
+                            <Form.Control type="text" ref={contactInfoRef} />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowLostFoundModal(false)}>
+                        סגור
+                    </Button>
+                    <Button variant="primary" onClick={handleAddLostFoundItem}>
+                        הוסף פריט
                     </Button>
                 </Modal.Footer>
             </Modal>
