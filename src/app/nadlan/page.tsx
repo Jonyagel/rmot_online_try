@@ -96,8 +96,11 @@ export default function RealEstate() {
   // };
 
 
-  const sendEmailToUser = async (dadaPosted: any, email: any) => {
-    try {
+ const sendEmailToUser = async (dadaPosted: any, emails: string[]) => {
+  try {
+    const uniqueEmails = [...new Set(emails)]; // Remove duplicates
+    
+    for (const email of uniqueEmails) {
       const templateParams = {
         to_email: email,
         from_name: "Ramot Online Try",
@@ -105,7 +108,6 @@ export default function RealEstate() {
         property_rooms: dadaPosted.rooms,
         property_price: dadaPosted.price,
         property_address: dadaPosted.address,
-        // property_link: `${process.env.NEXT_PUBLIC_SITE_URL}/nadlan/${newProperty.id}` // Assuming you have a page for individual properties
       };
 
       const result = await emailjs.send(
@@ -115,11 +117,12 @@ export default function RealEstate() {
         process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
       );
 
-      console.log('Email sent successfully:', result.text);
-    } catch (error) {
-      console.error('Error sending email:', error);
+      console.log('Email sent successfully to:', email, result.text);
     }
-  };
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+};
 
   // const checkAndSendAlerts = async (newProperty: any) => {
   //   try {
@@ -192,18 +195,15 @@ export default function RealEstate() {
     doApiPost()
   };
 
-  const doApiGetEmail = async () => {
-    let url = `${process.env.NEXT_PUBLIC_API_URL}/api/alertMachingNadlan?rooms=${nadlanAr[0].rooms}&price=${nadlanAr[0].price}`;
-    const resp = await fetch(url, { cache: 'no-store' })
-    const data = await resp.json();
-    console.log(data);
-    console.log(data[0].to_email);
-    setUserEmail(data[0].to_email);
-    // sendEmailToUser(data[0].to_email)
-    setSendemailAr(data)
-    return data[0].to_email
-    // setProperties(data);
-  };
+ const doApiGetEmail = async () => {
+  let url = `${process.env.NEXT_PUBLIC_API_URL}/api/alertMachingNadlan?rooms=${nadlanAr[0].rooms}&price=${nadlanAr[0].price}`;
+  const resp = await fetch(url, { cache: 'no-store' })
+  const data = await resp.json();
+  console.log(data);
+  const emails = data.map(item => item.to_email);
+  setSendemailAr(data)
+  return emails;
+};
 
   const fetchProperties = async () => {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`;
@@ -227,31 +227,30 @@ export default function RealEstate() {
     const direction = directionRef.current?.value;
     const condition = conditionRef.current?.value;
     const description = descriptionRef.current?.value;
-    try {
-      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`, {
-        method: 'POST',
-        body: JSON.stringify({ type, rooms, price, address, images, size, floor, elevator, parking, entryDate, direction, condition, description }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      const data = await resp.json();
-      console.log(data);
-      setNadlanPosted(data);
-      const email = await doApiGetEmail();
-      sendEmailToUser(data, email);
-      setStatus('הודעה נשלחה בהצלחה!');
-      setShowAlert(true);
-      handleAddModalClose();
-      fetchProperties();
-      // await checkAndSendAlerts(data);
-      router.push('/nadlan');
-    } catch (error: any) {
-      console.error('Error:', error);
-      setStatus('אירעה שגיאה בשליחת ההודעה. אנא נסה שוב.');
-      setShowAlert(true);
-    }
-    setTimeout(() => setShowAlert(false), 5000);
+     try {
+    const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`, {
+      method: 'POST',
+      body: JSON.stringify({ type, rooms, price, address, images, size, floor, elevator, parking, entryDate, direction, condition, description }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await resp.json();
+    console.log(data);
+    setNadlanPosted(data);
+    const emails = await doApiGetEmail();
+    await sendEmailToUser(data, emails);
+    setStatus('הודעות נשלחו בהצלחה!');
+    setShowAlert(true);
+    handleAddModalClose();
+    fetchProperties();
+    router.push('/nadlan');
+  } catch (error: any) {
+    console.error('Error:', error);
+    setStatus('אירעה שגיאה בשליחת ההודעות. אנא נסה שוב.');
+    setShowAlert(true);
+  }
+  setTimeout(() => setShowAlert(false), 5000);
   }
 
   const handleClose = () => {
