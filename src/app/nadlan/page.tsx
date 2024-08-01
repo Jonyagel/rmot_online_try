@@ -96,9 +96,11 @@ export default function RealEstate() {
   // };
 
 
- const sendEmailToUser = async (dadaPosted: any, emails: string[]) => {
+const sendEmailToUser = async (dadaPosted: any, emails: string[]) => {
   try {
-    const uniqueEmails = [...new Set(emails)]; // Remove duplicates
+    const uniqueEmails = emails.filter((email, index, self) =>
+      self.indexOf(email) === index
+    );
     
     for (const email of uniqueEmails) {
       const templateParams = {
