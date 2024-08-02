@@ -1,10 +1,12 @@
 "use client"
-import React, { useRef, useState } from 'react';
-import { Container, Row, Col, Card, Button, Accordion, ListGroup, Form, Nav, Modal, Dropdown } from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from 'react';
+import { Container, Row, Col, Card, Button, Accordion, ListGroup, Form, Nav, Modal, Dropdown, Collapse } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarAlt, faBook, faSynagogue, faUtensils, faQuestionCircle, faRunning, faLightbulb, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarAlt, faBook, faSynagogue, faUtensils, faQuestionCircle, faRunning, faLightbulb, faSearch, faPlus, faMapMarkerAlt, faHandHoldingHeart, faPhone, faClipboardList, faCheckSquare, faListUl, faClock, faUsers, faPiggyBank, faPoll, faMapMarkedAlt, faCamera } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import SynagogueCard from './components/synagogue'
+import { AnyMxRecord } from 'dns';
+import './familyPage.css'
 
 const SynagogueItem = styled.div`
   margin-bottom: 2rem;
@@ -125,9 +127,14 @@ const StyledNav = styled(Nav)`
     font-weight: bold;
     padding: 10px 15px;
     
-    &:hover, &.active {
+    &:hover {
       color: #3498db;
     }
+
+     &.active{
+     color: #ffffff;
+     }
+
   }
 `;
 const StyledNavLink = styled(Nav.Link)`
@@ -137,13 +144,37 @@ const StyledNavLink = styled(Nav.Link)`
 `;
 
 const FamilyPage = () => {
+    interface Recipe {
+        name: string;
+        ingredients: string[];
+        instructions: string[];
+    }
+
+    interface ActivityRecommendation {
+        title: string;
+        description: string;
+    }
     interface LostFoundItem {
+        id?: string;
         type: 'מציאה' | 'אבידה';
         description: string;
         location: string;
         date: string;
         contact: string;
+        area?: 'ramot-a' | 'ramot-b' | 'ramot-c' | 'ramot-polin';
     }
+    const [showAnswer2, setShowAnswer2] = useState<boolean>(false);
+    const [recipe2, setRecipe2] = useState<Recipe>({ name: '', ingredients: [], instructions: [] });
+    const [weeklyParasha, setWeeklyParasha] = useState<string>('');
+    const [torahThought, setTorahThought] = useState<string>('');
+    const [savingTip, setSavingTip] = useState<string>('');
+    const [familyActivities, setFamilyActivities] = useState<string[]>([]);
+    const [activityRecommendation, setActivityRecommendation] = useState<ActivityRecommendation>({ title: '', description: '' });
+    const [photoChallengeTopic, setPhotoChallengeTopic] = useState<string>('');
+    const [openContacts, setOpenContacts] = useState<{ [key: string]: boolean }>({});
+    const [typeFilter, setTypeFilter] = useState<'all' | 'מציאה' | 'אבידה'>('all');
+    const [areaFilter, setAreaFilter] = useState<AreaFilter>('all');
+    const [filteredItems, setFilteredItems] = useState<LostFoundItem[]>([]);
     const [showSynagogueModal, setShowSynagogueModal] = useState(false);
     const [lostAndFound, setLostAndFound] = useState<LostFoundItem[]>([]);
     const [showLostFoundModal, setShowLostFoundModal] = useState(false);
@@ -153,26 +184,101 @@ const FamilyPage = () => {
     const itemLocationRef = useRef<HTMLInputElement>(null);
     const itemDateRef = useRef<HTMLInputElement>(null);
     const contactInfoRef = useRef<HTMLInputElement>(null);
+    const itemAreaRef = useRef<HTMLSelectElement>(null);
+
 
     const handleAddLostFoundItem = () => {
-        if (
-            itemTypeRef.current &&
-            itemDescriptionRef.current &&
-            itemLocationRef.current &&
-            itemDateRef.current &&
-            contactInfoRef.current
-        ) {
-            const newItem: LostFoundItem = {
-                type: itemTypeRef.current.value as 'מציאה' | 'אבידה',
-                description: itemDescriptionRef.current.value,
-                location: itemLocationRef.current.value,
-                date: itemDateRef.current.value,
-                contact: contactInfoRef.current.value
-            };
-            setLostAndFound(prevItems => [...prevItems, newItem]);
-            setShowLostFoundModal(false);
-        }
+        const newItem: LostFoundItem = {
+            type: itemTypeRef.current?.value as 'מציאה' | 'אבידה',
+            description: itemDescriptionRef.current?.value || '',
+            location: itemLocationRef.current?.value || '',
+            date: itemDateRef.current?.value || '',
+            contact: contactInfoRef.current?.value || '',
+            area: itemAreaRef.current?.value as 'ramot-a' | 'ramot-b' | 'ramot-c' | 'ramot-polin'
+        };
+        setLostAndFound(prev => [...prev, newItem]);
+        setShowLostFoundModal(false);
     };
+
+    // interface LostFoundItem {
+    //     id: string;
+    //     type: 'lost' | 'found';
+    //     description: string;
+    //     location: string;
+    //     date: string;
+
+    // }
+
+    // הגדרת הטיפוס למסנן האזור
+    type AreaFilter = 'all' | 'ramot-a' | 'ramot-b' | 'ramot-c' | 'ramot-polin';
+
+    // הגדרת הטיפוס למסנן הסוג
+    type TypeFilter = 'all' | 'מציאה' | 'אבידה';
+    useEffect(() => {
+        // כאן תוכל לבצע קריאות API או לטעון מידע ממקור חיצוני
+        fetchWeeklyData();
+    }, []);
+    useEffect(() => {
+        const newFilteredItems = lostAndFound.filter(item => {
+            const matchesType = typeFilter === 'all' || item.type === typeFilter;
+            const matchesArea = areaFilter === 'all' || item.area === areaFilter;
+            return matchesType && matchesArea;
+        });
+        setFilteredItems(newFilteredItems);
+    }, [lostAndFound, typeFilter, areaFilter]);
+
+
+    const fetchWeeklyData = async () => {
+        // לדוגמה בלבד - במציאות, כאן תבצע קריאות API אמיתיות
+        setRecipe2({
+            name: 'עוגת שוקולד',
+            ingredients: ['קמח', 'סוכר', 'ביצים', 'שוקולד'],
+            instructions: ['ערבב את המרכיבים', 'אפה בתנור']
+        });
+        setWeeklyParasha('בראשית');
+        setTorahThought('בראשית ברא אלוהים את השמים ואת הארץ');
+        setSavingTip('כבה אורות כשאתה יוצא מהחדר');
+        setFamilyActivities(['טיול בטבע', 'משחק קופסה', 'צפייה בסרט']);
+        setActivityRecommendation({
+            title: 'פיקניק בפארק',
+            description: 'צאו לפיקניק משפחתי בפארק הסמוך'
+        });
+        setPhotoChallengeTopic('שקיעה');
+    };
+
+
+    const toggleAnswer2 = () => setShowAnswer2(!showAnswer);
+
+    const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // כאן תטפל בהעלאת התמונה
+        console.log('תמונה הועלתה', event.target.files);
+    };
+
+    const handleFamilyActivityVote = (activity: string) => {
+        // כאן תטפל בהצבעה לפעילות משפחתית
+        console.log('הצבעה לפעילות:', activity);
+    };
+    const handleTypeFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setTypeFilter(event.target.value as 'all' | 'מציאה' | 'אבידה');
+    };
+
+    const handleAreaFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setAreaFilter(event.target.value as AreaFilter);
+    };
+
+    const toggleContact = (itemId: string) => {
+        setOpenContacts(prev => ({ ...prev, [itemId]: !prev[itemId] }));
+    };
+
+    const handleShowContact = (contact: string) => {
+        alert(`פרטי התקשרות: ${contact}`);
+        // או לחלופין, תוכל להשתמש במודל או בפופאובר להצגת הפרטים
+    };
+
+    const addNewItem = (newItem: LostFoundItem) => {
+        setLostAndFound(prevItems => [...prevItems, newItem]);
+    };
+
 
 
     const [activeTab, setActiveTab] = useState('daily');
@@ -305,7 +411,7 @@ const FamilyPage = () => {
                                 </CardHeader>
                                 <Card.Body>
                                     <p>מה הולך על ארבע בבוקר, על שתיים בצהריים, ועל שלוש בערב?</p>
-                                    <Button variant="outline-primary" onClick={toggleAnswer}>
+                                    <Button variant="outline-primary" onClick={toggleAnswer2}>
                                         {showAnswer ? 'הסתר תשובה' : 'הצג תשובה'}
                                     </Button>
                                     {showAnswer && (
@@ -315,31 +421,8 @@ const FamilyPage = () => {
                                     )}
                                 </Card.Body>
                             </StyledCard>
-                        </Col>
-                        <Col md={6}>
-                            <StyledCard>
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faUtensils} className="mr-2" /> מתכון לשבת
-                                </CardHeader>
-                                <Card.Body>
-                                    <h4>{recipe.name}</h4>
-                                    <h5>מצרכים:</h5>
-                                    <ul>
-                                        {recipe.ingredients.map((ingredient, index) => (
-                                            <li key={index}>{ingredient}</li>
-                                        ))}
-                                    </ul>
-                                    <h5>הוראות הכנה:</h5>
-                                    <ol>
-                                        {recipe.instructions.map((instruction, index) => (
-                                            <li key={index}>{instruction}</li>
-                                        ))}
-                                    </ol>
-                                </Card.Body>
-                            </StyledCard>
-                        </Col>
-                        <Col md={12}>
-                            <StyledCard>
+
+                            <StyledCard className="mt-4">
                                 <CardHeader>
                                     <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> אתגר שבועי
                                 </CardHeader>
@@ -352,6 +435,121 @@ const FamilyPage = () => {
                                         </Form.Group>
                                         <Button variant="primary" className="mt-3">שתפו את המעשים הטובים</Button>
                                     </Form>
+                                </Card.Body>
+                            </StyledCard>
+                            <StyledCard className="mt-4">
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faBook} className="mr-2" /> דבר תורה שבועי
+                                </CardHeader>
+                                <Card.Body>
+                                    <h5>פרשת השבוע: {weeklyParasha}</h5>
+                                    <p>{torahThought}</p>
+                                    <Button variant="outline-primary">קרא עוד</Button>
+                                </Card.Body>
+                            </StyledCard>
+                        </Col>
+
+                        <Col md={6}>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faUtensils} className="mr-2" /> מתכון לשבת
+                                </CardHeader>
+                                <Card.Body className="recipe-card">
+                                    <div className="recipe-content">
+                                        <div className="recipe-header">
+                                            <h2 className="recipe-title text-4xl font-bold">{recipe.name}</h2>
+                                            <img src="/images/car3.jpg" alt={"food"} className="recipe-image" />
+                                        </div>
+
+                                        <div className="recipe-info">
+                                            <div className="recipe-meta">
+                                                <span><FontAwesomeIcon icon={faClock} /> זמן הכנה: {"1:30"}</span>
+                                                <span><FontAwesomeIcon icon={faUsers} /> מספר מנות: {"5"}</span>
+                                            </div>
+
+                                            <div className="recipe-description">
+                                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima sunt nostrum voluptatem sequi accusamus aperiam fuga laboriosam in consectetur unde optio, provident neque, magnam beatae amet aliquid qui architecto veritatis.</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="recipe-main">
+                                            <div className="ingredients-section">
+                                                <h3><FontAwesomeIcon icon={faListUl} /> מצרכים</h3>
+                                                <ul className="ingredients-list">
+                                                    {recipe.ingredients.map((ingredient, index) => (
+                                                        <li key={index}>{ingredient}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+
+                                            <div className="instructions-section">
+                                                <h3><FontAwesomeIcon icon={faClipboardList} /> הוראות הכנה</h3>
+                                                <ol className="instructions-list">
+                                                    {recipe.instructions.map((instruction, index) => (
+                                                        <li key={index}>{instruction}</li>
+                                                    ))}
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Card.Body>
+                            </StyledCard>
+                            <StyledCard className="mt-4">
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faPiggyBank} className="mr-2" /> טיפ חיסכון שבועי
+                                </CardHeader>
+                                <Card.Body>
+                                    <h5>חיסכון בחשבון החשמל</h5>
+                                    <p>{savingTip}</p>
+                                    <Button variant="outline-success">עוד טיפים לחיסכון</Button>
+                                </Card.Body>
+                            </StyledCard>
+
+                            <StyledCard className="mt-4">
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faPoll} className="mr-2" /> סקר משפחתי
+                                </CardHeader>
+                                <Card.Body>
+                                    <h5>מה נעשה בשבת הקרובה?</h5>
+                                    <Form>
+                                        {familyActivities.map((activity, index) => (
+                                            <Form.Check
+                                                type="radio"
+                                                id={`activity-${index}`}
+                                                label={activity}
+                                                name="familyActivity"
+                                                key={index}
+                                            />
+                                        ))}
+                                        <Button variant="primary" className="mt-3">הצבע</Button>
+                                    </Form>
+                                </Card.Body>
+                            </StyledCard>
+                        </Col>
+                        <Col md={6}>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" /> המלצה לבילוי משפחתי
+                                </CardHeader>
+                                <Card.Body>
+                                    <h5>{activityRecommendation.title}</h5>
+                                    <p>{activityRecommendation.description}</p>
+                                    <Button variant="outline-info">פרטים נוספים</Button>
+                                </Card.Body>
+                            </StyledCard>
+                        </Col>
+                        <Col md={6}>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faCamera} className="mr-2" /> אתגר צילום שבועי
+                                </CardHeader>
+                                <Card.Body>
+                                    <h5>נושא השבוע: {photoChallengeTopic}</h5>
+                                    <p>צלמו תמונה בנושא השבועי ושתפו אותה כאן!</p>
+                                    <Form.Group>
+                                        {/* <Form.File id="photoUpload" label="העלו את התמונה שלכם" /> */}
+                                    </Form.Group>
+                                    <Button variant="primary" className="mt-3">שתף תמונה</Button>
                                 </Card.Body>
                             </StyledCard>
                         </Col>
@@ -368,18 +566,70 @@ const FamilyPage = () => {
                                     <FontAwesomeIcon icon={faSearch} className="mr-2" /> מציאות ואבידות
                                 </CardHeader>
                                 <Card.Body>
+                                    <Form className="mb-3">
+                                        <Form.Group as={Row}>
+                                            <Form.Label column sm={3}>מיון לפי:</Form.Label>
+                                            <Col sm={4}>
+                                                <Form.Select onChange={handleTypeFilter}>
+                                                    <option value="all">הכל</option>
+                                                    <option value="אבידה">אבידות</option>
+                                                    <option value="מציאה">מציאות</option>
+                                                </Form.Select>
+                                            </Col>
+                                            <Col sm={5}>
+                                                <Form.Select onChange={handleAreaFilter}>
+                                                    <option value="all">כל האזורים</option>
+                                                    <option value="ramot-a">רמות א'</option>
+                                                    <option value="ramot-b">רמות ב'</option>
+                                                    <option value="ramot-c">רמות ג'</option>
+                                                    <option value="ramot-polin">רמות פולין</option>
+                                                </Form.Select>
+                                            </Col>
+                                        </Form.Group>
+                                    </Form>
+
                                     <ListGroup>
-                                        {lostAndFound.map((item, index) => (
-                                            <ListGroup.Item key={index}>
-                                                <strong>{item.type}: </strong>{item.description}
-                                                <br />
-                                                <small>נמצא/אבד ב: {item.location}, {item.date}</small>
+                                        {filteredItems.map((item: any) => (
+                                            <ListGroup.Item key={item.id}>
+                                                <Row>
+                                                    <Col xs={2} className="d-flex align-items-center justify-content-center">
+                                                        <FontAwesomeIcon icon={item.type === 'אבידה' ? faSearch : faHandHoldingHeart} size="2x" />
+                                                    </Col>
+                                                    <Col xs={10}>
+                                                        <strong>{item.type === 'אבידה' ? 'אבד' : 'נמצא'}: </strong>{item.description}
+                                                        <br />
+                                                        <small>
+                                                            <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" /> {item.location},
+                                                            <FontAwesomeIcon icon={faCalendarAlt} className="mr-1 ml-2" /> {item.date}
+                                                        </small>
+                                                        <br />
+                                                        <Button
+                                                            variant="primary"
+                                                            className="p-1 mt-2"
+                                                            onClick={() => toggleContact(item.id)}
+                                                            aria-controls={`contact-${item.id}`}
+                                                            aria-expanded={openContacts[item.id]}
+                                                        >
+                                                            {openContacts[item.id] ? 'הסתר פרטי התקשרות' : 'הצג פרטי התקשרות'}
+                                                        </Button>
+                                                        <Collapse in={openContacts[item.id]}>
+                                                            <div id={`contact-${item.id}`} className="mt-2">
+                                                                <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                                                                {item.contact}
+                                                            </div>
+                                                        </Collapse>
+                                                    </Col>
+                                                </Row>
                                             </ListGroup.Item>
                                         ))}
+
                                     </ListGroup>
-                                    <Button variant="outline-primary" className="mt-3" onClick={() => {
-                                        setShowLostFoundModal(true)
-                                    }}>הוסף פריט חדש</Button>
+
+                                    <div className="text-center mt-4">
+                                        <Button variant="outline-primary" onClick={() => setShowLostFoundModal(true)}>
+                                            <FontAwesomeIcon icon={faPlus} className="mr-2" /> הוסף פריט חדש
+                                        </Button>
+                                    </div>
                                 </Card.Body>
                             </StyledCard>
                         </Col>
@@ -426,6 +676,15 @@ const FamilyPage = () => {
                             <Form.Label>מיקום</Form.Label>
                             <Form.Control type="text" ref={itemLocationRef} />
                         </Form.Group>
+                        <Form.Group controlId="itemArea">
+                            <Form.Label>אזור</Form.Label>
+                            <Form.Select ref={itemAreaRef}>
+                                <option value="ramot-a">רמות א'</option>
+                                <option value="ramot-b">רמות ב'</option>
+                                <option value="ramot-c">רמות ג'</option>
+                                <option value="ramot-polin">רמות פולין</option>
+                            </Form.Select>
+                        </Form.Group>
                         <Form.Group controlId="itemDate">
                             <Form.Label>תאריך</Form.Label>
                             <Form.Control type="date" ref={itemDateRef} />
@@ -445,7 +704,7 @@ const FamilyPage = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </StyledContainer>
+        </StyledContainer >
     );
 };
 
