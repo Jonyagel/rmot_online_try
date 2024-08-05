@@ -14,9 +14,6 @@ export async function GET(req: any, route: any) {
     const pageQuery = searchParams.get('page');
     const perPage = 10;
     const page = pageQuery ? parseInt(pageQuery) : 0;
-      route.setHeader('Access-Control-Allow-Origin', '*');
-  route.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  route.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type');
 
     try {
         await connectDb();
