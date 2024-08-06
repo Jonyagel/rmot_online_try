@@ -148,7 +148,7 @@ const SynagogueCard: React.FC<SynagogueCardProps> = ({ synagogues }) => {
           <StyledSelect
           // <SynagogueOption, false>
             options={synagogueOptions}
-            onChange={handleSynagogueChange}
+           // onChange={handleSynagogueChange}
             value={selectedSynagogue ? { value: selectedSynagogue, label: selectedSynagogue.name } : null}
             placeholder="חפש בית כנסת..."
             isSearchable={true}
