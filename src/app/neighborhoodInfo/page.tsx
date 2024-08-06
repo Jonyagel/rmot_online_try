@@ -8,7 +8,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 export default function NeighborhoodInfo() {
     return (
         <div className='container'>
-            <StripCarousel />
+            {/* <StripCarousel /> */}
             <CardCategory />
            <AcordionShops />
         </div>

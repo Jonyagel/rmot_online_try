@@ -91,9 +91,7 @@ export default function RealEstate() {
     setShowAddModal(true);
   };
 
-  // const handleNewPropertyChange = (e: any) => {
 
-  // };
 
 
   const sendEmailToUser = async (dadaPosted: any, email: any) => {
@@ -121,32 +119,6 @@ export default function RealEstate() {
     }
   };
 
-  // const checkAndSendAlerts = async (newProperty: any) => {
-  //   try {
-  //     const response = await fetch('/api/matchingAlerts', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(newProperty),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-
-  //     const matchingUsers = await response.json();
-
-  //     // Send email to each matching user
-  //     for (const user of matchingUsers) {
-  //       await sendEmailToUser(user.to_email, newProperty);
-  //     }
-
-  //     console.log(`Sent alerts to ${matchingUsers.length} users`);
-  //   } catch (error) {
-  //     console.error('Error checking and sending alerts:', error);
-  //   }
-  // };
 
   const handleAlertFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -179,11 +151,6 @@ export default function RealEstate() {
     setTimeout(() => setShowAlert(false), 5000);
   };
 
-
-  // const handleUploadSuccess = (result:any) => {
-  //   setUploadedImageUrls(prev => [...prev, result.info.secure_url]);
-  // };
-
   const removeImage = (index: any) => {
     setUploadedImageUrls(prev => prev.filter((_, i) => i !== index));
   };
@@ -199,10 +166,8 @@ export default function RealEstate() {
     console.log(data);
     console.log(data[0].to_email);
     setUserEmail(data[0].to_email);
-    // sendEmailToUser(data[0].to_email)
     setSendemailAr(data)
     return data[0].to_email
-    // setProperties(data);
   };
 
   const fetchProperties = async () => {
@@ -244,7 +209,6 @@ export default function RealEstate() {
       setShowAlert(true);
       handleAddModalClose();
       fetchProperties();
-      // await checkAndSendAlerts(data);
       router.push('/nadlan');
     } catch (error: any) {
       console.error('Error:', error);
@@ -287,32 +251,6 @@ export default function RealEstate() {
     }
   };
 
-
-
-  // const checkAndSendAlerts = async (newProperty:any) => {
-  //   try {
-  //     const response = await fetch('/api/matchingAlerts', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(newProperty),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Network response was not ok');
-  //     }
-
-  //     const matchingUsers = await response.json();
-
-  //     // שליחת מייל לכל משתמש מתאים
-  //     for (const user of matchingUsers) {
-  //       await (user.to_email, newProperty);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error checking and sending alerts:', error);
-  //   }
-  // };
 
   return (
     <div className='container-fluid'>

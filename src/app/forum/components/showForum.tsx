@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddQuestion from './addQuestion';
 import Link from 'next/link';
@@ -9,6 +9,7 @@ import { Card, Badge, Button, Popover, OverlayTrigger, Dropdown, Form, InputGrou
 import { motion, AnimatePresence } from 'framer-motion';
 import './showForum.css'
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +36,9 @@ export default function ShowForum(props: any) {
     // const q = props.searchParams
     // console.log(q)
 
+    const router = useRouter();
+
+    const saerchRef = useRef<HTMLInputElement>(null);
 
 
     useEffect(() => {
@@ -61,11 +65,19 @@ export default function ShowForum(props: any) {
         setSearchTerm('');
     };
 
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+    // const scrollToTop = () => {
+    //     window.scrollTo({
+    //         top: 0,
+    //         behavior: 'smooth'
+    //     });
+    // };
+
+    const onSearchClick = (e: any) => {
+        e.preventDefault();
+        const search = saerchRef.current?.value
+        // setSearchTerm(e.target.value)
+        doApi(1);
+        // router.push(`/forum?search=${search}`);
     };
 
     const handlePageChange = (newPage: number) => {
@@ -81,7 +93,8 @@ export default function ShowForum(props: any) {
     };
 
     async function doApi(newPage: any) {
-        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum?page=${newPage - 1}`;
+        const search = saerchRef.current?.value
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum?page=${newPage - 1}&search=${search}`;
         const resp = await fetch(url, { cache: 'no-store' });
         const data = await resp.json();
         console.log(data);
@@ -148,62 +161,63 @@ export default function ShowForum(props: any) {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className='title text-center mt-5 mb-4'
+                className='title text-center mt-5'
             >
                 <h2 className='display-4 fw-bold text-primary'>פורום תושבי רמות</h2>
                 <p className='lead text-muted'>שואלים, עונים, ומחברים את הקהילה</p>
             </motion.div>
 
-            <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
-
-            <div className="mb-3 d-flex justify-content-between align-items-center">
-                <div>
-                    <Button variant="outline-secondary" onClick={() => setViewMode('list')} className="me-2">
-                        <i className="bi bi-list"></i>
-                    </Button>
-                    <Button variant="outline-secondary" onClick={() => setViewMode('grid')}>
-                        <i className="bi bi-grid"></i>
-                    </Button>
-                </div>
-                <Dropdown>
-                    <Dropdown.Toggle variant="secondary" id="dropdown-sort">
-                        מיין לפי: {sortBy === 'date' ? 'תאריך' : 'תגובות'}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => setSortBy('date')}>תאריך</Dropdown.Item>
-                        <Dropdown.Item onClick={() => setSortBy('comments')}>תגובות</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
+            <div className='d-flex justify-content-end mb-3'>
+                <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
             </div>
 
-            <InputGroup className="mb-3">
-                <InputGroup.Text className='rounded'><i className="bi bi-search"></i></InputGroup.Text>
-                <Form.Control
-                    placeholder="חיפוש בפורום"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-            </InputGroup>
+            <div className='mb-3'>
+                <InputGroup>
+                    <Form.Control
+                        placeholder="חיפוש בפורום"
+                        // value={searchTerm}
+                        // onChange={(e:any) => (
+                        //     setSearchTerm(e.target.value)
+                        // )}
+                        ref={saerchRef}
+                        className='rounded-end'
+                    />
+                    <InputGroup.Text className='rounded-start' onClick={(e:any) => (
+                        onSearchClick(e)
+                            // setSearchTerm(e.target.value)
+                        )}><i className="bi bi-search"></i></InputGroup.Text>
+                </InputGroup>
+            </div>
 
-            <div className="mb-3">
-                <h5>סנן לפי נושא:</h5>
-                {popularTags.map(tag => (
-                    <Badge
-                        key={tag}
-                        bg={selectedTopic === tag ? 'primary' : 'secondary'}
-                        className="me-2 mb-2"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => handleTopicClick(tag)}
-                    >
-                        {tag}
-                    </Badge>
-                ))}
-                <Button variant="outline-secondary" size="sm" onClick={() => setShowAllTags(true)} className="me-2">
-                    הצג את כל התגים
-                </Button>
-                <Button variant="primary" size="sm" onClick={showAllQuestions}>
-                    הצג את כל השאלות
-                </Button>
+            <div className="my-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                <div className='mb-3 mb-md-0'>
+                    <Button variant="light" onClick={() => setShowAllTags(true)} className="me-2 border">
+                        סנן לפי תגים
+                    </Button>
+                    <Button variant="primary" onClick={showAllQuestions}>
+                        הצג את כל התגים
+                    </Button>
+                </div>
+
+                <div className='d-flex align-items-center'>
+                    <Dropdown className="me-2">
+                        <Dropdown.Toggle variant="light" id="dropdown-sort" className='border' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: '150px' }}>
+                            <span>מיין לפי: {sortBy === 'date' ? 'תאריך' : 'תגובות'}</span>
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu className='text-end'>
+                            <Dropdown.Item onClick={() => setSortBy('date')}>תאריך</Dropdown.Item>
+                            <Dropdown.Item onClick={() => setSortBy('comments')}>תגובות</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <div>
+                        <Button variant="outline-secondary" onClick={() => setViewMode('list')} className="me-2">
+                            <i className="bi bi-list"></i>
+                        </Button>
+                        <Button variant="outline-secondary" onClick={() => setViewMode('grid')}>
+                            <i className="bi bi-grid"></i>
+                        </Button>
+                    </div>
+                </div>
             </div>
 
             <div className={`row ${viewMode === 'grid' ? 'row-cols-1 row-cols-md-2 row-cols-lg-3' : ''}`}>
@@ -262,12 +276,12 @@ export default function ShowForum(props: any) {
                                                 />
                                             </div>
                                         )}
-                                        <div className='d-flex justify-content-between align-items-center'>
-                                            <Button variant="outline-primary" size="sm">
+                                        <div className='d-flex justify-content-end align-items-center'>
+                                            <small className='me-2'>
                                                 <i className="bi bi-chat-dots me-2"></i>
                                                 {item.numOfComments} תגובות
-                                            </Button>
-                                            <small className='text-muted'>{formatPostAgo(item.date)}</small>
+                                            </small>
+                                            <small className='text-muted'><i className="bi bi-clock me-2"></i>{formatPostAgo(item.date)}</small>
                                         </div>
                                     </Card.Body>
                                 </Card>
@@ -283,7 +297,7 @@ export default function ShowForum(props: any) {
                         <button
                             className="page-link rounded-circle shadow-sm border-0 mx-1"
                             onClick={() => {
-                                handlePageChange(currentPage - 1) 
+                                handlePageChange(currentPage - 1)
                             }}
                             aria-label="הקודם"
                             style={{ width: '40px', height: '40px', transition: 'all 0.3s' }}
@@ -335,7 +349,7 @@ export default function ShowForum(props: any) {
                 </ul>
             </nav>
 
-            {showScrollTop && (
+            {/* {showScrollTop && (
                 <Button
                     onClick={scrollToTop}
                     className="position-fixed bottom-0 end-0 m-3"
@@ -345,28 +359,32 @@ export default function ShowForum(props: any) {
                 >
                     <i className="bi bi-arrow-up"></i>
                 </Button>
-            )}
-            <Modal show={showAllTags} onHide={() => setShowAllTags(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title>כל התגים</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {getAllTags().map((tag: any) => (
-                        <Badge
-                            key={tag}
-                            bg={'secondary'}
-                            className="me-2 mb-2"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                                handleTopicClick(tag);
-                                setShowAllTags(false);
-                            }}
-                        >
-                            {tag}
-                        </Badge>
-                    ))}
-                </Modal.Body>
-            </Modal>
-        </div>
+            )} */}
+    <Modal show={showAllTags} onHide={() => setShowAllTags(false)}>
+        <Modal.Header closeButton>
+            <Modal.Title className="w-100">
+                <div className="d-flex justify-content-between align-items-center">
+                    <span>כל התגים</span>
+                </div>
+            </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            {getAllTags().map((tag: any) => (
+                <Badge
+                    key={tag}
+                    bg={'secondary'}
+                    className="me-2 mb-2"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                        handleTopicClick(tag);
+                        setShowAllTags(false);
+                    }}
+                >
+                    {tag}
+                </Badge>
+            ))}
+        </Modal.Body>
+    </Modal>
+        </div >
     )
 }

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+"use client"
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSynagogue, faMapMarkerAlt, faSun, faCloudSun, faMoon } from '@fortawesome/free-solid-svg-icons';
-import { Card, Col, Form, ListGroup } from 'react-bootstrap';
+import { faSynagogue, faMapMarkerAlt, faSun, faCloudSun, faMoon, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Card, Col, Form, ListGroup, InputGroup, Button, ButtonProps } from 'react-bootstrap';
+import Select, { ActionMeta, SingleValue } from 'react-select';
 
 const StyledCard = styled(Card)`
   border: none;
@@ -76,9 +78,66 @@ const DaySelector = styled(Form.Select)`
   margin-bottom: 1rem;
 `;
 
-const SynagogueCard = (props:any) => {
-  const [selectedDay, setSelectedDay] = useState('weekday');
 
+const StyledSelect = styled(Select)`
+  margin-bottom: 1rem;
+`;
+
+const ClearButton = styled(Button)<ButtonProps>`
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+`;
+
+interface PrayerTimes {
+  shacharit: string;
+  mincha: string;
+  arvit: string;
+}
+
+interface Synagogue {
+  name: string;
+  address: string;
+  prayerTimes: {
+    weekday: PrayerTimes;
+    saturday: PrayerTimes;
+  };
+}
+
+interface SynagogueCardProps {
+  synagogues: Synagogue[];
+}
+
+interface SynagogueOption {
+  value: Synagogue;
+  label: string;
+}
+
+const SynagogueCard: React.FC<SynagogueCardProps> = ({ synagogues }) => {
+  const [selectedDay, setSelectedDay] = useState<'weekday' | 'saturday'>('weekday');
+  const [selectedSynagogue, setSelectedSynagogue] = useState<Synagogue | null>(null);
+
+  const synagogueOptions: SynagogueOption[] = useMemo(() => 
+    synagogues.map((synagogue) => ({
+      value: synagogue,
+      label: synagogue.name
+    })),
+    [synagogues]
+  );
+
+  const handleSynagogueChange = (
+    newValue: SingleValue<SynagogueOption>,
+    actionMeta: ActionMeta<SynagogueOption>
+  ) => {
+    setSelectedSynagogue(newValue ? newValue.value : null);
+  };
+
+  const clearSelection = () => {
+    setSelectedSynagogue(null);
+  };
+
+  const synagoguesToShow = selectedSynagogue ? [selectedSynagogue] : synagogues;
+
+  
   return (
     <Col md={6}>
       <StyledCard>
@@ -86,15 +145,28 @@ const SynagogueCard = (props:any) => {
           <FontAwesomeIcon icon={faSynagogue} className="mr-2" /> בתי כנסת באזור
         </CardHeader>
         <Card.Body>
+          <StyledSelect
+          // <SynagogueOption, false>
+            options={synagogueOptions}
+            onChange={handleSynagogueChange}
+            value={selectedSynagogue ? { value: selectedSynagogue, label: selectedSynagogue.name } : null}
+            placeholder="חפש בית כנסת..."
+            isSearchable={true}
+          />
+          {selectedSynagogue && (
+            <ClearButton variant="outline-secondary" size="sm" onClick={clearSelection}>
+              <FontAwesomeIcon icon={faTimes} /> נקה בחירה
+            </ClearButton>
+          )}
           <DaySelector 
             value={selectedDay} 
-            onChange={(e) => setSelectedDay(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedDay(e.target.value as 'weekday' | 'saturday')}
           >
             <option value="weekday">יום חול</option>
             <option value="saturday">שבת</option>
           </DaySelector>
           <SynagogueList>
-            {props.synagogues.map((synagogue:any, index:any) => (
+            {synagoguesToShow.map((synagogue, index) => (
               <SynagogueItem key={index}>
                 <SynagogueName>{synagogue.name}</SynagogueName>
                 <SynagogueAddress>

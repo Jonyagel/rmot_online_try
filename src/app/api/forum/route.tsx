@@ -14,13 +14,15 @@ export async function GET(req: any, route: any) {
     const pageQuery = searchParams.get('page');
     const perPage = 10;
     const page = pageQuery ? parseInt(pageQuery) : 0;
-
+    const searchQuery = searchParams.get('search') || '';
+    const searchExp = new RegExp(searchQuery, "i")
+    // route.setHeader('Access-Control-Allow-Origin', '*');
     try {
         await connectDb();
 
         const totalDocuments = await ForumModel.countDocuments();
         const totalPages = Math.ceil(totalDocuments / perPage);
-        const data = await ForumModel.find({})
+        const data = await ForumModel.find({$or:[{tittle:searchExp},{description:searchExp}]})
             .sort({ createdAt: -1 })
             .limit(perPage)
             .skip(page * perPage)

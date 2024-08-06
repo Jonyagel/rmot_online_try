@@ -48,6 +48,7 @@ export default function RootLayout({
               {children}
               <Footer />
               <Analytics />
+              {/* <script src="./nagishli_beta.js"></script> */}
             </body>
           </html>
           );

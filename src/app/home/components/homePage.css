@@ -1,0 +1,113 @@
+/* homePage.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.title {
+    margin-bottom: 40px;
+}
+
+.display-4 {
+    color: #007bff;
+    font-weight: 700;
+}
+
+.lead {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.card {
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-5px);
+}
+
+.btn-outline-primary {
+    transition: all 0.2s ease;
+}
+
+.btn-outline-primary:hover {
+    transform: scale(1.05);
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    border-color: #80bdff;
+}
+
+.badge {
+    font-size: 0.8rem;
+    padding: 0.4em 0.6em;
+}
+
+.rounded-image {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* מדיה קוורי לתצוגה מותאמת למובייל */
+@media (max-width: 768px) {
+    .title {
+        margin-bottom: 20px;
+    }
+
+    .display-4 {
+        font-size: 2.5rem;
+    }
+
+    .lead {
+        font-size: 1rem;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+}
+
+/* אנימציות נוספות */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease-in;
+}
+
+/* סגנון לקישורים מהירים */
+.quick-links .btn {
+    margin: 5px;
+    min-width: 120px;
+}
+
+/* סגנון לעדכונים חשובים */
+.important-updates {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.important-updates .badge {
+    margin-right: 10px;
+}
+
+/* סגנון לתמונה הראשית */
+.main-image {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+}
+

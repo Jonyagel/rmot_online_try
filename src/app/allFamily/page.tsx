@@ -178,6 +178,10 @@ const FamilyPage = () => {
     const [showSynagogueModal, setShowSynagogueModal] = useState(false);
     const [lostAndFound, setLostAndFound] = useState<LostFoundItem[]>([]);
     const [showLostFoundModal, setShowLostFoundModal] = useState(false);
+    const [faithStories, setFaithStories] = useState<Array<{ author: string, story: string, date: string }>>([]);
+    const [showFaithStoryModal, setShowFaithStoryModal] = useState(false);
+    const storyAuthorRef = useRef<HTMLInputElement>(null);
+    const storyContentRef = useRef<HTMLTextAreaElement>(null);
     // const [selectedSynagogue, setSelectedSynagogue] = useState(synagogues);
     const itemTypeRef = useRef<HTMLSelectElement>(null);
     const itemDescriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -227,6 +231,15 @@ const FamilyPage = () => {
         setFilteredItems(newFilteredItems);
     }, [lostAndFound, typeFilter, areaFilter]);
 
+    const handleAddFaithStory = () => {
+        const newStory = {
+            author: storyAuthorRef.current?.value || 'אנונימי',
+            story: storyContentRef.current?.value || '',
+            date: new Date().toLocaleDateString('he-IL')
+        };
+        setFaithStories(prevStories => [...prevStories, newStory]);
+        setShowFaithStoryModal(false);
+    };
 
     const fetchWeeklyData = async () => {
         // לדוגמה בלבד - במציאות, כאן תבצע קריאות API אמיתיות
@@ -447,6 +460,47 @@ const FamilyPage = () => {
                                     <Button variant="outline-primary">קרא עוד</Button>
                                 </Card.Body>
                             </StyledCard>
+                            <StyledCard className="mt-4">
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faPiggyBank} className="mr-2" /> טיפ חיסכון שבועי
+                                </CardHeader>
+                                <Card.Body>
+                                    <h5>חיסכון בחשבון החשמל</h5>
+                                    <p>{savingTip}</p>
+                                    <Button variant="outline-success">עוד טיפים לחיסכון</Button>
+                                </Card.Body>
+                            </StyledCard>
+
+                            <StyledCard className="mt-4">
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faPoll} className="mr-2" /> סקר משפחתי
+                                </CardHeader>
+                                <Card.Body>
+                                    <h5>מה נעשה בשבת הקרובה?</h5>
+                                    <Form>
+                                        {familyActivities.map((activity, index) => (
+                                            <Form.Check
+                                                type="radio"
+                                                id={`activity-${index}`}
+                                                label={activity}
+                                                name="familyActivity"
+                                                key={index}
+                                            />
+                                        ))}
+                                        <Button variant="primary" className="mt-3">הצבע</Button>
+                                    </Form>
+                                </Card.Body>
+                            </StyledCard>
+                            <StyledCard>
+                                <CardHeader>
+                                    <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" /> המלצה לבילוי משפחתי
+                                </CardHeader>
+                                <Card.Body>
+                                    <h5>{activityRecommendation.title}</h5>
+                                    <p>{activityRecommendation.description}</p>
+                                    <Button variant="outline-info">פרטים נוספים</Button>
+                                </Card.Body>
+                            </StyledCard>
                         </Col>
 
                         <Col md={6}>
@@ -494,51 +548,6 @@ const FamilyPage = () => {
                                     </div>
                                 </Card.Body>
                             </StyledCard>
-                            <StyledCard className="mt-4">
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faPiggyBank} className="mr-2" /> טיפ חיסכון שבועי
-                                </CardHeader>
-                                <Card.Body>
-                                    <h5>חיסכון בחשבון החשמל</h5>
-                                    <p>{savingTip}</p>
-                                    <Button variant="outline-success">עוד טיפים לחיסכון</Button>
-                                </Card.Body>
-                            </StyledCard>
-
-                            <StyledCard className="mt-4">
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faPoll} className="mr-2" /> סקר משפחתי
-                                </CardHeader>
-                                <Card.Body>
-                                    <h5>מה נעשה בשבת הקרובה?</h5>
-                                    <Form>
-                                        {familyActivities.map((activity, index) => (
-                                            <Form.Check
-                                                type="radio"
-                                                id={`activity-${index}`}
-                                                label={activity}
-                                                name="familyActivity"
-                                                key={index}
-                                            />
-                                        ))}
-                                        <Button variant="primary" className="mt-3">הצבע</Button>
-                                    </Form>
-                                </Card.Body>
-                            </StyledCard>
-                        </Col>
-                        <Col md={6}>
-                            <StyledCard>
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" /> המלצה לבילוי משפחתי
-                                </CardHeader>
-                                <Card.Body>
-                                    <h5>{activityRecommendation.title}</h5>
-                                    <p>{activityRecommendation.description}</p>
-                                    <Button variant="outline-info">פרטים נוספים</Button>
-                                </Card.Body>
-                            </StyledCard>
-                        </Col>
-                        <Col md={6}>
                             <StyledCard>
                                 <CardHeader>
                                     <FontAwesomeIcon icon={faCamera} className="mr-2" /> אתגר צילום שבועי
@@ -561,6 +570,26 @@ const FamilyPage = () => {
 
                         <SynagogueCard synagogues={synagogues} />
                         <Col md={6}>
+
+                                <StyledCard>
+                                    <CardHeader>
+                                        <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> סיפורי השגחה פרטית ואמונה
+                                    </CardHeader>
+                                    <Card.Body>
+                                        <ListGroup>
+                                            {faithStories.map((story, index) => (
+                                                <ListGroup.Item key={index}>
+                                                    <p><strong>{story.author}</strong> - {story.date}</p>
+                                                    <p>{story.story}</p>
+                                                </ListGroup.Item>
+                                            ))}
+                                        </ListGroup>
+                                        <Button variant="outline-primary" className="mt-3" onClick={() => setShowFaithStoryModal(true)}>
+                                            <FontAwesomeIcon icon={faPlus} className="mr-2" /> הוסף סיפור חדש
+                                        </Button>
+                                    </Card.Body>
+                                </StyledCard>
+
                             <StyledCard>
                                 <CardHeader>
                                     <FontAwesomeIcon icon={faSearch} className="mr-2" /> מציאות ואבידות
@@ -655,6 +684,31 @@ const FamilyPage = () => {
                     </Button>
                 </Modal.Footer>
             </Modal> */}
+            <Modal show={showFaithStoryModal} onHide={() => setShowFaithStoryModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>הוספת סיפור השגחה פרטית ואמונה</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="storyAuthor">
+                            <Form.Label>שם (אופציונלי)</Form.Label>
+                            <Form.Control type="text" ref={storyAuthorRef} />
+                        </Form.Group>
+                        <Form.Group controlId="storyContent">
+                            <Form.Label>הסיפור שלך</Form.Label>
+                            <Form.Control as="textarea" rows={5} ref={storyContentRef} />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowFaithStoryModal(false)}>
+                        סגור
+                    </Button>
+                    <Button variant="primary" onClick={handleAddFaithStory}>
+                        הוסף סיפור
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             <Modal show={showLostFoundModal} onHide={() => setShowLostFoundModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>הוספת פריט מציאה/אבידה</Modal.Title>
