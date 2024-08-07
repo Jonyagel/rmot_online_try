@@ -29,3 +29,10 @@
     direction: rtl;
     font-family: Assistant-regular;
 }
+
+@media (max-width: 768px) {
+  body {
+      padding-top: 100px; /* התאם לגובה ההידר במובייל */
+  }
+}
+
