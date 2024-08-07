@@ -4,7 +4,7 @@ import { CldImage } from 'next-cloudinary';
 import { Card, Badge, Button, Modal, Form, Row, Col, Tabs, Tab, InputGroup, FormControl } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faHeart, faShare, faPlus } from '@fortawesome/free-solid-svg-icons';
-import './board.css'; // נניח שיצרנו קובץ CSS נפרד
+import './board.css';
 import { CldUploadButton } from 'next-cloudinary';
 import { toast } from 'react-toastify';
 import { faCloudUploadAlt, faTimes } from '@fortawesome/free-solid-svg-icons';

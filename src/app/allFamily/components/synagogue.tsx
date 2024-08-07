@@ -83,7 +83,7 @@ const StyledSelect = styled(Select)`
   margin-bottom: 1rem;
 `;
 
-const ClearButton = styled(Button)<ButtonProps>`
+const ClearButton = styled(Button) <ButtonProps>`
   margin-bottom: 1rem;
   margin-left: 1rem;
 `;
@@ -116,7 +116,7 @@ const SynagogueCard: React.FC<SynagogueCardProps> = ({ synagogues }) => {
   const [selectedDay, setSelectedDay] = useState<'weekday' | 'saturday'>('weekday');
   const [selectedSynagogue, setSelectedSynagogue] = useState<Synagogue | null>(null);
 
-  const synagogueOptions: SynagogueOption[] = useMemo(() => 
+  const synagogueOptions: SynagogueOption[] = useMemo(() =>
     synagogues.map((synagogue) => ({
       value: synagogue,
       label: synagogue.name
@@ -137,7 +137,7 @@ const SynagogueCard: React.FC<SynagogueCardProps> = ({ synagogues }) => {
 
   const synagoguesToShow = selectedSynagogue ? [selectedSynagogue] : synagogues;
 
-  
+
   return (
     <Col md={6}>
       <StyledCard>
@@ -145,10 +145,9 @@ const SynagogueCard: React.FC<SynagogueCardProps> = ({ synagogues }) => {
           <FontAwesomeIcon icon={faSynagogue} className="mr-2" /> בתי כנסת באזור
         </CardHeader>
         <Card.Body>
-          <StyledSelect
-          // <SynagogueOption, false>
+          <Select<SynagogueOption, false>
             options={synagogueOptions}
-           // onChange={handleSynagogueChange}
+            onChange={handleSynagogueChange}
             value={selectedSynagogue ? { value: selectedSynagogue, label: selectedSynagogue.name } : null}
             placeholder="חפש בית כנסת..."
             isSearchable={true}
@@ -158,8 +157,8 @@ const SynagogueCard: React.FC<SynagogueCardProps> = ({ synagogues }) => {
               <FontAwesomeIcon icon={faTimes} /> נקה בחירה
             </ClearButton>
           )}
-          <DaySelector 
-            value={selectedDay} 
+          <DaySelector
+            value={selectedDay}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedDay(e.target.value as 'weekday' | 'saturday')}
           >
             <option value="weekday">יום חול</option>

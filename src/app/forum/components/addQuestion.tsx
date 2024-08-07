@@ -94,7 +94,7 @@ export default function AddQuestion(props: any) {
                 <i className="bi bi-plus-lg fs-4"></i>
             </Button>
 
-            <Modal show={showModal} onHide={handleClose} centered>
+            <Modal show={showModal} onHide={handleClose} centered className='addForumModal'>
                 <Modal.Header>
                     <div className="w-100 d-flex justify-content-between align-items-start">
                         <Modal.Title>הוספת שאלה חדשה</Modal.Title>

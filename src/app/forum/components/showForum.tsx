@@ -26,34 +26,15 @@ export default function ShowForum(props: any) {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(props.totalPages);
 
-    // const handleClose = () => setShow(false);
-    // const handleShow = () => setShow(true);
 
     const popularTags = ['שאלה', 'עזרה', 'בעיה', 'תקלה'];
 
-    // const searchParams = useSearchParams();
-    // const page = searchParams.get('page') || '1';
-    // const q = props.searchParams
-    // console.log(q)
+
 
     const router = useRouter();
 
     const saerchRef = useRef<HTMLInputElement>(null);
 
-
-    useEffect(() => {
-        const toggleVisibility = () => {
-            if (window.scrollY > 300) {
-                setShowScrollTop(true);
-            } else {
-                setShowScrollTop(false);
-            }
-        };
-
-        window.addEventListener('scroll', toggleVisibility);
-
-        return () => window.removeEventListener('scroll', toggleVisibility);
-    }, []);
 
     const getAllTags = () => {
         const allTags = new Set(forum_ar.map((post: any) => post.topic));
@@ -65,19 +46,11 @@ export default function ShowForum(props: any) {
         setSearchTerm('');
     };
 
-    // const scrollToTop = () => {
-    //     window.scrollTo({
-    //         top: 0,
-    //         behavior: 'smooth'
-    //     });
-    // };
 
     const onSearchClick = (e: any) => {
         e.preventDefault();
         const search = saerchRef.current?.value
-        // setSearchTerm(e.target.value)
         doApi(1);
-        // router.push(`/forum?search=${search}`);
     };
 
     const handlePageChange = (newPage: number) => {
@@ -87,7 +60,7 @@ export default function ShowForum(props: any) {
             doApi(newPage);
             window.scrollTo({
                 top: 300,
-                behavior: 'smooth'  // לאנימציית גלילה חלקה
+                behavior: 'smooth'
             });
         }
     };
@@ -175,17 +148,12 @@ export default function ShowForum(props: any) {
                 <InputGroup>
                     <Form.Control
                         placeholder="חיפוש בפורום"
-                        // value={searchTerm}
-                        // onChange={(e:any) => (
-                        //     setSearchTerm(e.target.value)
-                        // )}
                         ref={saerchRef}
                         className='rounded-end'
                     />
-                    <InputGroup.Text className='rounded-start' onClick={(e:any) => (
+                    <InputGroup.Text className='rounded-start' onClick={(e: any) => (
                         onSearchClick(e)
-                            // setSearchTerm(e.target.value)
-                        )}><i className="bi bi-search"></i></InputGroup.Text>
+                    )}><i className="bi bi-search"></i></InputGroup.Text>
                 </InputGroup>
             </div>
 
@@ -209,7 +177,7 @@ export default function ShowForum(props: any) {
                             <Dropdown.Item onClick={() => setSortBy('comments')}>תגובות</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                    <div>
+                    <div className="d-none d-md-block"> {/* Hide on mobile, show on medium screens and up */}
                         <Button variant="outline-secondary" onClick={() => setViewMode('list')} className="me-2">
                             <i className="bi bi-list"></i>
                         </Button>
@@ -232,8 +200,8 @@ export default function ShowForum(props: any) {
                             transition={{ duration: 0.3 }}
                         >
                             <Link href={`/forum/comment/${item._id}`} className='text-decoration-none'>
-                                <Card className='shadow-sm hover-card position-relative'>
-                                    <Card.Body>
+                                <Card className='forumCard shadow-sm hover-card position-relative'>
+                                    <Card.Body className='forumCardBody'>
                                         <div className='d-flex justify-content-between align-items-start mb-3'>
                                             <div className='d-flex'>
                                                 <OverlayTrigger
@@ -349,42 +317,31 @@ export default function ShowForum(props: any) {
                 </ul>
             </nav>
 
-            {/* {showScrollTop && (
-                <Button
-                    onClick={scrollToTop}
-                    className="position-fixed bottom-0 end-0 m-3"
-                    variant="primary"
-                    size="lg"
-                    style={{ borderRadius: '50%', width: '50px', height: '50px' }}
-                >
-                    <i className="bi bi-arrow-up"></i>
-                </Button>
-            )} */}
-    <Modal show={showAllTags} onHide={() => setShowAllTags(false)}>
-        <Modal.Header closeButton>
-            <Modal.Title className="w-100">
-                <div className="d-flex justify-content-between align-items-center">
-                    <span>כל התגים</span>
-                </div>
-            </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            {getAllTags().map((tag: any) => (
-                <Badge
-                    key={tag}
-                    bg={'secondary'}
-                    className="me-2 mb-2"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                        handleTopicClick(tag);
-                        setShowAllTags(false);
-                    }}
-                >
-                    {tag}
-                </Badge>
-            ))}
-        </Modal.Body>
-    </Modal>
+            <Modal show={showAllTags} onHide={() => setShowAllTags(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title className="w-100">
+                        <div className="d-flex justify-content-between align-items-center">
+                            <span>כל התגים</span>
+                        </div>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className='forumModalBody'>
+                    {getAllTags().map((tag: any) => (
+                        <Badge
+                            key={tag}
+                            bg={'secondary'}
+                            className="me-2 mb-2"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => {
+                                handleTopicClick(tag);
+                                setShowAllTags(false);
+                            }}
+                        >
+                            {tag}
+                        </Badge>
+                    ))}
+                </Modal.Body>
+            </Modal>
         </div >
     )
 }
