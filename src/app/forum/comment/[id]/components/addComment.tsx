@@ -31,9 +31,9 @@ export default function AddComment(props: any) {
     <Popover id="popover-basic" className=''>
       <Popover.Body>
         <EmojiPicker onEmojiClick={onEmojiSelect} emojiStyle={EmojiStyle.GOOGLE} searchDisabled={true} width={240}
-          height={400} 
-          // hiddenEmojis={[ '1f600' ,  '1f601' ,  '1f602' ,"1f607","1f970"]}
-          />
+          height={400}
+        // hiddenEmojis={[ '1f600' ,  '1f601' ,  '1f602' ,"1f607","1f970"]}
+        />
       </Popover.Body>
     </Popover>
   );
@@ -166,15 +166,17 @@ export default function AddComment(props: any) {
       <Card className='shadow-sm'>
         <Card.Body>
           {props.replay && (
-            <Card className='mb-3 bg-light'>
-              <Card.Body>
+            <Card className='mb-2 bg-light border-start border-primary border-3'>
+              <Card.Body className='py-2 px-3'>
                 <div className='d-flex justify-content-between align-items-center'>
-                  <div>
-                    <Card.Title>{props.commentReplying.userComment}</Card.Title>
-                    <Card.Text>{props.commentReplying.dataComment}</Card.Text>
+                  <div className='overflow-hidden'>
+                    <Card.Title className='h6 mb-1'>{props.commentReplying.userComment}</Card.Title>
+                    <Card.Text className='text-muted small text-truncate' style={{ maxWidth: '250px' }}>
+                      {props.commentReplying.dataComment}
+                    </Card.Text>
                   </div>
-                  <Button variant="light" onClick={() => props.setReplay(false)}>
-                    <i className="bi bi-x-lg"></i>
+                  <Button variant="link" className='text-muted p-0 ms-2' onClick={() => props.setReplay(false)}>
+                    <i className="bi bi-x"></i>
                   </Button>
                 </div>
               </Card.Body>
@@ -184,7 +186,7 @@ export default function AddComment(props: any) {
             <div className='d-flex align-items-end mb-2'>
               <div className='d-flex align-items-center ms-2'>
                 <CldUploadButton
-                  className='btn btn-outline-primary me-2 border-0'
+                  className='btn btn-outline-primary me-md-2 border-0'
                   uploadPreset="my_upload_test"
                   onSuccess={handleUpload}
                   onError={(error) => {
@@ -202,7 +204,7 @@ export default function AddComment(props: any) {
                   <i className="bi bi-paperclip"></i>
                 </CldUploadButton>
                 <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
-                  <Button variant="btn btn-outline-primary border-0" className='me-2' onClick={() => setShowEmoji(!showEmoji)}>
+                  <Button variant="btn btn-outline-primary border-0" className='me-md-2' onClick={() => setShowEmoji(!showEmoji)}>
                     <i className="bi bi-emoji-smile"></i>
                   </Button>
                 </OverlayTrigger>
@@ -229,7 +231,7 @@ export default function AddComment(props: any) {
             {fileName && (
               <div className="mt-2">
                 <small className="text-muted">
-                  <i className="bi bi-file-earmark-image me-1"></i>
+                  <i className="bi bi-file-earmark-image me-md-1"></i>
                   קובץ מצורף: {fileName}
                 </small>
               </div>

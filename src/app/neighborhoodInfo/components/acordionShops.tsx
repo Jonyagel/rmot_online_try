@@ -129,7 +129,7 @@ export default function ShopCards() {
         try {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/shops`, {
                 method: 'POST',
-                body: JSON.stringify({ name, description, content, hours, address, phone, email, website, category,logo,image }),
+                body: JSON.stringify({ name, description, content, hours, address, phone, email, website, category, logo, image }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -167,7 +167,7 @@ export default function ShopCards() {
                         >
                             <div className="shop-card-content">
                                 <div className="shop-card-header">
-                                   {/* <img src={shop.logo} alt={shop.name} className="shop-logo" /> */}
+                                    {/* <img src={shop.logo} alt={shop.name} className="shop-logo" /> */}
                                     <CldImage
                                         src={shop.logo}
                                         width="800"
@@ -382,7 +382,7 @@ export default function ShopCards() {
                             <Form.Group className="mb-3">
                                 <Form.Label>תמונה</Form.Label>
                                 <div className="upload-container">
-                                <CldUploadButton
+                                    <CldUploadButton
                                         className='btn btn-outline-primary me-2 mb-2'
                                         uploadPreset="my_upload_test"
                                         onSuccess={(result) => {

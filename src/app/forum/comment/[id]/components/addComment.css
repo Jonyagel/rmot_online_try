@@ -21,3 +21,17 @@
     box-shadow: none;
     border-color: #80bdff;
   }
+
+  .card.bg-light {
+    transition: all 0.3s ease;
+  }
+  
+  .card.bg-light:hover {
+    background-color: #f8f9fa !important;
+  }
+  
+  .text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
