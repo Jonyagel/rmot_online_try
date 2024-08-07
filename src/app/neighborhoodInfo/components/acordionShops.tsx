@@ -3,7 +3,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload } from 'react-icons/fa';
 import { Button, Modal, Form } from 'react-bootstrap';
-import { CldUploadButton } from 'next-cloudinary';
+import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './acordionShops.css';
@@ -167,7 +167,21 @@ export default function ShopCards() {
                         >
                             <div className="shop-card-content">
                                 <div className="shop-card-header">
-                                    <img src={shop.logo} alt={shop.name} className="shop-logo" />
+                                   {/* <img src={shop.logo} alt={shop.name} className="shop-logo" /> */}
+                                    <CldImage
+                                        src={shop.logo}
+                                        width="800"
+                                        height="600"
+                                        sizes="100vw"
+                                        crop="fit"
+                                        className="shop-image"
+                                        alt={shop.name}
+                                        placeholder="blur"
+                                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+                                        loading='lazy'
+                                        format="auto"
+                                        quality="auto"
+                                    />
                                 </div>
                                 <h3 className='text-center'>{shop.name}</h3>
                                 <p className='text-center'>{shop.description}</p>
@@ -199,7 +213,21 @@ export default function ShopCards() {
                                     <FaTimes />
                                 </button>
                                 <div className="shop-details">
-                                    <img src={selectedShop.image} alt={selectedShop.name} className="shop-image" />
+                                    {/* <img src={selectedShop.image} alt={selectedShop.name} className="shop-image" /> */}
+                                    <CldImage
+                                        src={selectedShop.image}
+                                        width="800"
+                                        height="600"
+                                        sizes="100vw"
+                                        crop="fit"
+                                        className="shop-image"
+                                        alt={selectedShop.name}
+                                        placeholder="blur"
+                                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+                                        loading='lazy'
+                                        format="auto"
+                                        quality="auto"
+                                    />
                                     <h2>{selectedShop.name}</h2>
                                     <p className="shop-content text-center">{selectedShop.content}</p>
                                     <div className="shop-info">
