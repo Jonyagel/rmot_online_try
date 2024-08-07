@@ -56,11 +56,15 @@ const NeighborhoodDescription: React.FC = () => {
 
 const CounterStatistic: React.FC<CounterStatisticProps> = ({ label, endValue, icon }) => {
     const [count, setCount] = useState(0);
+
+
     const controls = useAnimation();
     const [ref, inView] = useInView({
         triggerOnce: true,
         threshold: 0.1,
     });
+
+
 
     useEffect(() => {
         if (inView) {
@@ -118,6 +122,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ icon, title, content, link }) => (
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="info-card"
+        style={{ height: '250px' }} // או כל גובה אחר שמתאים לתוכן שלך
     >
         <FontAwesomeIcon icon={icon} className="info-icon" />
         <h3>{title}</h3>
@@ -133,6 +138,12 @@ interface CarouselItem {
 }
 
 const StripCarousel: React.FC = () => {
+    const [showStatistics, setShowStatistics] = useState(false);
+
+    useEffect(() => {
+        setShowStatistics(true);
+    }, []);
+
     const carouselItems: CarouselItem[] = [
         {
             image: 'school_m7feau',
@@ -191,8 +202,8 @@ const StripCarousel: React.FC = () => {
     ];
 
     return (
-        <div className='container-fluid strip px-0'>
-            <Row>
+        <div className='container-fluid strip px-0' style={{ minHeight: '100vh' }}>
+            <Row className="mx-0">
                 {/* מקום לפרסומת בצד שמאל */}
                 <Col md={2} className="d-none d-md-block">
                     <div style={{
@@ -200,11 +211,12 @@ const StripCarousel: React.FC = () => {
                         top: '100px',
                         overflowY: 'auto'
                     }}>
-                        <div className="p-3">
+                        <div className="">
                             <img
                                 src="/images/bookgif.gif"
                                 alt="תיאור הפרסומת"
                                 style={{ width: '100%', height: 'auto' }}
+                                loading='lazy'
                             />
                         </div>
                     </div>
@@ -233,7 +245,9 @@ const StripCarousel: React.FC = () => {
                                             crop="fill"
                                             className="d-block w-100 rounded carousel-image"
                                             alt='נוף שכונת רמות'
-                                            priority
+                                            placeholder="blur"
+                                            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+                                            loading='lazy'
                                         />
                                     </div>
                                     <Carousel.Caption className='bg-light bg-opacity-75 rounded text-dark'>
@@ -245,14 +259,16 @@ const StripCarousel: React.FC = () => {
                         </Carousel>
                     </div>
                     <NeighborhoodDescription />
-                    <div className='mt-5 statistics-section'>
-                        <h2 className='text-center text-primary text-4xl mb-4'>סטטיסטיקות שכונת רמות</h2>
-                        <div className='statistics-container'>
-                            {statistics.map((stat, index) => (
-                                <CounterStatistic key={index} {...stat} />
-                            ))}
+                    {showStatistics && (
+                        <div className='mt-5 statistics-section'>
+                            <h2 className='text-center text-primary text-4xl mb-4'>סטטיסטיקות שכונת רמות</h2>
+                            <div className='statistics-container'>
+                                {statistics.map((stat, index) => (
+                                    <CounterStatistic key={index} {...stat} />
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    )}
                     <div className='mt-5 info-section'>
                         <h2 className='text-center text-primary text-4xl mb-4'>מה חדש ברמות?</h2>
                         <div className='info-container'>
@@ -262,13 +278,13 @@ const StripCarousel: React.FC = () => {
                         </div>
                     </div>
                 </Col>
-                <Col md={2} className="d-none d-md-block">
+                <Col md={2} className="d-none d-md-block px-0">
                     <div style={{
                         position: 'sticky',
                         top: '100px',
                         overflowY: 'auto'
                     }}>
-                        <div className="p-3">
+                        <div className="">
                             <img
                                 src="/images/timegif.gif"
                                 alt="תיאור הפרסומת השנייה"

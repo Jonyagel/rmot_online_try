@@ -200,7 +200,7 @@ export default function ShowForum(props: any) {
                             transition={{ duration: 0.3 }}
                         >
                             <Link href={`/forum/comment/${item._id}`} className='text-decoration-none'>
-                                <Card className='forumCard shadow-sm hover-card position-relative'>
+                                <Card className='forumCard shadow-sm hover-card position-relative' style={{ minHeight: '100px' }}>
                                     <Card.Body className='forumCardBody'>
                                         <div className='d-flex justify-content-between align-items-start mb-3'>
                                             <div className='d-flex'>
@@ -234,13 +234,12 @@ export default function ShowForum(props: any) {
                                                     width="100"
                                                     height="100"
                                                     sizes="100vw"
-                                                    crop={{
-                                                        type: 'fill',
-                                                        source: true
-                                                    }}
+                                                    crop="fill"
                                                     className="rounded"
                                                     alt='תמונה מצורפת'
-                                                    priority
+                                                    placeholder="blur"
+                                                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+                                                    loading='lazy'
                                                 />
                                             </div>
                                         )}
