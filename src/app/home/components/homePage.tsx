@@ -216,7 +216,6 @@ const StripCarousel: React.FC = () => {
                                 src="/images/bookgif.gif"
                                 alt="תיאור הפרסומת"
                                 style={{ width: '100%', height: 'auto' }}
-                                loading='lazy'
                             />
                         </div>
                     </div>
@@ -247,7 +246,8 @@ const StripCarousel: React.FC = () => {
                                             alt='נוף שכונת רמות'
                                             placeholder="blur"
                                             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-                                            loading='lazy'
+                                            format="auto"
+                                            quality="auto"
                                         />
                                     </div>
                                     <Carousel.Caption className='bg-light bg-opacity-75 rounded text-dark'>

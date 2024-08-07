@@ -25,6 +25,8 @@ export default function ShowForum(props: any) {
     const [showAllTags, setShowAllTags] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(props.totalPages);
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState('');
 
 
     const popularTags = ['שאלה', 'עזרה', 'בעיה', 'תקלה'];
@@ -235,11 +237,18 @@ export default function ShowForum(props: any) {
                                                     height="100"
                                                     sizes="100vw"
                                                     crop="fill"
-                                                    className="rounded"
+                                                    className="rounded cursor-pointer"
                                                     alt='תמונה מצורפת'
                                                     placeholder="blur"
                                                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
                                                     loading='lazy'
+                                                    format="auto"
+                                                    quality="auto"
+                                                    onClick={(e) => {
+                                                        e.preventDefault(); // מונע ניווט ללינק
+                                                        setSelectedImage(item.fileName);
+                                                        setShowImageModal(true);
+                                                    }}
                                                 />
                                             </div>
                                         )}
@@ -339,6 +348,27 @@ export default function ShowForum(props: any) {
                             {tag}
                         </Badge>
                     ))}
+                </Modal.Body>
+            </Modal>
+            <Modal show={showImageModal} onHide={() => setShowImageModal(false)} size="lg" centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>תמונה מצורפת</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <CldImage
+                        src={selectedImage}
+                        width="800"
+                        height="600"
+                        sizes="100vw"
+                        crop="fit"
+                        className="img-fluid"
+                        alt='תמונה מצורפת בגדול'
+                        placeholder="blur"
+                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+                        loading='lazy'
+                        format="auto"
+                        quality="auto"
+                    />
                 </Modal.Body>
             </Modal>
         </div >

@@ -43,11 +43,14 @@ export default function AddQuestion(props: any) {
             console.log(data);
             handleClose();
             props.doApi();
+            setShowModal(false);
+            setUploadedImageUrl('');
             router.push('/forum');
             props.setAddForum(!props.addForum);
         } catch (error) {
             console.error('Error:', error);
         }
+        
     }
 
     const checkSignIn = async () => {
