@@ -1,93 +1,130 @@
-/* Centering the login form */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: #f8f9fa; /* Light grey background */
-  }
-  
-  /* Styling the login form */
-  .login-form {
-    width: 100%;
-    max-width: 400px;
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Styling the form title */
-  .login-form h2 {
-    font-family: 'Arial', sans-serif;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 0.5rem;
-  }
-  
-  /* Styling the form subtitle */
-  .login-form p {
-    font-family: 'Arial', sans-serif;
-    color: #666;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Additional styling for form elements */
-  .form-label {
-    font-weight: bold;
-    color: #555;
-  }
-  
-  .form-control {
-    border-radius: 5px;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-  }
-  
-  .form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  }
-  
-  /* Styling the buttons */
-  .loginBtn {
-    background-color: #000;
-    border-color: #000;
-    border-radius: 5px;
-    padding: 0.75rem;
-    font-weight: bold;
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-  
-  .btn-primary:hover {
-    background-color: #333;
-    border-color: #333;
-  }
-  
-  .btn-primary:focus {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  }
-  
-  .btn-outline-dark {
-    border-radius: 5px;
-    padding: 0.75rem;
-    font-weight: bold;
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-  
-  .btn-outline-dark img {
-    vertical-align: middle;
-  }
-  
-  /* Styling the "forgot password" link */
-  .text-end a {
-    color: #007bff;
-    font-weight: bold;
-  }
-  
-  /* Styling the "Sign up" link */
-  .login-form a {
-    color: #007bff;
-    font-weight: bold;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  padding: 2rem;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
+  overflow: hidden;
+}
+
+.login-form h2 {
+  color: #007bff;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.login-form p {
+  color: #6c757d;
+}
+
+.login-form .form-label {
+  font-weight: 500;
+  color: #007bff;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.login-form .form-control {
+  border-radius: 10px;
+  border: 2px solid #e0e0e0;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.login-form .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  border-color: #007bff;
+  outline: none;
+}
+
+.login-form .btn {
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form .loginBtn {
+  background-color: #007bff;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.11), 0 1px 3px rgba(0, 123, 255, 0.08);
+  color: white;
+}
+
+.login-form .loginBtn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0, 123, 255, 0.1), 0 3px 6px rgba(0, 123, 255, 0.07);
+}
+
+.login-form .btn-outline-dark {
+  border: 2px solid #343a40;
+  color: #343a40;
+  background-color: transparent;
+}
+
+.login-form .btn-outline-dark:hover {
+  background-color: #343a40;
+  color: white;
+}
+
+.login-form .btn-outline-dark i {
+  margin-left: 0.5rem;
+}
+
+.login-form a {
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.login-form a:hover {
+  color: #0056b3;
+}
+
+/* RTL Support */
+.login-form {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Custom scrollbar for long forms */
+.login-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.login-form::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.login-form::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.login-form::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Additional styles for login page */
+.login-form .text-end {
+  text-align: left;
+}
+
+.login-form .bi-google {
+  font-size: 1.25rem;
+  margin-left: 0.5rem;
+}

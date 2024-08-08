@@ -10,6 +10,8 @@ import './acordionShops.css';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 interface Shop {
     id: string;
     name: string;
@@ -28,7 +30,7 @@ interface Shop {
     categories: string[];
 }
 
-export default function ShopCards() {
+export default function ShopCards(props: any) {
     const router = useRouter();
 
     const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
@@ -37,7 +39,7 @@ export default function ShopCards() {
     const [showModal, setShowModal] = useState(false);
     const [logo, setLogo] = useState('');
     const [image, setImage] = useState('');
-    const [shopsAr, setShopsAr] = useState([]);
+    const [shopsAr, setShopsAr] = useState(props.shopsData);
 
 
     const nameRef = useRef<HTMLInputElement>(null);
@@ -50,9 +52,11 @@ export default function ShopCards() {
     const websiteRef = useRef<HTMLInputElement>(null);
     const categoryRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        doApi();
-    }, []);
+    // useEffect(() => {
+    //     // setShopsAr(props.shopsData)
+    //     // console.log(shopsAr)
+    //     doApi();
+    // }, []); 
 
     const doApi = async () => {
         let url = `${process.env.NEXT_PUBLIC_API_URL}/api/shops`;
@@ -147,132 +151,144 @@ export default function ShopCards() {
     };
 
     return (
-        <div>
+        <div className="shop-container">
             <motion.button
                 className="add-shop-button"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleShowModal}
             >
-                <FaPlus />
+                <FaPlus /> הוסף חנות חדשה
             </motion.button>
-            <div className="shop-container">
-                <div className="shop-grid">
-                    {shopsAr.map((shop: any) => (
-                        <motion.div
-                            key={shop.id}
-                            className="shop-card"
-                            whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-                            onClick={() => setSelectedShop(shop)}
-                        >
-                            <div className="shop-card-content">
-                                <div className="shop-card-header">
-                                    {/* <img src={shop.logo} alt={shop.name} className="shop-logo" /> */}
+
+            <div className="shop-grid">
+                {filteredShops.map((shop: Shop) => (
+                    <motion.div
+                        key={shop.id}
+                        className="shop-card "
+                        whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+                        onClick={() => handleShopClick(shop)}
+                    >
+                        <div className="shop-card-content">
+                            <div className="shop-card-header">
+                                <CldImage
+                                    src={shop.image}
+                                    width="400"
+                                    height="200"
+                                    crop="fill"
+                                    className="shop-image"
+                                    alt={shop.name}
+                                />
+                                <div className="shop-logo">
                                     <CldImage
                                         src={shop.logo}
-                                        width="800"
-                                        height="600"
-                                        sizes="100vw"
-                                        crop="fit"
-                                        className="shop-image"
-                                        alt={shop.name}
-                                        placeholder="blur"
-                                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-                                        loading='lazy'
-                                        format="auto"
-                                        quality="auto"
+                                        width="50"
+                                        height="50"
+                                        crop="fill"
+                                        className="logo-image"
+                                        alt={`${shop.name} logo`}
                                     />
-                                </div>
-                                <h3 className='text-center'>{shop.name}</h3>
-                                <p className='text-center'>{shop.description}</p>
-                                <div className="shop-card-footer">
-                                    <span className="shop-category"><FaTag className="category-icon" /> {shop.category}</span>
-                                </div>
+                                </div> 
+                            </div> 
+                            <h3>{shop.name}</h3>
+                            <p>
+                                {shop.description.length > 100
+                                    ? `${shop.description.substring(0, 100)}...`
+                                    : shop.description}
+                            </p>
+                            <div className="shop-card-footer">
+                                {/* <span className="shop-category"><FaTag /> {shop.category}</span> */}
+                                <span className="shop-address"><FaMapMarkerAlt /> {shop.address}</span>
                             </div>
-                        </motion.div>
-                    ))}
-                </div>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
 
-                <AnimatePresence>
-                    {selectedShop && (
+            <AnimatePresence>
+                {selectedShop && (
+                    <motion.div
+                        className="shop_detaile modal-overlay"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={closeModal}
+                    >
                         <motion.div
-                            className="modal-overlay"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setSelectedShop(null)}
+                            className="modal-content shop-detail-modal"
+                            initial={{ y: 50, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: 50, opacity: 0 }}
+                            onClick={(e) => e.stopPropagation()}
                         >
-                            <motion.div
-                                className="modal-content"
-                                initial={{ y: 50, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                exit={{ y: 50, opacity: 0 }}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                <button className="close-button" onClick={() => setSelectedShop(null)}>
+                            <div className="modal-header">
+                                <button className="close-button" onClick={closeModal}>
                                     <FaTimes />
                                 </button>
-                                <div className="shop-details">
-                                    {/* <img src={selectedShop.image} alt={selectedShop.name} className="shop-image" /> */}
+                            </div>
+                            <div className="shop-details">
+                                <div className="shop-header">
                                     <CldImage
                                         src={selectedShop.image}
                                         width="800"
-                                        height="600"
-                                        sizes="100vw"
-                                        crop="fit"
-                                        className="shop-image"
+                                        height="400"
+                                        crop="fill"
+                                        className="shop-detail-image"
                                         alt={selectedShop.name}
-                                        placeholder="blur"
-                                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-                                        loading='lazy'
-                                        format="auto"
-                                        quality="auto"
                                     />
-                                    <h2>{selectedShop.name}</h2>
-                                    <p className="shop-content text-center">{selectedShop.content}</p>
-                                    <div className="shop-info">
-                                        <div className="info-item">
-                                            <FaClock className="info-icon" />
-                                            <p>{selectedShop.hours}</p>
-                                        </div>
-                                        <div className="info-item">
-                                            <FaMapMarkerAlt className="info-icon" />
-                                            <p>{selectedShop.address}</p>
-                                        </div>
-                                        <div className="info-item">
-                                            <FaPhone className="info-icon" />
-                                            <Link href={`tel:${selectedShop.phone}`}>{selectedShop.phone}</Link>
-                                        </div>
-                                        <div className="info-item">
-                                            <FaEnvelope className="info-icon" />
-                                            <p>{selectedShop.email}</p>
-                                        </div>
-                                        <div className="info-item">
-                                            <FaGlobe className="info-icon" />
-                                            <Link href={selectedShop.website}>{selectedShop.website}</Link>
-                                        </div>
-                                    </div>
-                                    <div className="shop-features">
-                                        <h3>מה מיוחד אצלנו</h3>
-                                        <ul>
-                                            {selectedShop.features.map((feature: any, index: any) => (
-                                                <li key={index}>{feature}</li>
+                                    <div className="shop-title-container">
+                                        <h2>{selectedShop.name}</h2>
+                                        <div className="shop-categories">
+                                            {selectedShop.categories.map((category, index) => (
+                                                <span key={index} className="category-tag">{category}</span>
                                             ))}
-                                        </ul>
-                                    </div>
-                                    <div className="shop-ad">
-                                        <h3>מבצע מיוחד!</h3>
-                                        <img src={selectedShop.specialOffer} />
+                                        </div>
                                     </div>
                                 </div>
-                            </motion.div>
+                                <p className="shop-content">{selectedShop.content}</p>
+                                <div className="shop-info">
+                                    <div className="info-item">
+                                        <FaClock className="info-icon" />
+                                        <p>{selectedShop.hours}</p>
+                                    </div>
+                                    <div className="info-item">
+                                        <FaMapMarkerAlt className="info-icon" />
+                                        <p>{selectedShop.address}</p>
+                                    </div>
+                                    <div className="info-item">
+                                        <FaPhone className="info-icon" />
+                                        <Link href={`tel:${selectedShop.phone}`}>{selectedShop.phone}</Link>
+                                    </div>
+                                    <div className="info-item">
+                                        <FaEnvelope className="info-icon" />
+                                        <p>{selectedShop.email}</p>
+                                    </div>
+                                    <div className="info-item">
+                                        <FaGlobe className="info-icon" />
+                                        <Link href={selectedShop.website} target="_blank" rel="noopener noreferrer">{selectedShop.website}</Link>
+                                    </div>
+                                </div>
+                                <div className="shop-features">
+                                    <h3>מה מיוחד אצלנו</h3>
+                                    <ul>
+                                        {selectedShop.features.map((feature: string, index: number) => (
+                                            <li key={index}>{feature}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="shop-ad">
+                                    <h3 className='font-bold'>מבצע מיוחד!</h3>
+                                    <img src='./images/giftestads.gif' alt="Special offer" />
+                                </div>
+                            </div>
                         </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
-            <Modal show={showModal} onHide={handleCloseModal} centered className="custom-modal">
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            <Modal show={showModal} onHide={handleCloseModal} centered className="shop-modal">
                 <Modal.Header>
-                    <Modal.Title>הוספת חנות חדשה</Modal.Title>
+                    <Modal.Title>הוספת עסק חדש</Modal.Title>
                     <Button variant="link" onClick={handleCloseModal} className="close-button">
                         <FaTimes />
                     </Button>
@@ -286,14 +302,14 @@ export default function ShopCards() {
                     >
                         <motion.div variants={itemAnimation}>
                             <Form.Group className="mb-3">
-                                <Form.Label>שם החנות</Form.Label>
+                                <Form.Label>שם העסק</Form.Label>
                                 <Form.Control ref={nameRef} type="text" required />
                             </Form.Group>
                         </motion.div>
 
                         <motion.div variants={itemAnimation}>
                             <Form.Group className="mb-3">
-                                <Form.Label>תיאור קצר</Form.Label>
+                                <Form.Label>סלוגן</Form.Label>
                                 <Form.Control ref={descriptionRef} as="textarea" rows={2} required />
                             </Form.Group>
                         </motion.div>
@@ -335,6 +351,7 @@ export default function ShopCards() {
                         </motion.div>
                         <motion.div variants={itemAnimation}>
                             <Form.Group className="mb-3">
+                                {/* לשנות את זה לסלקט מתוך מבחר מסוים של קטגוריות */}
                                 <Form.Label>קטגוריה</Form.Label>
                                 <Form.Control ref={categoryRef} type="text" required />
                             </Form.Group>
@@ -380,7 +397,7 @@ export default function ShopCards() {
 
                         <motion.div variants={itemAnimation}>
                             <Form.Group className="mb-3">
-                                <Form.Label>תמונה</Form.Label>
+                                <Form.Label>תמונות (עד 4)</Form.Label>
                                 <div className="upload-container">
                                     <CldUploadButton
                                         className='btn btn-outline-primary me-2 mb-2'
@@ -419,7 +436,7 @@ export default function ShopCards() {
 
                         <motion.div variants={itemAnimation}>
                             <Button type="submit" variant="primary" className="submit-button">
-                                <FaPlus /> הוסף חנות
+                                שלח לאישור
                             </Button>
                         </motion.div>
                     </motion.form>

@@ -21,38 +21,6 @@ interface CounterStatisticProps {
     icon: IconDefinition;
 }
 
-const NeighborhoodDescription: React.FC = () => {
-    return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="neighborhood-description  mt-4"
-        >
-            <div className="description-content">
-                <motion.div
-                    initial={{ x: -50 }}
-                    animate={{ x: 0 }}
-                    transition={{ delay: 0.2, duration: 0.5 }}
-                >
-                    <h2 className="text-primary mb-3">
-                        <FontAwesomeIcon icon={faMapMarkerAlt} className="me-2" />
-                        שכונת רמות
-                    </h2>
-                </motion.div>
-                <motion.p
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.4, duration: 0.5 }}
-                >
-                    רמות אלון (ידועה גם בקיצור: רמות) היא שכונה הממוקמת בצפון-מערב ירושלים והיא אחת מהשכונות הגדולות בישראל. רמות אלון שוכנת על שתי שלוחות הר, צידה הדרומי והתחתון סמוך למחלף גולדה מאיר והיא משתרעת עד שיפולי גבעת נבי סמואל בצפון, שם מגיעה לרום של כ־885 מטרים מעל גובה פני הים.
-
-                    השכונה נוסדה בשנת 1974, כאחת מחמש שכונות הטבעת שהוקמו על מנת לעבות את היישוב היהודי בשטחים שצורפו לירושלים לאחר מלחמת ששת הימים.
-                </motion.p>
-            </div>
-        </motion.div>
-    );
-};
 
 const CounterStatistic: React.FC<CounterStatisticProps> = ({ label, endValue, icon }) => {
     const [count, setCount] = useState(0);
@@ -211,7 +179,7 @@ const StripCarousel: React.FC = () => {
                         top: '100px',
                         overflowY: 'auto'
                     }}>
-                        <div className="">
+                        <div className="p-3 mt-2">
                             <img
                                 src="/images/bookgif.gif"
                                 alt="תיאור הפרסומת"
@@ -227,22 +195,22 @@ const StripCarousel: React.FC = () => {
                         transition={{ duration: 0.5 }}
                         className='title text-center my-5'
                     >
-                        <h1 className='display-4 fw-bold text-primary'>ברוכים הבאים לאתר שכונת רמות</h1>
-                        <p className='lead text-muted'>המקום לכל המידע והשירותים לתושבי השכונה</p>
+                        <h1 className='display-4 fw-bold home-title'>ברוכים הבאים לאתר שכונת רמות</h1>
+                        {/* <p className='lead text-muted'>המקום לכל המידע והשירותים לתושבי השכונה</p> */}
                     </motion.div>
 
-                    <div className='mt-2'>
-                        <Carousel className='carousel-responsive rounded shadow mx-auto'>
+                    <div className='mt-2 w-100 p-0 rounded'>
+                        <Carousel className=' rounded shadow w-100' style={{width:'100%'}}>
                             {carouselItems.map((item, index) => (
                                 <Carousel.Item key={index}>
-                                    <div className="carousel-image-container">
+                                    <div className="carousel-image-container w-100">
                                         <CldImage
                                             src={item.image}
-                                            width="800"
+                                            width="600"
                                             height="400"
                                             sizes="100vw"
                                             crop="fill"
-                                            className="d-block w-100 rounded carousel-image"
+                                            className="d-block rounded carousel-image"
                                             alt='נוף שכונת רמות'
                                             placeholder="blur"
                                             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
@@ -258,10 +226,9 @@ const StripCarousel: React.FC = () => {
                             ))}
                         </Carousel>
                     </div>
-                    <NeighborhoodDescription />
                     {showStatistics && (
-                        <div className='mt-5 statistics-section'>
-                            <h2 className='text-center text-primary text-4xl mb-4'>סטטיסטיקות שכונת רמות</h2>
+                        <div className='mt-5 statistics-section bg-white'>
+                            <h2 className='text-center text-4xl mb-4 statistics-title'>סטטיסטיקות שכונת רמות</h2>
                             <div className='statistics-container'>
                                 {statistics.map((stat, index) => (
                                     <CounterStatistic key={index} {...stat} />
@@ -269,8 +236,8 @@ const StripCarousel: React.FC = () => {
                             </div>
                         </div>
                     )}
-                    <div className='mt-5 info-section'>
-                        <h2 className='text-center text-primary text-4xl mb-4'>מה חדש ברמות?</h2>
+                    <div className='mt-5 info-section bg-white'>
+                        <h2 className='text-center text-4xl mb-4 info-title'>מה חדש ברמות?</h2>
                         <div className='info-container'>
                             {infoCards.map((card, index) => (
                                 <InfoCard key={index} {...card} />
@@ -284,7 +251,7 @@ const StripCarousel: React.FC = () => {
                         top: '100px',
                         overflowY: 'auto'
                     }}>
-                        <div className="">
+                        <div className="p-3 mt-2">
                             <img
                                 src="/images/timegif.gif"
                                 alt="תיאור הפרסומת השנייה"
