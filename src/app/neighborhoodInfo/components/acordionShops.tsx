@@ -1,8 +1,8 @@
 "use client"
 import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload } from 'react-icons/fa';
-import { Button, Modal, Form } from 'react-bootstrap';
+import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload, FaSearch } from 'react-icons/fa';
+import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -90,7 +90,7 @@ export default function ShopCards(props: any) {
                 shop.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
             (!selectedCategory || shop.categories.includes(selectedCategory))
         );
-    }, [searchTerm, selectedCategory]);
+    }, [searchTerm, selectedCategory, shopsAr]);
 
     const allCategories = useMemo(() => {
         return Array.from(new Set(shopsAr.flatMap((shop: any) => shop.categories)));
@@ -150,24 +150,43 @@ export default function ShopCards(props: any) {
         handleCloseModal();
     };
 
+
     return (
         <div className="shop-container">
+
             <motion.button
-                className="add-shop-button"
+                className="add-shop-button p-3"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleShowModal}
             >
-                <FaPlus /> הוסף חנות חדשה
+                <FaPlus />
             </motion.button>
+            <div className="search-container mb-3" >
+                <InputGroup style={{ direction: 'ltr' }}>
+                    <Form.Control
+                        type="text"
+                        placeholder="חיפוש חנויות..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="rounded"
 
+                    />
+                    <InputGroup.Text
+                        className="rounded-start search-button"
+                    // onClick={() => handleSearch()}
+                    >
+                        <FaSearch />
+                    </InputGroup.Text>
+                </InputGroup>
+            </div>
             <div className="shop-grid">
                 {filteredShops.map((shop: Shop) => (
                     <motion.div
                         key={shop.id}
-                        className="shop-card "
+                        className="shop-card"
                         whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-                        onClick={() => handleShopClick(shop)}
+                    // onClick={() => handleShopClick(shop)}
                     >
                         <div className="shop-card-content">
                             <div className="shop-card-header">
@@ -188,18 +207,20 @@ export default function ShopCards(props: any) {
                                         className="logo-image"
                                         alt={`${shop.name} logo`}
                                     />
-                                </div> 
-                            </div> 
-                            <h3>{shop.name}</h3>
-                            <p>
-                                {shop.description.length > 100
-                                    ? `${shop.description.substring(0, 100)}...`
-                                    : shop.description}
-                            </p>
-                            <div className="shop-card-footer">
-                                {/* <span className="shop-category"><FaTag /> {shop.category}</span> */}
-                                <span className="shop-address"><FaMapMarkerAlt /> {shop.address}</span>
+                                </div>
                             </div>
+                            <h3>{shop.name}</h3>
+                            <div className="shop-description">
+                                <p>
+                                    {shop.description.length > 100
+                                        ? `${shop.description.substring(0, 100)}...`
+                                        : shop.description}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="shop-card-footer">
+                            <button className="more-info-btn" onClick={() => handleShopClick(shop)}>למידע נוסף</button>
+                            <span className="shop-address"><FaMapMarkerAlt /> {shop.address}</span>
                         </div>
                     </motion.div>
                 ))}
@@ -245,40 +266,64 @@ export default function ShopCards(props: any) {
                                         </div>
                                     </div>
                                 </div>
-                                <p className="shop-content">{selectedShop.content}</p>
-                                <div className="shop-info">
-                                    <div className="info-item">
-                                        <FaClock className="info-icon" />
-                                        <p>{selectedShop.hours}</p>
+                                <div className="shop-details-unique-container">
+                                    <div className="shop-description-unique">
+                                        <h3>אודות החנות</h3>
+                                        <p className="shop-content-unique">{selectedShop.content}</p>
                                     </div>
-                                    <div className="info-item">
-                                        <FaMapMarkerAlt className="info-icon" />
-                                        <p>{selectedShop.address}</p>
+
+                                    <div className="shop-info-grid-unique">
+                                        <div className="info-item-unique">
+                                            <div className="icon-wrapper-unique">
+                                                <FaClock className="info-icon-unique" />
+                                            </div>
+                                            <div className="info-content-unique">
+                                                <h4>שעות פעילות</h4>
+                                                <p>{selectedShop.hours}</p>
+                                            </div>
+                                        </div>
+                                        <div className="info-item-unique">
+                                            <div className="icon-wrapper-unique">
+                                                <FaMapMarkerAlt className="info-icon-unique" />
+                                            </div>
+                                            <div className="info-content-unique">
+                                                <h4>כתובת</h4>
+                                                <p>{selectedShop.address}</p>
+                                            </div>
+                                        </div>
+                                        <div className="info-item-unique">
+                                            <div className="icon-wrapper-unique">
+                                                <FaPhone className="info-icon-unique" />
+                                            </div>
+                                            <div className="info-content-unique">
+                                                <h4>טלפון</h4>
+                                                <Link href={`tel:${selectedShop.phone}`}>{selectedShop.phone}</Link>
+                                            </div>
+                                        </div>
+                                        <div className="info-item-unique">
+                                            <div className="icon-wrapper-unique">
+                                                <FaEnvelope className="info-icon-unique" />
+                                            </div>
+                                            <div className="info-content-unique">
+                                                <h4>אימייל</h4>
+                                                <p>{selectedShop.email}</p>
+                                            </div>
+                                        </div>
+                                        <div className="info-item-unique">
+                                            <div className="icon-wrapper-unique">
+                                                <FaGlobe className="info-icon-unique" />
+                                            </div>
+                                            <div className="info-content-unique">
+                                                <h4>אתר אינטרנט</h4>
+                                                <Link href={selectedShop.website} target="_blank" rel="noopener noreferrer">{selectedShop.website}</Link>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="info-item">
-                                        <FaPhone className="info-icon" />
-                                        <Link href={`tel:${selectedShop.phone}`}>{selectedShop.phone}</Link>
+
+                                    <div className="shop-ad-unique">
+                                        <h3>מבצע מיוחד!</h3>
+                                        <img src='./images/saleAds.gif' alt="Special offer" />
                                     </div>
-                                    <div className="info-item">
-                                        <FaEnvelope className="info-icon" />
-                                        <p>{selectedShop.email}</p>
-                                    </div>
-                                    <div className="info-item">
-                                        <FaGlobe className="info-icon" />
-                                        <Link href={selectedShop.website} target="_blank" rel="noopener noreferrer">{selectedShop.website}</Link>
-                                    </div>
-                                </div>
-                                <div className="shop-features">
-                                    <h3>מה מיוחד אצלנו</h3>
-                                    <ul>
-                                        {selectedShop.features.map((feature: string, index: number) => (
-                                            <li key={index}>{feature}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <div className="shop-ad">
-                                    <h3 className='font-bold'>מבצע מיוחד!</h3>
-                                    <img src='./images/giftestads.gif' alt="Special offer" />
                                 </div>
                             </div>
                         </motion.div>

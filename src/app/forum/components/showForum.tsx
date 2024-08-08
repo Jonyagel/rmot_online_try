@@ -147,7 +147,7 @@ export default function ShowForum(props: any) {
             </div>
 
             <div className='mb-3'>
-                <InputGroup>
+                <InputGroup style={{direction: 'ltr'}}>
                     <Form.Control
                         placeholder="חיפוש בפורום"
                         ref={saerchRef}

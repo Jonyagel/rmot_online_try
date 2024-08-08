@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './addQuestion.css'
+import { FaPlus } from 'react-icons/fa';
 
 export const dynamic = 'auto';
 
@@ -93,8 +94,9 @@ export default function AddQuestion(props: any) {
 
     return (
         <div>
-            <Button variant="primary" className="rounded-circle shadow-sm m-4" onClick={checkSignIn}>
-                <i className="bi bi-plus-lg fs-4"></i>
+            <Button variant="primary" className="rounded-circle shadow-sm p-3 m-4" onClick={checkSignIn}>
+                {/* <i className="bi bi-plus-lg fs-4"></i> */}
+                <FaPlus />
             </Button>
 
             <Modal show={showModal} onHide={handleClose} centered className='addForumModal'>
