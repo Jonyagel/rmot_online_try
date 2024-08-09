@@ -8,6 +8,9 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import emailjs from '@emailjs/browser';
+import './style.css'
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaPlus } from 'react-icons/fa';
 
 
 export const dynamic = 'auto';
@@ -229,9 +232,12 @@ export default function RealEstate() {
   };
 
   const handleFilterChange = (e: any) => {
+    console.log(e.target.value)
     setFilters({ ...filters, [e.target.name]: e.target.value });
+   
+    console.log(filteredProperties);
+    setNadlanAr(filteredProperties);
   };
-
   const filteredProperties = properties.filter((property: any) => {
     return (filters.type === 'all' || property.type === filters.type) &&
       (filters.rooms === 'all' || property.rooms.toString() === filters.rooms) &&
@@ -240,6 +246,7 @@ export default function RealEstate() {
         (filters.priceRange === 'medium' && property.price >= 1000000 && property.price < 2000000) ||
         (filters.priceRange === 'high' && property.price >= 2000000));
   });
+  
 
   const handleUploadSuccess = (result: any) => {
     if (result.event === 'success') {
@@ -255,11 +262,11 @@ export default function RealEstate() {
   return (
     <div className='container-fluid'>
       {showAlert && (
-          <Alert variant={status.includes('בהצלחה') ? "success" : "danger"} onClose={() => setShowAlert(false)} dismissible className="mb-4">
-            <Alert.Heading>{status.includes('בהצלחה') ? "תודה שפנית אלינו!" : "שגיאה"}</Alert.Heading>
-            <p>{status}</p>
-          </Alert>
-        )}
+        <Alert variant={status.includes('בהצלחה') ? "success" : "danger"} onClose={() => setShowAlert(false)} dismissible className="mb-4">
+          <Alert.Heading>{status.includes('בהצלחה') ? "תודה שפנית אלינו!" : "שגיאה"}</Alert.Heading>
+          <p>{status}</p>
+        </Alert>
+      )}
       <Row>
         {/* מקום לפרסומת בצד שמאל */}
         <Col md={2} className="d-none d-md-block">
@@ -280,20 +287,27 @@ export default function RealEstate() {
 
         {/* תוכן ראשי */}
         <Col md={8}>
-          <h1 className="mb-4 text-7xl text-primary">נדל"ן בשכונה</h1>
-          <Button variant="primary" className="mb-3" onClick={handleAddModalShow}>
-            הוסף נכס חדש
-          </Button>
-          <Button variant="info" className="mb-3" onClick={() => setShowAlertForm(true)}>
-            <FontAwesomeIcon icon={faBell} className="me-2" />
-            הירשם להתראות
-          </Button>
-          <Form className="mb-4">
+          <h1 className="mb-4 text-3xl nadlan-title">נדל"ן בשכונה</h1>
+          <div className='flex justify-content-between mb-2'>
+            <Button variant="primary" className="mb-auto" onClick={() => setShowAlertForm(true)}>
+              <FontAwesomeIcon icon={faBell} className="me-2" />
+              הירשם להתראות
+            </Button>
+            <motion.button
+              className="add-nadlan-button p-3"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleAddModalShow}
+            >
+              <FaPlus />
+            </motion.button>
+          </div>
+          <Form className="mb-4 filter-nadlan">
             <Row>
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>סוג עסקה</Form.Label>
-                  <Form.Control as="select" name="type" onChange={handleFilterChange}>
+                  <Form.Control as="select" name="type" onChange={handleFilterChange} onClick={() => {setNadlanAr(filteredProperties)}}>
                     <option value="all">הכל</option>
                     <option value="מכירה">מכירה</option>
                     <option value="השכרה">השכרה</option>
@@ -303,7 +317,7 @@ export default function RealEstate() {
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>מספר חדרים</Form.Label>
-                  <Form.Control as="select" name="rooms" onChange={handleFilterChange}>
+                  <Form.Control as="select" name="rooms" onChange={handleFilterChange} onClick={() => {setNadlanAr(filteredProperties)}}>
                     <option value="all">הכל</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -315,7 +329,7 @@ export default function RealEstate() {
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>טווח מחירים</Form.Label>
-                  <Form.Control as="select" name="priceRange" onChange={handleFilterChange}>
+                  <Form.Control as="select" name="priceRange" onChange={handleFilterChange} onClick={() => {setNadlanAr(filteredProperties)}}>
                     <option value="all">הכל</option>
                     <option value="low">עד מיליון ₪</option>
                     <option value="medium">1-2 מיליון ₪</option>
@@ -325,7 +339,6 @@ export default function RealEstate() {
               </Col>
             </Row>
           </Form>
-
           <Row>
             {nadlanAr.map((item: any, index: any) => (
               <React.Fragment key={item._id}>
@@ -490,9 +503,11 @@ export default function RealEstate() {
       </Modal>
 
       {/* מודל להוספת נכס חדש */}
-      <Modal show={showAddModal} onHide={handleAddModalClose} centered size="lg">
-        <Modal.Header closeButton className="bg-primary text-white">
-          <Modal.Title>הוסף נכס חדש</Modal.Title>
+      <Modal show={showAddModal} onHide={handleAddModalClose} centered size="lg" className='nadlan-modal'>
+        <Modal.Header closeButton className=" bg-primary text-white">
+          <div className="w-100 d-flex justify-content-between align-items-start">
+            <Modal.Title>הוסף נכס חדש</Modal.Title>
+          </div>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={(e) => {
@@ -595,58 +610,60 @@ export default function RealEstate() {
               <Form.Label>תיאור הנכס</Form.Label>
               <Form.Control as="textarea" rows={3} name="description" className="form-control-lg" ref={descriptionRef} />
             </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>תמונות</Form.Label>
-              <div className="d-flex flex-wrap align-items-center">
-                <CldUploadButton
-                  className='btn btn-outline-primary me-2 mb-2'
-                  uploadPreset="my_upload_test"
-                  onSuccess={(result) => {
-                    handleUploadSuccess(result);
-                  }}
-                  onError={(error) => {
-                    console.error('Upload error:', error);
-                    toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
-                  }}
-                  options={{
-                    sources: ['local'],
-                    maxFileSize: 5000000,
-                    maxImageWidth: 2000,
-                    maxImageHeight: 2000,
-                    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-                    multiple: true
-                  }}
-                >
-                  <FontAwesomeIcon icon={faCloudUploadAlt} className="me-2" />
-                  העלאת תמונות
-                </CldUploadButton>
-                {uploadedImageUrls.map((url: any, index: any) => (
-                  <div key={index} className="position-relative me-2 mb-2">
-                    <img
-                      src={url}
-                      alt={`תמונה שהועלתה ${index + 1}`}
-                      className="img-thumbnail"
-                      style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                    />
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      className="position-absolute top-0 start-100 translate-middle rounded-circle p-1"
-                      onClick={() => removeImage(index)}
-                    >
-                      <FontAwesomeIcon icon={faTimes} />
-                    </Button>
-                  </div>
-                ))}
+            <div className='flex justify-content-between align-items-center'>
+              <Form.Group className="mb-3">
+                <Form.Label>תמונות</Form.Label>
+                <div className="d-flex flex-wrap align-items-center">
+                  <CldUploadButton
+                    className='btn btn-outline-primary me-2 mb-2'
+                    uploadPreset="my_upload_test"
+                    onSuccess={(result) => {
+                      handleUploadSuccess(result);
+                    }}
+                    onError={(error) => {
+                      console.error('Upload error:', error);
+                      toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
+                    }}
+                    options={{
+                      sources: ['local'],
+                      maxFileSize: 5000000,
+                      maxImageWidth: 2000,
+                      maxImageHeight: 2000,
+                      clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                      multiple: true
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faCloudUploadAlt} className="me-2" />
+                    העלאת תמונות
+                  </CldUploadButton>
+                  {uploadedImageUrls.map((url: any, index: any) => (
+                    <div key={index} className="position-relative me-2 mb-2">
+                      <img
+                        src={url}
+                        alt={`תמונה שהועלתה ${index + 1}`}
+                        className="img-thumbnail"
+                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                      />
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        className="position-absolute top-0 start-100 translate-middle rounded-circle p-1"
+                        onClick={() => removeImage(index)}
+                      >
+                        <FontAwesomeIcon icon={faTimes} />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </Form.Group>
+              <div className="text-end pt-2">
+                <Button variant="secondary" onClick={handleAddModalClose} className="me-2">
+                  ביטול
+                </Button>
+                <Button variant="primary" type="submit">
+                  הוסף נכס
+                </Button>
               </div>
-            </Form.Group>
-            <div className="text-end">
-              <Button variant="secondary" onClick={handleAddModalClose} className="me-2">
-                ביטול
-              </Button>
-              <Button variant="primary" type="submit">
-                הוסף נכס
-              </Button>
             </div>
           </Form>
         </Modal.Body>

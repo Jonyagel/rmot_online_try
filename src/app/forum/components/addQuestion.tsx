@@ -51,7 +51,7 @@ export default function AddQuestion(props: any) {
         } catch (error) {
             console.error('Error:', error);
         }
-        
+
     }
 
     const checkSignIn = async () => {
@@ -100,7 +100,7 @@ export default function AddQuestion(props: any) {
             </Button>
 
             <Modal show={showModal} onHide={handleClose} centered className='addForumModal'>
-                <Modal.Header>
+                <Modal.Header className=" bg-primary text-white">
                     <div className="w-100 d-flex justify-content-between align-items-start">
                         <Modal.Title>הוספת שאלה חדשה</Modal.Title>
                         <Button variant="link" onClick={handleClose} className="close-button p-0">
@@ -173,10 +173,12 @@ export default function AddQuestion(props: any) {
                                     )}
                                 </div>
                             </Form.Group>
-                            <Button type="submit" variant="primary">
-                                <i className="bi bi-send me-2"></i>
-                                שלח
-                            </Button>
+                            <div className='pt-3'>
+                                <Button type="submit" variant="primary">
+                                    <i className="bi bi-send me-2"></i>
+                                    שלח
+                                </Button>
+                            </div>
                         </div>
                     </Form>
                 </Modal.Body>

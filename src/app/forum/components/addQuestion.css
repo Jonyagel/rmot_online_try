@@ -5,8 +5,8 @@
 }
 
 .addForumModal .modal-header {
-  background-color: #007bff;
-  color: white;
+  /* background-color: #007bff;
+  color: white; */
   border-bottom: none;
   padding: 1.5rem 2rem;
   border-top-left-radius: 20px;
@@ -84,7 +84,6 @@
 }
 
 .addForumModal .btn-primary {
-  background-color: #007bff;
   border: none;
   box-shadow: 0 4px 6px rgba(0, 123, 255, 0.11), 0 1px 3px rgba(0, 123, 255, 0.08);
 }

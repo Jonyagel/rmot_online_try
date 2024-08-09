@@ -114,7 +114,7 @@ const StripCarousel: React.FC = () => {
 
     const carouselItems: CarouselItem[] = [
         {
-            image: 'school_m7feau',
+            image: 'panorama1_exutgv',
             title: '14/08/2024',
             description: 'טקס פתיחת שנת הלימודים בבית ספר רמות.'
         },
@@ -139,7 +139,7 @@ const StripCarousel: React.FC = () => {
         { label: 'מרכזי קניות', endValue: '5', icon: faShoppingCart },
         { label: 'מרפאות', endValue: '8', icon: faHospital },
         { label: 'קווי אוטובוס', endValue: '12', icon: faRoad },
-        { label: 'גובה מעל פני הים', endValue: '885', icon: faMountain }
+        { label: 'גובה מעל פני הים', endValue: '885', icon: faMountain },
     ];
 
     const infoCards: InfoCardProps[] = [
@@ -199,35 +199,35 @@ const StripCarousel: React.FC = () => {
                         {/* <p className='lead text-muted'>המקום לכל המידע והשירותים לתושבי השכונה</p> */}
                     </motion.div>
 
-                    <div className='mt-2 w-100 p-0 rounded'>
-                        <Carousel className=' rounded shadow w-100' style={{width:'100%'}}>
-                            {carouselItems.map((item, index) => (
-                                <Carousel.Item key={index}>
-                                    <div className="carousel-image-container w-100">
-                                        <CldImage
-                                            src={item.image}
-                                            width="600"
-                                            height="400"
-                                            sizes="100vw"
-                                            crop="fill"
-                                            className="d-block rounded carousel-image"
-                                            alt='נוף שכונת רמות'
-                                            placeholder="blur"
-                                            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-                                            format="auto"
-                                            quality="auto"
-                                        />
-                                    </div>
-                                    <Carousel.Caption className='bg-light bg-opacity-75 rounded text-dark'>
-                                        <h3 className='font-bold text-4xl'>{item.title}</h3>
-                                        <p>{item.description}</p>
-                                    </Carousel.Caption>
-                                </Carousel.Item>
-                            ))}
-                        </Carousel>
-                    </div>
+                    {/* <div className='mt-2 w-100 p-0  rounded mb-4'> */}
+                    <Carousel className=' rounded shadow mt-2 w-100'>
+                        {carouselItems.map((item, index) => (
+                            <Carousel.Item className=' rounded' key={index}>
+                                {/* <div className="carousel-image-container w-100 "> */}
+                                <CldImage
+                                    src={item.image}
+                                    width="1200"
+                                    height="500"
+                                    sizes="100vw"
+                                    crop="fill"
+                                    className="d-block rounded carousel-image img-fluid h-auto"
+                                    alt='נוף שכונת רמות'
+                                    placeholder="blur"
+                                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+                                    format="auto"
+                                    quality="auto"
+                                />
+                                {/* </div> */}
+                                <Carousel.Caption className='bg-light bg-opacity-75 rounded text-dark w-50 mx-auto bg-white'>
+                                    <h3 className='font-bold text-2xl'>{item.title}</h3>
+                                    <p>{item.description}</p>
+                                </Carousel.Caption>
+                            </Carousel.Item>
+                        ))}
+                    </Carousel>
+                    {/* </div> */}
                     {showStatistics && (
-                        <div className='mt-5 statistics-section bg-white'>
+                        <div className='mt-5 statistics-section '>
                             <h2 className='text-center text-4xl mb-4 statistics-title'>סטטיסטיקות שכונת רמות</h2>
                             <div className='statistics-container'>
                                 {statistics.map((stat, index) => (
@@ -236,7 +236,7 @@ const StripCarousel: React.FC = () => {
                             </div>
                         </div>
                     )}
-                    <div className='mt-5 info-section bg-white'>
+                    <div className='mt-5 info-section'>
                         <h2 className='text-center text-4xl mb-4 info-title'>מה חדש ברמות?</h2>
                         <div className='info-container'>
                             {infoCards.map((card, index) => (
