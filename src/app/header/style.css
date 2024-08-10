@@ -148,7 +148,7 @@
     color: #ffffff;
     padding: 0.5rem 0;
     font-size: 0.9rem;
-    border-top: 1px solid #e9ecef;
+    /* border-top: 1px solid #f64e00; */
 }
 
 @media (max-width: 768px) {

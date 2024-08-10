@@ -170,7 +170,7 @@ const StripCarousel: React.FC = () => {
     ];
 
     return (
-        <div className='container-fluid strip px-0' style={{ minHeight: '100vh' }}>
+        <div className='container-fluid strip px-0' style={{ minHeight: '100vw' }}>
             <Row className="mx-0">
                 {/* מקום לפרסומת בצד שמאל */}
                 <Col md={2} className="d-none d-md-block">
@@ -203,7 +203,7 @@ const StripCarousel: React.FC = () => {
                     <Carousel className=' rounded shadow mt-2 w-100'>
                         {carouselItems.map((item, index) => (
                             <Carousel.Item className=' rounded' key={index}>
-                                {/* <div className="carousel-image-container w-100 "> */}
+                                <div className=" w-100 ">
                                 <CldImage
                                     src={item.image}
                                     width="1200"
@@ -217,7 +217,7 @@ const StripCarousel: React.FC = () => {
                                     format="auto"
                                     quality="auto"
                                 />
-                                {/* </div> */}
+                                </div>
                                 <Carousel.Caption className='bg-light bg-opacity-75 rounded text-dark w-50 mx-auto bg-white'>
                                     <h3 className='font-bold text-2xl'>{item.title}</h3>
                                     <p>{item.description}</p>

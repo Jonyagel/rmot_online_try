@@ -152,7 +152,7 @@ export default function ShopCards(props: any) {
 
 
     return (
-        <div className="shop-container">
+        <div className="shop-container" style={{ minHeight: '100vh' }}>
 
             <motion.button
                 className="add-shop-button p-3"

@@ -49,9 +49,11 @@ export default function Header() {
                     </div>
                 </div>
             </div>
-            <Marquee className="marquee" pauseOnHover={true} direction='right' speed={50} autoFill={true} style={{ direction: 'ltr' }}>
-                הודעות חשובות למשתמשים יופיעו כאן
-            </Marquee>
+            <div className='h-10'>
+                <Marquee className="marquee h-10" pauseOnHover={true} direction='right' speed={50} autoFill={true} style={{ direction: 'ltr' }}>
+                    הודעות חשובות למשתמשים יופיעו כאן
+                </Marquee>
+            </div>
         </header>
     )
 }

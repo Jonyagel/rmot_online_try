@@ -20,7 +20,7 @@ export default async function NeighborhoodInfo() {
     const initialData = await doApi();
 
     return (
-        <div className='container'>
+        <div className='container' style={{ minHeight: '100vh' }}>
             {/* <StripCarousel /> */}
             {/* <CardCategory /> */}
            <AcordionShops shopsData={initialData} />
