@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { Card, Badge, Button, Modal, Form, Row, Col, Container, Carousel, Alert } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHome, faPhone, faRulerCombined, faSun, faTimes, faBell } from '@fortawesome/free-solid-svg-icons';
+import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHome, faPhone, faRulerCombined, faSun, faTimes, faBell, faEye } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -85,6 +85,25 @@ export default function RealEstate() {
     fetchProperties();
   }, []);
 
+  useEffect(() => {
+    const filteredProperties = properties.filter((property: Property) => {
+      const typeMatch = filters.type === 'all' || property.type === filters.type;
+
+      const roomsMatch = filters.rooms === 'all' ||
+        (filters.rooms === '4' ? property.rooms >= 4 : property.rooms.toString() === filters.rooms);
+
+      const priceMatch =
+        filters.priceRange === 'all' ||
+        (filters.priceRange === 'low' && property.price < 1000000) ||
+        (filters.priceRange === 'medium' && property.price >= 1000000 && property.price < 2000000) ||
+        (filters.priceRange === 'high' && property.price >= 2000000);
+
+      return typeMatch && roomsMatch && priceMatch;
+    });
+
+    setNadlanAr(filteredProperties);
+  }, [filters, properties]);
+
   const handleAddModalClose = () => {
     setShowAddModal(false);
 
@@ -158,9 +177,9 @@ export default function RealEstate() {
     setUploadedImageUrls(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleAddProperty = () => {
-    doApiPost()
-  };
+  // const handleAddProperty = () => {
+  //   doApiPost()
+  // };
 
   const doApiGetEmail = async () => {
     let url = `${process.env.NEXT_PUBLIC_API_URL}/api/alertMachingNadlan?rooms=${nadlanAr[0].rooms}&price=${nadlanAr[0].price}`;
@@ -232,12 +251,10 @@ export default function RealEstate() {
   };
 
   const handleFilterChange = (e: any) => {
-    console.log(e.target.value)
-    setFilters({ ...filters, [e.target.name]: e.target.value });
-   
-    console.log(filteredProperties);
-    setNadlanAr(filteredProperties);
+    const { name, value } = e.target;
+    setFilters(prevFilters => ({ ...prevFilters, [name]: value }));
   };
+
   const filteredProperties = properties.filter((property: any) => {
     return (filters.type === 'all' || property.type === filters.type) &&
       (filters.rooms === 'all' || property.rooms.toString() === filters.rooms) &&
@@ -246,7 +263,7 @@ export default function RealEstate() {
         (filters.priceRange === 'medium' && property.price >= 1000000 && property.price < 2000000) ||
         (filters.priceRange === 'high' && property.price >= 2000000));
   });
-  
+
 
   const handleUploadSuccess = (result: any) => {
     if (result.event === 'success') {
@@ -277,7 +294,7 @@ export default function RealEstate() {
           }}>
             <div className="p-3">
               <img
-                src="/images/bookgif.gif"
+                src="/images/bookgif.webp"
                 alt="תיאור הפרסומת"
                 style={{ width: '100%', height: 'auto' }}
               />
@@ -307,7 +324,11 @@ export default function RealEstate() {
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>סוג עסקה</Form.Label>
-                  <Form.Control as="select" name="type" onChange={handleFilterChange} onClick={() => {setNadlanAr(filteredProperties)}}>
+                  <Form.Control
+                    as="select"
+                    name="type"
+                    onChange={handleFilterChange}
+                  >
                     <option value="all">הכל</option>
                     <option value="מכירה">מכירה</option>
                     <option value="השכרה">השכרה</option>
@@ -317,7 +338,11 @@ export default function RealEstate() {
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>מספר חדרים</Form.Label>
-                  <Form.Control as="select" name="rooms" onChange={handleFilterChange} onClick={() => {setNadlanAr(filteredProperties)}}>
+                  <Form.Control
+                    as="select"
+                    name="rooms"
+                    onChange={handleFilterChange}
+                  >
                     <option value="all">הכל</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -329,7 +354,11 @@ export default function RealEstate() {
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>טווח מחירים</Form.Label>
-                  <Form.Control as="select" name="priceRange" onChange={handleFilterChange} onClick={() => {setNadlanAr(filteredProperties)}}>
+                  <Form.Control
+                    as="select"
+                    name="priceRange"
+                    onChange={handleFilterChange}
+                  >
                     <option value="all">הכל</option>
                     <option value="low">עד מיליון ₪</option>
                     <option value="medium">1-2 מיליון ₪</option>
@@ -340,67 +369,82 @@ export default function RealEstate() {
             </Row>
           </Form>
           <Row>
-            {nadlanAr.map((item: any, index: any) => (
-              <React.Fragment key={item._id}>
-                <Col md={4} className="mb-4">
-                  <Card className='shadow-sm hover-card h-100 transition-all duration-300 transform hover:scale-105'>
-                    <CldImage
-                      src={item.images[0]} // השתמש בתמונה הראשונה מהמערך
-                      width="400"
-                      height="300"
-                      crop="fill"
-                      alt={`תמונה של ${item.address}`}
-                      className="card-img-top"
-                    />
-                    <Card.Body className="d-flex flex-column">
-                      <Card.Title className="font-bold text-xl mb-2">{item.address}</Card.Title>
-                      <Card.Text>
-                        <div className="grid grid-cols-2 gap-2">
-                          <div><FontAwesomeIcon icon={faBed} className="mr-2 text-primary" /> {item.rooms} חדרים</div>
-                          <div><FontAwesomeIcon icon={faRulerCombined} className="mr-2 text-primary" /> {item.size} מ"ר</div>
-                          <div><FontAwesomeIcon icon={faBuilding} className="mr-2 text-primary" /> קומה {item.floor}</div>
-                          <div><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> {item.elevator == "true" ? 'יש מעלית' : 'אין מעלית'}</div>
-                          <div><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> {item.parking == "true" ? 'יש חניה' : 'אין חניה'}</div>
-                          <div><FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-primary" /> כניסה: {item.entryDate}</div>
-                        </div>
-                        <div className="mt-2 font-bold text-lg text-primary">
-                          מחיר: {item.type === 'מכירה' ?
-                            `${item.price.toLocaleString()} ₪` :
-                            `${item.price.toLocaleString()} ₪ לחודש`}
-                        </div>
-                      </Card.Text>
-                      <Badge bg={item.type === 'מכירה' ? 'primary' : 'success'} className="mb-2 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {nadlanAr.map((item: any, index: number) => (
+                <React.Fragment key={item._id}>
+                  <div className="bg-white rounded border position-relative property-card">
+                    <div className="relative">
+                      <CldImage
+                        src={item.images[0]}
+                        width="400"
+                        height="250"
+                        crop="fill"
+                        alt={`תמונה של ${item.address}`}
+                        className="w-full h-40 object-cover  rounded-b-none rounded-t"
+                        loading="lazy"
+                        format="webp"
+                        quality="auto"
+                      />
+                      <Badge bg='primary' className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute">{item.type}</Badge>
+                      {/* <div className="absolute top-4 left-4 bg-blue-600 text-white text-sm font-bold px-2 py-1 rounded">
                         {item.type}
-                      </Badge>
-                      <Button variant="outline-primary" className="mt-auto hover:bg-primary hover:text-white transition-all duration-300" onClick={() => handleShow(item)}>
-                        פרטים נוספים
-                      </Button>
-                    </Card.Body>
-                  </Card>
-                </Col>
-
-                {/* הכנסת פרסומות בין הכרטיסים במסך קטן */}
-                {(index + 1) % 3 === 0 && (
-                  <Col xs={12} className="d-md-none mb-4">
-                    <div className="text-center">
-                      {index % 2 === 0 ? (
-                        <img
-                          src="/images/bookgif.gif"
-                          alt="תיאור הפרסומת"
-                          style={{ width: '100%', maxWidth: '300px', height: 'auto' }}
-                        />
-                      ) : (
-                        <img
-                          src="/images/timegif.gif"
-                          alt="תיאור הפרסומת השנייה"
-                          style={{ width: '100%', maxWidth: '300px', height: 'auto' }}
-                        />
-                      )}
+                      </div> */}
                     </div>
-                  </Col>
-                )}
-              </React.Fragment>
-            ))}
+                    <div className="p-6">
+                      <h5 className="font-bold  mb-3 text-gray-800 truncate">{item.address}</h5>
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="text-1xl font-bold text-blue-600">
+                          {item.type === 'מכירה'
+                            ? `${item.price.toLocaleString()} ₪`
+                            : `${item.price.toLocaleString()} ₪ לחודש`}
+                        </div>
+                        {/* <div className="text-sm text-gray-500 flex items-center">
+                          <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
+                          {item.entryDate}
+                        </div> */}
+                      </div>
+                      <div className="grid grid-cols-2 gap-y-3 text-sm text-gray-600 mb-4">
+                        <div className="flex items-center">
+                          <FontAwesomeIcon icon={faBed} className="mr-3 text-blue-500 w-5" />
+                          <span>{item.rooms} חדרים</span>
+                        </div>
+                        <div className="flex items-center">
+                          <FontAwesomeIcon icon={faRulerCombined} className="mr-3 text-blue-500 w-5" />
+                          <span>{item.size} מ"ר</span>
+                        </div>
+                        <div className="flex items-center">
+                          <FontAwesomeIcon icon={faBuilding} className="mr-3 text-blue-500 w-5" />
+                          <span>קומה {item.floor}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <FontAwesomeIcon icon={faCar} className="mr-3 text-blue-500 w-5" />
+                          <span>{item.parking ? 'חניה' : 'ללא חניה'}</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleShow(item)}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-lg transition duration-300 flex items-center justify-center"
+                      >
+                        צפה בפרטים נוספים
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* פרסומת בין הכרטיסים במצב טלפון נייד */}
+                  {(index + 1) % 3 === 0 && (
+                    <div className="md:hidden col-span-1">
+                      <div className="bg-gray-100 rounded-lg p-4 shadow-md">
+                        <img
+                          src={index % 2 === 0 ? "/images/bookgif.gif" : "/images/timegif.gif"}
+                          alt="פרסומת"
+                          className="w-full h-auto rounded"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
           </Row>
         </Col>
 
@@ -412,7 +456,7 @@ export default function RealEstate() {
           }}>
             <div className="p-3">
               <img
-                src="/images/timegif.gif"
+                src="/images/timegif.webp"
                 alt="תיאור הפרסומת השנייה"
                 style={{ width: '100%', height: 'auto' }}
               />
@@ -424,7 +468,9 @@ export default function RealEstate() {
       {/* מודל לפרטי הנכס */}
       <Modal show={showModal} onHide={handleClose} centered size="xl">
         <Modal.Header closeButton className="bg-primary text-white">
-          <Modal.Title>{selectedProperty?.address}</Modal.Title>
+          <div className="w-100 d-flex justify-content-between align-items-start">
+            <Modal.Title>{selectedProperty?.address}</Modal.Title>
+          </div>
         </Modal.Header>
         <Modal.Body>
           {selectedProperty && (
@@ -440,6 +486,8 @@ export default function RealEstate() {
                         crop="fill"
                         alt={`תמונה ${index + 1} של ${selectedProperty.address}`}
                         className="img-fluid rounded shadow"
+                        format="webp"
+                        quality="auto"
                       />
                     </Carousel.Item>
                   ))}
@@ -493,9 +541,9 @@ export default function RealEstate() {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          {/* <Button variant="secondary" onClick={handleClose}>
             סגור
-          </Button>
+          </Button> */}
           <Button variant="primary">
             <FontAwesomeIcon icon={faPhone} className="mr-2" /> צור קשר עם המוכר
           </Button>
@@ -512,7 +560,7 @@ export default function RealEstate() {
         <Modal.Body>
           <Form onSubmit={(e) => {
             e.preventDefault();
-            handleAddProperty();
+            doApiPost()
           }}>
             <Row>
               <Col md={6}>
@@ -669,8 +717,10 @@ export default function RealEstate() {
         </Modal.Body>
       </Modal>
       <Modal show={showAlertForm} onHide={() => setShowAlertForm(false)} centered>
-        <Modal.Header closeButton className="bg-info text-white">
-          <Modal.Title>הרשמה לקבלת התראות</Modal.Title>
+        <Modal.Header closeButton className="bg-primary text-white">
+          <div className="w-100 d-flex justify-content-between align-items-start">
+            <Modal.Title>הרשמה לקבלת התראות</Modal.Title>
+          </div>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleAlertFormSubmit}>
@@ -698,9 +748,11 @@ export default function RealEstate() {
               <Form.Label>אזור מבוקש</Form.Label>
               <Form.Control type="text" ref={addressAlertRef} />
             </Form.Group>
-            <Button variant="info" type="submit" className="w-100">
-              הירשם להתראות
-            </Button>
+            <div className='w-100  flex justify-content-end'>
+              <Button variant="primary" type="submit" className="">
+                הירשם להתראות
+              </Button>
+            </div>
           </Form>
         </Modal.Body>
       </Modal>
