@@ -238,11 +238,11 @@ export default function CommunityBoard() {
   return (
     <div className='container mt-5'>
       <h1 className="mb-4 text-3xl board-title">לוח קהילתי</h1>
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex justify-content-end align-items-center mb-4">
         <Button variant="primary" className="rounded-circle shadow-sm p-3 m-4" onClick={() => setShowAddModal(true)}>
           <FaPlus />
         </Button>
-        <motion.div
+        {/* <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -253,7 +253,7 @@ export default function CommunityBoard() {
             <option value="date">מיון לפי תאריך</option>
             <option value="likes">מיון לפי לייקים</option>
           </StyledSelect>
-        </motion.div>
+        </motion.div> */}
       </div>
       <div className="mb-4 search-container-board">
         <InputGroup style={{ direction: 'ltr' }}>
@@ -347,7 +347,9 @@ export default function CommunityBoard() {
 
       <Modal show={showModal} onHide={handleClose} centered size="xl">
         <Modal.Header closeButton className="bg-primary text-white">
-          <Modal.Title>{selectedItem?.title}</Modal.Title>
+          <div className="w-100 d-flex justify-content-between align-items-start">
+            <Modal.Title>{selectedItem?.title}</Modal.Title>
+          </div>
         </Modal.Header>
         <Modal.Body className="p-4">
           {selectedItem && (
@@ -363,13 +365,13 @@ export default function CommunityBoard() {
                     className="img-fluid rounded shadow-sm"
                   />
                 ) : (
-                  <div className="d-flex align-items-center justify-content-center bg-light rounded" style={{ height: '300px' }}>
+                  <div className="d-flex h-full align-items-center justify-content-center bg-light rounded">
                     <FontAwesomeIcon icon={faImage} size="5x" color="#adb5bd" />
                   </div>
                 )}
               </div>
               <div className="col-lg-6">
-                <div className="card border-0 shadow-sm h-100">
+                <div className="card border-0 h-100">
                   <div className="card-body d-flex flex-column">
                     <h5 className="card-title mb-4">פרטי הפריט</h5>
                     <div className="row mb-3">

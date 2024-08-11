@@ -3,6 +3,22 @@
   background-color: #ffffff;
 }
 
+.neighborhoodInfo-title {
+  font-weight: bold;
+  color: #000000;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.neighborhoodInfo-title:after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #3498db;
+  margin: 10px auto;
+}
+
 .add-shop-button {
   display: flex;
   align-items: center;
@@ -52,9 +68,12 @@
 }
 .shop-card-content {
   flex-grow: 1;
-  padding: 15px;
+ 
   display: flex;
   flex-direction: column;
+}
+.shop-description{
+  padding: 15px;
 }
 
 .shop-card-header {

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { Card, Badge, Button, Modal, Form, Row, Col, Container, Carousel, Alert } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHome, faPhone, faRulerCombined, faSun, faTimes, faBell, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHome, faPhone, faRulerCombined, faSun, faTimes, faBell, faEye, faImage } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -374,17 +374,23 @@ export default function RealEstate() {
                 <React.Fragment key={item._id}>
                   <div className="bg-white rounded border position-relative property-card">
                     <div className="relative">
-                      <CldImage
-                        src={item.images[0]}
-                        width="400"
-                        height="250"
-                        crop="fill"
-                        alt={`תמונה של ${item.address}`}
-                        className="w-full h-40 object-cover  rounded-b-none rounded-t"
-                        loading="lazy"
-                        format="webp"
-                        quality="auto"
-                      />
+                      {item.images[0] ? (
+                        <CldImage
+                          src={item.images[0]}
+                          width="400"
+                          height="250"
+                          crop="fill"
+                          alt={`תמונה של ${item.address}`}
+                          className="w-full h-40 object-cover  rounded-b-none rounded-t"
+                          loading="lazy"
+                          format="webp"
+                          quality="auto"
+                        />
+                      ) : (
+                        <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
+                          <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+                        </div>
+                      )}
                       <Badge bg='primary' className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute">{item.type}</Badge>
                       {/* <div className="absolute top-4 left-4 bg-blue-600 text-white text-sm font-bold px-2 py-1 rounded">
                         {item.type}
@@ -476,22 +482,30 @@ export default function RealEstate() {
           {selectedProperty && (
             <div className="row">
               <div className="col-md-6">
-                <Carousel>
-                  {selectedProperty.images.map((image, index) => (
-                    <Carousel.Item key={index}>
-                      <CldImage
-                        src={image}
-                        width={600}
-                        height={400}
-                        crop="fill"
-                        alt={`תמונה ${index + 1} של ${selectedProperty.address}`}
-                        className="img-fluid rounded shadow"
-                        format="webp"
-                        quality="auto"
-                      />
-                    </Carousel.Item>
-                  ))}
-                </Carousel>
+                {selectedProperty.images[0] ? (
+                  <Carousel>
+                    {selectedProperty.images.map((image, index) => (
+
+                      <Carousel.Item key={index}>
+                        <CldImage
+                          src={image}
+                          width={600}
+                          height={400}
+                          crop="fill"
+                          alt={`תמונה ${index + 1} של ${selectedProperty.address}`}
+                          className="img-fluid rounded shadow"
+                          format="webp"
+                          quality="auto"
+                        />
+                      </Carousel.Item>
+
+                    ))}
+                  </Carousel>
+                ) : (
+                  <div className="w-full h-full bg-gray-200 rounded flex items-center justify-center">
+                    <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+                  </div>
+                )}
               </div>
               <div className="col-md-6">
                 <h3 className="mb-4 text-primary">פרטי הנכס</h3>
@@ -756,6 +770,6 @@ export default function RealEstate() {
           </Form>
         </Modal.Body>
       </Modal>
-    </div>
+    </div >
   )
 }

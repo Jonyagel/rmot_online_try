@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import './acordionShops.css';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { faFontAwesome, faImage } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,7 +29,7 @@ interface Shop {
     features: string[];
     specialOffer: string;
     category: string;
-    categories: string[];
+    // categories: string[];
 }
 
 export default function ShopCards(props: any) {
@@ -153,15 +155,17 @@ export default function ShopCards(props: any) {
 
     return (
         <div className="shop-container" style={{ minHeight: '100vh' }}>
-
-            <motion.button
-                className="add-shop-button p-3"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleShowModal}
-            >
-                <FaPlus />
-            </motion.button>
+            <h1 className="mb-4 text-3xl neighborhoodInfo-title">מידע שכונתי</h1>
+            <div className='w-full flex justify-content-end'>
+                <motion.button
+                    className="add-shop-button p-3"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleShowModal}
+                >
+                    <FaPlus />
+                </motion.button>
+            </div>
             <div className="search-container mb-3" >
                 <InputGroup style={{ direction: 'ltr' }}>
                     <Form.Control
@@ -184,33 +188,46 @@ export default function ShopCards(props: any) {
                 {filteredShops.map((shop: Shop) => (
                     <motion.div
                         key={shop.id}
-                        className="shop-card"
+                        className="shop-card border"
                         whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
                     // onClick={() => handleShopClick(shop)}
                     >
                         <div className="shop-card-content">
                             <div className="shop-card-header">
-                                <CldImage
-                                    src={shop.image}
-                                    width="400"
-                                    height="200"
-                                    crop="fill"
-                                    className="shop-image"
-                                    alt={shop.name}
-                                />
-                                <div className="shop-logo">
+                                {shop.image ? (
                                     <CldImage
-                                        src={shop.logo}
-                                        width="50"
-                                        height="50"
+                                        src={shop.image}
+                                        width="400"
+                                        height="200"
                                         crop="fill"
-                                        className="logo-image"
-                                        alt={`${shop.name} logo`}
+                                        className="shop-image rounded-t"
+                                        alt={shop.name}
                                     />
+                                ) : (
+                                    <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
+                                        <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+                                    </div>
+                                )}
+                                <div className="shop-logo">
+                                    {shop.logo ? (
+                                        <CldImage
+                                            src={shop.logo}
+                                            width="50"
+                                            height="50"
+                                            crop="fill"
+                                            className="logo-image"
+                                            alt={`${shop.name} logo`}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                            <FontAwesomeIcon icon={faFontAwesome} size="2x" color="#adb5bd" />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                            <h3>{shop.name}</h3>
+
                             <div className="shop-description">
+                                <h3>{shop.name}</h3>
                                 <p>
                                     {shop.description.length > 100
                                         ? `${shop.description.substring(0, 100)}...`
@@ -259,11 +276,11 @@ export default function ShopCards(props: any) {
                                     />
                                     <div className="shop-title-container">
                                         <h2>{selectedShop.name}</h2>
-                                        <div className="shop-categories">
+                                        {/* <div className="shop-categories">
                                             {selectedShop.categories.map((category, index) => (
                                                 <span key={index} className="category-tag">{category}</span>
                                             ))}
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                                 <div className="shop-details-unique-container">
@@ -332,11 +349,10 @@ export default function ShopCards(props: any) {
             </AnimatePresence>
 
             <Modal show={showModal} onHide={handleCloseModal} centered className="shop-modal">
-                <Modal.Header>
-                    <Modal.Title>הוספת עסק חדש</Modal.Title>
-                    <Button variant="link" onClick={handleCloseModal} className="close-button">
-                        <FaTimes />
-                    </Button>
+                <Modal.Header closeButton className="bg-primary text-white">
+                    <div className="w-100 d-flex justify-content-between align-items-start">
+                        <Modal.Title>הוספת עסק חדש</Modal.Title>
+                    </div>
                 </Modal.Header>
                 <Modal.Body>
                     <motion.form
