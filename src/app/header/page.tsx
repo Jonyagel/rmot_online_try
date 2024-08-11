@@ -7,40 +7,56 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function Header() {
     const [isNavOpen, setIsNavOpen] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
+    // const [isScrolled, setIsScrolled] = useState(false);
 
     const toggleNav = () => {
         setIsNavOpen(!isNavOpen);
+        // if()
+        // document.body.style.overflow = isNavOpen ? 'auto' : 'hidden';
     };
 
     useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
+        // const handleScroll = () => {
+        //     setIsScrolled(window.scrollY > 500);
+        // };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        // window.addEventListener('scroll', handleScroll);
+        // return () => {
+        //     window.removeEventListener('scroll', handleScroll);
+        //     document.body.style.overflow = 'auto';
+        // };
     }, []);
 
+    const navLinks = [
+        { href: '/', text: 'בית' },
+        { href: '/neighborhoodInfo', text: 'מידע' },
+        { href: '/forum', text: 'פורום' },
+        { href: '/allFamily', text: 'משפחה' },
+        { href: '/nadlan', text: 'נדל"ן' },
+        { href: '/board', text: 'לוח' },
+        { href: '/contactUs', text: 'צור קשר' },
+    ];
+
     return (
-        <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+        <header className={`header`}>
             <div className="container">
                 <div className="header-content">
                     <Link href="/" className="logo-link">
                         <img src='/images/logo.jpg' width={40} className="logo" alt="Logo" />
                     </Link>
                     <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`}>
-                        <Link className='nav-link' href='/' onClick={toggleNav}>בית</Link>
-                        <Link className='nav-link' href='/neighborhoodInfo' onClick={toggleNav}>מידע</Link>
-                        <Link className='nav-link' href='/forum' onClick={toggleNav}>פורום</Link>
-                        <Link className='nav-link' href='/allFamily' onClick={toggleNav}>משפחה</Link>
-                        <Link className='nav-link' href='/nadlan' onClick={toggleNav}>נדל"ן</Link>
-                        <Link className='nav-link' href='/board' onClick={toggleNav}>לוח</Link>
-                        <Link className='nav-link' href='/contactUs' onClick={toggleNav}>צור קשר</Link>
+                        {navLinks.map((link, index) => (
+                            <Link key={index} className='nav-link' href={link.href} onClick={toggleNav}>
+                                {link.text}
+                            </Link>
+                        ))}
+                        <Link href="/login" className="nav-link login-link mobile-only" onClick={toggleNav}>
+                            כניסה/הרשמה
+                        </Link>
                     </nav>
 
                     <div className="header-actions">
-                        <Link href="/login" className="login-link">כניסה/הרשמה</Link>
+                        <Link href="/login" className="login-link desktop-only">כניסה/הרשמה</Link>
                         <button className={`menu-toggle ${isNavOpen ? 'active' : ''}`} onClick={toggleNav}>
                             <span></span>
                             <span></span>

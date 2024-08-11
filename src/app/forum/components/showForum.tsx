@@ -10,6 +10,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './showForum.css'
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +20,7 @@ export default function ShowForum(props: any) {
     const [forum_ar, setForum_ar] = useState(props.forumData);
     const [show, setShow] = useState(false);
     const [sortBy, setSortBy] = useState('date');
-    const [viewMode, setViewMode] = useState('list');
+    // const [viewMode, setViewMode] = useState('list');
     const [searchTerm, setSearchTerm] = useState('');
     const [showScrollTop, setShowScrollTop] = useState(false);
     const [selectedTopic, setSelectedTopic] = useState('');
@@ -138,7 +140,7 @@ export default function ShowForum(props: any) {
                 transition={{ duration: 0.5 }}
                 className='title text-center mt-5'
             >
-                <h2 className='display-4 fw-bold text-primary'>פורום תושבי רמות</h2>
+                <h2 className='mb-4 text-3xl forum-title'>פורום תושבי רמות</h2>
                 <p className='lead text-muted'>שואלים, עונים, ומחברים את הקהילה</p>
             </motion.div>
 
@@ -146,7 +148,7 @@ export default function ShowForum(props: any) {
                 <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
             </div>
 
-            <div className='mb-3'>
+            <div className='mb-3 search-container-forum'>
                 <InputGroup style={{direction: 'ltr'}}>
                     <Form.Control
                         placeholder="חיפוש בפורום"
@@ -155,22 +157,22 @@ export default function ShowForum(props: any) {
                     />
                     <InputGroup.Text className='rounded-start' onClick={(e: any) => (
                         onSearchClick(e)
-                    )}><i className="bi bi-search"></i></InputGroup.Text>
+                    )}>   <FontAwesomeIcon icon={faSearch} /></InputGroup.Text>
                 </InputGroup>
             </div>
 
             <div className="my-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
                 <div className='mb-3 mb-md-0'>
-                    <Button variant="light" onClick={() => setShowAllTags(true)} className="me-2 border">
+                    <Button variant="light" onClick={() => setShowAllTags(true)} className="border">
                         סנן לפי תגים
                     </Button>
-                    <Button variant="primary" onClick={showAllQuestions}>
+                    <Button variant="primary" onClick={showAllQuestions} className='ms-2'>
                         הצג את כל התגים
                     </Button>
                 </div>
 
                 <div className='d-flex align-items-center'>
-                    <Dropdown className="me-2">
+                    <Dropdown className="">
                         <Dropdown.Toggle variant="light" id="dropdown-sort" className='border' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: '150px' }}>
                             <span>מיין לפי: {sortBy === 'date' ? 'תאריך' : 'תגובות'}</span>
                         </Dropdown.Toggle>
@@ -179,22 +181,22 @@ export default function ShowForum(props: any) {
                             <Dropdown.Item onClick={() => setSortBy('comments')}>תגובות</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                    <div className="d-none d-md-block"> {/* Hide on mobile, show on medium screens and up */}
+                    {/* <div className="d-none d-md-block">
                         <Button variant="outline-secondary" onClick={() => setViewMode('list')} className="me-2">
                             <i className="bi bi-list"></i>
                         </Button>
                         <Button variant="outline-secondary" onClick={() => setViewMode('grid')}>
                             <i className="bi bi-grid"></i>
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
-            <div className={`row ${viewMode === 'grid' ? 'row-cols-1 row-cols-md-2 row-cols-lg-3' : ''}`}>
+            <div className='row' >
                 <AnimatePresence>
                     {sortedAndFilteredPosts.map((item: any) => (
                         <motion.div
-                            className={`${viewMode === 'list' ? 'col-12' : ''} mb-4`}
+                            className='col-12 mb-4'
                             key={item._id}
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}

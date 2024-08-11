@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
 import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Button, Modal, Form, Row, Col, Tabs, Tab, InputGroup, FormControl } from 'react-bootstrap';
+import { Card, Badge, Button, Modal, Form, Row, Col, Tabs, Tab, InputGroup, FormControl, Nav } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faHeart, faShare, faPlus, faCalendarAlt, faEnvelope, faPhone, faShekelSign, faInfoCircle, faTag, faImage } from '@fortawesome/free-solid-svg-icons';
 import './board.css';
@@ -165,90 +165,83 @@ export default function CommunityBoard() {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
 
-  const StyledTabs = styled(Tabs)`
-  border-bottom: none;
-  .nav-link {
-    color: #007bff;
+  const StyledNav = styled(Nav)`
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+  
+    @media (max-width: 768px) {
+      display: none;
+    }
+  
+    .nav-link {
+      color: #2c3e50;
+      font-weight: bold;
+      padding: 10px 15px;
+      
+      &:hover {
+        color: #3498db;
+      }
+  
+      &.active {
+        color: #3498db;
+        position: relative;
+  
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background-color: #3498db;
+        }
+      }
+    }
+  `;
+
+  const StyledNavLink = styled(Nav.Link)`
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 100%;
+  `;
+
+  const StyledSelect = styled.select`
+    background-color: #f8f9fa;
     border: none;
+    border-radius: 20px;
     padding: 0.5rem 1rem;
-    margin-right: 0.5rem;
-    // border-radius: 20px;
-    // transition: all 0.3s ease;
-     background-color: #f8f9fa;
+    font-weight: bold;
+    color: #2c3e50;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%232c3e50" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    padding-right: 2rem;
+  `;
 
-    &:hover {
-      background-color: #f8f9fa;
-    }
-
-    &.active {
-      color: #fff;
-      background-color: #007bff;
-    }
-  }
-`;
-  const StyledSelect = styled(Form.Select)`
-  // border-radius: 20px;
-  border: 1px solid #ced4da;
-  padding: 0.375rem 1.75rem 0.375rem 0.75rem;
-  transition: all 0.3s ease;
-
-  &:focus {
-    border-color: #80bdff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-  }
-`;
-
-  const TabContent = ({ children, isActive }: any) => (
-    <motion.div
-    // initial={{ opacity: 0, y: 20 }}
-    // animate={{ opacity: isActive ? 1 : 1, y: isActive ? 0 : 0 }}
-    // transition={{ duration: 0.3 }}
-    >
-      {children}
-    </motion.div>
-  );
+  // const TabContent = ({ children, isActive }: any) => (
+  //   <motion.div
+  //   // initial={{ opacity: 0, y: 20 }}
+  //   // animate={{ opacity: isActive ? 1 : 1, y: isActive ? 0 : 0 }}
+  //   // transition={{ duration: 0.3 }}
+  //   >
+  //     {children}
+  //   </motion.div>
+  // );
 
   return (
     <div className='container mt-5'>
-      <h1 className="mb-4 text-center text-7xl text-primary">לוח קהילתי</h1>
+      <h1 className="mb-4 text-3xl board-title">לוח קהילתי</h1>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <Button variant="primary" className="rounded-circle shadow-sm p-3 m-4" onClick={() => setShowAddModal(true)}>
           <FaPlus />
         </Button>
-      </div>
-      <div className="mb-4">
-        <InputGroup>
-          <InputGroup.Text className='rounded'>
-            <FontAwesomeIcon icon={faSearch} />
-          </InputGroup.Text>
-          <FormControl
-            className='rounded'
-            placeholder="חיפוש..."
-            aria-label="חיפוש"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </InputGroup>
-      </div>
-
-      <motion.div
-        className="d-flex justify-content-between align-items-center mb-4"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <StyledTabs
-          activeKey={activeTab}
-          onSelect={(k: any) => setActiveTab(k)}
-          className="mb-3"
-        >
-          <Tab eventKey="all" title={<TabContent isActive={activeTab === 'all'}>הכל</TabContent>} style={{ color: 'black' }} />
-          <Tab eventKey="sale" title={<TabContent isActive={activeTab === 'sale'}>מכירה</TabContent>} style={{ color: 'black' }} />
-          <Tab eventKey="lost-found" title={<TabContent isActive={activeTab === 'lost-found'}>אבידה ומציאה</TabContent>} style={{ color: 'black' }} />
-          <Tab eventKey="gmach" title={<TabContent isActive={activeTab === 'gmach'}>גמ"ח</TabContent>} />
-          <Tab eventKey="class" title={<TabContent isActive={activeTab === 'class'}>חוגים</TabContent>} />
-        </StyledTabs>
-
         <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -261,6 +254,37 @@ export default function CommunityBoard() {
             <option value="likes">מיון לפי לייקים</option>
           </StyledSelect>
         </motion.div>
+      </div>
+      <div className="mb-4 search-container-board">
+        <InputGroup style={{ direction: 'ltr' }}>
+          <FormControl
+            className='rounded'
+            placeholder="חיפוש..."
+            aria-label="חיפוש"
+            value={searchTerm}
+            onChange={(e: any) => setSearchTerm(e.target.value)}
+          />
+          <InputGroup.Text className='rounded'>
+            <FontAwesomeIcon icon={faSearch} />
+          </InputGroup.Text>
+        </InputGroup>
+      </div>
+
+      <motion.div
+        className="d-flex justify-content-between align-items-center mb-4"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <StyledNav activeKey={activeTab} onSelect={(k: any) => setActiveTab(k)}>
+          <StyledNavLink eventKey="all">הכל</StyledNavLink>
+          <StyledNavLink eventKey="sale">מכירה</StyledNavLink>
+          <StyledNavLink eventKey="lost-found">אבידה ומציאה</StyledNavLink>
+          <StyledNavLink eventKey="gmach">גמ״ח</StyledNavLink>
+          <StyledNavLink eventKey="class">חוגים</StyledNavLink>
+        </StyledNav>
+
+
       </motion.div>
 
       <Row>
@@ -471,7 +495,7 @@ export default function CommunityBoard() {
             </Row>
             <Form.Group className="mb-3">
               <Form.Label>תמונה</Form.Label>
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center justify-content-between">
                 <CldUploadButton
                   className='btn btn-outline-primary me-2'
                   uploadPreset="my_upload_test"
@@ -512,16 +536,18 @@ export default function CommunityBoard() {
                     </Button>
                   </div>
                 )}
+                <div className="text-end">
+                  {/* <Button variant="secondary" onClick={() => setShowAddModal(false)} className="me-2">
+                    ביטול
+                  </Button> */}
+                  <Button variant="primary" type="submit">
+                    הוסף פריט
+                  </Button>
+                </div>
               </div>
+
             </Form.Group>
-            <div className="text-end">
-              <Button variant="secondary" onClick={() => setShowAddModal(false)} className="me-2">
-                ביטול
-              </Button>
-              <Button variant="primary" type="submit">
-                הוסף פריט
-              </Button>
-            </div>
+
           </Form>
         </Modal.Body>
       </Modal>
