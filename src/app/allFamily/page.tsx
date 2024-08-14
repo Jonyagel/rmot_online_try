@@ -68,7 +68,7 @@ const SynagogueDivider = styled.hr`
 
 const StyledContainer = styled(Container)`
   background-color: #f0f4f8;
-  padding: 2rem 0;
+//   padding: 2rem 0;
 `;
 
 const StyledCard = styled(Card)`
@@ -353,318 +353,342 @@ const FamilyPage = () => {
     };
 
     return (
-        <StyledContainer fluid>
-            <Container>
-                <SectionTitle>לכל המשפחה</SectionTitle>
+        <Container fluid className="content-container p-3">
+            <Row>
+                <Col lg={2} className="d-none d-lg-block">
+                    {/* אזור פרסומות שמאלי */}
+                    <div className="ad-container">
+                        <div className="ad-space">
+                            <img src='/images/bookgif.webp' className='rounded' />
+                        </div>
+                    </div>
+                </Col>
+                <Col lg={8}>
 
-                <StyledNav variant="pills" activeKey={activeTab} onSelect={(k: any) => setActiveTab(k)} className="flex-column flex-md-row">
-                    <Nav.Item>
-                        <Nav.Link eventKey="daily">
-                            <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> יומי
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="weekly">
-                            <FontAwesomeIcon icon={faRunning} className="mr-2" /> שבועי
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link eventKey="community">
-                            <FontAwesomeIcon icon={faSynagogue} className="mr-2" /> קהילה
-                        </Nav.Link>
-                    </Nav.Item>
-                </StyledNav>
-                <Dropdown className="d-md-none mb-3">
-                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                        {activeTab === 'daily' ? 'יומי' : activeTab === 'weekly' ? 'שבועי' : 'קהילה'}
-                    </Dropdown.Toggle>
+                    <Container>
+                        <SectionTitle>לכל המשפחה</SectionTitle>
 
-                    <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => setActiveTab('daily')}>יומי</Dropdown.Item>
-                        <Dropdown.Item onClick={() => setActiveTab('weekly')}>שבועי</Dropdown.Item>
-                        <Dropdown.Item onClick={() => setActiveTab('community')}>קהילה</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-                {activeTab === 'daily' && (
-                    <Row>
-                        <Col md={6}>
-                            <StyledCard>
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> לוח שנה עברי
-                                </CardHeader>
-                                <Card.Body>
-                                    <p>היום: כ"ג בתמוז תשפ"ג</p>
-                                    <p>פרשת השבוע: פנחס</p>
-                                    <p>חג קרוב: תשעה באב (01.08.2023)</p>
-                                </Card.Body>
-                            </StyledCard>
-                        </Col>
-                        <Col md={6}>
-                            <StyledCard>
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faBook} className="mr-2" /> פינת לימוד יומית
-                                </CardHeader>
-                                <Card.Body>
-                                    <blockquote className="blockquote">
-                                        <p>"בראשית ברא אלוהים את השמים ואת הארץ"</p>
-                                    </blockquote>
-                                    <Button variant="outline-primary">דיון משפחתי</Button>
-                                </Card.Body>
-                            </StyledCard>
-                        </Col>
-                    </Row>
-                )}
+                        <StyledNav variant="pills" activeKey={activeTab} onSelect={(k: any) => setActiveTab(k)} className="flex-column flex-md-row">
+                            <Nav.Item>
+                                <Nav.Link eventKey="daily">
+                                    <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> יומי
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="weekly">
+                                    <FontAwesomeIcon icon={faRunning} className="mr-2" /> שבועי
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="community">
+                                    <FontAwesomeIcon icon={faSynagogue} className="mr-2" /> קהילה
+                                </Nav.Link>
+                            </Nav.Item>
+                        </StyledNav>
+                        <Dropdown className="d-md-none mb-3">
+                            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                                {activeTab === 'daily' ? 'יומי' : activeTab === 'weekly' ? 'שבועי' : 'קהילה'}
+                            </Dropdown.Toggle>
 
-                {activeTab === 'weekly' && (
-                    <Row>
-                        <Col md={6}>
-                            <StyledCard>
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" /> טריוויה שבועית
-                                </CardHeader>
-                                <Card.Body>
-                                    <p>מה הולך על ארבע בבוקר, על שתיים בצהריים, ועל שלוש בערב?</p>
-                                    <Button variant="outline-primary" onClick={toggleAnswer2}>
-                                        {showAnswer ? 'הסתר תשובה' : 'הצג תשובה'}
-                                    </Button>
-                                    {showAnswer && (
-                                        <p className="mt-3 alert alert-success">
-                                            התשובה: האדם. בילדותו הוא זוחל על ארבע, כמבוגר הוא הולך על שתיים, ובזקנתו נעזר במקל (שלוש).
-                                        </p>
-                                    )}
-                                </Card.Body>
-                            </StyledCard>
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => setActiveTab('daily')}>יומי</Dropdown.Item>
+                                <Dropdown.Item onClick={() => setActiveTab('weekly')}>שבועי</Dropdown.Item>
+                                <Dropdown.Item onClick={() => setActiveTab('community')}>קהילה</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        {activeTab === 'daily' && (
+                            <Row>
+                                <Col md={6}>
+                                    <StyledCard>
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> לוח שנה עברי
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <p>היום: כ"ג בתמוז תשפ"ג</p>
+                                            <p>פרשת השבוע: פנחס</p>
+                                            <p>חג קרוב: תשעה באב (01.08.2023)</p>
+                                        </Card.Body>
+                                    </StyledCard>
+                                </Col>
+                                <Col md={6}>
+                                    <StyledCard>
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faBook} className="mr-2" /> פינת לימוד יומית
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <blockquote className="blockquote">
+                                                <p>"בראשית ברא אלוהים את השמים ואת הארץ"</p>
+                                            </blockquote>
+                                            <Button variant="outline-primary">דיון משפחתי</Button>
+                                        </Card.Body>
+                                    </StyledCard>
+                                </Col>
+                            </Row>
+                        )}
 
-                            <StyledCard className="mt-4">
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> אתגר שבועי
-                                </CardHeader>
-                                <Card.Body>
-                                    <h5>השבוע: מעשה טוב יומי</h5>
-                                    <p>כל יום, עשו מעשה טוב אחד לפחות. בסוף השבוע, שתפו את המעשים הטובים שעשיתם עם המשפחה.</p>
-                                    <Form>
-                                        <Form.Group>
-                                            <Form.Control as="textarea" rows={3} placeholder="רשמו כאן את המעשים הטובים שלכם" />
-                                        </Form.Group>
-                                        <Button variant="primary" className="mt-3">שתפו את המעשים הטובים</Button>
-                                    </Form>
-                                </Card.Body>
-                            </StyledCard>
-                            <StyledCard className="mt-4">
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faBook} className="mr-2" /> דבר תורה שבועי
-                                </CardHeader>
-                                <Card.Body>
-                                    <h5>פרשת השבוע: {weeklyParasha}</h5>
-                                    <p>{torahThought}</p>
-                                    <Button variant="outline-primary">קרא עוד</Button>
-                                </Card.Body>
-                            </StyledCard>
-                            <StyledCard className="mt-4">
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faPiggyBank} className="mr-2" /> טיפ חיסכון שבועי
-                                </CardHeader>
-                                <Card.Body>
-                                    <h5>חיסכון בחשבון החשמל</h5>
-                                    <p>{savingTip}</p>
-                                    <Button variant="outline-success">עוד טיפים לחיסכון</Button>
-                                </Card.Body>
-                            </StyledCard>
+                        {activeTab === 'weekly' && (
+                            <Row>
+                                <Col md={6}>
+                                    <StyledCard>
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" /> טריוויה שבועית
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <p>מה הולך על ארבע בבוקר, על שתיים בצהריים, ועל שלוש בערב?</p>
+                                            <Button variant="outline-primary" onClick={toggleAnswer2}>
+                                                {showAnswer ? 'הסתר תשובה' : 'הצג תשובה'}
+                                            </Button>
+                                            {showAnswer && (
+                                                <p className="mt-3 alert alert-success">
+                                                    התשובה: האדם. בילדותו הוא זוחל על ארבע, כמבוגר הוא הולך על שתיים, ובזקנתו נעזר במקל (שלוש).
+                                                </p>
+                                            )}
+                                        </Card.Body>
+                                    </StyledCard>
 
-                            <StyledCard className="mt-4">
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faPoll} className="mr-2" /> סקר משפחתי
-                                </CardHeader>
-                                <Card.Body>
-                                    <h5>מה נעשה בשבת הקרובה?</h5>
-                                    <Form>
-                                        {familyActivities.map((activity, index) => (
-                                            <Form.Check
-                                                type="radio"
-                                                id={`activity-${index}`}
-                                                label={activity}
-                                                name="familyActivity"
-                                                key={index}
-                                            />
-                                        ))}
-                                        <Button variant="primary" className="mt-3">הצבע</Button>
-                                    </Form>
-                                </Card.Body>
-                            </StyledCard>
-                            <StyledCard>
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" /> המלצה לבילוי משפחתי
-                                </CardHeader>
-                                <Card.Body>
-                                    <h5>{activityRecommendation.title}</h5>
-                                    <p>{activityRecommendation.description}</p>
-                                    <Button variant="outline-info">פרטים נוספים</Button>
-                                </Card.Body>
-                            </StyledCard>
-                        </Col>
+                                    <StyledCard className="mt-4">
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> אתגר שבועי
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <h5>השבוע: מעשה טוב יומי</h5>
+                                            <p>כל יום, עשו מעשה טוב אחד לפחות. בסוף השבוע, שתפו את המעשים הטובים שעשיתם עם המשפחה.</p>
+                                            <Form>
+                                                <Form.Group>
+                                                    <Form.Control as="textarea" rows={3} placeholder="רשמו כאן את המעשים הטובים שלכם" />
+                                                </Form.Group>
+                                                <Button variant="primary" className="mt-3">שתפו את המעשים הטובים</Button>
+                                            </Form>
+                                        </Card.Body>
+                                    </StyledCard>
+                                    <StyledCard className="mt-4">
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faBook} className="mr-2" /> דבר תורה שבועי
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <h5>פרשת השבוע: {weeklyParasha}</h5>
+                                            <p>{torahThought}</p>
+                                            <Button variant="outline-primary">קרא עוד</Button>
+                                        </Card.Body>
+                                    </StyledCard>
+                                    <StyledCard className="mt-4">
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faPiggyBank} className="mr-2" /> טיפ חיסכון שבועי
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <h5>חיסכון בחשבון החשמל</h5>
+                                            <p>{savingTip}</p>
+                                            <Button variant="outline-success">עוד טיפים לחיסכון</Button>
+                                        </Card.Body>
+                                    </StyledCard>
 
-                        <Col md={6}>
-                            <StyledCard>
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faUtensils} className="mr-2" /> מתכון לשבת
-                                </CardHeader>
-                                <Card.Body className="recipe-card">
-                                    <div className="recipe-content">
-                                        <div className="recipe-header">
-                                            <h2 className="recipe-title text-4xl font-bold">{recipe.name}</h2>
-                                            <img src="/images/car3.jpg" alt={"food"} className="recipe-image" />
-                                        </div>
+                                    <StyledCard className="mt-4">
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faPoll} className="mr-2" /> סקר משפחתי
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <h5>מה נעשה בשבת הקרובה?</h5>
+                                            <Form>
+                                                {familyActivities.map((activity, index) => (
+                                                    <Form.Check
+                                                        type="radio"
+                                                        id={`activity-${index}`}
+                                                        label={activity}
+                                                        name="familyActivity"
+                                                        key={index}
+                                                    />
+                                                ))}
+                                                <Button variant="primary" className="mt-3">הצבע</Button>
+                                            </Form>
+                                        </Card.Body>
+                                    </StyledCard>
+                                    <StyledCard>
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" /> המלצה לבילוי משפחתי
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <h5>{activityRecommendation.title}</h5>
+                                            <p>{activityRecommendation.description}</p>
+                                            <Button variant="outline-info">פרטים נוספים</Button>
+                                        </Card.Body>
+                                    </StyledCard>
+                                </Col>
 
-                                        <div className="recipe-info">
-                                            <div className="recipe-meta">
-                                                <span><FontAwesomeIcon icon={faClock} /> זמן הכנה: {"1:30"}</span>
-                                                <span><FontAwesomeIcon icon={faUsers} /> מספר מנות: {"5"}</span>
+                                <Col md={6}>
+                                    <StyledCard>
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faUtensils} className="mr-2" /> מתכון לשבת
+                                        </CardHeader>
+                                        <Card.Body className="recipe-card">
+                                            <div className="recipe-content">
+                                                <div className="recipe-header">
+                                                    <h2 className="recipe-title text-4xl font-bold">{recipe.name}</h2>
+                                                    <img src="/images/car3.jpg" alt={"food"} className="recipe-image" />
+                                                </div>
+
+                                                <div className="recipe-info">
+                                                    <div className="recipe-meta">
+                                                        <span><FontAwesomeIcon icon={faClock} /> זמן הכנה: {"1:30"}</span>
+                                                        <span><FontAwesomeIcon icon={faUsers} /> מספר מנות: {"5"}</span>
+                                                    </div>
+
+                                                    <div className="recipe-description">
+                                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima sunt nostrum voluptatem sequi accusamus aperiam fuga laboriosam in consectetur unde optio, provident neque, magnam beatae amet aliquid qui architecto veritatis.</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="recipe-main">
+                                                    <div className="ingredients-section">
+                                                        <h3><FontAwesomeIcon icon={faListUl} /> מצרכים</h3>
+                                                        <ul className="ingredients-list">
+                                                            {recipe.ingredients.map((ingredient, index) => (
+                                                                <li key={index}>{ingredient}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+
+                                                    <div className="instructions-section">
+                                                        <h3><FontAwesomeIcon icon={faClipboardList} /> הוראות הכנה</h3>
+                                                        <ol className="instructions-list">
+                                                            {recipe.instructions.map((instruction, index) => (
+                                                                <li key={index}>{instruction}</li>
+                                                            ))}
+                                                        </ol>
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </Card.Body>
+                                    </StyledCard>
+                                    <StyledCard>
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faCamera} className="mr-2" /> אתגר צילום שבועי
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <h5>נושא השבוע: {photoChallengeTopic}</h5>
+                                            <p>צלמו תמונה בנושא השבועי ושתפו אותה כאן!</p>
+                                            <Form.Group>
+                                                {/* <Form.File id="photoUpload" label="העלו את התמונה שלכם" /> */}
+                                            </Form.Group>
+                                            <Button variant="primary" className="mt-3">שתף תמונה</Button>
+                                        </Card.Body>
+                                    </StyledCard>
+                                </Col>
+                            </Row>
+                        )}
 
-                                            <div className="recipe-description">
-                                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima sunt nostrum voluptatem sequi accusamus aperiam fuga laboriosam in consectetur unde optio, provident neque, magnam beatae amet aliquid qui architecto veritatis.</p>
-                                            </div>
-                                        </div>
+                        {activeTab === 'community' && (
+                            <Row>
 
-                                        <div className="recipe-main">
-                                            <div className="ingredients-section">
-                                                <h3><FontAwesomeIcon icon={faListUl} /> מצרכים</h3>
-                                                <ul className="ingredients-list">
-                                                    {recipe.ingredients.map((ingredient, index) => (
-                                                        <li key={index}>{ingredient}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
+                                <SynagogueCard synagogues={synagogues} />
+                                <Col md={6}>
 
-                                            <div className="instructions-section">
-                                                <h3><FontAwesomeIcon icon={faClipboardList} /> הוראות הכנה</h3>
-                                                <ol className="instructions-list">
-                                                    {recipe.instructions.map((instruction, index) => (
-                                                        <li key={index}>{instruction}</li>
-                                                    ))}
-                                                </ol>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Card.Body>
-                            </StyledCard>
-                            <StyledCard>
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faCamera} className="mr-2" /> אתגר צילום שבועי
-                                </CardHeader>
-                                <Card.Body>
-                                    <h5>נושא השבוע: {photoChallengeTopic}</h5>
-                                    <p>צלמו תמונה בנושא השבועי ושתפו אותה כאן!</p>
-                                    <Form.Group>
-                                        {/* <Form.File id="photoUpload" label="העלו את התמונה שלכם" /> */}
-                                    </Form.Group>
-                                    <Button variant="primary" className="mt-3">שתף תמונה</Button>
-                                </Card.Body>
-                            </StyledCard>
-                        </Col>
-                    </Row>
-                )}
+                                    <StyledCard>
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> סיפורי השגחה פרטית ואמונה
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <ListGroup>
+                                                {faithStories.map((story, index) => (
+                                                    <ListGroup.Item key={index}>
+                                                        <p><strong>{story.author}</strong> - {story.date}</p>
+                                                        <p>{story.story}</p>
+                                                    </ListGroup.Item>
+                                                ))}
+                                            </ListGroup>
+                                            <Button variant="outline-primary" className="mt-3" onClick={() => setShowFaithStoryModal(true)}>
+                                                <FontAwesomeIcon icon={faPlus} className="mr-2" /> הוסף סיפור חדש
+                                            </Button>
+                                        </Card.Body>
+                                    </StyledCard>
 
-                {activeTab === 'community' && (
-                    <Row>
-
-                        <SynagogueCard synagogues={synagogues} />
-                        <Col md={6}>
-
-                                <StyledCard>
-                                    <CardHeader>
-                                        <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> סיפורי השגחה פרטית ואמונה
-                                    </CardHeader>
-                                    <Card.Body>
-                                        <ListGroup>
-                                            {faithStories.map((story, index) => (
-                                                <ListGroup.Item key={index}>
-                                                    <p><strong>{story.author}</strong> - {story.date}</p>
-                                                    <p>{story.story}</p>
-                                                </ListGroup.Item>
-                                            ))}
-                                        </ListGroup>
-                                        <Button variant="outline-primary" className="mt-3" onClick={() => setShowFaithStoryModal(true)}>
-                                            <FontAwesomeIcon icon={faPlus} className="mr-2" /> הוסף סיפור חדש
-                                        </Button>
-                                    </Card.Body>
-                                </StyledCard>
-
-                            <StyledCard>
-                                <CardHeader>
-                                    <FontAwesomeIcon icon={faSearch} className="mr-2" /> מציאות ואבידות
-                                </CardHeader>
-                                <Card.Body>
-                                    <Form className="mb-3">
-                                        <Form.Group as={Row}>
-                                            <Form.Label column sm={3}>מיון לפי:</Form.Label>
-                                            <Col sm={4}>
-                                                <Form.Select onChange={handleTypeFilter}>
-                                                    <option value="all">הכל</option>
-                                                    <option value="אבידה">אבידות</option>
-                                                    <option value="מציאה">מציאות</option>
-                                                </Form.Select>
-                                            </Col>
-                                            <Col sm={5}>
-                                                <Form.Select onChange={handleAreaFilter}>
-                                                    <option value="all">כל האזורים</option>
-                                                    <option value="ramot-a">רמות א'</option>
-                                                    <option value="ramot-b">רמות ב'</option>
-                                                    <option value="ramot-c">רמות ג'</option>
-                                                    <option value="ramot-polin">רמות פולין</option>
-                                                </Form.Select>
-                                            </Col>
-                                        </Form.Group>
-                                    </Form>
-
-                                    <ListGroup>
-                                        {filteredItems.map((item: any) => (
-                                            <ListGroup.Item key={item.id}>
-                                                <Row>
-                                                    <Col xs={2} className="d-flex align-items-center justify-content-center">
-                                                        <FontAwesomeIcon icon={item.type === 'אבידה' ? faSearch : faHandHoldingHeart} size="2x" />
+                                    <StyledCard>
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faSearch} className="mr-2" /> מציאות ואבידות
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <Form className="mb-3">
+                                                <Form.Group as={Row}>
+                                                    <Form.Label column sm={3}>מיון לפי:</Form.Label>
+                                                    <Col sm={4}>
+                                                        <Form.Select onChange={handleTypeFilter}>
+                                                            <option value="all">הכל</option>
+                                                            <option value="אבידה">אבידות</option>
+                                                            <option value="מציאה">מציאות</option>
+                                                        </Form.Select>
                                                     </Col>
-                                                    <Col xs={10}>
-                                                        <strong>{item.type === 'אבידה' ? 'אבד' : 'נמצא'}: </strong>{item.description}
-                                                        <br />
-                                                        <small>
-                                                            <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" /> {item.location},
-                                                            <FontAwesomeIcon icon={faCalendarAlt} className="mr-1 ml-2" /> {item.date}
-                                                        </small>
-                                                        <br />
-                                                        <Button
-                                                            variant="primary"
-                                                            className="p-1 mt-2"
-                                                            onClick={() => toggleContact(item.id)}
-                                                            aria-controls={`contact-${item.id}`}
-                                                            aria-expanded={openContacts[item.id]}
-                                                        >
-                                                            {openContacts[item.id] ? 'הסתר פרטי התקשרות' : 'הצג פרטי התקשרות'}
-                                                        </Button>
-                                                        <Collapse in={openContacts[item.id]}>
-                                                            <div id={`contact-${item.id}`} className="mt-2">
-                                                                <FontAwesomeIcon icon={faPhone} className="mr-2" />
-                                                                {item.contact}
-                                                            </div>
-                                                        </Collapse>
+                                                    <Col sm={5}>
+                                                        <Form.Select onChange={handleAreaFilter}>
+                                                            <option value="all">כל האזורים</option>
+                                                            <option value="ramot-a">רמות א'</option>
+                                                            <option value="ramot-b">רמות ב'</option>
+                                                            <option value="ramot-c">רמות ג'</option>
+                                                            <option value="ramot-polin">רמות פולין</option>
+                                                        </Form.Select>
                                                     </Col>
-                                                </Row>
-                                            </ListGroup.Item>
-                                        ))}
+                                                </Form.Group>
+                                            </Form>
 
-                                    </ListGroup>
+                                            <ListGroup>
+                                                {filteredItems.map((item: any) => (
+                                                    <ListGroup.Item key={item.id}>
+                                                        <Row>
+                                                            <Col xs={2} className="d-flex align-items-center justify-content-center">
+                                                                <FontAwesomeIcon icon={item.type === 'אבידה' ? faSearch : faHandHoldingHeart} size="2x" />
+                                                            </Col>
+                                                            <Col xs={10}>
+                                                                <strong>{item.type === 'אבידה' ? 'אבד' : 'נמצא'}: </strong>{item.description}
+                                                                <br />
+                                                                <small>
+                                                                    <FontAwesomeIcon icon={faMapMarkerAlt} className="mr-1" /> {item.location},
+                                                                    <FontAwesomeIcon icon={faCalendarAlt} className="mr-1 ml-2" /> {item.date}
+                                                                </small>
+                                                                <br />
+                                                                <Button
+                                                                    variant="primary"
+                                                                    className="p-1 mt-2"
+                                                                    onClick={() => toggleContact(item.id)}
+                                                                    aria-controls={`contact-${item.id}`}
+                                                                    aria-expanded={openContacts[item.id]}
+                                                                >
+                                                                    {openContacts[item.id] ? 'הסתר פרטי התקשרות' : 'הצג פרטי התקשרות'}
+                                                                </Button>
+                                                                <Collapse in={openContacts[item.id]}>
+                                                                    <div id={`contact-${item.id}`} className="mt-2">
+                                                                        <FontAwesomeIcon icon={faPhone} className="mr-2" />
+                                                                        {item.contact}
+                                                                    </div>
+                                                                </Collapse>
+                                                            </Col>
+                                                        </Row>
+                                                    </ListGroup.Item>
+                                                ))}
 
-                                    <div className="text-center mt-4">
-                                        <Button variant="outline-primary" onClick={() => setShowLostFoundModal(true)}>
-                                            <FontAwesomeIcon icon={faPlus} className="mr-2" /> הוסף פריט חדש
-                                        </Button>
-                                    </div>
-                                </Card.Body>
-                            </StyledCard>
-                        </Col>
-                    </Row>
-                )}
-            </Container>
+                                            </ListGroup>
+
+                                            <div className="text-center mt-4">
+                                                <Button variant="outline-primary" onClick={() => setShowLostFoundModal(true)}>
+                                                    <FontAwesomeIcon icon={faPlus} className="mr-2" /> הוסף פריט חדש
+                                                </Button>
+                                            </div>
+                                        </Card.Body>
+                                    </StyledCard>
+                                </Col>
+                            </Row>
+                        )}
+                    </Container>
+                </Col>
+
+                <Col lg={2} className="d-none d-lg-block ">
+                    {/* אזור פרסומות ימני */}
+                    <div className="ad-container">
+                        <div className="ad-space">
+                            <img src='/images/timegif.webp' className='rounded' />
+                            {/* כאן תוכל להוסיף את קוד הפרסומת שלך */}
+                        </div>
+                    </div>
+                </Col>
+            </Row>
+
             {/* <Modal show={showSynagogueModal} onHide={() => setShowSynagogueModal(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>{selectedSynagogue?.name}</Modal.Title>
@@ -758,7 +782,7 @@ const FamilyPage = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </StyledContainer >
+        </Container>
     );
 };
 

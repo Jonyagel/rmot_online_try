@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
 import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Button, Modal, Form, Row, Col, Tabs, Tab, InputGroup, FormControl, Nav } from 'react-bootstrap';
+import { Card, Badge, Button, Modal, Form, Row, Col, Tabs, Tab, InputGroup, FormControl, Nav, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faHeart, faShare, faPlus, faCalendarAlt, faEnvelope, faPhone, faShekelSign, faInfoCircle, faTag, faImage } from '@fortawesome/free-solid-svg-icons';
 import './board.css';
@@ -236,13 +236,23 @@ export default function CommunityBoard() {
   // );
 
   return (
-    <div className='container mt-5'>
-      <h1 className="mb-4 text-3xl board-title">לוח קהילתי</h1>
-      <div className="d-flex justify-content-end align-items-center mb-4">
-        <Button variant="primary" className="rounded-circle shadow-sm p-3 m-4" onClick={() => setShowAddModal(true)}>
-          <FaPlus />
-        </Button>
-        {/* <motion.div
+    <Container fluid className="content-container p-3">
+      <Row>
+        <Col lg={2} className="d-none d-lg-block">
+          {/* אזור פרסומות שמאלי */}
+          <div className="ad-container">
+            <div className="ad-space">
+              <img src='/images/bookgif.webp' className='rounded' />
+            </div>
+          </div>
+        </Col>
+        <Col lg={8}>
+          <h1 className="mb-4 text-3xl board-title">לוח קהילתי</h1>
+          <div className="d-flex justify-content-end align-items-center mb-4">
+            <Button variant="primary" className="rounded-circle shadow-sm p-3 m-4" onClick={() => setShowAddModal(true)}>
+              <FaPlus />
+            </Button>
+            {/* <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -254,95 +264,107 @@ export default function CommunityBoard() {
             <option value="likes">מיון לפי לייקים</option>
           </StyledSelect>
         </motion.div> */}
-      </div>
-      <div className="mb-4 search-container-board">
-        <InputGroup style={{ direction: 'ltr' }}>
-          <FormControl
-            className='rounded'
-            placeholder="חיפוש..."
-            aria-label="חיפוש"
-            value={searchTerm}
-            onChange={(e: any) => setSearchTerm(e.target.value)}
-          />
-          <InputGroup.Text className='rounded'>
-            <FontAwesomeIcon icon={faSearch} />
-          </InputGroup.Text>
-        </InputGroup>
-      </div>
+          </div>
+          <div className="mb-4 search-container-board">
+            <InputGroup style={{ direction: 'ltr' }}>
+              <FormControl
+                className='rounded'
+                placeholder="חיפוש..."
+                aria-label="חיפוש"
+                value={searchTerm}
+                onChange={(e: any) => setSearchTerm(e.target.value)}
+              />
+              <InputGroup.Text className='rounded'>
+                <FontAwesomeIcon icon={faSearch} />
+              </InputGroup.Text>
+            </InputGroup>
+          </div>
 
-      <motion.div
-        className="d-flex justify-content-between align-items-center mb-4"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <StyledNav activeKey={activeTab} onSelect={(k: any) => setActiveTab(k)}>
-          <StyledNavLink eventKey="all">הכל</StyledNavLink>
-          <StyledNavLink eventKey="sale">מכירה</StyledNavLink>
-          <StyledNavLink eventKey="lost-found">אבידה ומציאה</StyledNavLink>
-          <StyledNavLink eventKey="gmach">גמ״ח</StyledNavLink>
-          <StyledNavLink eventKey="class">חוגים</StyledNavLink>
-        </StyledNav>
+          <motion.div
+            className="d-flex justify-content-between align-items-center mb-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <StyledNav activeKey={activeTab} onSelect={(k: any) => setActiveTab(k)}>
+              <StyledNavLink eventKey="all">הכל</StyledNavLink>
+              <StyledNavLink eventKey="sale">מכירה</StyledNavLink>
+              <StyledNavLink eventKey="lost-found">אבידה ומציאה</StyledNavLink>
+              <StyledNavLink eventKey="gmach">גמ״ח</StyledNavLink>
+              <StyledNavLink eventKey="class">חוגים</StyledNavLink>
+            </StyledNav>
 
 
-      </motion.div>
+          </motion.div>
 
-      <Row>
-        {filteredAndSortedItems.map(item => (
-          <Col key={item.id} md={4} className="mb-4">
-            <div className="bg-white rounded border position-relative property-card h-100">
-              <div className="relative">
-                {item.image ? (
-                  <CldImage
-                    src={item.image}
-                    width="400"
-                    height="250"
-                    crop="fill"
-                    alt={item.title}
-                    className="w-full h-40 object-cover rounded-b-none rounded-t"
-                    loading="lazy"
-                    format="webp"
-                    quality="auto"
-                  />
-                ) : (
-                  <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
-                    <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+          <Row>
+            {filteredAndSortedItems.map(item => (
+              <Col key={item.id} md={4} className="mb-4">
+                <div className="bg-white rounded border position-relative property-card h-100">
+                  <div className="relative">
+                    {item.image ? (
+                      <CldImage
+                        src={item.image}
+                        width="400"
+                        height="250"
+                        crop="fill"
+                        alt={item.title}
+                        className="w-full h-40 object-cover rounded-b-none rounded-t"
+                        loading="lazy"
+                        format="webp"
+                        quality="auto"
+                      />
+                    ) : (
+                      <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
+                        <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+                      </div>
+                    )}
+                    <Badge bg='primary' className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute">
+                      {getItemTypeName(item.type)}
+                    </Badge>
                   </div>
-                )}
-                <Badge bg='primary' className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute">
-                  {getItemTypeName(item.type)}
-                </Badge>
-              </div>
-              <div className="p-6">
-                <h5 className="font-bold mb-3 text-gray-800 truncate">{item.title}</h5>
-                <div className="flex justify-between items-center mb-2">
-                  {item.price && (
-                    <div className="text-1xl font-bold text-blue-600">
-                      {item.price.toLocaleString()} ₪
+                  <div className="p-6">
+                    <h5 className="font-bold mb-3 text-gray-800 truncate">{item.title}</h5>
+                    <div className="flex justify-between items-center mb-2">
+                      {item.price && (
+                        <div className="text-1xl font-bold text-blue-600">
+                          {item.price.toLocaleString()} ₪
+                        </div>
+                      )}
+
                     </div>
-                  )}
-
-                </div>
-                <p className="text-sm text-gray-600 mb-4 truncate">{item.description}</p>
-                <div className="flex justify-between items-center">
-                  <Button
-                    onClick={() => handleShow(item)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
-                  >
-                    פרטים נוספים
-                  </Button>
-                  <div className="text-sm text-gray-500 flex items-center">
-                    <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
-                    {new Date(Number(item.date)).toLocaleDateString('he-IL')}
-                  </div>
-                  {/* <Button variant="light" onClick={() => handleShare(item)}>
+                    <p className="text-sm text-gray-600 mb-4 truncate">{item.description}</p>
+                    <div className="flex justify-between items-center">
+                      <Button
+                        onClick={() => handleShow(item)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+                      >
+                        פרטים נוספים
+                      </Button>
+                      <div className="text-sm text-gray-500 flex items-center">
+                        <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
+                        {new Date(Number(item.date)).toLocaleDateString('he-IL')}
+                      </div>
+                      {/* <Button variant="light" onClick={() => handleShare(item)}>
                     <FontAwesomeIcon icon={faShare} />
                   </Button> */}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </Col>
+            ))}
+          </Row>
+        </Col>
+
+        <Col lg={2} className="d-none d-lg-block ">
+          {/* אזור פרסומות ימני */}
+          <div className="ad-container">
+            <div className="ad-space">
+              <img src='/images/timegif.webp' className='rounded' />
+              {/* כאן תוכל להוסיף את קוד הפרסומת שלך */}
             </div>
-          </Col>
-        ))}
+          </div>
+        </Col>
       </Row>
 
       <Modal show={showModal} onHide={handleClose} centered size="xl">
@@ -553,7 +575,7 @@ export default function CommunityBoard() {
           </Form>
         </Modal.Body>
       </Modal>
-    </div>
+    </Container>
   )
 }
 

@@ -23,7 +23,7 @@ export default async function Forum() {
   
 
     return (
-        <div className='container'>
+        <div className=''>
             <ShowForum forumData={initialData.data} totalPages={initialData.totalPages}/>
           
 

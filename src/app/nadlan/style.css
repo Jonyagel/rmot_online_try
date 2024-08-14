@@ -4,71 +4,100 @@
 
 .property-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.nadlan-title{
-    font-weight: bold;
-    color: #000000;
-    margin: 1.5rem 0;
-    text-align: center;
+.nadlan-title {
+  font-weight: bold;
+  color: #000000;
+  margin: 1.5rem 0;
+  text-align: center;
 }
 
 .nadlan-title:after {
-    content: '';
-    display: block;
-    width: 50px;
-    height: 3px;
-    background: #3498db;
-    margin: 10px auto;
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #3498db;
+  margin: 10px auto;
 }
 
 .add-nadlan-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* padding: 20px 20px; */
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    margin-bottom: 20px;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 20px 20px; */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
 
-  .nadlan-modal .modal-content {
-    border-radius: 15px;
-  }
-  .nadlan-modal .modal-header{
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom: none;
-    padding: 1.5rem 2rem;
-  }
-  .nadlan-modal .modal-title {
-    font-weight: 600;
-  }
+.nadlan-modal .modal-content {
+  border-radius: 15px;
+}
 
-  input.form-control:focus {
-    box-shadow: none;
-    border-color: #007bff;
-  }
-  select.form-select {
-    padding: 0.75rem 2rem;
-    
-  }
-  select.form-select:focus {
-    box-shadow: none;
-    border-color: #007bff;
-    
-  }
-  textarea.form-control:focus {
-    box-shadow: none;
-    border-color: #007bff;
-  }
+.nadlan-modal .modal-header {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom: none;
+  padding: 1.5rem 2rem;
+}
 
-  .filter-nadlan .form-control:focus {
-    box-shadow: none;
-    border-color: #007bff;
-  } 
+.nadlan-modal .modal-title {
+  font-weight: 600;
+}
+
+input.form-control:focus {
+  box-shadow: none;
+  border-color: #007bff;
+}
+
+select.form-select {
+  padding: 0.75rem 2rem;
+
+}
+
+select.form-select:focus {
+  box-shadow: none;
+  border-color: #007bff;
+
+}
+
+textarea.form-control:focus {
+  box-shadow: none;
+  border-color: #007bff;
+}
+
+.filter-nadlan .form-control:focus {
+  box-shadow: none;
+  border-color: #007bff;
+}
+
+.ad-container {
+  position: sticky;
+  top: 130px;
+  /* התאם את זה לפי הצורך */
+  height: calc(100vh - 130px);
+  /* גובה המסך פחות המרחק מהחלק העליון */
+  overflow-y: auto;
+  /* מאפשר גלילה אם יש יותר מדי פרסומות */
+}
+
+.ad-space {
+  /* background: white; */
+  /* border-radius: 10px; */
+  /* padding: 1rem; */
+  /* margin-bottom: 1rem; */
+  /* text-align: center; */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ad-space h5 {
+  margin-bottom: 0.5rem;
+  color: #6c757d;
+}

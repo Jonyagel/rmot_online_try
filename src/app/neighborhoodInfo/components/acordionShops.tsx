@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload, FaSearch } from 'react-icons/fa';
-import { Button, Modal, Form, InputGroup } from 'react-bootstrap';
+import { Button, Modal, Form, InputGroup, Col, Container, Row } from 'react-bootstrap';
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -154,199 +154,225 @@ export default function ShopCards(props: any) {
 
 
     return (
-        <div className="shop-container" style={{ minHeight: '100vh' }}>
-            <h1 className="mb-4 text-3xl neighborhoodInfo-title">מידע שכונתי</h1>
-            <div className='w-full flex justify-content-end'>
-                <motion.button
-                    className="add-shop-button p-3"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleShowModal}
-                >
-                    <FaPlus />
-                </motion.button>
-            </div>
-            <div className="search-container mb-3" >
-                <InputGroup style={{ direction: 'ltr' }}>
-                    <Form.Control
-                        type="text"
-                        placeholder="חיפוש חנויות..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="rounded"
-
-                    />
-                    <InputGroup.Text
-                        className="rounded-start search-button"
-                    // onClick={() => handleSearch()}
-                    >
-                        <FaSearch />
-                    </InputGroup.Text>
-                </InputGroup>
-            </div>
-            <div className="shop-grid">
-                {filteredShops.map((shop: Shop) => (
-                    <motion.div
-                        key={shop.id}
-                        className="shop-card border"
-                        whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-                    // onClick={() => handleShopClick(shop)}
-                    >
-                        <div className="shop-card-content">
-                            <div className="shop-card-header">
-                                {shop.image ? (
-                                    <CldImage
-                                        src={shop.image}
-                                        width="400"
-                                        height="200"
-                                        crop="fill"
-                                        className="shop-image rounded-t"
-                                        alt={shop.name}
-                                    />
-                                ) : (
-                                    <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
-                                        <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
-                                    </div>
-                                )}
-                                <div className="shop-logo">
-                                    {shop.logo ? (
-                                        <CldImage
-                                            src={shop.logo}
-                                            width="50"
-                                            height="50"
-                                            crop="fill"
-                                            className="logo-image"
-                                            alt={`${shop.name} logo`}
-                                        />
-                                    ) : (
-                                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                            <FontAwesomeIcon icon={faFontAwesome} size="2x" color="#adb5bd" />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="shop-description">
-                                <h3>{shop.name}</h3>
-                                <p>
-                                    {shop.description.length > 100
-                                        ? `${shop.description.substring(0, 100)}...`
-                                        : shop.description}
-                                </p>
-                            </div>
+        // <div className="shop-container" style={{ minHeight: '100vh' }}>
+        <div className="shop-container px-3" style={{ minHeight: '100vh' }}>
+            <Row>
+                <Col lg={2} className="d-none d-lg-block">
+                    {/* אזור פרסומות שמאלי */}
+                    <div className="ad-container">
+                        <div className="ad-space">
+                            <img src='/images/bookgif.webp' className='rounded' />
                         </div>
-                        <div className="shop-card-footer">
-                            <button className="more-info-btn" onClick={() => handleShopClick(shop)}>למידע נוסף</button>
-                            <span className="shop-address"><FaMapMarkerAlt /> {shop.address}</span>
-                        </div>
-                    </motion.div>
-                ))}
-            </div>
+                    </div>
+                </Col>
+                <Col lg={8}>
+                    <h1 className="mb-4 text-3xl neighborhoodInfo-title">מידע שכונתי</h1>
 
-            <AnimatePresence>
-                {selectedShop && (
-                    <motion.div
-                        className="shop_detaile modal-overlay"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={closeModal}
-                    >
-                        <motion.div
-                            className="modal-content shop-detail-modal"
-                            initial={{ y: 50, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: 50, opacity: 0 }}
-                            onClick={(e) => e.stopPropagation()}
+                    <div className='w-full flex justify-content-end'>
+                        <motion.button
+                            className="add-shop-button p-3"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={handleShowModal}
                         >
-                            <div className="modal-header">
-                                <button className="close-button" onClick={closeModal}>
-                                    <FaTimes />
-                                </button>
-                            </div>
-                            <div className="shop-details">
-                                <div className="shop-header">
-                                    <CldImage
-                                        src={selectedShop.image}
-                                        width="800"
-                                        height="400"
-                                        crop="fill"
-                                        className="shop-detail-image"
-                                        alt={selectedShop.name}
-                                    />
-                                    <div className="shop-title-container">
-                                        <h2>{selectedShop.name}</h2>
-                                        {/* <div className="shop-categories">
+                            <FaPlus />
+                        </motion.button>
+                    </div>
+                    <div className="search-container mb-3" >
+                        <InputGroup style={{ direction: 'ltr' }}>
+                            <Form.Control
+                                type="text"
+                                placeholder="חיפוש חנויות..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="rounded"
+
+                            />
+                            <InputGroup.Text
+                                className="rounded-start search-button"
+                            // onClick={() => handleSearch()}
+                            >
+                                <FaSearch />
+                            </InputGroup.Text>
+                        </InputGroup>
+                    </div>
+
+                    <div className="shop-grid">
+                        {filteredShops.map((shop: Shop) => (
+                            <motion.div
+                                key={shop.id}
+                                className="shop-card border"
+                                whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+                            // onClick={() => handleShopClick(shop)}
+                            >
+                                <div className="shop-card-content">
+                                    <div className="shop-card-header">
+                                        {shop.image ? (
+                                            <CldImage
+                                                src={shop.image}
+                                                width="400"
+                                                height="200"
+                                                crop="fill"
+                                                className="shop-image rounded-t"
+                                                alt={shop.name}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
+                                                <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+                                            </div>
+                                        )}
+                                        <div className="shop-logo">
+                                            {shop.logo ? (
+                                                <CldImage
+                                                    src={shop.logo}
+                                                    width="50"
+                                                    height="50"
+                                                    crop="fill"
+                                                    className="logo-image"
+                                                    alt={`${shop.name} logo`}
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                    <FontAwesomeIcon icon={faFontAwesome} size="2x" color="#adb5bd" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="shop-description">
+                                        <h3>{shop.name}</h3>
+                                        <p>
+                                            {shop.description.length > 100
+                                                ? `${shop.description.substring(0, 100)}...`
+                                                : shop.description}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="shop-card-footer">
+                                    <button className="more-info-btn" onClick={() => handleShopClick(shop)}>למידע נוסף</button>
+                                    <span className="shop-address"><FaMapMarkerAlt /> {shop.address}</span>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+
+                    <AnimatePresence>
+                        {selectedShop && (
+                            <motion.div
+                                className="shop_detaile modal-overlay"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={closeModal}
+                            >
+                                <motion.div
+                                    className="modal-content shop-detail-modal"
+                                    initial={{ y: 50, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: 50, opacity: 0 }}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <div className="modal-header">
+                                        <button className="close-button" onClick={closeModal}>
+                                            <FaTimes />
+                                        </button>
+                                    </div>
+                                    <div className="shop-details">
+                                        <div className="shop-header">
+                                            <CldImage
+                                                src={selectedShop.image}
+                                                width="800"
+                                                height="400"
+                                                crop="fill"
+                                                className="shop-detail-image"
+                                                alt={selectedShop.name}
+                                            />
+                                            <div className="shop-title-container">
+                                                <h2>{selectedShop.name}</h2>
+                                                {/* <div className="shop-categories">
                                             {selectedShop.categories.map((category, index) => (
                                                 <span key={index} className="category-tag">{category}</span>
                                             ))}
                                         </div> */}
-                                    </div>
-                                </div>
-                                <div className="shop-details-unique-container">
-                                    <div className="shop-description-unique">
-                                        <h3>אודות החנות</h3>
-                                        <p className="shop-content-unique">{selectedShop.content}</p>
-                                    </div>
+                                            </div>
+                                        </div>
+                                        <div className="shop-details-unique-container">
+                                            <div className="shop-description-unique">
+                                                <h3>אודות החנות</h3>
+                                                <p className="shop-content-unique">{selectedShop.content}</p>
+                                            </div>
 
-                                    <div className="shop-info-grid-unique">
-                                        <div className="info-item-unique">
-                                            <div className="icon-wrapper-unique">
-                                                <FaClock className="info-icon-unique" />
+                                            <div className="shop-info-grid-unique">
+                                                <div className="info-item-unique">
+                                                    <div className="icon-wrapper-unique">
+                                                        <FaClock className="info-icon-unique" />
+                                                    </div>
+                                                    <div className="info-content-unique">
+                                                        <h4>שעות פעילות</h4>
+                                                        <p>{selectedShop.hours}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="info-item-unique">
+                                                    <div className="icon-wrapper-unique">
+                                                        <FaMapMarkerAlt className="info-icon-unique" />
+                                                    </div>
+                                                    <div className="info-content-unique">
+                                                        <h4>כתובת</h4>
+                                                        <p>{selectedShop.address}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="info-item-unique">
+                                                    <div className="icon-wrapper-unique">
+                                                        <FaPhone className="info-icon-unique" />
+                                                    </div>
+                                                    <div className="info-content-unique">
+                                                        <h4>טלפון</h4>
+                                                        <Link href={`tel:${selectedShop.phone}`}>{selectedShop.phone}</Link>
+                                                    </div>
+                                                </div>
+                                                <div className="info-item-unique">
+                                                    <div className="icon-wrapper-unique">
+                                                        <FaEnvelope className="info-icon-unique" />
+                                                    </div>
+                                                    <div className="info-content-unique">
+                                                        <h4>אימייל</h4>
+                                                        <p>{selectedShop.email}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="info-item-unique">
+                                                    <div className="icon-wrapper-unique">
+                                                        <FaGlobe className="info-icon-unique" />
+                                                    </div>
+                                                    <div className="info-content-unique">
+                                                        <h4>אתר אינטרנט</h4>
+                                                        <Link href={selectedShop.website} target="_blank" rel="noopener noreferrer">{selectedShop.website}</Link>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="info-content-unique">
-                                                <h4>שעות פעילות</h4>
-                                                <p>{selectedShop.hours}</p>
-                                            </div>
-                                        </div>
-                                        <div className="info-item-unique">
-                                            <div className="icon-wrapper-unique">
-                                                <FaMapMarkerAlt className="info-icon-unique" />
-                                            </div>
-                                            <div className="info-content-unique">
-                                                <h4>כתובת</h4>
-                                                <p>{selectedShop.address}</p>
-                                            </div>
-                                        </div>
-                                        <div className="info-item-unique">
-                                            <div className="icon-wrapper-unique">
-                                                <FaPhone className="info-icon-unique" />
-                                            </div>
-                                            <div className="info-content-unique">
-                                                <h4>טלפון</h4>
-                                                <Link href={`tel:${selectedShop.phone}`}>{selectedShop.phone}</Link>
-                                            </div>
-                                        </div>
-                                        <div className="info-item-unique">
-                                            <div className="icon-wrapper-unique">
-                                                <FaEnvelope className="info-icon-unique" />
-                                            </div>
-                                            <div className="info-content-unique">
-                                                <h4>אימייל</h4>
-                                                <p>{selectedShop.email}</p>
-                                            </div>
-                                        </div>
-                                        <div className="info-item-unique">
-                                            <div className="icon-wrapper-unique">
-                                                <FaGlobe className="info-icon-unique" />
-                                            </div>
-                                            <div className="info-content-unique">
-                                                <h4>אתר אינטרנט</h4>
-                                                <Link href={selectedShop.website} target="_blank" rel="noopener noreferrer">{selectedShop.website}</Link>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div className="shop-ad-unique">
-                                        <h3>מבצע מיוחד!</h3>
-                                        <img src='./images/saleAds.gif' alt="Special offer" />
+                                            <div className="shop-ad-unique">
+                                                <h3>מבצע מיוחד!</h3>
+                                                <img src='./images/saleAds.gif' alt="Special offer" />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </Col >
+                <Col lg={2} className="d-none d-lg-block ">
+                    {/* אזור פרסומות ימני */}
+                    <div className="ad-container">
+                        <div className="ad-space">
+                            <img src='/images/timegif.webp' className='rounded' />
+                            {/* כאן תוכל להוסיף את קוד הפרסומת שלך */}
+                        </div>
+                    </div>
+                </Col>
+            </Row >
+
 
             <Modal show={showModal} onHide={handleCloseModal} centered className="shop-modal">
                 <Modal.Header closeButton className="bg-primary text-white">
@@ -504,6 +530,7 @@ export default function ShopCards(props: any) {
                 </Modal.Body>
             </Modal>
             <ToastContainer position="bottom-center" theme="colored" />
-        </div>
+            {/* </div > */}
+        </div >
     )
 }
