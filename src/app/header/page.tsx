@@ -65,11 +65,12 @@ export default function Header() {
                     </div>
                 </div>
             </div>
-            <div className='h-10'>
+            <div className='h-10 marquee-div'>
                 <Marquee className="marquee h-10" pauseOnHover={true} direction='right' speed={50} autoFill={true} style={{ direction: 'ltr' }}>
                     הודעות חשובות למשתמשים יופיעו כאן
                 </Marquee>
             </div>
+
         </header>
     )
 }

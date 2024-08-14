@@ -1,19 +1,25 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import Carousel from 'react-bootstrap/Carousel';
-import './style.css';
-import { motion, useAnimation } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { CldImage } from 'next-cloudinary';
 import { useInView } from 'react-intersection-observer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faUsers, faSchool, faBaby, faTree, faSynagogue, faShoppingCart,
     faHospital, faRoad, faHome, faCalendarAlt, faStore, faSearch,
-    faMountain,
-    faMapMarkerAlt
+    faMountain, faChevronLeft, faChevronRight,
+    faGraduationCap, faHeartbeat
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { Col, Row } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
+import Link from 'next/link';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import './style1.css'
+
 
 interface CounterStatisticProps {
     label: string;
@@ -21,27 +27,15 @@ interface CounterStatisticProps {
     icon: IconDefinition;
 }
 
-
 const CounterStatistic: React.FC<CounterStatisticProps> = ({ label, endValue, icon }) => {
     const [count, setCount] = useState(0);
-
-
-    const controls = useAnimation();
     const [ref, inView] = useInView({
         triggerOnce: true,
         threshold: 0.1,
     });
 
-
-
     useEffect(() => {
         if (inView) {
-            controls.start({
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.5 }
-            });
-
             let start = 0;
             const end = parseInt(endValue.replace(/,/g, ''));
             const duration = 2000;
@@ -59,20 +53,19 @@ const CounterStatistic: React.FC<CounterStatisticProps> = ({ label, endValue, ic
 
             return () => clearInterval(timer);
         }
-    }, [inView, endValue, controls]);
+    }, [inView, endValue]);
 
     return (
         <motion.div
             ref={ref}
             initial={{ opacity: 0, y: 20 }}
-            animate={controls}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
             className="statistic-item text-center"
         >
-            <div className="statistic-icon">
-                <FontAwesomeIcon icon={icon} />
-            </div>
-            <h2>{count.toLocaleString()}</h2>
-            <p>{label}</p>
+            <FontAwesomeIcon icon={icon} className="statistic-icon" />
+            <div className="statistic-value">{count.toLocaleString()}</div>
+            <div className="statistic-label">{label}</div>
         </motion.div>
     );
 };
@@ -85,34 +78,27 @@ interface InfoCardProps {
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({ icon, title, content, link }) => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="info-card"
-        style={{ height: '250px' }} // או כל גובה אחר שמתאים לתוכן שלך
-    >
-        <FontAwesomeIcon icon={icon} className="info-icon" />
-        <h3>{title}</h3>
-        <p>{content}</p>
-        <a href={link} className="info-link">קרא עוד</a>
-    </motion.div>
+    <div className="info-card border">
+        <div>
+            <FontAwesomeIcon icon={icon} className="info-card-icon" />
+            <h3>{title}</h3>
+            <p>{content}</p>
+        </div>
+        <Link href={link} className="info-card-link text-center">גלה עוד</Link>
+    </div>
 );
 
-interface CarouselItem {
-    image: string;
-    title: string;
-    description: string;
-}
-
-const StripCarousel: React.FC = () => {
-    const [showStatistics, setShowStatistics] = useState(false);
+const HomePage: React.FC = () => {
+    const [currentSlide, setCurrentSlide] = useState(0);
 
     useEffect(() => {
-        setShowStatistics(true);
+        const timer = setInterval(() => {
+            setCurrentSlide((prevSlide) => (prevSlide + 1) % carouselItems.length);
+        }, 5000);
+        return () => clearInterval(timer);
     }, []);
 
-    const carouselItems: CarouselItem[] = [
+    const carouselItems = [
         {
             image: 'panorama1_exutgv',
             title: '14/08/2024',
@@ -126,7 +112,7 @@ const StripCarousel: React.FC = () => {
         {
             image: 'sport_ytyyfu',
             title: '05/08/2024',
-            description: 'פתיחת ההרשמה לחוגי הספורט העירוניים לשנת תשפ\"ה.'
+            description: 'פתיחת ההרשמה לחוגי הספורט העירוניים לשנת תשפ"ה.'
         }
     ];
 
@@ -145,124 +131,200 @@ const StripCarousel: React.FC = () => {
     const infoCards: InfoCardProps[] = [
         {
             icon: faHome,
-            title: "נדל\"ן",
-            content: "דירת 4 חדרים למכירה ברחוב הרב קוק, קומה 3, נוף מרהיב.",
-            link: "/real-estate"
+            title: "נדל\"ן חדש",
+            content: "פרויקט מגורים חדשני ברמות ג' - דירות יוקרה עם נוף פנורמי לירושלים. הזדמנות להשקעה!",
+            link: "/nadlan"
         },
         {
             icon: faCalendarAlt,
-            title: "אירועים",
-            content: "הרצאה בנושא 'חינוך ילדים בעידן הדיגיטלי' במתנ\"ס רמות ביום שלישי הקרוב.",
-            link: "/events"
+            title: "אירועי תרבות",
+            content: "פסטיבל האביב של רמות - שבוע של מופעים, סדנאות ופעילויות לכל המשפחה. הכניסה חופשית!",
+            link: "/allFamily"
         },
         {
             icon: faStore,
             title: "עסקים מקומיים",
-            content: "פיצרייה 'טעם של פעם' - מבצע השבוע: קנה פיצה משפחתית וקבל שתייה חינם!",
-            link: "/local-businesses"
+            content: "חנות הספרים 'קריאה מהנה' - מבצע השבוע: קנו שני ספרים וקבלו את השלישי במתנה!",
+            link: "/neighborhoodInfo"
         },
         {
-            icon: faSearch,
-            title: "אבידות ומציאות",
-            content: "נמצא צרור מפתחות ליד גן השעשועים ברחוב הרצוג. לפרטים פנו למשרד השכונתי.",
-            link: "/lost-and-found"
+            icon: faTree,
+            title: "פארקים וטבע",
+            content: "גן החיות הקהילתי החדש נפתח! בואו לפגוש את בעלי החיים ולהנות מפינות ליטוף ופעילויות לילדים.",
+            link: "/"
+        },
+        {
+            icon: faGraduationCap,
+            title: "חינוך",
+            content: "בית הספר 'אופק' זכה בפרס החינוך הארצי! תכנית הלימודים החדשנית מושכת תשומת לב ארצית.",
+            link: "/"
+        },
+        {
+            icon: faHeartbeat,
+            title: "בריאות וספורט",
+            content: "מרכז הספורט העירוני מציע קורסי יוגה חינמיים לגיל השלישי. הצטרפו אלינו לחיים בריאים!",
+            link: "/"
         }
     ];
 
     return (
-        <div className='container-fluid strip px-0' style={{ minHeight: '100vw' }}>
-            <Row className="mx-0">
-                {/* מקום לפרסומת בצד שמאל */}
+        <Container fluid className="px-4 py-4" style={{ backgroundColor: '#f0f2f5' }}>
+            <Row>
                 <Col md={2} className="d-none d-md-block">
-                    <div style={{
-                        position: 'sticky',
-                        top: '100px',
-                        overflowY: 'auto'
-                    }}>
-                        <div className="p-3 mt-2">
-                            <img
-                                src="/images/bookgif.gif"
-                                alt="תיאור הפרסומת"
-                                style={{ width: '100%', height: 'auto' }}
-                            />
+                    <div className="sticky pt-3" style={{ top: '110px', overflowY: 'auto' }}>
+                        <div className="ad-space">
+                            {/* <h5>פרסומת</h5> */}
+                            <img src="/images/bookgif.webp" alt="פרסומת 1" className="img-fluid rounded" />
                         </div>
+                        {/* <div className="ad-space">
+                            <h5>פרסומת</h5>
+                            <img src="/ads/ad2.jpg" alt="פרסומת 2" className="img-fluid" />
+                        </div> */}
                     </div>
                 </Col>
                 <Col md={8}>
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className='title text-center my-5'
-                    >
-                        <h1 className='display-4 fw-bold home-title'>ברוכים הבאים לאתר שכונת רמות</h1>
-                        {/* <p className='lead text-muted'>המקום לכל המידע והשירותים לתושבי השכונה</p> */}
-                    </motion.div>
-
-                    {/* <div className='mt-2 w-100 p-0  rounded mb-4'> */}
-                    <Carousel className=' rounded shadow mt-2 w-100'>
-                        {carouselItems.map((item, index) => (
-                            <Carousel.Item className=' rounded' key={index}>
-                                <div className=" w-100 ">
-                                <CldImage
-                                    src={item.image}
-                                    width="1200"
-                                    height="500"
-                                    sizes="100vw"
-                                    crop="fill"
-                                    className="d-block rounded carousel-image img-fluid h-auto"
-                                    alt='נוף שכונת רמות'
-                                    placeholder="blur"
-                                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-                                    format="auto"
-                                    quality="auto"
-                                />
-                                </div>
-                                <Carousel.Caption className='bg-light bg-opacity-75 rounded text-dark w-50 mx-auto bg-white'>
-                                    <h3 className='font-bold text-2xl'>{item.title}</h3>
-                                    <p>{item.description}</p>
-                                </Carousel.Caption>
-                            </Carousel.Item>
-                        ))}
-                    </Carousel>
-                    {/* </div> */}
-                    {showStatistics && (
-                        <div className='mt-5 statistics-section '>
-                            <h2 className='text-center text-4xl mb-4 statistics-title'>סטטיסטיקות שכונת רמות</h2>
-                            <div className='statistics-container'>
-                                {statistics.map((stat, index) => (
-                                    <CounterStatistic key={index} {...stat} />
-                                ))}
+                    <div className="main-content">
+                        <motion.section
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1 }}
+                            className="hero-section flex items-center justify-center"
+                        >
+                            <AnimatePresence initial={false}>
+                                <motion.div
+                                    key={currentSlide}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="absolute inset-0"
+                                >
+                                    <CldImage
+                                        src={carouselItems[currentSlide].image}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        alt={carouselItems[currentSlide].description}
+                                        sizes="100vw"
+                                    />
+                                    <div className="absolute inset-0 bg-black opacity-40"></div>
+                                </motion.div>
+                            </AnimatePresence>
+                            <div className="hero-content">
+                                <motion.h1
+                                    initial={{ y: -50, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.2, duration: 0.8 }}
+                                    className="hero-title"
+                                >
+                                    ברוכים הבאים לאתר שכונת רמות
+                                </motion.h1>
+                                <motion.p
+                                    initial={{ y: 50, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.4, duration: 0.8 }}
+                                    className="hero-description"
+                                >
+                                    {carouselItems[currentSlide].description}
+                                </motion.p>
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="hero-button"
+                                >
+                                    גלה עוד
+                                </motion.button>
                             </div>
-                        </div>
-                    )}
-                    <div className='mt-5 info-section'>
-                        <h2 className='text-center text-4xl mb-4 info-title'>מה חדש ברמות?</h2>
-                        <div className='info-container'>
-                            {infoCards.map((card, index) => (
-                                <InfoCard key={index} {...card} />
-                            ))}
-                        </div>
+                            <button
+                                onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + carouselItems.length) % carouselItems.length)}
+                                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none"
+                            >
+                                <FontAwesomeIcon icon={faChevronLeft} className="text-xl" />
+                            </button>
+                            <button
+                                onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % carouselItems.length)}
+                                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 rounded-full p-2 focus:outline-none"
+                            >
+                                <FontAwesomeIcon icon={faChevronRight} className="text-xl" />
+                            </button>
+                        </motion.section>
+
+                        <section className="py-8">
+                            <motion.h2
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
+                                className="section-title"
+                            >
+                                מה חדש ברמות?
+                            </motion.h2>
+                            <Swiper
+                                spaceBetween={20}
+                                slidesPerView={3}
+                                autoplay={{
+                                    delay: 3000,
+                                    disableOnInteraction: false,
+                                }}
+                                pagination={{ clickable: true }}
+                                navigation={true}
+                                modules={[Autoplay, Pagination, Navigation]}
+                                className="mySwiper p-4"
+                                breakpoints={{
+                                    640: {
+                                        slidesPerView: 1,
+                                        spaceBetween: 20,
+                                    },
+                                    768: {
+                                        slidesPerView: 2,
+                                        spaceBetween: 30,
+                                    },
+                                    1024: {
+                                        slidesPerView: 3,
+                                        spaceBetween: 20,
+                                    },
+                                }}
+                            >
+                                {infoCards.map((card, index) => (
+                                    <SwiperSlide key={index}>
+                                        <InfoCard {...card} />
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </section>
+
+                        <section className="py-8">
+                            <motion.h2
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5 }}
+                                className="section-title"
+                            >
+                                סטטיסטיקות שכונת רמות
+                            </motion.h2>
+                            <Row className="justify-content-center">
+                                {statistics.map((stat, index) => (
+                                    <Col key={index} xs={6} sm={4} md={4} lg={3} className="mb-4">
+                                        <CounterStatistic {...stat} />
+                                    </Col>
+                                ))}
+                            </Row>
+                        </section>
                     </div>
                 </Col>
-                <Col md={2} className="d-none d-md-block px-0">
-                    <div style={{
-                        position: 'sticky',
-                        top: '100px',
-                        overflowY: 'auto'
-                    }}>
-                        <div className="p-3 mt-2">
-                            <img
-                                src="/images/timegif.gif"
-                                alt="תיאור הפרסומת השנייה"
-                                style={{ width: '100%', height: 'auto' }}
-                            />
+                <Col md={2} className="d-none d-md-block">
+                    <div className="sticky pt-3" style={{ top: '110px', overflowY: 'auto' }}>
+                        <div className="ad-space">
+                            {/* <h5>פרסומת</h5> */}
+                            <img src="/images/timegif.webp" alt="פרסומת 3" className="img-fluid rounded" />
                         </div>
+                        {/* <div className="ad-space">
+                            <h5>פרסומת</h5>
+                            <img src="/ads/ad4.jpg" alt="פרסומת 4" className="img-fluid" />
+                        </div> */}
                     </div>
                 </Col>
             </Row>
-        </div>
+        </Container>
     );
 };
 
-export default StripCarousel;
+export default HomePage;
