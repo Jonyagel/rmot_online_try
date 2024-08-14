@@ -20,6 +20,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import './style1.css'
 import { gsap } from 'gsap';
+import { useRouter } from 'next/navigation';
 
 interface CounterStatisticProps {
     label: string;
@@ -89,6 +90,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ icon, title, content, link }) => (
 );
 
 const HomePage: React.FC = () => {
+    const router = useRouter();
     const titleRef = useRef<HTMLHeadingElement | null>(null);
     const [currentSlide, setCurrentSlide] = useState(0);
     const heroRef = useRef(null);
@@ -96,7 +98,7 @@ const HomePage: React.FC = () => {
         target: heroRef,
         offset: ["start start", "end start"]
     });
-    const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+    const imageOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
     const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
 
     useEffect(() => {
@@ -108,44 +110,29 @@ const HomePage: React.FC = () => {
 
     useEffect(() => {
         if (titleRef.current) {
-            const words = titleRef.current.querySelectorAll('.word');
+            const words = titleRef.current.innerText.split(' ');
+            titleRef.current.innerHTML = words.map(word => `<span class="word"><span class="word-inner">${word}</span></span>`).join(' ');
+
+            const wordInners = titleRef.current.querySelectorAll('.word-inner');
             const searchIcon = titleRef.current.querySelector('.search-icon');
 
-            // אנימציה למילים
-            gsap.fromTo(words,
-                {
-                    y: 50,
-                    opacity: 0,
-                    rotation: 15,
-                    scale: 0.8
-                },
-                {
-                    y: 0,
-                    opacity: 1,
-                    rotation: 0,
-                    scale: 1,
-                    duration: 1,
-                    stagger: 0.2,
-                    ease: "elastic.out(1, 0.3)"
-                }
-            );
+            gsap.set(wordInners, {
+                opacity: 0,
+                y: 20,
+                rotateX: -45,
+                filter: 'blur(10px)'
+            });
 
-            // אנימציה לאייקון החיפוש
-            gsap.fromTo(searchIcon,
-                {
-                    scale: 0,
-                    opacity: 0,
-                    rotation: 360
-                },
-                {
-                    scale: 1,
-                    opacity: 1,
-                    rotation: 0,
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                    delay: 1 // מתחיל אחרי שהמילים מסיימות להופיע
-                }
-            );
+            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+            tl.to(wordInners, {
+                opacity: 1,
+                y: 0,
+                rotateX: 0,
+                filter: 'blur(0px)',
+                duration: 1.2,
+                stagger: 0.1
+            })
         }
     }, []);
 
@@ -229,7 +216,7 @@ const HomePage: React.FC = () => {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
                         className="hero-image-container"
-                        style={{ scale }}
+                        style={{ scale, opacity: imageOpacity }}
                     >
                         <CldImage
                             src={carouselItems[currentSlide].image}
@@ -242,14 +229,9 @@ const HomePage: React.FC = () => {
                 </AnimatePresence>
                 <div className="hero-overlay"></div>
                 <div className="hero-content">
-                    <motion.h1 ref={titleRef} className="hero-title">
-                        <span className="word">ברוכים</span>{' '}
-                        <span className="word">הבאים</span>{' '}
-                        <span className="word">לאתר</span>{' '}
-                        <span className="word">שכונת</span>{' '}
-                        <span className="word">רמות</span>{' '}
-                        <FontAwesomeIcon icon={faSearch} className="search-icon" />
-                    </motion.h1>
+                    <h1 ref={titleRef} className="hero-title">
+                        ברוכים הבאים לאתר שכונת רמות
+                    </h1>
                     <motion.p
                         initial={{ y: 50, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -262,6 +244,9 @@ const HomePage: React.FC = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className="hero-button"
+                        onClick={() => {
+                            router.push('/neighborhoodInfo')
+                        }}
                     >
                         גלה עוד
                     </motion.button>
