@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faMap, faSearch, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import NotFoundAnimation from './notFound/page';
+import NotFoundAnimation from './notFound/notFoundComps';
 
 const NotFoundPage: React.FC = () => {
     const router = useRouter();
