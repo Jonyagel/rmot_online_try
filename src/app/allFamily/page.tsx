@@ -5,71 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faBook, faSynagogue, faUtensils, faQuestionCircle, faRunning, faLightbulb, faSearch, faPlus, faMapMarkerAlt, faHandHoldingHeart, faPhone, faClipboardList, faCheckSquare, faListUl, faClock, faUsers, faPiggyBank, faPoll, faMapMarkedAlt, faCamera } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import SynagogueCard from './components/synagogue'
-import { AnyMxRecord } from 'dns';
 import './familyPage.css'
 
-const SynagogueItem = styled.div`
-  margin-bottom: 2rem;
-`;
-
-const SynagogueName = styled.h4`
-  color: #2c3e50;
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
-`;
-
-const SynagogueAddress = styled.p`
-  color: #7f8c8d;
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-`;
-
-const PrayerTimes = styled.div`
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 1rem;
-`;
-
-const PrayerTimesTitle = styled.h5`
-  color: #34495e;
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  text-align: center;
-`;
-
-const PrayerTimesGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-`;
-
-const PrayerTime = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-
-  span {
-    font-size: 0.9rem;
-    color: #7f8c8d;
-    margin: 0.3rem 0;
-  }
-
-  strong {
-    font-size: 1.1rem;
-    color: #2c3e50;
-  }
-`;
-
-const SynagogueDivider = styled.hr`
-  margin: 2rem 0;
-  border-top: 1px solid #ecf0f1;
-`;
-
-const StyledContainer = styled(Container)`
-  background-color: #f0f4f8;
-//   padding: 2rem 0;
-`;
 
 const StyledCard = styled(Card)`
   border: none;
@@ -86,7 +23,7 @@ const StyledCard = styled(Card)`
 `;
 
 const CardHeader = styled(Card.Header)`
-  background: linear-gradient(45deg, #3498db, #2980b9);
+    background: linear-gradient(135deg, #007bff, #6610f2);
   color: white;
   font-weight: bold;
   padding: 1rem;
@@ -164,6 +101,7 @@ const FamilyPage = () => {
         area?: 'ramot-a' | 'ramot-b' | 'ramot-c' | 'ramot-polin';
     }
     const [showAnswer2, setShowAnswer2] = useState<boolean>(false);
+    const [hebDate, setHebDate] = useState('');
     const [recipe2, setRecipe2] = useState<Recipe>({ name: '', ingredients: [], instructions: [] });
     const [weeklyParasha, setWeeklyParasha] = useState<string>('');
     const [torahThought, setTorahThought] = useState<string>('');
@@ -190,6 +128,17 @@ const FamilyPage = () => {
     const contactInfoRef = useRef<HTMLInputElement>(null);
     const itemAreaRef = useRef<HTMLSelectElement>(null);
 
+    const dateDoApi = async () => {
+        const url = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=now&month=8&ss=on&mf=on&c=on&geo=geoname&geonameid=281184&M=on&s=on&d=on&lg=he&start=2024-08-15&end=2024-08-15`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        console.log(data.items[0].heDateParts);
+        setHebDate(data.items[0].heDateParts);
+    }
+    // useEffect(() => {
+    //     console.log(hebDate);
+    //   }, [hebDate]);
+
 
     const handleAddLostFoundItem = () => {
         const newItem: LostFoundItem = {
@@ -204,23 +153,16 @@ const FamilyPage = () => {
         setShowLostFoundModal(false);
     };
 
-    // interface LostFoundItem {
-    //     id: string;
-    //     type: 'lost' | 'found';
-    //     description: string;
-    //     location: string;
-    //     date: string;
-
-    // }
-
     // הגדרת הטיפוס למסנן האזור
     type AreaFilter = 'all' | 'ramot-a' | 'ramot-b' | 'ramot-c' | 'ramot-polin';
 
     // הגדרת הטיפוס למסנן הסוג
     type TypeFilter = 'all' | 'מציאה' | 'אבידה';
     useEffect(() => {
+        dateDoApi();
         // כאן תוכל לבצע קריאות API או לטעון מידע ממקור חיצוני
         fetchWeeklyData();
+
     }, []);
     useEffect(() => {
         const newFilteredItems = lostAndFound.filter(item => {
@@ -404,9 +346,12 @@ const FamilyPage = () => {
                                             <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> לוח שנה עברי
                                         </CardHeader>
                                         <Card.Body>
-                                            <p>היום: כ"ג בתמוז תשפ"ג</p>
-                                            <p>פרשת השבוע: פנחס</p>
-                                            <p>חג קרוב: תשעה באב (01.08.2023)</p>
+                                            {hebDate &&
+                                                <div>
+                                                    <p><span>היום:</span>{hebDate.d} {hebDate.m} {hebDate.y} </p>
+                                                    <p>פרשת השבוע: פנחס</p>
+                                                </div>
+                                            }
                                         </Card.Body>
                                     </StyledCard>
                                 </Col>

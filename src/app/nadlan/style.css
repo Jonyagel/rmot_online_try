@@ -81,19 +81,11 @@ textarea.form-control:focus {
 .ad-container {
   position: sticky;
   top: 130px;
-  /* התאם את זה לפי הצורך */
   height: calc(100vh - 130px);
-  /* גובה המסך פחות המרחק מהחלק העליון */
   overflow-y: auto;
-  /* מאפשר גלילה אם יש יותר מדי פרסומות */
 }
 
 .ad-space {
-  /* background: white; */
-  /* border-radius: 10px; */
-  /* padding: 1rem; */
-  /* margin-bottom: 1rem; */
-  /* text-align: center; */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 

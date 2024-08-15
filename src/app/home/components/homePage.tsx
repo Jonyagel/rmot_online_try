@@ -1,5 +1,6 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
+import './style1.css'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { CldImage } from 'next-cloudinary';
 import { useInView } from 'react-intersection-observer';
@@ -18,7 +19,6 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import './style1.css'
 import { gsap } from 'gsap';
 import { useRouter } from 'next/navigation';
 
@@ -79,19 +79,19 @@ interface InfoCardProps {
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({ icon, title, content, link }) => (
-    <div className="info-card">
+    <div className="info-card mx-2">
         <div className="info-card-content">
             <FontAwesomeIcon icon={icon} className="info-card-icon" />
             <h3>{title}</h3>
             <p>{content}</p>
         </div>
-        <Link href={link} className="info-card-link">גלה עוד</Link>
+        <Link href={link} className="info-card-link text-center">גלה עוד</Link>
     </div>
 );
 
 const HomePage: React.FC = () => {
     const router = useRouter();
-    const titleRef = useRef<HTMLHeadingElement | null>(null);
+    // const titleRef = useRef<HTMLHeadingElement | null>(null);
     const [currentSlide, setCurrentSlide] = useState(0);
     const heroRef = useRef(null);
     const { scrollYProgress } = useScroll({
@@ -108,33 +108,39 @@ const HomePage: React.FC = () => {
         return () => clearInterval(timer);
     }, []);
 
-    useEffect(() => {
-        if (titleRef.current) {
-            const words = titleRef.current.innerText.split(' ');
-            titleRef.current.innerHTML = words.map(word => `<span class="word"><span class="word-inner">${word}</span></span>`).join(' ');
+    const titleWords = "ברוכים הבאים לאתר שכונת רמות".split(' ');
 
-            const wordInners = titleRef.current.querySelectorAll('.word-inner');
-            const searchIcon = titleRef.current.querySelector('.search-icon');
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2,
+            },
+        },
+    };
 
-            gsap.set(wordInners, {
-                opacity: 0,
-                y: 20,
-                rotateX: -45,
-                filter: 'blur(10px)'
-            });
+    const wordVariants = {
+        hidden: {
+            opacity: 0,
+            y: 20,
+            rotateX: -45,
+            filter: "blur(10px)"
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            filter: "blur(0px)",
+            transition: {
+                type: "spring",
+                damping: 12,
+                stiffness: 100,
+            },
+        },
+    };
 
-            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-            tl.to(wordInners, {
-                opacity: 1,
-                y: 0,
-                rotateX: 0,
-                filter: 'blur(0px)',
-                duration: 1.2,
-                stagger: 0.1
-            })
-        }
-    }, []);
 
     const carouselItems = [
         {
@@ -143,7 +149,7 @@ const HomePage: React.FC = () => {
             description: 'טקס פתיחת שנת הלימודים בבית ספר רמות.'
         },
         {
-            image: 'work_street_yith94',
+            image: 'ramot_ai1_x5bxdh',
             title: '10/08/2024',
             description: 'עבודות תשתית ברחוב הרב אויערבך - צפויים שיבושי תנועה.'
         },
@@ -165,18 +171,18 @@ const HomePage: React.FC = () => {
         { label: 'קווי אוטובוס', endValue: '12', icon: faRoad },
         { label: 'גובה מעל פני הים', endValue: '885', icon: faMountain },
     ];
-
+// מקסימום 80 תווים 3 שורות בתוכן פירוט של הכרטיס לא יותר של יגלוש
     const infoCards: InfoCardProps[] = [
         {
             icon: faHome,
             title: "נדל\"ן חדש",
-            content: "פרויקט מגורים חדשני ברמות ג' - דירות יוקרה עם נוף פנורמי לירושלים. הזדמנות להשקעה!",
+            content: "פרויקט  חדשני ברמות ג' - דירות יוקרה עם נוף פנורמי לירושלים. הזדמנות להשקעה!",
             link: "/nadlan"
         },
         {
             icon: faCalendarAlt,
             title: "אירועי תרבות",
-            content: "פסטיבל האביב של רמות - שבוע של מופעים, סדנאות ופעילויות לכל המשפחה. הכניסה חופשית!",
+            content: "פסטיבל  של רמות - שבוע של מופעים, סדנאות ופעילויות לכל המשפחה. הכניסה חופשית!",
             link: "/allFamily"
         },
         {
@@ -188,19 +194,19 @@ const HomePage: React.FC = () => {
         {
             icon: faTree,
             title: "פארקים וטבע",
-            content: "גן החיות הקהילתי החדש נפתח! בואו לפגוש את בעלי החיים ולהנות מפינות ליטוף ופעילויות לילדים.",
+            content: "גן החיות   נפתח! בואו לפגוש את בעלי החיים ולהנות מפינות ליטוף ופעילויות לילדים.",
             link: "/"
         },
         {
             icon: faGraduationCap,
             title: "חינוך",
-            content: "בית הספר 'אופק' זכה בפרס החינוך הארצי! תכנית הלימודים החדשנית מושכת תשומת לב ארצית.",
+            content: "בית הספר 'אופק'  החינוך הארצי! תכנית הלימודים החדשנית מושכת תשומת לב ארצית.",
             link: "/"
         },
         {
             icon: faHeartbeat,
             title: "בריאות וספורט",
-            content: "מרכז הספורט העירוני מציע קורסי יוגה חינמיים לגיל השלישי. הצטרפו אלינו לחיים בריאים!",
+            content: "מרכז  העירוני מציע קורסי יוגה חינמיים לגיל השלישי. הצטרפו אלינו לחיים בריאים!",
             link: "/"
         }
     ];
@@ -229,9 +235,23 @@ const HomePage: React.FC = () => {
                 </AnimatePresence>
                 <div className="hero-overlay"></div>
                 <div className="hero-content">
-                    <h1 ref={titleRef} className="hero-title">
-                        ברוכים הבאים לאתר שכונת רמות
-                    </h1>
+                    <motion.h1
+                        className="hero-title"
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                    >
+                        {titleWords.map((word, index) => (
+                            <motion.span
+                                key={index}
+                                className="word"
+                                variants={wordVariants}
+                                style={{ display: 'inline-block', marginRight: '0.3em' }}
+                            >
+                                {word}
+                            </motion.span>
+                        ))}
+                    </motion.h1>
                     <motion.p
                         initial={{ y: 50, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -296,7 +316,7 @@ const HomePage: React.FC = () => {
                                     pagination={{ clickable: true }}
                                     navigation={true}
                                     modules={[Autoplay, Pagination, Navigation]}
-                                    className="info-swiper"
+                                    className="info-swiper p-3"
                                     breakpoints={{
                                         640: {
                                             slidesPerView: 1,
@@ -308,12 +328,12 @@ const HomePage: React.FC = () => {
                                         },
                                         1024: {
                                             slidesPerView: 3,
-                                            spaceBetween: 20,
+                                            spaceBetween: 25,
                                         },
                                     }}
                                 >
                                     {infoCards.map((card, index) => (
-                                        <SwiperSlide key={index}>
+                                        <SwiperSlide key={index} className='py-3'>
                                             <InfoCard {...card} />
                                         </SwiperSlide>
                                     ))}

@@ -15,7 +15,7 @@ const StyledCard = styled(Card)`
 `;
 
 const CardHeader = styled(Card.Header)`
-  background: linear-gradient(45deg, #3498db, #2980b9);
+    background: linear-gradient(135deg, #007bff, #6610f2);
   color: white;
   font-weight: bold;
   padding: 1rem;
