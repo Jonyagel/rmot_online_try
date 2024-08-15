@@ -348,7 +348,7 @@ const FamilyPage = () => {
                                         <Card.Body>
                                             {hebDate &&
                                                 <div>
-                                                    <p><span>היום:</span>{hebDate.d} {hebDate.m} {hebDate.y} </p>
+                                                   {/* <p><span>היום:</span>{hebDate.d} {hebDate.m} {hebDate.y} </p>  */}
                                                     <p>פרשת השבוע: פנחס</p>
                                                 </div>
                                             }
