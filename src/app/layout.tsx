@@ -7,6 +7,7 @@ import localFont from 'next/font/local'
 import { Analytics } from "@vercel/analytics/react"
 import Footer from "./footer/page";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import SessionWrapper from "@/components/SessionWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,15 +44,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={assistantFont.className}>
-            <body className={inter.className}>
-              <Header />
-              {children}
-              <Footer />
-              <Analytics />
-              <SpeedInsights/>
-              {/* <script src="./nagishli_beta.js"></script> */}
-            </body>
-          </html>
-          );
+    <SessionWrapper>
+      <html lang="en" className={assistantFont.className}>
+        <body className={inter.className}>
+          <Header />
+          {children}
+          <Footer />
+          <Analytics />
+          <SpeedInsights />
+          {/* <script src="./nagishli_beta.js"></script> */}
+        </body>
+      </html>
+    </SessionWrapper>
+  );
 }
