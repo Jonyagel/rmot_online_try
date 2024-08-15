@@ -1,0 +1,159 @@
+:root {
+    --primary-color: #0275d8;
+    /* הצבע הראשי של האתר - שנה לצבע הרצוי */
+}
+
+.not-found-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* min-height: 100vh; */
+    background-color: white;
+    /* גופן עברי מודרני */
+    color: #333;
+}
+
+.not-found-content {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    background-color: #f8f9fa;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.not-found-left {
+    flex: 1;
+    padding: 3rem;
+    text-align: right;
+}
+
+.not-found-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    /* שינוי הרקע ללבן */
+}
+
+.not-found-right svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.not-found-icon {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.not-found-content h1 {
+    font-size: 6rem;
+    font-weight: 900;
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.not-found-content h2 {
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.not-found-content p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: #34495e;
+}
+
+.not-found-map {
+    width: 300px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5rem;
+    color: white;
+}
+
+.not-found-links {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.not-found-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    cursor: pointer;
+    /* הוסף זאת כדי שהדיב ייראה לחיץ */
+}
+
+.not-found-link:hover {
+    background-color: #2980b9;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.not-found-link svg {
+    margin-left: 0.5rem;
+}
+
+@media (max-width: 968px) {
+    .not-found-content {
+        flex-direction: column;
+    }
+
+    .not-found-left,
+    .not-found-right {
+        width: 100%;
+    }
+
+    .not-found-right {
+        order: -1;
+        padding: 2rem;
+    }
+
+    .not-found-map {
+        width: 200px;
+        height: 200px;
+    }
+
+    .not-found-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .not-found-left {
+        padding: 2rem;
+    }
+
+    .not-found-content h1 {
+        font-size: 4rem;
+    }
+
+    .not-found-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .not-found-links {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .not-found-link {
+        text-align: center;
+    }
+}

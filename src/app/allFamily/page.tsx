@@ -23,7 +23,7 @@ const StyledCard = styled(Card)`
 `;
 
 const CardHeader = styled(Card.Header)`
-    background: linear-gradient(135deg, #007bff, #6610f2);
+    background: #0275d8;
   color: white;
   font-weight: bold;
   padding: 1rem;
@@ -101,7 +101,7 @@ const FamilyPage = () => {
         area?: 'ramot-a' | 'ramot-b' | 'ramot-c' | 'ramot-polin';
     }
     const [showAnswer2, setShowAnswer2] = useState<boolean>(false);
-    const [hebDate, setHebDate] = useState('');
+    const [hebDate, setHebDate] = useState<string[]>([]);
     const [recipe2, setRecipe2] = useState<Recipe>({ name: '', ingredients: [], instructions: [] });
     const [weeklyParasha, setWeeklyParasha] = useState<string>('');
     const [torahThought, setTorahThought] = useState<string>('');
@@ -133,7 +133,7 @@ const FamilyPage = () => {
         const resp = await fetch(url);
         const data = await resp.json();
         console.log(data.items[0].heDateParts);
-        setHebDate(data.items[0].heDateParts);
+        setHebDate([data.items[0].heDateParts]);
     }
     // useEffect(() => {
     //     console.log(hebDate);
@@ -347,10 +347,14 @@ const FamilyPage = () => {
                                         </CardHeader>
                                         <Card.Body>
                                             {hebDate &&
-                                                <div>
-                                                   {/* <p><span>היום:</span>{hebDate.d} {hebDate.m} {hebDate.y} </p>  */}
-                                                    <p>פרשת השבוע: פנחס</p>
-                                                </div>
+                                                hebDate.map((item: any) => {
+                                                    return (
+                                                        <div>
+                                                            <p><span>היום:</span>{item.d} {item.m} {item.y} </p>
+                                                            <p>פרשת השבוע: פנחס</p>
+                                                        </div>
+                                                    )
+                                                })
                                             }
                                         </Card.Body>
                                     </StyledCard>
