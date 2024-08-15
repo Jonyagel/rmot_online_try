@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import './signup.css';
@@ -17,6 +17,7 @@ export default function Signup() {
   const nameRef: any = useRef();
   const emailRef: any = useRef();
   const passRef: any = useRef();
+  const [googleUser, setGoogleUser] = useState();
 
   const doApi = async (e: any) => {
     e.preventDefault();
@@ -24,6 +25,7 @@ export default function Signup() {
     const name = nameRef.current.value;
     const email = emailRef.current.value;
     const password = passRef.current.value;
+
 
     const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
       method: 'POST',
@@ -56,10 +58,22 @@ export default function Signup() {
             <input ref={passRef} className='form-control' type='password' placeholder='סיסמא...' required />
           </div>
           <button className='signupBtn btn btn-primary w-100 mb-3' type='submit'>הירשם</button>
-          <button className='btn btn-outline-dark w-100 block' type='button' onClick={() => signIn("google")}>
+          <button className='btn btn-outline-dark w-100 block' type='button' onClick={() => {
+            signIn("google")
+          }}>
             <i className="bi bi-google"></i>
             <p className='m-0'>הירשם עם גוגל</p>
           </button>
+          {/* {session ? (
+            <button
+              onClick={() => signOut()}
+              className="border border-black rounded-lg bg-red-400 px-5 py-1"
+            >
+              Sign Out
+            </button>
+          ) : (
+            <div></div>
+          )} */}
         </form>
         <p className='text-center mt-3'>
           כבר יש לך חשבון? <Link href='/login' className='text-decoration-none'>הכנס פה</Link>
