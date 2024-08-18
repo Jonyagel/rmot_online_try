@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/react"
 import Footer from "./footer/page";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import SessionWrapper from "@/components/SessionWrapper";
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,6 +55,7 @@ export default function RootLayout({
           <SpeedInsights />
           {/* <script src="./nagishli_beta.js"></script> */}
         </body>
+        <GoogleAnalytics gaId="G-7P3W0FCXJ2" />
       </html>
     </SessionWrapper>
   );
