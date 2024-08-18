@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
-import { Button, OverlayTrigger, Popover, Card } from 'react-bootstrap';
+import { Button, OverlayTrigger, Popover, Card, Row, Col } from 'react-bootstrap';
 import { CldUploadButton } from 'next-cloudinary';
 import EmojiPicker from 'emoji-picker-react';
 import { EmojiStyle } from 'emoji-picker-react';
@@ -163,30 +163,38 @@ export default function AddComment(props: any) {
 
   return (
     <div className='sticky-bottom mt-4'>
-      <Card className='shadow-sm'>
-        <Card.Body>
+      <Card className='shadow-sm rounded'>
+        <Card.Body className='p-2'>
           {props.replay && (
-            <Card className='mb-2 bg-light border-start border-primary border-3'>
-              <Card.Body className='py-2 px-3'>
-                <div className='d-flex justify-content-between align-items-center'>
-                  <div className='overflow-hidden'>
-                    <Card.Title className='h6 mb-1'>{props.commentReplying.userComment}</Card.Title>
-                    <Card.Text className='text-muted small text-truncate' style={{ maxWidth: '250px' }}>
-                      {props.commentReplying.dataComment}
-                    </Card.Text>
-                  </div>
-                  <Button variant="link" className='text-muted p-0 ms-2' onClick={() => props.setReplay(false)}>
-                    <i className="bi bi-x"></i>
-                  </Button>
-                </div>
-              </Card.Body>
-            </Card>
+            // <Row>
+            //   <Col lg={11}>
+            //      <div className='flex w-full justify-content-end'>
+            //      <Col lg={11}>
+                    <Card className='mb-2 bg-light rounded' style={{ borderRight: 'solid #0275d8 6px' }}>
+                      <Card.Body className='py-2 px-3'>
+                        <div className='d-flex justify-content-between align-items-center'>
+                          <div className='overflow-hidden'>
+                            <Card.Title className='h6 mb-1'>{props.commentReplying.userComment}</Card.Title>
+                            <Card.Text className='text-muted small text-truncate' style={{ maxWidth: '250px' }}>
+                              {props.commentReplying.dataComment}
+                            </Card.Text>
+                          </div>
+                          <Button variant="link" className='text-muted p-0 ms-2' onClick={() => props.setReplay(false)}>
+                            <i className="bi bi-x"></i>
+                          </Button>
+                        </div>
+                      </Card.Body>
+                    </Card>
+                  // </Col>
+                // </div>
+            //  </Col> 
+            //  </Row> 
           )}
-          <div className='d-flex flex-column'>
-            <div className='d-flex align-items-end mb-2'>
-              <div className='d-flex align-items-center ms-2'>
+          <div className='d-flex justify-content-between flex-column'>
+            <div className='d-flex'>
+              <div className='d-flex align-items-center'>
                 <CldUploadButton
-                  className='btn btn-outline-primary me-md-2 border-0'
+                  className='btn btn-outline-primary border-0'
                   uploadPreset="my_upload_test"
                   onSuccess={handleUpload}
                   onError={(error) => {
@@ -204,7 +212,7 @@ export default function AddComment(props: any) {
                   <i className="bi bi-paperclip"></i>
                 </CldUploadButton>
                 <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
-                  <Button variant="btn btn-outline-primary border-0" className='me-md-2' onClick={() => setShowEmoji(!showEmoji)}>
+                  <Button variant="btn btn-outline-primary border-0" className='ms-md-1' onClick={() => setShowEmoji(!showEmoji)}>
                     <i className="bi bi-emoji-smile"></i>
                   </Button>
                 </OverlayTrigger>
@@ -222,7 +230,7 @@ export default function AddComment(props: any) {
                   style={{ resize: 'none', minHeight: '38px', maxHeight: '200px', overflowY: 'auto' }}
                 />
               </div>
-              <div className='d-flex align-items-center ms-2'>
+              <div className='d-flex align-items-center '>
                 <Button type="submit" variant="primary" onClick={handleSubmit}>
                   <i className="bi bi-send" style={{ transform: 'rotate(45deg)' }}></i>
                 </Button>

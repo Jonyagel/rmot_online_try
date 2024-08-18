@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
@@ -94,10 +95,13 @@ export default function AddQuestion(props: any) {
 
     return (
         <div>
-            <Button variant="primary" className="rounded-circle shadow-sm p-3 m-4" onClick={checkSignIn}>
-                {/* <i className="bi bi-plus-lg fs-4"></i> */}
+            <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="add-forum-button rounded-circle shadow-sm p-3 m-4 btn-primary"
+                onClick={checkSignIn}>
                 <FaPlus />
-            </Button>
+            </motion.button>
 
             <Modal show={showModal} onHide={handleClose} centered className='addForumModal'>
                 <Modal.Header className=" bg-primary text-white">

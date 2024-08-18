@@ -236,7 +236,7 @@ export default function CommunityBoard() {
   // );
 
   return (
-    <Container fluid className="content-container p-3">
+    <Container fluid className="content-container px-3">
       <Row>
         <Col lg={2} className="d-none d-lg-block">
           {/* אזור פרסומות שמאלי */}
@@ -247,11 +247,26 @@ export default function CommunityBoard() {
           </div>
         </Col>
         <Col lg={8}>
-          <h1 className="mb-4 text-3xl board-title">לוח קהילתי</h1>
-          <div className="d-flex justify-content-end align-items-center mb-4">
-            <Button variant="primary" className="rounded-circle shadow-sm p-3 m-4" onClick={() => setShowAddModal(true)}>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className='title text-center mt-5'
+          >
+            <h1 className="my-4 text-3xl board-title">לוח קהילתי</h1>
+          </motion.div>
+          <div className="d-flex justify-content-end align-items-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="add-board-button rounded-circle shadow-sm p-3 m-4 btn-primary"
+              onClick={() => setShowAddModal(true)}
+            >
               <FaPlus />
-            </Button>
+            </motion.button>
+            {/* <Button variant="primary" className="add-board-button rounded-circle shadow-sm p-3 m-4" onClick={() => setShowAddModal(true)}>
+              <FaPlus />
+            </Button> */}
             {/* <motion.div
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

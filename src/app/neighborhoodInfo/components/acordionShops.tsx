@@ -166,11 +166,17 @@ export default function ShopCards(props: any) {
                     </div>
                 </Col>
                 <Col lg={8}>
-                    <h1 className="mb-4 text-3xl neighborhoodInfo-title">מידע שכונתי</h1>
-
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className='title text-center mt-5'
+                    >
+                        <h1 className="my-4 text-3xl neighborhoodInfo-title">מידע שכונתי</h1>
+                    </motion.div>
                     <div className='w-full flex justify-content-end'>
                         <motion.button
-                            className="add-shop-button p-3"
+                            className="add-shop-button p-3 m-4"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={handleShowModal}

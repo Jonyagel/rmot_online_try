@@ -1,7 +1,6 @@
 body {
   font-family: 'Rubik', sans-serif;
   background-color: #ffffff;
-  /* color: #333; */
 }
 
 .hero-section {
@@ -9,7 +8,6 @@ body {
   height: 100vh;
   overflow: hidden;
 }
-
 
 .hero-image-container {
   position: absolute;
@@ -26,7 +24,6 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  /* background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)); */
   z-index: 2;
 }
 
@@ -124,14 +121,16 @@ body {
 .carousel-control-right {
   right: 20px;
 }
+
 .hero-title .word {
   display: inline-block;
   white-space: nowrap;
 }
+
 .hero-title .search-icon {
   font-size: 0.8em;
   margin-left: 10px;
-  color: #0275d8; /* או כל צבע אחר שמתאים לעיצוב שלך */
+  color: #0275d8;
 }
 
 .content-container {
@@ -288,42 +287,250 @@ body {
   color: #7f8c8d;
 }
 
+.desktop-top-ad {
+  background-color: #f0f0f0;
+  padding: 10px 0;
+  text-align: center;
+  position: relative;
+  z-index: 10;
+}
+
+.desktop-top-ad .ad-placeholder {
+  background-color: #e0e0e0;
+  padding: 15px;
+  max-width: 728px;
+  margin: 0 auto;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #666;
+}
+
+@media (min-width: 769px) {
+  .hero-section {
+    margin-top: -60px;
+    /* התאם ערך זה בהתאם לגובה הפרסומת שלך */
+    padding-top: 60px;
+  }
+
+  .hero-content {
+    padding-top: 60px;
+    /* מוסיף מרווח נוסף מעל התוכן של ה-hero */
+  }
+}
 
 
 @media (max-width: 768px) {
+  .desktop-top-ad {
+    display: none !important;
+  }
+
   .hero-section {
-    height: 70vh;
+    height: 60vh;
   }
 
-  .content-container {
-    padding-top: 1rem;
-  }
-
-  .main-content {
-    margin-bottom: 1rem;
+  .hero-content {
+    padding: 1rem;
+    max-width: 95%;
   }
 
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
   }
 
   .hero-description {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .carousel-control {
+    width: 30px;
+    height: 30px;
     font-size: 1rem;
   }
 
-  .section-title {
-    font-size: 2rem;
+  .carousel-control-left {
+    left: 5px;
+  }
+
+  .carousel-control-right {
+    right: 5px;
   }
 
   .main-content {
-    padding: 2rem;
+    margin-top: -30px;
+    padding: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .info-swiper {
+    padding: 0.5rem 0 2rem;
+  }
+
+  .swiper-slide {
+    padding: 0;
+  }
+
+  .info-card {
+    margin: 0 auto;
+    max-width: 90%;
+  }
+
+  .info-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-card p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
+  .info-card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-card-link {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.7rem;
+    margin-top: 0.5rem;
+  }
+
+  .info-swiper {
+    padding: 0.5rem 0 2rem;
+  }
+
+  .swiper-slide {
+    padding: 0;
+  }
+
+  .info-card {
+    margin: 0 auto;
+    max-width: 90%;
+  }
+
+  /* הסרת margin-bottom מהכרטיס האחרון בכל סליידר */
+  .swiper-slide:last-child .info-card {
+    margin-bottom: 0;
+  }
+
+  /* התאמת גודל הכפתורים של ה-Swiper */
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 30px;
+    height: 30px;
+  }
+
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 1rem;
+  }
+
+  /* התאמת מיקום הנקודות של ה-Swiper */
+  .swiper-pagination-bullets {
+    bottom: 0;
   }
 
   .statistics-section {
-    padding: 2rem;
+    padding: 1rem;
   }
 
   .statistic-item {
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .statistic-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .statistic-value {
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .statistic-label {
+    font-size: 0.7rem;
+  }
+
+  .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .row {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+
+  .col-xs-6 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+/* הוספת תמיכה במסכים קטנים יותר */
+@media (max-width: 480px) {
+  .hero-section {
+    height: 50vh;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-description {
+    font-size: 0.8rem;
+  }
+
+  .hero-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .info-card {
+    max-width: 95%;
+  }
+
+  .info-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .info-card p {
+    font-size: 0.9rem;
     margin-bottom: 1rem;
+  }
+
+  .info-card-link {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .statistic-item {
+    padding: 0.6rem;
+  }
+
+  .statistic-icon {
+    font-size: 1.3rem;
+  }
+
+  .statistic-value {
+    font-size: 1rem;
+  }
+
+  .statistic-label {
+    font-size: 0.65rem;
   }
 }

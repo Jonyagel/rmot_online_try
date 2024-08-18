@@ -94,7 +94,7 @@ export default function CommentById(props: any) {
       </Modal>
 
 
-        <Card className='shadow-sm hover-card mb-3'>
+        <Card className='shadow-sm hover-card mb-3 rounded'>
           <Card.Body>
             <div className='d-flex justify-content-between align-items-start mb-3'>
               <div className='d-flex'>
@@ -111,7 +111,7 @@ export default function CommentById(props: any) {
                   </Card.Text>
                 </div>
               </div>
-              <Badge bg='secondary' className="ms-2 align-self-start">{dataForum.topic}</Badge>
+              <Badge bg='primary' className="ms-2 align-self-start top-0 end-20 translate-middle position-absolute">{dataForum.topic}</Badge>
             </div>
             {dataForum.fileName && (
               <div className="mb-3">

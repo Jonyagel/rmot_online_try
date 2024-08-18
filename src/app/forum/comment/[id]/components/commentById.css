@@ -17,7 +17,7 @@
   
   .card {
     border: none;
-    border-radius: 15px;
+    /* border-radius: 15px; */
   }
   
   .btn-outline-secondary {
@@ -34,6 +34,6 @@
   }
   
   @keyframes highlight {
-    0% { background-color: #ffff99; }
+    0% { background-color: #99daff; }
     100% { background-color: transparent; }
   }

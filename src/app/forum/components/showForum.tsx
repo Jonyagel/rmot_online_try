@@ -150,11 +150,11 @@ export default function ShowForum(props: any) {
                         transition={{ duration: 0.5 }}
                         className='title text-center mt-5'
                     >
-                        <h2 className='mb-4 text-3xl forum-title'>פורום תושבי רמות</h2>
-                        <p className='lead text-muted'>שואלים, עונים, ומחברים את הקהילה</p>
+                        <h2 className='my-4 text-3xl forum-title'>פורום תושבי רמות</h2>
+                        {/* <p className='lead text-muted'>שואלים, עונים, ומחברים את הקהילה</p> */}
                     </motion.div>
 
-                    <div className='d-flex justify-content-end mb-3'>
+                    <div className='d-flex justify-content-end'>
                         <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
                     </div>
 

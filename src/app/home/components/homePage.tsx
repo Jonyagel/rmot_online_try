@@ -79,13 +79,13 @@ interface InfoCardProps {
 }
 
 const InfoCard: React.FC<InfoCardProps> = ({ icon, title, content, link }) => (
-    <div className="info-card mx-2">
+    <div className="info-card">
         <div className="info-card-content">
             <FontAwesomeIcon icon={icon} className="info-card-icon" />
             <h3>{title}</h3>
             <p>{content}</p>
         </div>
-        <Link href={link} className="info-card-link text-center">גלה עוד</Link>
+        <Link href={link} className="info-card-link">גלה עוד</Link>
     </div>
 );
 
@@ -93,13 +93,13 @@ const HomePage: React.FC = () => {
     const router = useRouter();
     // const titleRef = useRef<HTMLHeadingElement | null>(null);
     const [currentSlide, setCurrentSlide] = useState(0);
-    const heroRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: heroRef,
-        offset: ["start start", "end start"]
-    });
-    const imageOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-    const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+    // const heroRef = useRef(null);
+    // const { scrollYProgress } = useScroll({
+    //     target: heroRef,
+    //     offset: ["start start", "end start"]
+    // });
+    // const imageOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+    // const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -171,7 +171,7 @@ const HomePage: React.FC = () => {
         { label: 'קווי אוטובוס', endValue: '12', icon: faRoad },
         { label: 'גובה מעל פני הים', endValue: '885', icon: faMountain },
     ];
-// מקסימום 80 תווים 3 שורות בתוכן פירוט של הכרטיס לא יותר של יגלוש
+    // מקסימום 80 תווים 3 שורות בתוכן פירוט של הכרטיס לא יותר של יגלוש
     const infoCards: InfoCardProps[] = [
         {
             icon: faHome,
@@ -213,6 +213,10 @@ const HomePage: React.FC = () => {
 
     return (
         <Container fluid className="px-0 py-0 home-container">
+            {/* <div className="desktop-top-ad d-none d-md-block">
+                <div className="ad-placeholder">פרסומת</div>
+                <img className="ad-placeholder rounded" src='/images/ads1top.jpg' />
+            </div> */}
             <section className="hero-section">
                 <AnimatePresence initial={false}>
                     <motion.div
@@ -222,7 +226,7 @@ const HomePage: React.FC = () => {
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.5 }}
                         className="hero-image-container"
-                        style={{ scale, opacity: imageOpacity }}
+                        // style={{ scale }}
                     >
                         <CldImage
                             src={carouselItems[currentSlide].image}
@@ -284,6 +288,10 @@ const HomePage: React.FC = () => {
                     <FontAwesomeIcon icon={faChevronRight} />
                 </button>
             </section>
+            <div className="mobile-ad-space ad-space-1 d-md-none my-2">
+                {/* <div className="ad-placeholder">פרסומת</div> */}
+                <img src='/images/saleAds.gif' className='rounded' />
+            </div>
             <Container fluid className="content-container">
                 <Row>
                     <Col lg={2} className="d-none d-lg-block">
@@ -318,15 +326,19 @@ const HomePage: React.FC = () => {
                                     modules={[Autoplay, Pagination, Navigation]}
                                     className="info-swiper p-3"
                                     breakpoints={{
-                                        640: {
+                                        320: {
                                             slidesPerView: 1,
-                                            spaceBetween: 20,
+                                            spaceBetween: 10,
                                         },
                                         768: {
                                             slidesPerView: 2,
-                                            spaceBetween: 30,
+                                            spaceBetween: 20,
                                         },
                                         1024: {
+                                            slidesPerView: 2,
+                                            spaceBetween: 25,
+                                        },
+                                        1500: {
                                             slidesPerView: 3,
                                             spaceBetween: 25,
                                         },
@@ -339,7 +351,9 @@ const HomePage: React.FC = () => {
                                     ))}
                                 </Swiper>
                             </section>
-
+                            <div className="mobile-ad-space ad-space-2 d-md-none my-2">
+                                <img src='/images/saleAds.gif' className='rounded' />
+                            </div>
                             <section className="statistics-section">
                                 <motion.h2
                                     initial={{ opacity: 0, y: 20 }}
