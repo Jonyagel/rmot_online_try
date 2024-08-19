@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload, FaSearch } from 'react-icons/fa';
-import { Button, Modal, Form, InputGroup, Col, Container, Row } from 'react-bootstrap';
+import { Button, Modal, Form, InputGroup, Col, Container, Row, NavLink, Nav } from 'react-bootstrap';
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +13,7 @@ import { faFontAwesome, faImage } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const dynamic = 'force-dynamic';
+
 
 interface Shop {
     id: string;
@@ -29,7 +30,7 @@ interface Shop {
     features: string[];
     specialOffer: string;
     category: string;
-    // categories: string[];
+    type: string;
 }
 
 export default function ShopCards(props: any) {
@@ -37,11 +38,14 @@ export default function ShopCards(props: any) {
 
     const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [logo, setLogo] = useState('');
     const [image, setImage] = useState('');
     const [shopsAr, setShopsAr] = useState(props.shopsData);
+    const [selectType, setSelectType] = useState(null);
+    const [activeTab, setActiveTab] = useState<string>('shop');
+    const [items, setItems] = useState<Shop[]>(shopsAr);
+
 
 
     const nameRef = useRef<HTMLInputElement>(null);
@@ -54,11 +58,6 @@ export default function ShopCards(props: any) {
     const websiteRef = useRef<HTMLInputElement>(null);
     const categoryRef = useRef<HTMLInputElement>(null);
 
-    // useEffect(() => {
-    //     // setShopsAr(props.shopsData)
-    //     // console.log(shopsAr)
-    //     doApi();
-    // }, []); 
 
     const doApi = async () => {
         let url = `${process.env.NEXT_PUBLIC_API_URL}/api/shops`;
@@ -88,15 +87,22 @@ export default function ShopCards(props: any) {
 
     const filteredShops = useMemo(() => {
         return shopsAr.filter((shop: any) =>
-            (shop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                shop.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
-            (!selectedCategory || shop.categories.includes(selectedCategory))
+        (shop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            shop.description.toLowerCase().includes(searchTerm.toLowerCase()))
         );
-    }, [searchTerm, selectedCategory, shopsAr]);
+    }, [searchTerm, shopsAr]);
 
-    const allCategories = useMemo(() => {
-        return Array.from(new Set(shopsAr.flatMap((shop: any) => shop.categories)));
-    }, []);
+    // useEffect(() => {
+    //     typeFilter();
+    // },[]);
+
+    const typeFilter = (typeActive: any) => {
+        const filteredAndSortedItems = items.filter((item: any) => item.type === typeActive)
+        console.log(filteredAndSortedItems)
+        setShopsAr(filteredAndSortedItems)
+        console.log(shopsAr);
+    }
+
 
     const handleShopClick = (shop: Shop) => {
         setSelectedShop(shop);
@@ -154,11 +160,9 @@ export default function ShopCards(props: any) {
 
 
     return (
-        // <div className="shop-container" style={{ minHeight: '100vh' }}>
         <div className="shop-container px-3" style={{ minHeight: '100vh' }}>
             <Row>
                 <Col lg={2} className="d-none d-lg-block">
-                    {/* אזור פרסומות שמאלי */}
                     <div className="ad-container">
                         <div className="ad-space">
                             <img src='/images/bookgif.webp' className='rounded' />
@@ -202,63 +206,92 @@ export default function ShopCards(props: any) {
                             </InputGroup.Text>
                         </InputGroup>
                     </div>
+                    <motion.div
+                        className="d-flex justify-content-center align-items-center mb-4 rounded"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <Nav
+                            activeKey={activeTab}
+                            onSelect={(k: any) => {
+                                setActiveTab(k);
+                                typeFilter(k);
+                            }}
+                            className='navInfo'
+                        >
+                            <NavLink className='rounded navLinkInfo' eventKey="shop">חנויות</NavLink>
+                            <NavLink className='rounded navLinkInfo' eventKey="mosdot">מוסדות</NavLink>
+                            <NavLink className='rounded navLinkInfo' eventKey="gmach">גמ״חים</NavLink>
+                        </Nav>
+                    </motion.div>
 
                     <div className="shop-grid">
-                        {filteredShops.map((shop: Shop) => (
-                            <motion.div
-                                key={shop.id}
-                                className="shop-card border"
-                                whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-                            // onClick={() => handleShopClick(shop)}
-                            >
-                                <div className="shop-card-content">
-                                    <div className="shop-card-header">
-                                        {shop.image ? (
-                                            <CldImage
-                                                src={shop.image}
-                                                width="400"
-                                                height="200"
-                                                crop="fill"
-                                                className="shop-image rounded-t"
-                                                alt={shop.name}
-                                            />
-                                        ) : (
-                                            <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
-                                                <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
-                                            </div>
-                                        )}
-                                        <div className="shop-logo">
-                                            {shop.logo ? (
+                        {filteredShops.map((shop: Shop, index: number) => (
+                            <React.Fragment key={shop.id}>
+                                <motion.div
+                                    className="shop-card border"
+                                    whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+                                >
+                                    <div className="shop-card-content">
+                                        <div className="shop-card-header">
+                                            {shop.image ? (
                                                 <CldImage
-                                                    src={shop.logo}
-                                                    width="50"
-                                                    height="50"
+                                                    src={shop.image}
+                                                    width="400"
+                                                    height="200"
                                                     crop="fill"
-                                                    className="logo-image"
-                                                    alt={`${shop.name} logo`}
+                                                    className="shop-image rounded-t"
+                                                    alt={shop.name}
                                                 />
                                             ) : (
-                                                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                                    <FontAwesomeIcon icon={faFontAwesome} size="2x" color="#adb5bd" />
+                                                <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
+                                                    <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
                                                 </div>
                                             )}
+                                            <div className="shop-logo">
+                                                {shop.logo ? (
+                                                    <CldImage
+                                                        src={shop.logo}
+                                                        width="50"
+                                                        height="50"
+                                                        crop="fill"
+                                                        className="logo-image"
+                                                        alt={`${shop.name} logo`}
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                        <FontAwesomeIcon icon={faFontAwesome} size="2x" color="#adb5bd" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        <div className="shop-description">
+                                            <h3>{shop.name}</h3>
+                                            <p>
+                                                {shop.description.length > 100
+                                                    ? `${shop.description.substring(0, 100)}...`
+                                                    : shop.description}
+                                            </p>
                                         </div>
                                     </div>
-
-                                    <div className="shop-description">
-                                        <h3>{shop.name}</h3>
-                                        <p>
-                                            {shop.description.length > 100
-                                                ? `${shop.description.substring(0, 100)}...`
-                                                : shop.description}
-                                        </p>
+                                    <div className="shop-card-footer">
+                                        <button className="more-info-btn" onClick={() => handleShopClick(shop)}>למידע נוסף</button>
+                                        <span className="shop-address"><FaMapMarkerAlt /> {shop.address}</span>
                                     </div>
-                                </div>
-                                <div className="shop-card-footer">
-                                    <button className="more-info-btn" onClick={() => handleShopClick(shop)}>למידע נוסף</button>
-                                    <span className="shop-address"><FaMapMarkerAlt /> {shop.address}</span>
-                                </div>
-                            </motion.div>
+                                </motion.div>
+                                {(index + 1) % 6 === 0 && (
+                                    <motion.div
+                                        className="shop-card border ad-card"
+                                        whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+                                    >
+                                        <div className="ad-content">
+                                            <img src="/images/timegif.webp" alt="פרסומת" className="ad-image" />
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </React.Fragment>
                         ))}
                     </div>
 
@@ -296,11 +329,6 @@ export default function ShopCards(props: any) {
                                             />
                                             <div className="shop-title-container">
                                                 <h2>{selectedShop.name}</h2>
-                                                {/* <div className="shop-categories">
-                                            {selectedShop.categories.map((category, index) => (
-                                                <span key={index} className="category-tag">{category}</span>
-                                            ))}
-                                        </div> */}
                                             </div>
                                         </div>
                                         <div className="shop-details-unique-container">
@@ -369,11 +397,9 @@ export default function ShopCards(props: any) {
                     </AnimatePresence>
                 </Col >
                 <Col lg={2} className="d-none d-lg-block ">
-                    {/* אזור פרסומות ימני */}
                     <div className="ad-container">
                         <div className="ad-space">
                             <img src='/images/timegif.webp' className='rounded' />
-                            {/* כאן תוכל להוסיף את קוד הפרסומת שלך */}
                         </div>
                     </div>
                 </Col>
@@ -536,7 +562,6 @@ export default function ShopCards(props: any) {
                 </Modal.Body>
             </Modal>
             <ToastContainer position="bottom-center" theme="colored" />
-            {/* </div > */}
         </div >
     )
 }

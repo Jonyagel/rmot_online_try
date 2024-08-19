@@ -10,7 +10,6 @@ import './familyPage.css'
 
 const StyledCard = styled(Card)`
   border: none;
-  border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   margin-bottom: 2rem;
@@ -23,7 +22,7 @@ const StyledCard = styled(Card)`
 `;
 
 const CardHeader = styled(Card.Header)`
-    background: #0275d8;
+    background: #0d6efd;
   color: white;
   font-weight: bold;
   padding: 1rem;
@@ -128,8 +127,20 @@ const FamilyPage = () => {
     const contactInfoRef = useRef<HTMLInputElement>(null);
     const itemAreaRef = useRef<HTMLSelectElement>(null);
 
+    const getDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1; // getMonth() מחזיר 0-11, לכן מוסיפים 1
+        const day = today.getDate();
+
+        const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        return formattedDate;
+    }
+
+
+
     const dateDoApi = async () => {
-        const url = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=now&month=8&ss=on&mf=on&c=on&geo=geoname&geonameid=281184&M=on&s=on&d=on&lg=he&start=2024-08-15&end=2024-08-15`;
+        const url = `https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=now&month=8&ss=on&mf=on&c=on&geo=geoname&geonameid=281184&M=on&s=on&d=on&lg=he&start=${getDate()}&end=${getDate()}`;
         const resp = await fetch(url);
         const data = await resp.json();
         console.log(data.items[0].heDateParts);
@@ -341,7 +352,7 @@ const FamilyPage = () => {
                         {activeTab === 'daily' && (
                             <Row>
                                 <Col md={6}>
-                                    <StyledCard>
+                                    <StyledCard className='rounded'>
                                         <CardHeader>
                                             <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" /> לוח שנה עברי
                                         </CardHeader>
@@ -368,7 +379,7 @@ const FamilyPage = () => {
                                             <blockquote className="blockquote">
                                                 <p>"בראשית ברא אלוהים את השמים ואת הארץ"</p>
                                             </blockquote>
-                                            <Button variant="outline-primary">דיון משפחתי</Button>
+                                            {/* <Button variant="outline-primary">דיון משפחתי</Button> */}
                                         </Card.Body>
                                     </StyledCard>
                                 </Col>
@@ -378,7 +389,7 @@ const FamilyPage = () => {
                         {activeTab === 'weekly' && (
                             <Row>
                                 <Col md={6}>
-                                    <StyledCard>
+                                    {/* <StyledCard>
                                         <CardHeader>
                                             <FontAwesomeIcon icon={faQuestionCircle} className="mr-2" /> טריוויה שבועית
                                         </CardHeader>
@@ -393,9 +404,9 @@ const FamilyPage = () => {
                                                 </p>
                                             )}
                                         </Card.Body>
-                                    </StyledCard>
+                                    </StyledCard> */}
 
-                                    <StyledCard className="mt-4">
+                                    {/* <StyledCard className="mt-4">
                                         <CardHeader>
                                             <FontAwesomeIcon icon={faLightbulb} className="mr-2" /> אתגר שבועי
                                         </CardHeader>
@@ -409,8 +420,8 @@ const FamilyPage = () => {
                                                 <Button variant="primary" className="mt-3">שתפו את המעשים הטובים</Button>
                                             </Form>
                                         </Card.Body>
-                                    </StyledCard>
-                                    <StyledCard className="mt-4">
+                                    </StyledCard> */}
+                                    <StyledCard className="">
                                         <CardHeader>
                                             <FontAwesomeIcon icon={faBook} className="mr-2" /> דבר תורה שבועי
                                         </CardHeader>
@@ -420,7 +431,7 @@ const FamilyPage = () => {
                                             <Button variant="outline-primary">קרא עוד</Button>
                                         </Card.Body>
                                     </StyledCard>
-                                    <StyledCard className="mt-4">
+                                    {/* <StyledCard className="mt-4">
                                         <CardHeader>
                                             <FontAwesomeIcon icon={faPiggyBank} className="mr-2" /> טיפ חיסכון שבועי
                                         </CardHeader>
@@ -429,9 +440,9 @@ const FamilyPage = () => {
                                             <p>{savingTip}</p>
                                             <Button variant="outline-success">עוד טיפים לחיסכון</Button>
                                         </Card.Body>
-                                    </StyledCard>
+                                    </StyledCard> */}
 
-                                    <StyledCard className="mt-4">
+                                    {/* <StyledCard className="mt-4">
                                         <CardHeader>
                                             <FontAwesomeIcon icon={faPoll} className="mr-2" /> סקר משפחתי
                                         </CardHeader>
@@ -450,8 +461,8 @@ const FamilyPage = () => {
                                                 <Button variant="primary" className="mt-3">הצבע</Button>
                                             </Form>
                                         </Card.Body>
-                                    </StyledCard>
-                                    <StyledCard>
+                                    </StyledCard> */}
+                                    {/* <StyledCard>
                                         <CardHeader>
                                             <FontAwesomeIcon icon={faMapMarkedAlt} className="mr-2" /> המלצה לבילוי משפחתי
                                         </CardHeader>
@@ -459,6 +470,19 @@ const FamilyPage = () => {
                                             <h5>{activityRecommendation.title}</h5>
                                             <p>{activityRecommendation.description}</p>
                                             <Button variant="outline-info">פרטים נוספים</Button>
+                                        </Card.Body>
+                                    </StyledCard> */}
+                                    <StyledCard>
+                                        <CardHeader>
+                                            <FontAwesomeIcon icon={faCamera} className="mr-2" /> אתגר צילום שבועי
+                                        </CardHeader>
+                                        <Card.Body>
+                                            <h5>נושא השבוע: {photoChallengeTopic}</h5>
+                                            <p>צלמו תמונה בנושא השבועי ושתפו אותה כאן!</p>
+                                            <Form.Group>
+                                                {/* <Form.File id="photoUpload" label="העלו את התמונה שלכם" /> */}
+                                            </Form.Group>
+                                            <Button variant="primary" className="mt-3">שתף תמונה</Button>
                                         </Card.Body>
                                     </StyledCard>
                                 </Col>
@@ -508,19 +532,7 @@ const FamilyPage = () => {
                                             </div>
                                         </Card.Body>
                                     </StyledCard>
-                                    <StyledCard>
-                                        <CardHeader>
-                                            <FontAwesomeIcon icon={faCamera} className="mr-2" /> אתגר צילום שבועי
-                                        </CardHeader>
-                                        <Card.Body>
-                                            <h5>נושא השבוע: {photoChallengeTopic}</h5>
-                                            <p>צלמו תמונה בנושא השבועי ושתפו אותה כאן!</p>
-                                            <Form.Group>
-                                                {/* <Form.File id="photoUpload" label="העלו את התמונה שלכם" /> */}
-                                            </Form.Group>
-                                            <Button variant="primary" className="mt-3">שתף תמונה</Button>
-                                        </Card.Body>
-                                    </StyledCard>
+
                                 </Col>
                             </Row>
                         )}

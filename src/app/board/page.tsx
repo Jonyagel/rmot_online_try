@@ -308,8 +308,6 @@ export default function CommunityBoard() {
               <StyledNavLink eventKey="gmach">גמ״ח</StyledNavLink>
               <StyledNavLink eventKey="class">חוגים</StyledNavLink>
             </StyledNav>
-
-
           </motion.div>
 
           <Row>

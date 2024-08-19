@@ -8,14 +8,15 @@ import Select, { ActionMeta, SingleValue } from 'react-select';
 
 const StyledCard = styled(Card)`
   border: none;
-  border-radius: 15px;
+  // border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   margin-bottom: 2rem;
 `;
 
 const CardHeader = styled(Card.Header)`
-    background: linear-gradient(135deg, #007bff, #6610f2);
+    // background: linear-gradient(135deg, #007bff, #6610f2);
+    background:#0d6efd;
   color: white;
   font-weight: bold;
   padding: 1rem;
@@ -158,6 +159,7 @@ const SynagogueCard: React.FC<SynagogueCardProps> = ({ synagogues }) => {
             </ClearButton>
           )}
           <DaySelector
+          className='mt-2 w-50'
             value={selectedDay}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedDay(e.target.value as 'weekday' | 'saturday')}
           >

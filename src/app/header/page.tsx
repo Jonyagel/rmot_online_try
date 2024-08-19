@@ -44,13 +44,13 @@ export default function Header() {
                     <Link href="/" className="logo-link">
                         <img src='/images/logo.jpg' width={40} className="logo" alt="Logo" />
                     </Link>
-                    <nav className={`nav ${isNavOpen ? 'nav-open' : ''}`}>
+                    <nav className={`navHeader ${isNavOpen ? 'nav-open' : ''}`}>
                         {navLinks.map((link, index) => (
-                            <Link key={index} className='nav-link' href={link.href} onClick={toggleNav}>
+                            <Link key={index} className='nav-linkHeader' href={link.href} onClick={toggleNav}>
                                 {link.text}
                             </Link>
                         ))}
-                        <Link href="/login" className="nav-link login-link mobile-only" onClick={toggleNav}>
+                        <Link href="/login" className="nav-linkHeader login-link mobile-only" onClick={toggleNav}>
                             כניסה/הרשמה
                         </Link>
                     </nav>

@@ -37,12 +37,12 @@
     transform: scale(1.1) rotate(5deg);
 }
 
-.nav {
+.navHeader {
     display: flex;
     gap: 1.5rem;
 }
 
-.nav-link {
+.nav-linkHeader {
     color: #333;
     text-decoration: none;
     font-size: 1rem;
@@ -52,7 +52,7 @@
     padding: 0.5rem 0;
 }
 
-.nav-link::after {
+.nav-linkHeader::after {
     content: '';
     position: absolute;
     width: 100%;
@@ -65,7 +65,7 @@
     transition: all 0.3s ease-in-out;
 }
 
-.nav-link:hover::after {
+.nav-linkHeader:hover::after {
     visibility: visible;
     transform: scaleX(1);
 }

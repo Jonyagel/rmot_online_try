@@ -78,7 +78,7 @@
 
 .ingredients-section h3,
 .instructions-section h3 {
-  color: #2980b9;
+  /* color: #2980b9; */
   margin-bottom: 15px;
   display: flex;
   align-items: center;
