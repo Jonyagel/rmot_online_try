@@ -12,6 +12,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FaChevronDown } from 'react-icons/fa';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,11 +30,26 @@ export default function ShowForum(props: any) {
     const [totalPages, setTotalPages] = useState(props.totalPages);
     const [showImageModal, setShowImageModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
+    // const [displayedPosts, setDisplayedPosts] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [lengthOfForum, setLengthOfForum] = useState(10);
+    const [loading, setLoading] = useState(2);
 
 
     const popularTags = ['שאלה', 'עזרה', 'בעיה', 'תקלה'];
 
+    // useEffect(() => {
+    //     setDisplayedPosts(sortedAndFilteredPosts.slice(0, 10)); // מציג 10 פוסטים ראשונים
+    //     setHasMore(sortedAndFilteredPosts.length > 10);
+    // }, [sortedAndFilteredPosts]);
 
+    // const loadMorePosts = () => {
+
+    //     const currentLength = displayedPosts.length;
+    //     const nextPosts = sortedAndFilteredPosts.slice(currentLength, currentLength + 10);
+    //     setDisplayedPosts([...displayedPosts, ...nextPosts]);
+    //     setHasMore(currentLength + 10 < sortedAndFilteredPosts.length);
+    // };
 
     const router = useRouter();
 
@@ -71,11 +87,12 @@ export default function ShowForum(props: any) {
 
     async function doApi(newPage: any) {
         const search = saerchRef.current?.value
-        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum?page=${newPage - 1}&search=${search}`;
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum?page=${newPage}&search=${search}`;
         const resp = await fetch(url, { cache: 'no-store' });
         const data = await resp.json();
         console.log(data);
         setForum_ar(data.data);
+        setLengthOfForum(data.totalPages)
     }
 
     const formatPostAgo = (date: number): string => {
@@ -204,138 +221,124 @@ export default function ShowForum(props: any) {
 
                     <div className='row' >
                         <AnimatePresence>
-                            {sortedAndFilteredPosts.map((item: any) => (
-                                <motion.div
-                                    className='col-12 mb-4'
-                                    key={item._id}
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <Link href={`/forum/comment/${item._id}`} className='text-decoration-none'>
-                                        <Card className='forumCard shadow-sm hover-card position-relative' style={{ minHeight: '100px' }}>
-                                            <Card.Body className='forumCardBody'>
-                                                <div className='d-flex justify-content-between align-items-start mb-3'>
-                                                    <div className='d-flex'>
-                                                        <OverlayTrigger
-                                                            trigger="hover"
-                                                            placement="top"
-                                                            overlay={popover(item.userName)}
-                                                        >
-                                                            <div className='text-center me-3'>
-                                                                <div className='bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px' }}>
-                                                                    <h5 className='m-0'>{item.userName[0]}</h5>
+                            {sortedAndFilteredPosts.map((item: any, index: number) => (
+                                <React.Fragment key={item._id}>
+                                    <motion.div
+                                        className='col-12 mb-4'
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <Link href={`/forum/comment/${item._id}`} className='text-decoration-none'>
+                                            <Card className='forumCard shadow-sm hover-card position-relative' style={{ minHeight: '100px' }}>
+                                                <Card.Body className='forumCardBody'>
+                                                    <div className='d-flex justify-content-between align-items-start mb-3'>
+                                                        <div className='d-flex'>
+                                                            <OverlayTrigger
+                                                                trigger="hover"
+                                                                placement="top"
+                                                                overlay={popover(item.userName)}
+                                                            >
+                                                                <div className='text-center me-3'>
+                                                                    <div className='bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px' }}>
+                                                                        <h5 className='m-0'>{item.userName[0]}</h5>
+                                                                    </div>
+                                                                    <small className='text-muted'>{item.userName}</small>
                                                                 </div>
-                                                                <small className='text-muted'>{item.userName}</small>
+                                                            </OverlayTrigger>
+                                                            <div className='d-flex flex-column justify-content-center'>
+                                                                <h5 className='mb-0 fw-bold'>{item.tittle}</h5>
+                                                                <Card.Text className='mt-2' style={{ whiteSpace: "pre-wrap" }}>
+                                                                    {item.description.length > 150
+                                                                        ? `${item.description.substring(0, 150)}...`
+                                                                        : item.description}
+                                                                </Card.Text>
                                                             </div>
-                                                        </OverlayTrigger>
-                                                        <div className='d-flex flex-column justify-content-center'>
-                                                            <h5 className='mb-0 fw-bold'>{item.tittle}</h5>
-                                                            <Card.Text className='mt-2' style={{ whiteSpace: "pre-wrap" }}>
-                                                                {item.description.length > 150
-                                                                    ? `${item.description.substring(0, 150)}...`
-                                                                    : item.description}
-                                                            </Card.Text>
                                                         </div>
+                                                        <Badge bg='primary' className="ms-2 align-self-start top-0 end-20 translate-middle position-absolute">{item.topic}</Badge>
                                                     </div>
-                                                    <Badge bg='primary' className="ms-2 align-self-start top-0 end-20 translate-middle position-absolute">{item.topic}</Badge>
-                                                </div>
-                                                {item.fileName && (
-                                                    <div className="mb-3">
-                                                        <CldImage
-                                                            src={item.fileName}
-                                                            width="100"
-                                                            height="100"
-                                                            sizes="100vw"
-                                                            crop="fill"
-                                                            className="rounded cursor-pointer"
-                                                            alt='תמונה מצורפת'
-                                                            placeholder="blur"
-                                                            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-                                                            loading='lazy'
-                                                            format="auto"
-                                                            quality="auto"
-                                                            onClick={(e) => {
-                                                                e.preventDefault(); // מונע ניווט ללינק
-                                                                setSelectedImage(item.fileName);
-                                                                setShowImageModal(true);
-                                                            }}
-                                                        />
+                                                    {item.fileName && (
+                                                        <div className="mb-3">
+                                                            <CldImage
+                                                                src={item.fileName}
+                                                                width="100"
+                                                                height="100"
+                                                                sizes="100vw"
+                                                                crop="fill"
+                                                                className="rounded cursor-pointer"
+                                                                alt='תמונה מצורפת'
+                                                                placeholder="blur"
+                                                                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
+                                                                loading='lazy'
+                                                                format="auto"
+                                                                quality="auto"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault(); // מונע ניווט ללינק
+                                                                    setSelectedImage(item.fileName);
+                                                                    setShowImageModal(true);
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    )}
+                                                    <div className='d-flex justify-content-end align-items-center'>
+                                                        <small className='me-2'>
+                                                            <i className="bi bi-chat-dots me-2"></i>
+                                                            {item.numOfComments} תגובות
+                                                        </small>
+                                                        <small className='text-muted'><i className="bi bi-clock me-2"></i>{formatPostAgo(item.date)}</small>
                                                     </div>
-                                                )}
-                                                <div className='d-flex justify-content-end align-items-center'>
-                                                    <small className='me-2'>
-                                                        <i className="bi bi-chat-dots me-2"></i>
-                                                        {item.numOfComments} תגובות
-                                                    </small>
-                                                    <small className='text-muted'><i className="bi bi-clock me-2"></i>{formatPostAgo(item.date)}</small>
-                                                </div>
-                                            </Card.Body>
-                                        </Card>
-                                    </Link>
-                                </motion.div>
+                                                </Card.Body>
+                                            </Card>
+                                        </Link>
+                                    </motion.div>
+                                    {(index + 1) % 6 === 0 && (
+                                        <motion.div
+                                            className='col-12 mb-4'
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <Card className='forumCard shadow-sm hover-card position-relative' style={{ minHeight: '100px' }}>
+                                                <Card.Body className='forumCardBody'>
+                                                    <div className='text-center'>
+                                                        <img src='/images/ads1top.jpg' alt="Advertisement" className="img-fluid" />
+                                                    </div>
+                                                </Card.Body>
+                                            </Card>
+                                        </motion.div>
+                                    )}
+                                </React.Fragment>
                             ))}
                         </AnimatePresence>
                     </div>
-
-                    <nav aria-label="ניווט בין עמודים" className="mt-5">
-                        <ul className="pagination pagination-md justify-content-center flex-wrap">
-                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                <button
-                                    className="page-link rounded-circle shadow-sm border-0 mx-1"
-                                    onClick={() => {
-                                        handlePageChange(currentPage - 1)
-                                    }}
-                                    aria-label="הקודם"
-                                    style={{ width: '40px', height: '40px', transition: 'all 0.3s' }}
+                    {hasMore && (
+                        <div className="text-center mt-5 mb-6">
+                            <motion.button
+                                className="load-more-button px-4 py-2"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => {
+                                    setLoading(loading + 1);
+                                    console.log(loading);
+                                    doApi(loading);
+                                    if(lengthOfForum === forum_ar.length) {
+                                        setHasMore(false);
+                                    }
+                                }}
+                            >
+                                הצג עוד
+                                <motion.span
+                                    className="chevron-icon"
+                                    animate={{ y: [0, 5, 0] }}
+                                    transition={{ repeat: Infinity, duration: 1.5 }}
                                 >
-                                    <i className="bi bi-chevron-right"></i>
-                                </button>
-                            </li>
-
-                            {[...Array(totalPages)].map((_, index) => {
-                                const pageNumber = index + 1;
-                                const isCurrentPage = currentPage === pageNumber;
-                                const isNearCurrent = Math.abs(currentPage - pageNumber) <= 2;
-
-                                if (isNearCurrent || pageNumber === 1 || pageNumber === totalPages) {
-                                    return (
-                                        <li key={index} className={`page-item ${isCurrentPage ? 'active' : ''}`}>
-                                            <button
-                                                className={`page-link rounded-circle shadow-sm border-0 mx-1 ${isCurrentPage ? 'bg-primary text-white' : 'bg-light'}`}
-                                                onClick={() => handlePageChange(pageNumber)}
-                                                style={{
-                                                    width: '40px',
-                                                    height: '40px',
-                                                    transition: 'all 0.3s',
-                                                    transform: isCurrentPage ? 'scale(1.1)' : 'scale(1)'
-                                                }}
-                                            >
-                                                {pageNumber}
-                                            </button>
-                                        </li>
-                                    );
-                                } else if (isNearCurrent && (pageNumber === currentPage - 3 || pageNumber === currentPage + 3)) {
-                                    return <li key={index} className="page-item disabled"><span className="page-link border-0">...</span></li>;
-                                }
-                                return null;
-                            })}
-
-                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                <button
-                                    className="page-link rounded-circle shadow-sm border-0 mx-1"
-                                    onClick={() => {
-                                        handlePageChange(currentPage + 1)
-                                    }}
-                                    aria-label="הבא"
-                                    style={{ width: '40px', height: '40px', transition: 'all 0.3s' }}
-                                >
-                                    <i className="bi bi-chevron-left"></i>
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
+                                    <FaChevronDown />
+                                </motion.span>
+                            </motion.button>
+                        </div>
+                    )}
                 </Col >
                 <Col lg={2} className="d-none d-lg-block ">
                     {/* אזור פרסומות ימני */}
