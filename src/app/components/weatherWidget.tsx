@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { WiThermometer, WiHumidity, WiWindy } from 'react-icons/wi';
-import './WeatherWidget.css';
+import './weatherWidget.css';
 
 interface WeatherData {
   main: {
