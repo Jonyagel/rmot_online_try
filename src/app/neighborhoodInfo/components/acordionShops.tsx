@@ -15,36 +15,52 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export const dynamic = 'force-dynamic';
 
 
-interface Shop {
+interface Card {
     id: string;
     name: string;
     description: string;
-    logo: string;
+    logo?: string;
     content: string;
     hours: string;
     address: string;
     phone: string;
     email: string;
-    website: string;
+    website?: string;
     image: string;
-    features: string[];
-    specialOffer: string;
+    features?: string[];
+    specialOffer?: string;
     category: string;
     type: string;
 }
+// interface gmach {
+//     id: string;
+//     name: string;
+//     description: string;
+//     content: string;
+//     hours: string;
+//     address: string;
+//     phone: string;
+//     email: string;
+//     image: string;
+//     category: string;
+//     type: string;
+// }
 
 export default function ShopCards(props: any) {
     const router = useRouter();
 
-    const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
+    const [selectedCard, setSelectedCard] = useState<Card | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [logo, setLogo] = useState('');
     const [image, setImage] = useState('');
-    const [shopsAr, setShopsAr] = useState(props.shopsData);
+    const [cardsAr, setCardsAr] = useState(props.shopsData);
+    const [gmachAr, setGmachAr] = useState(props.gmachData);
     const [selectType, setSelectType] = useState(null);
     const [activeTab, setActiveTab] = useState<string>('shop');
-    const [items, setItems] = useState<Shop[]>(shopsAr);
+    const [items, setItems] = useState<Card[]>(cardsAr);
+    const [activeSubcategory, setActiveSubcategory] = useState('');
+    // const [gmachitems, setGmachItems] = useState<Card[]>(gmachAr);
 
 
 
@@ -59,12 +75,21 @@ export default function ShopCards(props: any) {
     const categoryRef = useRef<HTMLInputElement>(null);
 
 
-    const doApi = async () => {
-        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/shops`;
+    const doApi = async (subCategory:any) => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/shops?category=${subCategory}`;
         const resp = await fetch(url, { cache: 'no-store' })
         const data = await resp.json();
         console.log(data);
-        setShopsAr(data)
+        setCardsAr(data)
+    }
+
+    const doApiGmach = async (subCategory:any) => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/gmach?category=${subCategory}`;
+        const resp = await fetch(url, { cache: 'no-store' })
+        const data = await resp.json();
+        console.log(data);
+        // setCardsAr(data)
+        setGmachAr(data);
     }
 
     const formAnimation = {
@@ -85,31 +110,39 @@ export default function ShopCards(props: any) {
         visible: { opacity: 1, y: 0 }
     };
 
-    const filteredShops = useMemo(() => {
-        return shopsAr.filter((shop: any) =>
-        (shop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            shop.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    const filteredCards = useMemo(() => {
+        return cardsAr.filter((card: any) =>
+        (card.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            card.description.toLowerCase().includes(searchTerm.toLowerCase()))
         );
-    }, [searchTerm, shopsAr]);
+    }, [searchTerm, cardsAr]);
+
+    const filteredGmach = useMemo(() => {
+        return gmachAr.filter((card: any) =>
+        (card.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            card.description.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+    }, [searchTerm, gmachAr]);
 
     // useEffect(() => {
     //     typeFilter();
     // },[]);
 
     const typeFilter = (typeActive: any) => {
-        const filteredAndSortedItems = items.filter((item: any) => item.type === typeActive)
-        console.log(filteredAndSortedItems)
-        setShopsAr(filteredAndSortedItems)
-        console.log(shopsAr);
+        // doApiGmach();
+        // const filteredAndSortedItems = items.filter((item: any) => item.type === typeActive)
+        // console.log(filteredAndSortedItems)
+        // setShopsAr(filteredAndSortedItems)
+        // console.log(shopsAr);
     }
 
 
-    const handleShopClick = (shop: Shop) => {
-        setSelectedShop(shop);
+    const handleShopClick = (card: Card) => {
+        setSelectedCard(card);
     };
 
     const closeModal = () => {
-        setSelectedShop(null);
+        setSelectedCard(null);
     };
 
     const handleShowModal = () => setShowModal(true);
@@ -127,8 +160,7 @@ export default function ShopCards(props: any) {
         setImage(result.info.secure_url);
     };
 
-    const handleAddShop = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleAddShop = async () => {
         const name = nameRef.current?.value;
         const description = descriptionRef.current?.value;
         const content = contentRef.current?.value;
@@ -148,13 +180,43 @@ export default function ShopCards(props: any) {
             });
             const data = await resp.json();
             console.log(data);
-            doApi();
+            doApi('');
             handleCloseModal();
             router.push('/neighborhoodInfo');
         } catch (error: any) {
             console.error('Error:', error);
         }
         toast.success('החנות נוספה בהצלחה!');
+        handleCloseModal();
+    };
+
+
+    const handleAddGmach = async () => {
+        const name = nameRef.current?.value;
+        const description = descriptionRef.current?.value;
+        const content = contentRef.current?.value;
+        const address = addressRef.current?.value;
+        const hours = hoursRef.current?.value;
+        const phone = phoneRef.current?.value;
+        const email = emailRef.current?.value;
+        const category = categoryRef.current?.value;
+        try {
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gmach`, {
+                method: 'POST',
+                body: JSON.stringify({ name, description, content, hours, address, phone, email, category, image }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await resp.json();
+            console.log(data);
+            doApiGmach('');
+            handleCloseModal();
+            router.push('/neighborhoodInfo');
+        } catch (error: any) {
+            console.error('Error:', error);
+        }
+        toast.success('הגמ"ח נוספה בהצלחה!');
         handleCloseModal();
     };
 
@@ -207,7 +269,7 @@ export default function ShopCards(props: any) {
                         </InputGroup>
                     </div>
                     <motion.div
-                        className="d-flex justify-content-center align-items-center mb-4 rounded"
+                        className="d-flex flex-column justify-content-center align-items-center mb-4 rounded"
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
@@ -216,69 +278,109 @@ export default function ShopCards(props: any) {
                             activeKey={activeTab}
                             onSelect={(k: any) => {
                                 setActiveTab(k);
-                                typeFilter(k);
+                                if (k === 'gmach') {
+                                    doApiGmach('');
+                                }
+                                else if (k === 'shop') {  
+                                    doApi("");
+                                    setActiveSubcategory('')
+                                }
+                                // typeFilter(k);          
+                                // setSubcategories(k);
                             }}
-                            className='navInfo'
+                            className='navInfo mb-3'
                         >
                             <NavLink className='rounded navLinkInfo' eventKey="shop">חנויות</NavLink>
                             <NavLink className='rounded navLinkInfo' eventKey="mosdot">מוסדות</NavLink>
                             <NavLink className='rounded navLinkInfo' eventKey="gmach">גמ״חים</NavLink>
                         </Nav>
-                    </motion.div>
 
+                        {activeTab === 'shop' && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Nav
+                                    activeKey={activeSubcategory}
+                                    onSelect={(k: any) => {
+                                        setActiveSubcategory(k)
+                                        doApi(k)
+                                    }}
+                                    className='navInfo subcategories'
+                                >
+                                    <NavLink className='rounded navLinkInfo subcategory' eventKey="clothing">ביגוד</NavLink>
+                                    <NavLink className='rounded navLinkInfo subcategory' eventKey="food">מזון</NavLink>
+                                    <NavLink className='rounded navLinkInfo subcategory' eventKey="electronics">אלקטרוניקה</NavLink>
+                                    <NavLink className='rounded navLinkInfo subcategory' eventKey="home">לבית</NavLink>
+                                </Nav>
+                            </motion.div>
+                        )}
+                    </motion.div>
                     <div className="shop-grid">
-                        {filteredShops.map((shop: Shop, index: number) => (
-                            <React.Fragment key={shop.id}>
+                        {(activeTab === 'shop' ? filteredCards : filteredGmach).map((card: Card, index: number) => (
+                            <React.Fragment key={card.id}>
                                 <motion.div
                                     className="shop-card border"
                                     whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
                                 >
                                     <div className="shop-card-content">
                                         <div className="shop-card-header">
-                                            {shop.image ? (
+                                            {card.image ? (
                                                 <CldImage
-                                                    src={shop.image}
+                                                    src={card.image}
                                                     width="400"
                                                     height="200"
                                                     crop="fill"
                                                     className="shop-image rounded-t"
-                                                    alt={shop.name}
+                                                    alt={card.name}
+                                                    loading='lazy'
+                                                    format="auto"
+                                                    quality="auto"
                                                 />
                                             ) : (
-                                                <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
+                                                <div className="w-full bg-gray-200 rounded-t flex items-center justify-center" style={{ height: '150px' }}>
                                                     <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
                                                 </div>
                                             )}
-                                            <div className="shop-logo">
-                                                {shop.logo ? (
-                                                    <CldImage
-                                                        src={shop.logo}
-                                                        width="50"
-                                                        height="50"
-                                                        crop="fill"
-                                                        className="logo-image"
-                                                        alt={`${shop.name} logo`}
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                                        <FontAwesomeIcon icon={faFontAwesome} size="2x" color="#adb5bd" />
-                                                    </div>
-                                                )}
-                                            </div>
+                                            {activeTab === 'shop' && (
+                                                <div className="shop-logo">
+                                                    {card.logo ? (
+                                                        <CldImage
+                                                            src={card.logo}
+                                                            width="50"
+                                                            height="50"
+                                                            crop="fill"
+                                                            className="logo-image"
+                                                            alt={`${card.name} logo`}
+                                                            loading='lazy'
+                                                            format="auto"
+                                                            quality="auto"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                            <FontAwesomeIcon icon={faFontAwesome} size="2x" color="#adb5bd" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                            {activeTab === 'gmach' && (
+                                                <div></div>
+                                            )}
                                         </div>
 
                                         <div className="shop-description">
-                                            <h3>{shop.name}</h3>
+                                            <h3>{card.name}</h3>
                                             <p>
-                                                {shop.description.length > 100
-                                                    ? `${shop.description.substring(0, 100)}...`
-                                                    : shop.description}
+                                                {card.description.length > 100
+                                                    ? `${card.description.substring(0, 100)}...`
+                                                    : card.description}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="shop-card-footer">
-                                        <button className="more-info-btn" onClick={() => handleShopClick(shop)}>למידע נוסף</button>
-                                        <span className="shop-address"><FaMapMarkerAlt /> {shop.address}</span>
+                                        <button className="more-info-btn" onClick={() => handleShopClick(card)}>למידע נוסף</button>
+                                        <span className="shop-address"><FaMapMarkerAlt /> {card.address}</span>
                                     </div>
                                 </motion.div>
                                 {(index + 1) % 6 === 0 && (
@@ -295,9 +397,8 @@ export default function ShopCards(props: any) {
                         ))}
                     </div>
 
-
                     <AnimatePresence>
-                        {selectedShop && (
+                        {selectedCard && (
                             <motion.div
                                 className="shop_detaile modal-overlay"
                                 initial={{ opacity: 0 }}
@@ -320,21 +421,24 @@ export default function ShopCards(props: any) {
                                     <div className="shop-details">
                                         <div className="shop-header">
                                             <CldImage
-                                                src={selectedShop.image}
+                                                src={selectedCard.image}
                                                 width="800"
                                                 height="400"
                                                 crop="fill"
                                                 className="shop-detail-image"
-                                                alt={selectedShop.name}
+                                                alt={selectedCard.name}
+                                                loading='lazy'
+                                                format="auto"
+                                                quality="auto"
                                             />
                                             <div className="shop-title-container">
-                                                <h2>{selectedShop.name}</h2>
+                                                <h2>{selectedCard.name}</h2>
                                             </div>
-                                        </div>
+                                        </div> 
                                         <div className="shop-details-unique-container">
                                             <div className="shop-description-unique">
                                                 <h3>אודות החנות</h3>
-                                                <p className="shop-content-unique">{selectedShop.content}</p>
+                                                <p className="shop-content-unique">{selectedCard.content}</p>
                                             </div>
 
                                             <div className="shop-info-grid-unique">
@@ -344,7 +448,7 @@ export default function ShopCards(props: any) {
                                                     </div>
                                                     <div className="info-content-unique">
                                                         <h4>שעות פעילות</h4>
-                                                        <p>{selectedShop.hours}</p>
+                                                        <p>{selectedCard.hours}</p>
                                                     </div>
                                                 </div>
                                                 <div className="info-item-unique">
@@ -353,7 +457,7 @@ export default function ShopCards(props: any) {
                                                     </div>
                                                     <div className="info-content-unique">
                                                         <h4>כתובת</h4>
-                                                        <p>{selectedShop.address}</p>
+                                                        <p>{selectedCard.address}</p>
                                                     </div>
                                                 </div>
                                                 <div className="info-item-unique">
@@ -362,7 +466,7 @@ export default function ShopCards(props: any) {
                                                     </div>
                                                     <div className="info-content-unique">
                                                         <h4>טלפון</h4>
-                                                        <Link href={`tel:${selectedShop.phone}`}>{selectedShop.phone}</Link>
+                                                        <Link href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</Link>
                                                     </div>
                                                 </div>
                                                 <div className="info-item-unique">
@@ -371,30 +475,40 @@ export default function ShopCards(props: any) {
                                                     </div>
                                                     <div className="info-content-unique">
                                                         <h4>אימייל</h4>
-                                                        <p>{selectedShop.email}</p>
+                                                        <p>{selectedCard.email}</p>
                                                     </div>
                                                 </div>
-                                                <div className="info-item-unique">
-                                                    <div className="icon-wrapper-unique">
-                                                        <FaGlobe className="info-icon-unique" />
-                                                    </div>
-                                                    <div className="info-content-unique">
-                                                        <h4>אתר אינטרנט</h4>
-                                                        <Link href={selectedShop.website} target="_blank" rel="noopener noreferrer">{selectedShop.website}</Link>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                {selectedCard.website ? (
+                                                    <div className="info-item-unique">
+                                                        <div className="icon-wrapper-unique">
+                                                            <FaGlobe className="info-icon-unique" />
+                                                        </div>
 
-                                            <div className="shop-ad-unique">
-                                                <h3>מבצע מיוחד!</h3>
-                                                <img src='./images/saleAds.gif' alt="Special offer" />
+                                                        <div className="info-content-unique">
+                                                            <h4>אתר אינטרנט</h4>
+                                                            <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer">{selectedCard.website}</Link>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div></div>
+                                                )}
                                             </div>
+                                            {selectedCard.website ? (
+                                                <div className="shop-ad-unique">
+                                                    <h3>מבצע מיוחד!</h3>
+                                                    <img src='./images/saleAds.gif' alt="Special offer" />
+                                                </div>
+                                            ) : (
+                                                <div></div>
+                                            )}
                                         </div>
                                     </div>
                                 </motion.div>
                             </motion.div>
+
                         )}
                     </AnimatePresence>
+
                 </Col >
                 <Col lg={2} className="d-none d-lg-block ">
                     <div className="ad-container">
@@ -409,19 +523,39 @@ export default function ShopCards(props: any) {
             <Modal show={showModal} onHide={handleCloseModal} centered className="shop-modal">
                 <Modal.Header closeButton className="bg-primary text-white">
                     <div className="w-100 d-flex justify-content-between align-items-start">
-                        <Modal.Title>הוספת עסק חדש</Modal.Title>
+                        {activeTab === 'shop' && (
+                            <Modal.Title>הוספת עסק חדש</Modal.Title>
+                        )}
+                        {activeTab === 'gmach' && (
+                            <Modal.Title>הוספת גמ"ח חדש</Modal.Title>
+                        )}
                     </div>
                 </Modal.Header>
                 <Modal.Body>
                     <motion.form
-                        onSubmit={handleAddShop}
+                        onSubmit={
+                            (e: any) => {
+                                e.preventDefault();
+                                if (activeTab === 'shop') {
+                                    handleAddShop()
+                                }
+                                else if (activeTab === 'gmach') {
+                                    handleAddGmach()
+                                }
+                            }
+                        }
                         variants={formAnimation}
                         initial="hidden"
                         animate="visible"
                     >
                         <motion.div variants={itemAnimation}>
                             <Form.Group className="mb-3">
-                                <Form.Label>שם העסק</Form.Label>
+                                {activeTab === 'shop' && (
+                                    <Form.Label>שם העסק</Form.Label>
+                                )}
+                                {activeTab === 'gmach' && (
+                                    <Form.Label>שם הגמ"ח</Form.Label>
+                                )}
                                 <Form.Control ref={nameRef} type="text" required />
                             </Form.Group>
                         </motion.div>
@@ -462,12 +596,14 @@ export default function ShopCards(props: any) {
                                 <Form.Control ref={emailRef} type="email" required />
                             </Form.Group>
                         </motion.div>
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>אתר אינטרנט</Form.Label>
-                                <Form.Control ref={websiteRef} type="url" required />
-                            </Form.Group>
-                        </motion.div>
+                        {activeTab === 'shop' && (
+                            <motion.div variants={itemAnimation}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>אתר אינטרנט</Form.Label>
+                                    <Form.Control ref={websiteRef} type="url" required />
+                                </Form.Group>
+                            </motion.div>
+                        )}
                         <motion.div variants={itemAnimation}>
                             <Form.Group className="mb-3">
                                 {/* לשנות את זה לסלקט מתוך מבחר מסוים של קטגוריות */}
@@ -475,45 +611,46 @@ export default function ShopCards(props: any) {
                                 <Form.Control ref={categoryRef} type="text" required />
                             </Form.Group>
                         </motion.div>
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>לוגו</Form.Label>
-                                <div className="upload-container">
-                                    <CldUploadButton
-                                        className='btn btn-outline-primary me-2 mb-2'
-                                        uploadPreset="my_upload_test"
-                                        onSuccess={(result) => {
-                                            handleUploadLogo(result);
-                                        }}
-                                        onError={(error) => {
-                                            console.error('Upload error:', error);
-                                            toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
-                                        }}
-                                        options={{
-                                            sources: ['local'],
-                                            maxFileSize: 5000000,
-                                            maxImageWidth: 2000,
-                                            maxImageHeight: 2000,
-                                            clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-                                            multiple: true
-                                        }}
-                                    >
-                                        <FaUpload /> העלאת לוגו
-                                    </CldUploadButton>
-                                    {logo && (
-                                        <motion.img
-                                            src={logo}
-                                            alt="לוגו"
-                                            className="uploaded-image"
-                                            initial={{ opacity: 0, scale: 0.5 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ duration: 0.3 }}
-                                        />
-                                    )}
-                                </div>
-                            </Form.Group>
-                        </motion.div>
-
+                        {activeTab === 'shop' && (
+                            <motion.div variants={itemAnimation}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>לוגו</Form.Label>
+                                    <div className="upload-container">
+                                        <CldUploadButton
+                                            className='btn btn-outline-primary me-2 mb-2'
+                                            uploadPreset="my_upload_test"
+                                            onSuccess={(result) => {
+                                                handleUploadLogo(result);
+                                            }}
+                                            onError={(error) => {
+                                                console.error('Upload error:', error);
+                                                toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
+                                            }}
+                                            options={{
+                                                sources: ['local'],
+                                                maxFileSize: 5000000,
+                                                maxImageWidth: 2000,
+                                                maxImageHeight: 2000,
+                                                clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                                                multiple: true
+                                            }}
+                                        >
+                                            <FaUpload /> העלאת לוגו
+                                        </CldUploadButton>
+                                        {logo && (
+                                            <motion.img
+                                                src={logo}
+                                                alt="לוגו"
+                                                className="uploaded-image"
+                                                initial={{ opacity: 0, scale: 0.5 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                transition={{ duration: 0.3 }}
+                                            />
+                                        )}
+                                    </div>
+                                </Form.Group>
+                            </motion.div>
+                        )}
                         <motion.div variants={itemAnimation}>
                             <Form.Group className="mb-3">
                                 <Form.Label>תמונות (עד 4)</Form.Label>

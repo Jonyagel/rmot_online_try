@@ -1,0 +1,84 @@
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --hover-scale: 1.2;
+    --border-radius: 50%;
+    --box-shadow-color: rgba(0, 0, 0, 0.1);
+    --box-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.15);
+    --transition-duration: 0.5s;
+    --transition-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .weather-widget-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    transition: transform var(--transition-duration) var(--transition-function), box-shadow var(--transition-duration) var(--transition-function), border-radius var(--transition-duration) var(--transition-function);
+  }
+  
+  .weather-widget-container--hovered {
+    transform: translateY(-15px);
+    box-shadow: var(--box-shadow-hover);
+    border-radius: 20px;
+  }
+  
+  .weather-widget {
+    background-color: #f2f2f2;
+    border-radius: var(--border-radius);
+    padding: 25px;
+    box-shadow: 0 6px 12px var(--box-shadow-color);
+    transition: transform var(--transition-duration) var(--transition-function), box-shadow var(--transition-duration) var(--transition-function), border-radius var(--transition-duration) var(--transition-function);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .weather-widget--hovered {
+    transform: scale(var(--hover-scale));
+    border-radius: 20px;
+  }
+  
+  .weather-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 26px;
+    color: var(--secondary-color);
+  }
+  
+  .weather-temperature {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+  
+  .weather-icon-primary {
+    color: var(--primary-color);
+    font-size: 42px;
+    margin-bottom: 10px;
+  }
+  
+  .weather-details {
+    margin-top: 20px;
+    font-size: 18px;
+    color: var(--secondary-color);
+  }
+  
+  .weather-detail {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  /* .weather-detail-text {
+    margin-left: 10px;
+  } */
+  
+  .weather-date {
+    margin-top: 20px;
+    font-size: 16px;
+    color: var(--secondary-color);
+  }

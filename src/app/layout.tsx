@@ -9,6 +9,7 @@ import Footer from "./footer/page";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import SessionWrapper from "@/components/SessionWrapper";
 import { GoogleAnalytics } from '@next/third-parties/google'
+import WeatherWidget from "./components/weatherWidget";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,6 +51,7 @@ export default function RootLayout({
         <body className={inter.className}>
           <Header />
           {children}
+          <WeatherWidget />
           <Footer />
           <Analytics />
           <SpeedInsights />

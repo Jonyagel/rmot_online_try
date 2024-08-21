@@ -256,7 +256,7 @@ const HomePage: React.FC = () => {
                             </motion.span>
                         ))}
                     </motion.h1>
-                    <motion.p
+                    {/* <motion.p
                         initial={{ y: 50, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
@@ -273,7 +273,7 @@ const HomePage: React.FC = () => {
                         }}
                     >
                         גלה עוד
-                    </motion.button>
+                    </motion.button> */}
                 </div>
                 <button
                     onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + carouselItems.length) % carouselItems.length)}
