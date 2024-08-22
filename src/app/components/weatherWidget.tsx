@@ -16,19 +16,50 @@ const WeatherWidget = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [isVisible, setIsVisible] = useState(true);
   const widgetRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: - 150, y: - 80 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
+    // Ensure this runs only on the client side
+    if (typeof window !== 'undefined') {
+      setPosition({ x: window.innerWidth - 150, y: window.innerHeight - 80 });
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (dragging && widgetRef.current) {
+          const newX = e.clientX - widgetRef.current.offsetWidth / 2;
+          const newY = e.clientY - widgetRef.current.offsetHeight / 2;
+          setPosition({ x: newX, y: newY });
+        }
+      };
+
+      const handleMouseUp = () => {
+        setDragging(false);
+      };
+
+      const handleMouseDown = (e: MouseEvent) => {
+        setDragging(true);
+      };
+
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [dragging]);
+
+  useEffect(() => {
+    const doApi = async () => {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=jerusalem,il&APPID=d278cce52712f5f684f33d50a3e1be93&units=metric`;
+      const resp = await fetch(url);
+      const data = await resp.json();
+      setWeather(data);
+    };
+
     doApi();
   }, []);
-
-  const doApi = async () => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=jerusalem,il&APPID=d278cce52712f5f684f33d50a3e1be93&units=metric`;
-    const resp = await fetch(url);
-    const data = await resp.json();
-    setWeather(data);
-  };
 
   const handleClose = () => {
     setIsVisible(false);
@@ -36,18 +67,6 @@ const WeatherWidget = () => {
 
   const handleMouseDown = (e: React.MouseEvent) => {
     setDragging(true);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (dragging) {
-      const newX = e.clientX - widgetRef.current!.offsetWidth / 2;
-      const newY = e.clientY - widgetRef.current!.offsetHeight / 2;
-      setPosition({ x: newX, y: newY });
-    }
-  };
-
-  const handleMouseUp = () => {
-    setDragging(false);
   };
 
   return (
@@ -60,12 +79,10 @@ const WeatherWidget = () => {
           top: `${position.y}px`,
         }}
         onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
       >
         {weather && (
           <div className="weather-widget">
-             <button className="close-button" onClick={handleClose}>
+            <button className="close-button" onClick={handleClose}>
               <FaTimes />
             </button>
             <img
@@ -74,7 +91,6 @@ const WeatherWidget = () => {
               className="weather-icon"
             />
             <span className="temperature">{weather.main.temp.toFixed(1)}°</span>
-           
           </div>
         )}
       </div>
@@ -83,3 +99,4 @@ const WeatherWidget = () => {
 };
 
 export default WeatherWidget;
+
