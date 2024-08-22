@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState, useRef } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import './WeatherWidget.css';
+import './weatherWidget.css';
 
 interface WeatherData {
   main: {
