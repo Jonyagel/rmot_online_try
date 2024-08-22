@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Marquee from 'react-fast-marquee'
 import './style.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { auto } from '@popperjs/core'
 
 export default function Header() {
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -42,7 +43,7 @@ export default function Header() {
             <div className="container">
                 <div className="header-content">
                     <Link href="/" className="logo-link">
-                        <img src='/images/logo.jpg' width={40} className="logo" alt="Logo" />
+                        <img src='/images/logo.jpg' width={40} height={auto} className="logo" alt="Logo" />
                     </Link>
                     <nav className={`navHeader ${isNavOpen ? 'nav-open' : ''}`}>
                         {navLinks.map((link, index) => (

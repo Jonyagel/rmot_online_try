@@ -21,6 +21,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { gsap } from 'gsap';
 import { useRouter } from 'next/navigation';
+import { auto } from '@popperjs/core';
 
 interface CounterStatisticProps {
     label: string;
@@ -272,7 +273,7 @@ const HomePage: React.FC = () => {
             </section>
             <div className="mobile-ad-space ad-space-1 d-md-none my-2">
                 {/* <div className="ad-placeholder">פרסומת</div> */}
-                <img src='/images/saleAds.gif' className='rounded' />
+                <img src='/images/saleAds.gif' width={auto} height={auto} className='rounded' />
             </div>
             <Container fluid className="content-container">
                 <Row>
@@ -359,7 +360,7 @@ const HomePage: React.FC = () => {
                         {/* אזור פרסומות ימני */}
                         <div className="ad-container">
                             <div className="ad-space">
-                                <img src='/images/timegif.webp' className='rounded' />
+                                <img src='/images/timegif.webp' width={auto} height={auto} className='rounded' />
                                 {/* כאן תוכל להוסיף את קוד הפרסומת שלך */}
                             </div>
                         </div>

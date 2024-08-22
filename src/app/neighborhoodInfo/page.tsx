@@ -1,7 +1,7 @@
 import React from 'react'
 // import StripCarousel from '../home/components/stripCarousel'
 // import CardCategory from './components/cardCategory'
-import AcordionShops from './components/acordionShops'
+import AcordionShops from './components/info'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export const dynamic = 'force-dynamic';

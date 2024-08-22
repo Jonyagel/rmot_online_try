@@ -360,7 +360,7 @@ export default function RealEstate() {
               </Row>
             </Form>
             <Row>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {nadlanAr.map((item: any, index: number) => (
                   <React.Fragment key={item._id}>
                     <div className="bg-white rounded border position-relative property-card">
@@ -382,7 +382,7 @@ export default function RealEstate() {
                             <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
                           </div>
                         )}
-                        <Badge bg='primary' className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute">{item.type}</Badge>
+                        <Badge bg={item.type === 'מכירה' ?'primary' : 'light'} className={`ms-2 align-self-start top-0 end-10 translate-middle position-absolute ${item.type === 'השכרה' ? 'text-primary' : 'text-light'}`}>{item.type}</Badge>
                         {/* <div className="absolute top-4 left-4 bg-blue-600 text-white text-sm font-bold px-2 py-1 rounded">
                         {item.type}
                       </div> */}

@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
+import { auto } from '@popperjs/core';
 
 export const dynamic = 'auto';
 
@@ -242,7 +243,7 @@ export default function CommunityBoard() {
           {/* אזור פרסומות שמאלי */}
           <div className="ad-container">
             <div className="ad-space">
-              <img src='/images/bookgif.webp' className='rounded' />
+              <img src='/images/bookgif.webp' width={auto} height={auto} className='rounded' />
             </div>
           </div>
         </Col>
@@ -312,7 +313,7 @@ export default function CommunityBoard() {
 
           <Row>
             {filteredAndSortedItems.map(item => (
-              <Col key={item.id} md={4} className="mb-4">
+              <Col key={item.id} md={4} lg={3} sm={6} className="mb-4">
                 <div className="bg-white rounded border position-relative property-card h-100">
                   <div className="relative">
                     {item.image ? (
@@ -373,7 +374,7 @@ export default function CommunityBoard() {
           {/* אזור פרסומות ימני */}
           <div className="ad-container">
             <div className="ad-space">
-              <img src='/images/timegif.webp' className='rounded' />
+              <img src='/images/timegif.webp' width={auto} height={auto} className='rounded' />
               {/* כאן תוכל להוסיף את קוד הפרסומת שלך */}
             </div>
           </div>
