@@ -335,7 +335,7 @@ const HomePage: React.FC = () => {
                                 </Swiper>
                             </section>
                             <div className="mobile-ad-space ad-space-2 d-md-none my-2">
-                                <img src='/images/saleAds.gif' className='rounded' />
+                                <img src='/images/saleAds.gif' alt='ads-phone' className='rounded' />
                             </div>
                             <section className="statistics-section">
                                 <motion.h2
