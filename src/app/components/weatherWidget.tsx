@@ -18,6 +18,7 @@ const WeatherWidget = () => {
   const widgetRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     // Ensure this runs only on the client side
@@ -26,18 +27,14 @@ const WeatherWidget = () => {
 
       const handleMouseMove = (e: MouseEvent) => {
         if (dragging && widgetRef.current) {
-          const newX = e.clientX - widgetRef.current.offsetWidth / 2;
-          const newY = e.clientY - widgetRef.current.offsetHeight / 2;
+          const newX = e.clientX - offset.x;
+          const newY = e.clientY - offset.y;
           setPosition({ x: newX, y: newY });
         }
       };
 
       const handleMouseUp = () => {
         setDragging(false);
-      };
-
-      const handleMouseDown = (e: MouseEvent) => {
-        setDragging(true);
       };
 
       window.addEventListener('mousemove', handleMouseMove);
@@ -48,7 +45,7 @@ const WeatherWidget = () => {
         window.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [dragging]);
+  }, [dragging, offset]);
 
   useEffect(() => {
     const doApi = async () => {
@@ -57,7 +54,6 @@ const WeatherWidget = () => {
       const data = await resp.json();
       setWeather(data);
     };
-
     doApi();
   }, []);
 
@@ -66,6 +62,13 @@ const WeatherWidget = () => {
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (widgetRef.current) {
+      const rect = widgetRef.current.getBoundingClientRect();
+      setOffset({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+    }
     setDragging(true);
   };
 
@@ -99,4 +102,3 @@ const WeatherWidget = () => {
 };
 
 export default WeatherWidget;
-
