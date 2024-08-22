@@ -21,30 +21,31 @@ const WeatherWidget = () => {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Ensure this runs only on the client side
     if (typeof window !== 'undefined') {
       setPosition({ x: window.innerWidth - 150, y: window.innerHeight - 80 });
-
-      const handleMouseMove = (e: MouseEvent) => {
-        if (dragging && widgetRef.current) {
-          const newX = e.clientX - offset.x;
-          const newY = e.clientY - offset.y;
-          setPosition({ x: newX, y: newY });
-        }
-      };
-
-      const handleMouseUp = () => {
-        setDragging(false);
-      };
-
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
-      };
     }
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (dragging && widgetRef.current) {
+        const newX = e.clientX - offset.x;
+        const newY = e.clientY - offset.y;
+        setPosition({ x: newX, y: newY });
+      }
+    };
+
+    const handleMouseUp = () => {
+      setDragging(false);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
   }, [dragging, offset]);
 
   useEffect(() => {
