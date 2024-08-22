@@ -86,11 +86,11 @@ const WeatherWidget = () => {
       >
         {weather && (
           <div className="weather-widget">
-            <button className="close-button" onClick={handleClose}>
+            <button className="close-button" title="closeWeather" onClick={handleClose}>
               <FaTimes />
             </button>
             <img
-              src={`http://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
+              src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
               alt="Weather Icon"
               className="weather-icon"
             />

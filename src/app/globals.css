@@ -5,35 +5,45 @@
 
 
 @font-face {
-    font-family: 'assistant-regular';
-    src: url('../../public/fonts/assistant/Assistant-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-  }
-  
-  @font-face {
-    font-family: 'assistant-Bold';
-    src: url('../../public/fonts/assistant/Assistant-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-  }
-  
-  @font-face {
-    font-family: 'assistant-Light';
-    src: url('../../public/fonts/assistant/Assistant-Light.ttf') format('truetype');
-    font-weight: 300;
-    font-style: normal;
-  }
+  font-family: 'assistant-regular';
+  src: url('../../public/fonts/assistant/Assistant-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
 
-  *{
-    direction: rtl;
-    font-family: Assistant-regular;
+@font-face {
+  font-family: 'assistant-Bold';
+  src: url('../../public/fonts/assistant/Assistant-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'assistant-Light';
+  src: url('../../public/fonts/assistant/Assistant-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+* {
+  direction: rtl;
+  font-family: Assistant-regular;
+}
+
+@font-face {
+  font-family: 'Pacifico';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Pacifico Regular'), local('Pacifico-Regular'),
+    url(https://fonts.gstatic.com/s/pacifico/v12/FwZY7-Qmy14u9lezJ-6H6MmBp0u-.woff2) format('woff2');
+  font-display: swap;
 }
 
 @media (max-width: 768px) {
   body {
     /* background-color: rgb(255, 0, 43); */
-      padding-top: 100px;
-      width: 100%; /* התאם לגובה ההידר במובייל */
+    padding-top: 100px;
+    width: 100%;
+    /* התאם לגובה ההידר במובייל */
   }
 }

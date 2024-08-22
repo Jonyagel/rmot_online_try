@@ -245,7 +245,7 @@ const HomePage: React.FC = () => {
                         muted
                         className="video-background"
                     />
-                    <button onClick={togglePlay} className="video-control">
+                    <button onClick={togglePlay} className="video-control" title="playVideo">
                         <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
                     </button>
                 </div>
