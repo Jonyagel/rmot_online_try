@@ -9,7 +9,7 @@ import {
     faUsers, faSchool, faBaby, faTree, faSynagogue, faShoppingCart,
     faHospital, faRoad, faHome, faCalendarAlt, faStore, faSearch,
     faMountain, faChevronLeft, faChevronRight,
-    faGraduationCap, faHeartbeat
+    faGraduationCap, faHeartbeat, faPlay, faPause
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -100,6 +100,11 @@ const HomePage: React.FC = () => {
     // });
     // const imageOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
     // const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const [isPlaying, setIsPlaying] = useState(true);
+
+
+
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -107,6 +112,18 @@ const HomePage: React.FC = () => {
         }, 5000);
         return () => clearInterval(timer);
     }, []);
+
+    const togglePlay = () => {
+        if (videoRef.current) {
+            if (isPlaying) {
+                videoRef.current.pause();
+            } else {
+                videoRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
+        }
+    };
+
 
     const titleWords = "ברוכים הבאים לאתר שכונת רמות".split(' ');
 
@@ -217,26 +234,21 @@ const HomePage: React.FC = () => {
                 <div className="ad-placeholder">פרסומת</div>
                 <img className="ad-placeholder rounded" src='/images/ads1top.jpg' />
             </div> */}
-            <section className="hero-section">
-                <AnimatePresence initial={false}>
-                    <motion.div
-                        key={currentSlide}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="hero-image-container"
-                        // style={{ scale }}
-                    >
-                        <CldImage
-                            src={carouselItems[currentSlide].image}
-                            fill
-                            style={{ objectFit: 'cover' }}
-                            alt={carouselItems[currentSlide].description}
-                            sizes="100vw"
-                        />
-                    </motion.div>
-                </AnimatePresence>
+            <section className="video-section">
+                <div className="video-container">
+                    <video
+                        ref={videoRef}
+                        src="/videos/panorama2.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        className="video-background"
+                    />
+                    <button onClick={togglePlay} className="video-control">
+                        <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+                    </button>
+                </div>
+
                 <div className="hero-overlay"></div>
                 <div className="hero-content">
                     <motion.h1
@@ -256,37 +268,7 @@ const HomePage: React.FC = () => {
                             </motion.span>
                         ))}
                     </motion.h1>
-                    {/* <motion.p
-                        initial={{ y: 50, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.4, duration: 0.8 }}
-                        className="hero-description"
-                    >
-                        {carouselItems[currentSlide].description}
-                    </motion.p>
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="hero-button"
-                        onClick={() => {
-                            router.push('/neighborhoodInfo')
-                        }}
-                    >
-                        גלה עוד
-                    </motion.button> */}
                 </div>
-                <button
-                    onClick={() => setCurrentSlide((prevSlide) => (prevSlide - 1 + carouselItems.length) % carouselItems.length)}
-                    className="carousel-control carousel-control-left"
-                >
-                    <FontAwesomeIcon icon={faChevronLeft} />
-                </button>
-                <button
-                    onClick={() => setCurrentSlide((prevSlide) => (prevSlide + 1) % carouselItems.length)}
-                    className="carousel-control carousel-control-right"
-                >
-                    <FontAwesomeIcon icon={faChevronRight} />
-                </button>
             </section>
             <div className="mobile-ad-space ad-space-1 d-md-none my-2">
                 {/* <div className="ad-placeholder">פרסומת</div> */}
