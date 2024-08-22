@@ -273,7 +273,7 @@ const HomePage: React.FC = () => {
             </section>
             <div className="mobile-ad-space ad-space-1 d-md-none my-2">
                 {/* <div className="ad-placeholder">פרסומת</div> */}
-                <img src='/images/saleAds.gif' width={auto} height={auto} className='rounded' />
+                <img src='/images/saleAds.gif' width={auto} height={auto} alt='ads-phone' className='rounded' />
             </div>
             <Container fluid className="content-container">
                 <Row>
@@ -281,7 +281,7 @@ const HomePage: React.FC = () => {
                         {/* אזור פרסומות שמאלי */}
                         <div className="ad-container">
                             <div className="ad-space">
-                                <img src='/images/bookgif.webp' className='rounded' />
+                                <img src='/images/bookgif.webp' width={auto} height={auto} alt='ads-left' className='rounded' />
                             </div>
                         </div>
                     </Col>
@@ -360,7 +360,7 @@ const HomePage: React.FC = () => {
                         {/* אזור פרסומות ימני */}
                         <div className="ad-container">
                             <div className="ad-space">
-                                <img src='/images/timegif.webp' width={auto} height={auto} className='rounded' />
+                                <img src='/images/timegif.webp' width={auto} height={auto} alt='ads-right' className='rounded' />
                                 {/* כאן תוכל להוסיף את קוד הפרסומת שלך */}
                             </div>
                         </div>
