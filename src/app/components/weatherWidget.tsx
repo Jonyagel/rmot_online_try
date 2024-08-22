@@ -16,7 +16,7 @@ const WeatherWidget = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [isVisible, setIsVisible] = useState(true);
   const widgetRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: window.innerWidth - 150, y: window.innerHeight - 80 });
+  const [position, setPosition] = useState({ x: - 150, y: - 80 });
   const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
