@@ -1,49 +1,122 @@
-.weather-widget-container {
+.weather-widget-wrapper {
   position: fixed;
   z-index: 100;
-  cursor: grab;
-  transition: transform 0.2s ease;
+  cursor: pointer;
 }
 
-.weather-widget-container:active {
+.weather-widget-wrapper:active {
   cursor: grabbing;
 }
 
 .weather-widget {
-  background: rgba(255, 255, 255, 0.5);
-  color: #333;
-  padding: 8px 12px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 140px;
+  height: 60px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   position: relative;
+  background: rgba(255, 255, 255, 0.6);
 }
 
-.weather-icon {
-  width: 30px;
-  height: 30px;
-  margin-right: 8px;
+.weather-widget__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 30px); /* Adjusted to prevent overlap */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 10px;
+  transition: transform 0.3s ease;
 }
 
-.temperature {
-  font-size: 1.5rem;
+.weather-widget__front,
+.weather-widget__back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.weather-widget__back {
+  transform: translateY(100%);
+}
+
+.weather-widget.flipped .weather-widget__front {
+  transform: translateY(-100%);
+}
+
+.weather-widget.flipped .weather-widget__back {
+  transform: translateY(0);
+}
+
+.weather-widget__date {
+  font-size: 0.9rem;
   font-weight: bold;
 }
 
-.close-button {
+.weather-widget__temperature {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.weather-widget__icons {
+  position: absolute;
+  left: 5px; /* Adjusted */
+  top: 0;
+  height: 100%;
+  width: 25px; /* Adjusted */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px 0; /* Adjusted */
+}
+
+.weather-widget__icon {
+  font-size: 1rem; /* Adjusted */
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.weather-widget__icon--active {
+  color: #0d6efd;
+}
+
+.weather-widget__weather-icon {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 4px;
+}
+
+.weather-widget__close {
   background-color: transparent;
   border: none;
   color: #888;
-  font-size: 1rem;
+  font-size: 0.8rem;
   cursor: pointer;
   position: absolute;
   top: 4px;
   right: 4px;
   padding: 0;
+  z-index: 3;
 }
 
-.close-button:hover {
+.weather-widget__close:hover {
   color: #000000;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.weather-widget__icon--pulse {
+  animation: pulse 2s infinite;
 }

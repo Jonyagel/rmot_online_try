@@ -3,14 +3,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { Card, Badge, Button, Modal, Form, Row, Col, Container, Carousel, Alert } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHome, faPhone, faRulerCombined, faSun, faTimes, faBell, faEye, faImage } from '@fortawesome/free-solid-svg-icons';
+import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHome, faPhone, faRulerCombined, faSun, faTimes, faBell, faEye, faImage, faPaintRoller, faCompass } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import emailjs from '@emailjs/browser';
 import './style.css'
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaTimes } from 'react-icons/fa';
 
 
 export const dynamic = 'auto';
@@ -275,6 +275,16 @@ export default function RealEstate() {
     }
   };
 
+  const InfoCard = ({ icon, title, value }: any) => (
+    <div className="nadlan-info-card">
+      <FontAwesomeIcon icon={icon} className="nadlan-info-icon" />
+      <div className="nadlan-info-content">
+        <h4>{title}</h4>
+        <p>{value}</p>
+      </div>
+    </div>
+  );
+
 
   return (
     <div className='container-fluid'>
@@ -360,84 +370,66 @@ export default function RealEstate() {
               </Row>
             </Form>
             <Row>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="nadlan-ar-grid">
                 {nadlanAr.map((item: any, index: number) => (
                   <React.Fragment key={item._id}>
-                    <div className="bg-white rounded border position-relative property-card">
-                      <div className="relative">
-                        {item.images[0] ? (
-                          <CldImage
-                            src={item.images[0]}
-                            width="400"
-                            height="250"
-                            crop="fill"
-                            alt={`תמונה של ${item.address}`}
-                            className="w-full h-40 object-cover  rounded-b-none rounded-t"
-                            loading="lazy"
-                            format="webp"
-                            quality="auto"
-                          />
-                        ) : (
-                          <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
-                            <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+                    <motion.div
+                      className="nadlan-ar-card border"
+                      whileHover={{ y: -2, boxShadow: '0 4px 8px rgba(13, 110, 253, 0.08)' }}
+                    >
+                      <div className="nadlan-ar-card-content">
+                        <div className="nadlan-ar-card-header">
+                          {item.images[0] ? (
+                            <CldImage
+                              src={item.images[0]}
+                              width="400"
+                              height="200"
+                              crop="fill"
+                              className="nadlan-ar-image"
+                              alt={`תמונה של ${item.address}`}
+                              loading='lazy'
+                              format="auto"
+                              quality="auto"
+                            />
+                          ) : (
+                            <div className="nadlan-ar-image-placeholder">
+                              <FontAwesomeIcon icon={faImage} size="lg" color="#0d6efd" />
+                            </div>
+                          )}
+                          <div className="nadlan-ar-type-badge">
+                            {item.type}
                           </div>
-                        )}
-                        <Badge bg={item.type === 'מכירה' ?'primary' : 'light'} className={`ms-2 align-self-start top-0 end-10 translate-middle position-absolute ${item.type === 'השכרה' ? 'text-primary' : 'text-light'}`}>{item.type}</Badge>
-                        {/* <div className="absolute top-4 left-4 bg-blue-600 text-white text-sm font-bold px-2 py-1 rounded">
-                        {item.type}
-                      </div> */}
-                      </div>
-                      <div className="p-6">
-                        <h5 className="font-bold  mb-3 text-gray-800 truncate">{item.address}</h5>
-                        <div className="flex justify-between items-center mb-2">
-                          <div className="text-1xl font-bold text-blue-600">
+                        </div>
+
+                        <div className="nadlan-ar-description">
+                          <h3 className="nadlan-ar-address">{item.address}</h3>
+                          <div className="nadlan-ar-price">
                             {item.type === 'מכירה'
                               ? `${item.price.toLocaleString()} ₪`
                               : `${item.price.toLocaleString()} ₪ לחודש`}
                           </div>
-                          {/* <div className="text-sm text-gray-500 flex items-center">
-                          <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
-                          {item.entryDate}
-                        </div> */}
-                        </div>
-                        <div className="grid grid-cols-2 gap-y-3 text-sm text-gray-600 mb-4">
-                          <div className="flex items-center">
-                            <FontAwesomeIcon icon={faBed} className="mr-3 text-blue-500 w-5" />
-                            <span>{item.rooms} חדרים</span>
-                          </div>
-                          <div className="flex items-center">
-                            <FontAwesomeIcon icon={faRulerCombined} className="mr-3 text-blue-500 w-5" />
-                            <span>{item.size} מ"ר</span>
-                          </div>
-                          <div className="flex items-center">
-                            <FontAwesomeIcon icon={faBuilding} className="mr-3 text-blue-500 w-5" />
-                            <span>קומה {item.floor}</span>
-                          </div>
-                          <div className="flex items-center">
-                            <FontAwesomeIcon icon={faCar} className="mr-3 text-blue-500 w-5" />
-                            <span>{item.parking ? 'חניה' : 'ללא חניה'}</span>
+                          <div className="nadlan-ar-features">
+                            <span><FontAwesomeIcon icon={faBed} /> {item.rooms}</span>
+                            <span><FontAwesomeIcon icon={faRulerCombined} /> {item.size} מ"ר</span>
+                            <span><FontAwesomeIcon icon={faBuilding} /> {item.floor}</span>
+                            <span><FontAwesomeIcon icon={faCar} /> {item.parking ? 'חניה' : 'אין'}</span>
                           </div>
                         </div>
-                        <button
-                          onClick={() => handleShow(item)}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-lg transition duration-300 flex items-center justify-center"
-                        >
-                          צפה בפרטים נוספים
-                        </button>
                       </div>
-                    </div>
+                      <div className="nadlan-ar-card-footer">
+                        <button className="nadlan-ar-more-info-btn" onClick={() => handleShow(item)}>פרטים נוספים</button>
+                      </div>
+                    </motion.div>
 
-                    {/* פרסומת בין הכרטיסים במצב טלפון נייד */}
-                    {(index + 1) % 3 === 0 && (
-                      <div className="md:hidden col-span-1">
-                        <div className="bg-gray-100 rounded-lg p-4 shadow-md">
-                          <img
-                            src={index % 2 === 0 ? "/images/bookgif.gif" : "/images/timegif.gif"}
-                            alt="פרסומת"
-                            className="w-full h-auto rounded"
-                          />
+                    {(index + 1) % 5 === 0 && (
+                      <motion.div
+                        className="nadlan-ar-ad-card"
+                        whileHover={{ y: -2, boxShadow: '0 4px 8px rgba(13, 110, 253, 0.08)' }}
+                      >
+                        <div className="nadlan-ar-ad-content">
+                          <img src={index % 2 === 0 ? "/images/bookgif.gif" : "/images/timegif.gif"} alt="פרסומת" className="nadlan-ar-ad-image" />
                         </div>
-                      </div>
+                      </motion.div>
                     )}
                   </React.Fragment>
                 ))}
@@ -457,97 +449,90 @@ export default function RealEstate() {
         </Row>
       </Container>
       {/* מודל לפרטי הנכס */}
-      <Modal show={showModal} onHide={handleClose} centered size="xl">
-        <Modal.Header closeButton className="bg-primary text-white">
-          <div className="w-100 d-flex justify-content-between align-items-start">
-            <Modal.Title>{selectedProperty?.address}</Modal.Title>
-          </div>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedProperty && (
-            <div className="row">
-              <div className="col-md-6">
-                {selectedProperty.images[0] ? (
-                  <Carousel>
-                    {selectedProperty.images.map((image, index) => (
-
-                      <Carousel.Item key={index}>
-                        <CldImage
-                          src={image}
-                          width={600}
-                          height={400}
-                          crop="fill"
-                          alt={`תמונה ${index + 1} של ${selectedProperty.address}`}
-                          className="img-fluid rounded shadow"
-                          format="webp"
-                          quality="auto"
-                        />
-                      </Carousel.Item>
-
-                    ))}
-                  </Carousel>
-                ) : (
-                  <div className="w-full h-full bg-gray-200 rounded flex items-center justify-center">
-                    <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+      <AnimatePresence>
+        {showModal && selectedProperty && (
+          <motion.div
+            className="nadlan-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleClose}
+          >
+            <motion.div
+              className="nadlan-modal-content nadlan-property-detail-modal"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="nadlan-close-button" onClick={handleClose}>
+                <FaTimes />
+              </button>
+              <div className="nadlan-modal-scroll-container">
+                <div className="nadlan-modal-inner-content">
+                  <div className="nadlan-property-image-container">
+                    {selectedProperty.images && selectedProperty.images.length > 0 ? (
+                      <Carousel>
+                        {selectedProperty.images.map((image, index) => (
+                          <Carousel.Item key={index}>
+                            <CldImage
+                              src={image}
+                              width="600"
+                              height="400"
+                              crop="fill"
+                              className="nadlan-property-detail-image"
+                              alt={`תמונה ${index + 1} של ${selectedProperty.address}`}
+                              loading="lazy"
+                              format="auto"
+                              quality="auto"
+                            />
+                          </Carousel.Item>
+                        ))}
+                      </Carousel>
+                    ) : (
+                      <div className="nadlan-no-image">
+                        <FontAwesomeIcon icon={faImage} size="2x" />
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <div className="col-md-6">
-                <h3 className="mb-4 text-primary">פרטי הנכס</h3>
-                <div className="row">
-                  <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faHome} className="mr-2 text-primary" /> <strong>סוג עסקה:</strong> {selectedProperty.type}</p>
+                  <div className="nadlan-property-details-content">
+                    <h2 className="nadlan-property-title">{selectedProperty.address}</h2>
+                    <p className="nadlan-price">
+                      {selectedProperty.price
+                        ? `${selectedProperty.price.toLocaleString()} ₪${selectedProperty.type === 'השכרה' ? ' לחודש' : ''}`
+                        : 'מחיר לא צוין'}
+                    </p>
+                    <div className="nadlan-property-info-grid">
+                      <InfoCard icon={faHome} title="סוג עסקה" value={selectedProperty.type || 'לא צוין'} />
+                      <InfoCard icon={faBed} title="חדרים" value={selectedProperty.rooms?.toString() || 'לא צוין'} />
+                      <InfoCard icon={faRulerCombined} title="שטח" value={selectedProperty.size ? `${selectedProperty.size} מ"ר` : 'לא צוין'} />
+                      <InfoCard icon={faBuilding} title="קומה" value={selectedProperty.floor?.toString() || 'לא צוין'} />
+                      <InfoCard icon={faElevator} title="מעלית" value={selectedProperty.elevator || 'לא צוין'} />
+                      <InfoCard icon={faCar} title="חניה" value={selectedProperty.parking || 'לא צוין'} />
+                      <InfoCard icon={faCalendarAlt} title="תאריך כניסה" value={selectedProperty.entryDate || 'לא צוין'} />
+                      <InfoCard icon={faCompass} title="כיוון" value={selectedProperty.direction || 'לא צוין'} />
+                      <InfoCard icon={faPaintRoller} title="מצב הנכס" value={selectedProperty.condition || 'לא צוין'} />
+                      {/* <InfoCard icon={faWarehouse} title="מחסן" value={selectedProperty.storage || 'לא צוין'} /> */}
+                      {/* <InfoCard icon={faDoorOpen} title="כניסות" value={selectedProperty.entrances?.toString() || 'לא צוין'} /> */}
+                    </div>
+                    {selectedProperty.description && (
+                      <div className="nadlan-property-description">
+                        <h3 className="nadlan-section-title">תיאור הנכס</h3>
+                        <p>{selectedProperty.description}</p>
+                      </div>
+                    )}
                   </div>
-                  <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faBed} className="mr-2 text-primary" /> <strong>מספר חדרים:</strong> {selectedProperty.rooms}</p>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faRulerCombined} className="mr-2 text-primary" /> <strong>שטח:</strong> {selectedProperty.size} מ"ר</p>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faBuilding} className="mr-2 text-primary" /> <strong>קומה:</strong> {selectedProperty.floor}</p>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faElevator} className="mr-2 text-primary" /> <strong>מעלית:</strong> {selectedProperty.elevator ? 'יש' : 'אין'}</p>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faCar} className="mr-2 text-primary" /> <strong>חניה:</strong> {selectedProperty.parking ? 'יש' : 'אין'}</p>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faCalendarAlt} className="mr-2 text-primary" /> <strong>תאריך כניסה:</strong> {selectedProperty.entryDate}</p>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faSun} className="mr-2 text-primary" /> <strong>כיוון אוויר:</strong> {selectedProperty.direction}</p>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <p><FontAwesomeIcon icon={faCouch} className="mr-2 text-primary" /> <strong>מצב הנכס:</strong> {selectedProperty.condition}</p>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <h4 className="text-primary mb-3">תיאור הנכס</h4>
-                  <p>{selectedProperty.description}</p>
-                </div>
-                <div className="mt-4">
-                  <h4 className="text-primary mb-3">מחיר</h4>
-                  <p className="h3 text-success">
-                    {selectedProperty.type === 'מכירה'
-                      ? `${selectedProperty.price.toLocaleString()} ₪`
-                      : `${selectedProperty.price.toLocaleString()} ₪ לחודש`}
-                  </p>
                 </div>
               </div>
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          {/* <Button variant="secondary" onClick={handleClose}>
-            סגור
-          </Button> */}
-          <Button variant="primary">
-            <FontAwesomeIcon icon={faPhone} className="mr-2" /> צור קשר עם המוכר
-          </Button>
-        </Modal.Footer>
-      </Modal>
+              <div className="nadlan-modal-footer">
+                <button className="nadlan-contact-button">
+                  <FontAwesomeIcon icon={faPhone} className="nadlan-button-icon" /> צור קשר
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* מודל להוספת נכס חדש */}
       <Modal show={showAddModal} onHide={handleAddModalClose} centered size="lg" className='nadlan-modal'>

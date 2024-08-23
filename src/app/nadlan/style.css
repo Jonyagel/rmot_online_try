@@ -37,19 +37,187 @@
   margin-bottom: 20px;
 }
 
-.nadlan-modal .modal-content {
-  border-radius: 15px;
+.nadlan-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
 }
 
-.nadlan-modal .modal-header {
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom: none;
-  padding: 1.5rem 2rem;
+.nadlan-property-detail-modal {
+  background-color: #ffffff;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 720px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
-.nadlan-modal .modal-title {
+.nadlan-modal-scroll-container {
+  overflow-y: auto;
+  max-height: calc(90vh - 80px);
+}
+
+.nadlan-modal-inner-content {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.nadlan-property-image-container {
+  margin-bottom: 20px;
+}
+
+.nadlan-property-detail-image {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.nadlan-property-details-content {
+  flex: 1;
+}
+
+.nadlan-property-title {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 0.5rem;
   font-weight: 600;
+}
+
+.nadlan-price {
+  font-size: 1.2rem;
+  color: #2ecc71;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.nadlan-property-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.nadlan-info-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+  border: 1px solid #eaeaea;
+}
+
+.nadlan-info-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+}
+
+.nadlan-info-icon {
+  font-size: 1.2rem;
+  margin-left: 0.8rem;
+  color: #3498db;
+}
+
+.nadlan-info-content h4 {
+  font-size: 0.75rem;
+  color: #777;
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+}
+
+.nadlan-info-content p {
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.nadlan-section-title {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.nadlan-property-description p {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.nadlan-close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  color: #333;
+  font-size: 1rem;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.nadlan-close-button:hover {
+  background: #fff;
+  transform: rotate(90deg);
+}
+
+.nadlan-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.nadlan-contact-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+
+.nadlan-contact-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(52, 152, 219, 0.3);
+}
+
+.nadlan-button-icon {
+  margin-right: 6px;
+}
+
+@media (max-width: 768px) {
+  .nadlan-property-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .nadlan-modal-scroll-container {
+    padding: 16px;
+  }
 }
 
 input.form-control:focus {
@@ -92,4 +260,144 @@ textarea.form-control:focus {
 .ad-space h5 {
   margin-bottom: 0.5rem;
   color: #6c757d;
+}
+
+.nadlan-ar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+.nadlan-ar-card,
+.nadlan-ar-ad-card {
+  display: flex;
+  flex-direction: column;
+  height: 320px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(13, 110, 253, 0.05);
+  transition: all 0.2s ease;
+}
+
+.nadlan-ar-card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.nadlan-ar-card-header {
+  position: relative;
+}
+
+.nadlan-ar-image,
+.nadlan-ar-image-placeholder {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.nadlan-ar-image-placeholder {
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nadlan-ar-type-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(13, 110, 253);
+  color: white;
+  padding: 2px 6px;
+  font-size: 11px;
+  border-radius: 3px;
+}
+
+.nadlan-ar-description {
+  padding: 12px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nadlan-ar-address {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nadlan-ar-price {
+  font-size: 18px;
+  font-weight: bolder;
+  color: #0d6efd;
+  margin-bottom: 8px;
+}
+
+.nadlan-ar-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  font-size: 13px;
+  color: #666666;
+  font-weight: bold;
+}
+
+.nadlan-ar-features span {
+  display: flex;
+  align-items: center;
+}
+
+.nadlan-ar-features svg {
+  margin-left: 4px;
+  color: #0d6efd;
+  font-size: 15px;
+}
+
+.nadlan-ar-card-footer {
+  padding: 12px;
+  margin-top: auto;
+}
+
+.nadlan-ar-more-info-btn {
+  width: 100%;
+  padding: 6px 10px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  font-size: 15px;
+  font-weight: bolder;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.nadlan-ar-more-info-btn:hover {
+  background-color: #0b5ed7;
+}
+
+.nadlan-ar-ad-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nadlan-ar-ad-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nadlan-ar-ad-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }

@@ -385,95 +385,92 @@ export default function ShopCards(props: any) {
                     <AnimatePresence>
                         {selectedCard && (
                             <motion.div
-                                className="shop_detaile modal-overlay"
+                                className="ys-modal-overlay"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 onClick={closeModal}
                             >
                                 <motion.div
-                                    className="modal-content shop-detail-modal"
+                                    className="ys-modal-content ys-shop-detail-modal"
                                     initial={{ y: 50, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     exit={{ y: 50, opacity: 0 }}
                                     onClick={(e) => e.stopPropagation()}
                                 >
-                                    <div className="modal-header">
-                                        <button className="close-button" onClick={closeModal}>
-                                            <FaTimes />
-                                        </button>
-                                    </div>
-                                    <div className="modal-content">
-                                        <div className="shop-header">
-                                            <CldImage
-                                                src={selectedCard.image}
-                                                width="800"
-                                                height="400"
-                                                crop="fill"
-                                                className="shop-detail-image"
-                                                alt={selectedCard.name}
-                                                loading='lazy'
-                                                format="auto"
-                                                quality="auto"
-                                            />
-                                            <div className="shop-title-container">
-                                                <h2>{selectedCard.name}</h2>
+                                    <button className="ys-close-button" onClick={closeModal}>
+                                        <FaTimes />
+                                    </button>
+                                    <div className="ys-modal-scroll-container">
+                                        <div className="ys-modal-inner-content">
+                                            <div className="ys-shop-image-container">
+                                                <CldImage
+                                                    src={selectedCard.image}
+                                                    width="400"
+                                                    height="300"
+                                                    crop="fill"
+                                                    className="ys-shop-detail-image"
+                                                    alt={selectedCard.name}
+                                                    loading='lazy'
+                                                    format="auto"
+                                                    quality="auto"
+                                                />
+                                                <h2 className="ys-shop-title">{selectedCard.name}</h2>
+                                                <p className="ys-shop-description">{selectedCard.description}</p>
                                             </div>
-                                            <button className="close-button" onClick={closeModal}>
-                                                <FaTimes />
-                                            </button>
-                                        </div>
-                                        <div className="shop-details-content">
-                                            <p className="shop-description">{selectedCard.content}</p>
-                                            <div className="shop-info-grid">
-                                                <div className="info-item">
-                                                    <FaClock className="info-icon" />
-                                                    <div className="info-content">
-                                                        <h4>שעות פעילות</h4>
-                                                        <p>{selectedCard.hours}</p>
-                                                    </div>
-                                                </div>
-                                                <div className="info-item">
-                                                    <FaMapMarkerAlt className="info-icon" />
-                                                    <div className="info-content">
-                                                        <h4>כתובת</h4>
-                                                        <p>{selectedCard.address}</p>
-                                                    </div>
-                                                </div>
-                                                <div className="info-item">
-                                                    <FaPhone className="info-icon" />
-                                                    <div className="info-content">
-                                                        <h4>טלפון</h4>
-                                                        <a href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</a>
-                                                    </div>
-                                                </div>
-                                                <div className="info-item">
-                                                    <FaEnvelope className="info-icon" />
-                                                    <div className="info-content">
-                                                        <h4>אימייל</h4>
-                                                        <p>{selectedCard.email}</p>
-                                                    </div>
-                                                </div>
-                                                {selectedCard.website && (
-                                                    <div className="info-item">
-                                                        <FaGlobe className="info-icon" />
-                                                        <div className="info-content">
-                                                            <h4>אתר אינטרנט</h4>
-                                                            <a href={selectedCard.website} target="_blank" rel="noopener noreferrer">{selectedCard.website}</a>
+                                            <div className="ys-shop-details-content">
+
+                                                <div className="ys-shop-info-grid">
+                                                    <div className="ys-info-card">
+                                                        <FaClock className="ys-info-icon" />
+                                                        <div className="ys-info-content">
+                                                            <h4>שעות פעילות</h4>
+                                                            <p>{selectedCard.hours}</p>
                                                         </div>
                                                     </div>
-                                                )}
-                                            </div>
-                                            {selectedCard.website && (
-                                                <div className="shop-ad">
-                                                    <img src='./images/saleAds.gif' alt="Special offer" />
+                                                    <div className="ys-info-card">
+                                                        <FaMapMarkerAlt className="ys-info-icon" />
+                                                        <div className="ys-info-content">
+                                                            <h4>כתובת</h4>
+                                                            <p>{selectedCard.address}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="ys-info-card">
+                                                        <FaPhone className="ys-info-icon" />
+                                                        <div className="ys-info-content">
+                                                            <h4>טלפון</h4>
+                                                            <a href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</a>
+                                                        </div>
+                                                    </div>
+                                                    <div className="ys-info-card">
+                                                        <FaEnvelope className="ys-info-icon" />
+                                                        <div className="ys-info-content">
+                                                            <h4>אימייל</h4>
+                                                            <a href={`mailto:${selectedCard.email}`}>{selectedCard.email}</a>
+                                                        </div>
+                                                    </div>
+                                                    {selectedCard.website && (
+                                                        <div className="ys-info-card">
+                                                            <FaGlobe className="ys-info-icon" />
+                                                            <div className="ys-info-content">
+                                                                <h4>אתר אינטרנט</h4>
+                                                                <a href={selectedCard.website} target="_blank" rel="noopener noreferrer">
+                                                                    {selectedCard.website}
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )}
+                                            </div>
                                         </div>
+                                        {selectedCard.website && (
+                                            <div className="ys-shop-ad">
+                                                <img src='./images/saleAds.gif' alt="Special offer" />
+                                            </div>
+                                        )}
                                     </div>
                                 </motion.div>
                             </motion.div>
-
                         )}
                     </AnimatePresence>
 
