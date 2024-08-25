@@ -274,37 +274,13 @@ export default function UserArea() {
                                     </Card.Header>
                                     <Card.Body>
                                         <Card.Title>{post.tittle}</Card.Title>
-                                        {/* {post.image && (
-                                            <div className="post-image-container">
-                                                <CldImage
-                                                    src={post.image}
-                                                    width="300"
-                                                    height="200"
-                                                    crop="fill"
-                                                    alt={post.title}
-                                                    className="post-image"
-                                                />
-                                            </div>
-                                        )} */}
                                         <Card.Text>{post.description}</Card.Text>
-                                        {/* {post.type === 'nadlan' && (
-                                            <div className="nadlan-info">
-                                                <div><FontAwesomeIcon icon={faBed} /> {post.rooms} חדרים</div>
-                                                <div><FontAwesomeIcon icon={faRulerCombined} /> {post.size} מ"ר</div>
-                                                <div><FontAwesomeIcon icon={faBuilding} /> קומה {post.floor}</div>
-                                                <div><FontAwesomeIcon icon={faCar} /> {post.parking ? 'חניה' : 'ללא חניה'}</div>
-                                            </div>
-                                        )} */}
-                                        {/* <div className="post-meta">
-                                            <span><FontAwesomeIcon icon={faMapMarkerAlt} /> {post.address}</span>
-                                            <span><FontAwesomeIcon icon={faClock} /> {new Date(post.date).toLocaleDateString('he-IL')}</span>
-                                        </div> */}
                                     </Card.Body>
                                     <Card.Footer>
                                         <Button variant="outline-primary" onClick={() => handleEdit(post)} className="me-2">
                                             <FontAwesomeIcon icon={faEdit} /> ערוך
                                         </Button>
-                                        <Button variant="outline-danger" onClick={() => handleDelete(post.id)}>
+                                        <Button variant="outline-danger" onClick={() => handleDelete(post._id)}>
                                             <FontAwesomeIcon icon={faTrash} /> מחק
                                         </Button>
                                     </Card.Footer>
