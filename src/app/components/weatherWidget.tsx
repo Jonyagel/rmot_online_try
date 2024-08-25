@@ -26,7 +26,7 @@ const WeatherWidget = () => {
   useEffect(() => {
     dateDoApi();
     if (typeof window !== 'undefined') {
-      setPosition({ x: window.innerWidth - 180, y: window.innerHeight - 80 });
+      setPosition({ x: window.innerWidth - 150, y: window.innerHeight - 120 });
     }
   }, []);
 
@@ -125,27 +125,27 @@ const WeatherWidget = () => {
             <FaTimes />
           </button>
           <div className="weather-widget__content weather-widget__front">
-            <span className="weather-widget__date m-2">
+            <span className="weather-widget__date">
               {hebDate &&
                 hebDate.map((item: any) => {
                   return (
-                    <div>
-                      <p>{item.d} {item.m} {item.y} </p>
+                    <div className=''>
+                      <p className=''>{item.d} {item.m} {item.y} </p>
                     </div>
                   )
                 })
               }</span>
-              <span className="weather-widget__date">{getCurrentDate()}</span>
+              <span className="weather-widget__date mb-2">{getCurrentDate()}</span>
           </div>
-          <div className="weather-widget__content weather-widget__back">
+          <div className="weather-widget__content weather-widget__back m-0 ">
             {weather ? (
-              <div className='flex'>
+              <div className='m-0 mb-4'>
                 <img
                   src={`https://openweathermap.org/img/w/${weather.weather[0].icon}.png`}
                   alt="Weather Icon"
-                  className="weather-widget__weather-icon"
+                  className="weather-widget__weather-icon mx-auto "
                 />
-                <span className="weather-widget__temperature">{weather.main.temp.toFixed(1)}°C</span>
+                <span className="weather-widget__temperature mb-4">{weather.main.temp.toFixed(1)}°C</span>
               </div>
             ) : (
               <span>טוען...</span>

@@ -9,7 +9,7 @@ import { CldUploadButton } from 'next-cloudinary';
 import { toast } from 'react-toastify';
 import { faCloudUploadAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
 import { auto } from '@popperjs/core';
@@ -236,6 +236,16 @@ export default function CommunityBoard() {
   //   </motion.div>
   // );
 
+  const InfoCard = ({ icon, title, value }: any) => (
+    <div className="nadlan-info-card">
+      <FontAwesomeIcon icon={icon} className="nadlan-info-icon" />
+      <div className="nadlan-info-content">
+        <h4>{title}</h4>
+        <p>{value}</p>
+      </div>
+    </div>
+  );
+
   return (
     <Container fluid className="content-container px-3">
       <Row>
@@ -314,57 +324,51 @@ export default function CommunityBoard() {
           <Row>
             {filteredAndSortedItems.map(item => (
               <Col key={item.id} md={4} lg={3} sm={6} className="mb-4">
-                <div className="bg-white rounded border position-relative property-card h-100">
-                  <div className="relative">
-                    {item.image ? (
-                      <CldImage
-                        src={item.image}
-                        width="400"
-                        height="250"
-                        crop="fill"
-                        alt={item.title}
-                        className="w-full h-40 object-cover rounded-b-none rounded-t"
-                        loading="lazy"
-                        format="webp"
-                        quality="auto"
-                      />
-                    ) : (
-                      <div className="w-full h-40 bg-gray-200 rounded-t flex items-center justify-center">
-                        <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+                <motion.div
+                  className="board-card border"
+                  whileHover={{ y: -2, boxShadow: '0 4px 8px rgba(13, 110, 253, 0.08)' }}
+                >
+                  <div className="board-card-content">
+                    <div className="board-card-header">
+                      {item.image ? (
+                        <CldImage
+                          src={item.image}
+                          width="400"
+                          height="200"
+                          crop="fill"
+                          alt={item.title}
+                          className="board-image"
+                          loading="lazy"
+                          format="auto"
+                          quality="auto"
+                        />
+                      ) : (
+                        <div className="board-image-placeholder">
+                          <FontAwesomeIcon icon={faImage} size="lg" color="#0d6efd" />
+                        </div>
+                      )}
+                      <div className="board-type-badge">
+                        {getItemTypeName(item.type)}
                       </div>
-                    )}
-                    <Badge bg='primary' className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute">
-                      {getItemTypeName(item.type)}
-                    </Badge>
-                  </div>
-                  <div className="p-6">
-                    <h5 className="font-bold mb-3 text-gray-800 truncate">{item.title}</h5>
-                    <div className="flex justify-between items-center mb-2">
+                    </div>
+
+                    <div className="board-description">
+                      <h3 className="board-address">{item.title}</h3>
                       {item.price && (
-                        <div className="text-1xl font-bold text-blue-600">
+                        <div className="board-price">
                           {item.price.toLocaleString()} ₪
                         </div>
                       )}
-
-                    </div>
-                    <p className="text-sm text-gray-600 mb-4 truncate">{item.description}</p>
-                    <div className="flex justify-between items-center">
-                      <Button
-                        onClick={() => handleShow(item)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
-                      >
-                        פרטים נוספים
-                      </Button>
-                      <div className="text-sm text-gray-500 flex items-center">
-                        <FontAwesomeIcon icon={faCalendarAlt} className="mr-2" />
-                        {new Date(Number(item.date)).toLocaleDateString('he-IL')}
+                      <p className="board-desc-text">{item.description}</p>
+                      <div className="board-features">
+                        <span><FontAwesomeIcon icon={faCalendarAlt} /> {new Date(Number(item.date)).toLocaleDateString('he-IL')}</span>
                       </div>
-                      {/* <Button variant="light" onClick={() => handleShare(item)}>
-                    <FontAwesomeIcon icon={faShare} />
-                  </Button> */}
                     </div>
                   </div>
-                </div>
+                  <div className="board-card-footer">
+                    <button className="board-more-info-btn" onClick={() => handleShow(item)}>פרטים נוספים</button>
+                  </div>
+                </motion.div>
               </Col>
             ))}
           </Row>
@@ -381,99 +385,71 @@ export default function CommunityBoard() {
         </Col>
       </Row>
 
-      <Modal show={showModal} onHide={handleClose} centered size="xl">
-        <Modal.Header closeButton className="bg-primary text-white">
-          <div className="w-100 d-flex justify-content-between align-items-start">
-            <Modal.Title>{selectedItem?.title}</Modal.Title>
-          </div>
-        </Modal.Header>
-        <Modal.Body className="p-4">
-          {selectedItem && (
-            <div className="row">
-              <div className="col-lg-6 mb-4 mb-lg-0">
-                {selectedItem.image ? (
-                  <CldImage
-                    src={selectedItem.image}
-                    width="800"
-                    height="600"
-                    crop="fill"
-                    alt={selectedItem.title}
-                    className="img-fluid rounded shadow-sm"
-                  />
-                ) : (
-                  <div className="d-flex h-full align-items-center justify-content-center bg-light rounded">
-                    <FontAwesomeIcon icon={faImage} size="5x" color="#adb5bd" />
-                  </div>
-                )}
-              </div>
-              <div className="col-lg-6">
-                <div className="card border-0 h-100">
-                  <div className="card-body d-flex flex-column">
-                    <h5 className="card-title mb-4">פרטי הפריט</h5>
-                    <div className="row mb-3">
-                      <div className="col-sm-6 mb-3">
-                        <div className="d-flex align-items-center">
-                          <FontAwesomeIcon icon={faTag} className="text-primary me-2" />
-                          <div>
-                            <strong>סוג</strong>
-                            <p className="mb-0">{getItemTypeName(selectedItem.type)}</p>
-                          </div>
-                        </div>
-                      </div>
-                      {selectedItem.price && (
-                        <div className="col-sm-6 mb-3">
-                          <div className="d-flex align-items-center">
-                            <FontAwesomeIcon icon={faShekelSign} className="text-primary me-2" />
-                            <div>
-                              <strong>מחיר</strong>
-                              <p className="mb-0">{selectedItem.price} ₪</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+      <AnimatePresence>
+        {showModal && selectedItem && (
+          <motion.div
+            className="board-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleClose}
+          >
+            <motion.div
+              className="board-modal-content board-item-detail-modal"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="board-close-button" onClick={handleClose}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+              <div className="board-modal-inner-content">
+                <div className="board-item-image-container">
+                  {selectedItem.image ? (
+                    <CldImage
+                      src={selectedItem.image}
+                      width="800"
+                      height="600"
+                      crop="fill"
+                      alt={selectedItem.title}
+                      className="board-item-detail-image"
+                    />
+                  ) : (
+                    <div className="board-no-image">
+                      <FontAwesomeIcon icon={faImage} size="5x" />
                     </div>
-                    <div className="mb-3">
-                      <div className="d-flex align-items-center">
-                        <FontAwesomeIcon icon={faInfoCircle} className="text-primary me-2" />
-                        <div>
-                          <strong>תיאור</strong>
-                          <p className="mb-0">{selectedItem.description}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-auto">
-                      <div className="d-flex align-items-center mb-3">
-                        <FontAwesomeIcon icon={faPhone} className="text-primary me-2" />
-                        <div>
-                          <strong>יצירת קשר</strong>
-                          <p className="mb-0">{selectedItem.contact}</p>
-                        </div>
-                      </div>
-                      <div className="d-flex align-items-center">
-                        <FontAwesomeIcon icon={faCalendarAlt} className="text-primary me-2" />
-                        <div>
-                          <strong>תאריך פרסום</strong>
-                          <p className="mb-0">{new Date(Number(selectedItem.date)).toLocaleDateString('he-IL')}</p>
-                        </div>
-                      </div>
-                    </div>
+                  )}
+                </div>
+                <div className="board-item-details-content">
+                  <h2 className="board-item-title">{selectedItem.title}</h2>
+                  <div className="board-item-info-grid">
+                    <InfoCard icon={faTag} title="סוג" value={getItemTypeName(selectedItem.type)} />
+                    {selectedItem.price && (
+                      <InfoCard icon={faShekelSign} title="מחיר" value={`${selectedItem.price} ₪`} />
+                    )}
+                    <InfoCard icon={faInfoCircle} title="תיאור" value={selectedItem.description} />
+                    <InfoCard icon={faPhone} title="יצירת קשר" value={selectedItem.contact} />
+                    <InfoCard
+                      icon={faCalendarAlt}
+                      title="תאריך פרסום"
+                      value={new Date(Number(selectedItem.date)).toLocaleDateString('he-IL')}
+                    />
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-secondary" onClick={handleClose}>
-            <FontAwesomeIcon icon={faTimes} className="me-2" />
-            סגור
-          </Button>
-          <Button variant="primary">
-            <FontAwesomeIcon icon={faEnvelope} className="me-2" />
-            יצירת קשר
-          </Button>
-        </Modal.Footer>
-      </Modal>
+              <div className="board-modal-footer">
+                {/* <button className="board-close-button-secondary" onClick={handleClose}>
+                  <FontAwesomeIcon icon={faTimes} className="board-button-icon" /> סגור
+                </button> */}
+                <button className="board-contact-button">
+                  <FontAwesomeIcon icon={faEnvelope} className="board-button-icon" /> יצירת קשר
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)} centered size="lg">
         <Modal.Header closeButton className="bg-primary text-white">
           <div className="w-100 d-flex justify-content-between align-items-start">

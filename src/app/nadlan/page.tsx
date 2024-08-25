@@ -468,61 +468,65 @@ export default function RealEstate() {
               <button className="nadlan-close-button" onClick={handleClose}>
                 <FaTimes />
               </button>
-              <div className="nadlan-modal-scroll-container">
-                <div className="nadlan-modal-inner-content">
-                  <div className="nadlan-property-image-container">
-                    {selectedProperty.images && selectedProperty.images.length > 0 ? (
-                      <Carousel>
-                        {selectedProperty.images.map((image, index) => (
-                          <Carousel.Item key={index}>
-                            <CldImage
-                              src={image}
-                              width="600"
-                              height="400"
-                              crop="fill"
-                              className="nadlan-property-detail-image"
-                              alt={`תמונה ${index + 1} של ${selectedProperty.address}`}
-                              loading="lazy"
-                              format="auto"
-                              quality="auto"
-                            />
-                          </Carousel.Item>
-                        ))}
-                      </Carousel>
-                    ) : (
-                      <div className="nadlan-no-image">
-                        <FontAwesomeIcon icon={faImage} size="2x" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="nadlan-property-details-content">
-                    <h2 className="nadlan-property-title">{selectedProperty.address}</h2>
-                    <p className="nadlan-price">
-                      {selectedProperty.price
-                        ? `${selectedProperty.price.toLocaleString()} ₪${selectedProperty.type === 'השכרה' ? ' לחודש' : ''}`
-                        : 'מחיר לא צוין'}
-                    </p>
-                    <div className="nadlan-property-info-grid">
-                      <InfoCard icon={faHome} title="סוג עסקה" value={selectedProperty.type || 'לא צוין'} />
-                      <InfoCard icon={faBed} title="חדרים" value={selectedProperty.rooms?.toString() || 'לא צוין'} />
-                      <InfoCard icon={faRulerCombined} title="שטח" value={selectedProperty.size ? `${selectedProperty.size} מ"ר` : 'לא צוין'} />
-                      <InfoCard icon={faBuilding} title="קומה" value={selectedProperty.floor?.toString() || 'לא צוין'} />
-                      <InfoCard icon={faElevator} title="מעלית" value={selectedProperty.elevator || 'לא צוין'} />
-                      <InfoCard icon={faCar} title="חניה" value={selectedProperty.parking || 'לא צוין'} />
-                      <InfoCard icon={faCalendarAlt} title="תאריך כניסה" value={selectedProperty.entryDate || 'לא צוין'} />
-                      <InfoCard icon={faCompass} title="כיוון" value={selectedProperty.direction || 'לא צוין'} />
-                      <InfoCard icon={faPaintRoller} title="מצב הנכס" value={selectedProperty.condition || 'לא צוין'} />
-                      {/* <InfoCard icon={faWarehouse} title="מחסן" value={selectedProperty.storage || 'לא צוין'} /> */}
-                      {/* <InfoCard icon={faDoorOpen} title="כניסות" value={selectedProperty.entrances?.toString() || 'לא צוין'} /> */}
+              <div className="nadlan-modal-inner-content">
+                <div className="nadlan-property-image-container">
+                  {selectedProperty.images && selectedProperty.images.length > 0 ? (
+                    <Carousel>
+                      {selectedProperty.images.map((image, index) => (
+                        <Carousel.Item key={index}>
+                          <CldImage
+                            src={image}
+                            width="400"
+                            height="300"
+                            crop="fill"
+                            className="nadlan-property-detail-image"
+                            alt={`תמונה ${index + 1} של ${selectedProperty.address}`}
+                            loading="lazy"
+                            format="auto"
+                            quality="auto"
+                          />
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+                  ) : (
+                    <div className="nadlan-no-image">
+                      <FontAwesomeIcon icon={faImage} size="2x" />
                     </div>
-                    {selectedProperty.description && (
-                      <div className="nadlan-property-description">
-                        <h3 className="nadlan-section-title">תיאור הנכס</h3>
-                        <p>{selectedProperty.description}</p>
-                      </div>
-                    )}
-                  </div>
+                  )}
+
                 </div>
+
+                <div className="nadlan-property-details-content">
+
+                  <div className="nadlan-property-info-grid">
+                    <InfoCard icon={faHome} title="סוג עסקה" value={selectedProperty.type || 'לא צוין'} />
+                    <InfoCard icon={faBed} title="חדרים" value={selectedProperty.rooms?.toString() || 'לא צוין'} />
+                    <InfoCard icon={faRulerCombined} title="שטח" value={selectedProperty.size ? `${selectedProperty.size} מ"ר` : 'לא צוין'} />
+                    <InfoCard icon={faBuilding} title="קומה" value={selectedProperty.floor?.toString() || 'לא צוין'} />
+                    <InfoCard icon={faElevator} title="מעלית" value={selectedProperty.elevator || 'לא צוין'} />
+                    <InfoCard icon={faCar} title="חניה" value={selectedProperty.parking || 'לא צוין'} />
+                    <InfoCard icon={faCalendarAlt} title="תאריך כניסה" value={selectedProperty.entryDate || 'לא צוין'} />
+                    <InfoCard icon={faCompass} title="כיוון" value={selectedProperty.direction || 'לא צוין'} />
+                    <InfoCard icon={faPaintRoller} title="מצב הנכס" value={selectedProperty.condition || 'לא צוין'} />
+                  </div>
+
+                </div>
+              </div>
+              <div className='nadlan-property-title-and-description'>
+                <div className='nadlan-property-title-div'>
+                  <h2 className="nadlan-property-title m-0">{selectedProperty.address}</h2>
+                  <p className="nadlan-price">
+                    {selectedProperty.price
+                      ? `${selectedProperty.price.toLocaleString()} ₪${selectedProperty.type === 'השכרה' ? ' לחודש' : ''}`
+                      : 'מחיר לא צוין'}
+                  </p>
+                </div>
+                {selectedProperty.description && (
+                  <div className="nadlan-property-description">
+                    <h3 className="nadlan-section-title">תיאור הנכס</h3>
+                    <p>{selectedProperty.description}</p>
+                  </div>
+                )}
               </div>
               <div className="nadlan-modal-footer">
                 <button className="nadlan-contact-button">
@@ -597,8 +601,8 @@ export default function RealEstate() {
                 <Form.Group className="mb-3">
                   <Form.Label>מעלית</Form.Label>
                   <Form.Select name="elevator" required className="form-control-lg" ref={elevatorRef}>
-                    <option value="true">יש</option>
-                    <option value="false">אין</option>
+                    <option value="יש">יש</option>
+                    <option value="אין">אין</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
@@ -606,8 +610,8 @@ export default function RealEstate() {
                 <Form.Group className="mb-3">
                   <Form.Label>חניה</Form.Label>
                   <Form.Select name="parking" required className="form-control-lg" ref={parkingRef}>
-                    <option value="true">יש</option>
-                    <option value="false">אין</option>
+                    <option value="יש">יש</option>
+                    <option value="אין">אין</option>
                   </Form.Select>
                 </Form.Group>
               </Col>

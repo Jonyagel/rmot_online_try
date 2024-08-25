@@ -55,8 +55,8 @@
   background-color: #ffffff;
   border-radius: 16px;
   width: 90%;
-  max-width: 720px;
-  max-height: 90vh;
+  max-width: 1200px;
+  height: 90vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
@@ -64,41 +64,48 @@
   overflow: hidden;
 }
 
-.nadlan-modal-scroll-container {
-  overflow-y: auto;
-  max-height: calc(90vh - 80px);
-}
-
 .nadlan-modal-inner-content {
+  margin-top: 20px;
   display: flex;
-  flex-direction: column;
-  padding: 24px;
+  flex-direction: row;
+  height: calc(65vh - 80px);
+  overflow: hidden;
 }
 
 .nadlan-property-image-container {
-  margin-bottom: 20px;
+  flex: 0 0 40%;
+  padding: 24px;
+  padding-bottom: 0;
+  /* display: flex; */
+  align-items: center;
+  justify-content: center;
 }
 
 .nadlan-property-detail-image {
   width: 100%;
   height: auto;
+  max-height: 100%;
+  object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .nadlan-property-details-content {
-  flex: 1;
+  flex: 0 0 60%;
+  padding: 24px;
+  padding-bottom: 0;
+  overflow-y: auto;
 }
 
 .nadlan-property-title {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: #333;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
 
 .nadlan-price {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #2ecc71;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -107,37 +114,38 @@
 .nadlan-property-info-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 0.5rem;
   margin-bottom: 1.5rem;
 }
 
 .nadlan-info-card {
-  background-color: #f8f9fa;
+  /* background-color: #f8f9fa; */
   border-radius: 8px;
   padding: 1rem;
   display: flex;
   align-items: flex-start;
-  transition: all 0.3s ease;
-  border: 1px solid #eaeaea;
+  /* transition: all 0.3s ease; */
+  /* border: 1px solid #eaeaea; */
 }
 
-.nadlan-info-card:hover {
+/* .nadlan-info-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   background-color: #ffffff;
-}
+} */
 
 .nadlan-info-icon {
   font-size: 1.2rem;
   margin-left: 0.8rem;
-  color: #3498db;
+  color: #0d6efd;
 }
 
 .nadlan-info-content h4 {
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: #777;
+  margin: 0;
   margin-bottom: 0.2rem;
-  font-weight: 600;
+  font-weight: bolder;
 }
 
 .nadlan-info-content p {
@@ -146,7 +154,7 @@
 }
 
 .nadlan-section-title {
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #333;
   margin-bottom: 0.5rem;
   font-weight: 600;
@@ -156,6 +164,33 @@
   font-size: 0.9rem;
   color: #555;
   line-height: 1.6;
+}
+
+.nadlan-property-title-and-description{
+  /* margin-top: 20px; */
+  display: flex;
+  flex-direction: row;
+  height: 25vh;
+  /* overflow: hidden; */
+}
+.nadlan-property-title-div{
+  flex: 0 0 40%;
+  padding-left: 24px;
+  padding-right: 24px;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+}
+.nadlan-property-title{
+  font-size: 1.2rem;
+}
+.nadlan-property-description{
+  flex: 0 0 60%;
+  padding-left: 24px;
+  padding-right: 24px;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
 }
 
 .nadlan-close-button {
@@ -189,7 +224,7 @@
 }
 
 .nadlan-contact-button {
-  background-color: #3498db;
+  background-color: #0d6efd;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -201,7 +236,7 @@
 }
 
 .nadlan-contact-button:hover {
-  background-color: #2980b9;
+  background-color: rgba(41, 127, 185, 0.575);
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(52, 152, 219, 0.3);
 }
@@ -210,13 +245,26 @@
   margin-right: 6px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+  .nadlan-modal-inner-content {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .nadlan-property-image-container,
+  .nadlan-property-details-content {
+    flex: none;
+    width: 100%;
+  }
+
   .nadlan-property-info-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+}
 
-  .nadlan-modal-scroll-container {
-    padding: 16px;
+@media (max-width: 768px) {
+  .nadlan-property-info-grid {
+    grid-template-columns: 1fr;
   }
 }
 

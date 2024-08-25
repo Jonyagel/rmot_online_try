@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload, FaSearch } from 'react-icons/fa';
+import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload, FaSearch, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { Button, Modal, Form, InputGroup, Col, Container, Row, NavLink, Nav } from 'react-bootstrap';
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,6 +11,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { faFontAwesome, faImage } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaShoppingBasket, FaTshirt, FaLaptop, FaHome, FaHeartbeat, FaFootballBall, FaBook, FaGamepad, FaGem, FaPaw, FaCar, FaPaintBrush, FaGift, FaCouch, FaUtensils } from 'react-icons/fa';
+import CategorySlider from './subCategorySlider';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,6 +33,11 @@ interface Card {
     specialOffer?: string;
     category: string;
     type: string;
+}
+
+interface Category {
+    name: string;
+    icon: React.ReactNode;
 }
 
 export default function ShopCards(props: any) {
@@ -61,6 +68,83 @@ export default function ShopCards(props: any) {
     const websiteRef = useRef<HTMLInputElement>(null);
     const categoryRef = useRef<HTMLInputElement>(null);
 
+    const categories = [
+        { name: "מזון וקמעונאות", icon: <FaShoppingBasket /> },
+        { name: "אופנה והלבשה", icon: <FaTshirt /> },
+        { name: "אלקטרוניקה וטכנולוגיה", icon: <FaLaptop /> },
+        { name: "בית וגינון", icon: <FaHome /> },
+        { name: "בריאות ויופי", icon: <FaHeartbeat /> },
+        { name: "ספורט ופנאי", icon: <FaFootballBall /> },
+        { name: "ספרים ומדיה", icon: <FaBook /> },
+        { name: "צעצועים ומשחקים", icon: <FaGamepad /> },
+        { name: "תכשיטים ואביזרים", icon: <FaGem /> },
+        { name: "חיות מחמד", icon: <FaPaw /> },
+        { name: "רכב ותחבורה", icon: <FaCar /> },
+        { name: "אמנות ויצירה", icon: <FaPaintBrush /> },
+        { name: "מתנות ומזכרות", icon: <FaGift /> },
+        { name: "ריהוט ועיצוב פנים", icon: <FaCouch /> },
+        { name: "כלי בית ומטבח", icon: <FaUtensils /> }
+    ];
+
+    const NextArrow = (props: any) => {
+        const { className, onClick } = props;
+        return (
+            <div className={className} onClick={onClick}>
+                <FaChevronLeft />
+            </div>
+        );
+    };
+
+    const PrevArrow = (props: any) => {
+        const { className, onClick } = props;
+        return (
+            <div className={className} onClick={onClick}>
+                <FaChevronRight />
+            </div>
+        );
+    };
+
+    const sliderSettings = {
+        dots: false,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 6,
+        slidesToScroll: 3,
+        rtl: true,
+        nextArrow: <NextArrow />,
+        prevArrow: <PrevArrow />,
+        responsive: [
+            {
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 5,
+                    slidesToScroll: 2,
+                }
+            },
+            {
+                breakpoint: 992,
+                settings: {
+                    slidesToShow: 4,
+                    slidesToScroll: 2,
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                }
+            },
+            {
+                breakpoint: 576,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                }
+            }
+        ]
+    };
+
 
     const doApi = async (subCategory: any) => {
         let url = `${process.env.NEXT_PUBLIC_API_URL}/api/shops?category=${subCategory}`;
@@ -68,6 +152,7 @@ export default function ShopCards(props: any) {
         const data = await resp.json();
         console.log(data);
         setCardsAr(data)
+        console.log(`Fetching data for category: ${subCategory}`);
     }
 
     const doApiGmach = async (subCategory: any) => {
@@ -77,6 +162,7 @@ export default function ShopCards(props: any) {
         console.log(data);
         // setCardsAr(data)
         setGmachAr(data);
+        console.log(`Fetching Gmach data for category: ${subCategory}`);
     }
 
     const formAnimation = {
@@ -275,9 +361,9 @@ export default function ShopCards(props: any) {
                             }}
                             className='main-nav'
                         >
-                            <NavLink className='nav-link' eventKey="shop">חנויות</NavLink>
-                            <NavLink className='nav-link' eventKey="mosdot">מוסדות</NavLink>
-                            <NavLink className='nav-link' eventKey="gmach">גמ״חים</NavLink>
+                            <NavLink className={`nav-link ${activeTab === 'shop' ? 'active' : ''}`} eventKey="shop">חנויות</NavLink>
+                            <NavLink className={`nav-link ${activeTab === 'mosdot' ? 'active' : ''}`} eventKey="mosdot">מוסדות</NavLink>
+                            <NavLink className={`nav-link ${activeTab === 'gmach' ? 'active' : ''}`} eventKey="gmach">גמ״חים</NavLink>
                         </Nav>
                         {activeTab === 'shop' && (
                             <motion.div
@@ -286,19 +372,12 @@ export default function ShopCards(props: any) {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <Nav
-                                    activeKey={activeSubcategory}
-                                    onSelect={(k: any) => {
-                                        setActiveSubcategory(k)
-                                        doApi(k)
-                                    }}
-                                    className='sub-nav'
-                                >
-                                    <NavLink className='nav-link' eventKey="clothing">ביגוד</NavLink>
-                                    <NavLink className='nav-link' eventKey="food">מזון</NavLink>
-                                    <NavLink className='nav-link' eventKey="electronics">אלקטרוניקה</NavLink>
-                                    <NavLink className='nav-link' eventKey="home">לבית</NavLink>
-                                </Nav>
+                                <CategorySlider
+                                    categories={categories}
+                                    activeSubcategory={activeSubcategory}
+                                    setActiveSubcategory={setActiveSubcategory}
+                                    doApi={doApi}
+                                />
                             </motion.div>
                         )}
                     </motion.div>
@@ -415,19 +494,10 @@ export default function ShopCards(props: any) {
                                                     format="auto"
                                                     quality="auto"
                                                 />
-                                                <h2 className="ys-shop-title">{selectedCard.name}</h2>
-                                                <p className="ys-shop-description">{selectedCard.description}</p>
+
                                             </div>
                                             <div className="ys-shop-details-content">
-
                                                 <div className="ys-shop-info-grid">
-                                                    <div className="ys-info-card">
-                                                        <FaClock className="ys-info-icon" />
-                                                        <div className="ys-info-content">
-                                                            <h4>שעות פעילות</h4>
-                                                            <p>{selectedCard.hours}</p>
-                                                        </div>
-                                                    </div>
                                                     <div className="ys-info-card">
                                                         <FaMapMarkerAlt className="ys-info-icon" />
                                                         <div className="ys-info-content">
@@ -439,14 +509,14 @@ export default function ShopCards(props: any) {
                                                         <FaPhone className="ys-info-icon" />
                                                         <div className="ys-info-content">
                                                             <h4>טלפון</h4>
-                                                            <a href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</a>
+                                                            <Link className=' link-underline link-underline-opacity-0' href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</Link>
                                                         </div>
                                                     </div>
                                                     <div className="ys-info-card">
                                                         <FaEnvelope className="ys-info-icon" />
                                                         <div className="ys-info-content">
                                                             <h4>אימייל</h4>
-                                                            <a href={`mailto:${selectedCard.email}`}>{selectedCard.email}</a>
+                                                            <Link className=' link-underline link-underline-opacity-0' href={`mailto:${selectedCard.email}`}>{selectedCard.email}</Link>
                                                         </div>
                                                     </div>
                                                     {selectedCard.website && (
@@ -454,20 +524,31 @@ export default function ShopCards(props: any) {
                                                             <FaGlobe className="ys-info-icon" />
                                                             <div className="ys-info-content">
                                                                 <h4>אתר אינטרנט</h4>
-                                                                <a href={selectedCard.website} target="_blank" rel="noopener noreferrer">
+                                                                <Link className=' link-underline link-underline-opacity-0' href={selectedCard.website} target="_blank" rel="noopener noreferrer">
                                                                     {selectedCard.website}
-                                                                </a>
+                                                                </Link>
                                                             </div>
                                                         </div>
                                                     )}
+                                                    <div className="ys-info-card">
+                                                        <FaClock className="ys-info-icon" />
+                                                        <div className="ys-info-content" style={{ width: '90%' }}>
+                                                            <h4>שעות פעילות</h4>
+                                                            <p>{selectedCard.hours}</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        {selectedCard.website && (
-                                            <div className="ys-shop-ad">
-                                                <img src='./images/saleAds.gif' alt="Special offer" />
-                                            </div>
-                                        )}
+                                        <div className=''>
+                                            <h2 className="ys-shop-title">{selectedCard.name}</h2>
+                                            <p className="ys-shop-description">{selectedCard.description}</p>
+                                        </div>
+                                        {/* {selectedCard.website && ( */}
+                                        <div className="ys-shop-ad">
+                                            <img src='./images/ads gif3.gif' alt="Special offer" />
+                                        </div>
+                                        {/* )} */}
                                     </div>
                                 </motion.div>
                             </motion.div>
