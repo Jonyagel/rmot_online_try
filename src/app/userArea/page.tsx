@@ -277,7 +277,7 @@ export default function UserArea() {
                                         <Card.Text>{post.description}</Card.Text>
                                     </Card.Body>
                                     <Card.Footer>
-                                        <Button variant="outline-primary" onClick={() => handleEdit(post)} className="me-2">
+                                        <Button variant="outline-primary" className="me-2">
                                             <FontAwesomeIcon icon={faEdit} /> ערוך
                                         </Button>
                                         <Button variant="outline-danger" onClick={() => handleDelete(post._id)}>
