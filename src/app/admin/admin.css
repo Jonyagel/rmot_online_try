@@ -1,0 +1,63 @@
+.admin-dashboard {
+    padding: 2rem;
+    background-color: #f8f9fa;
+}
+
+.dashboard-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #343a40;
+}
+
+.side-nav {
+    background-color: #ffffff;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.nav-link {
+    color: #495057;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: #e9ecef;
+}
+
+.content-card {
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    border: none;
+}
+
+.card-title {
+    color: #343a40;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.add-button {
+    margin-bottom: 1rem;
+}
+
+.item-card {
+    transition: all 0.3s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.card-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.users-table {
+    background-color: #ffffff;
+}
+
+.users-table th {
+    background-color: #e9ecef;
+}

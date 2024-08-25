@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
 import './style1.css'
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useTransform, useViewportScroll } from 'framer-motion';
 import { CldImage } from 'next-cloudinary';
 import { useInView } from 'react-intersection-observer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,7 +9,11 @@ import {
     faUsers, faSchool, faBaby, faTree, faSynagogue, faShoppingCart,
     faHospital, faRoad, faHome, faCalendarAlt, faStore, faSearch,
     faMountain, faChevronLeft, faChevronRight,
-    faGraduationCap, faHeartbeat, faPlay, faPause
+    faGraduationCap, faHeartbeat, faPlay, faPause,
+    faChevronDown,
+    faMapMarkerAlt,
+    faTimes,
+    faClock
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -93,26 +97,12 @@ const InfoCard: React.FC<InfoCardProps> = ({ icon, title, content, link }) => (
 const HomePage: React.FC = () => {
     const router = useRouter();
     // const titleRef = useRef<HTMLHeadingElement | null>(null);
-    const [currentSlide, setCurrentSlide] = useState(0);
-    // const heroRef = useRef(null);
-    // const { scrollYProgress } = useScroll({
-    //     target: heroRef,
-    //     offset: ["start start", "end start"]
-    // });
-    // const imageOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
-    // const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(true);
-
-
-
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentSlide((prevSlide) => (prevSlide + 1) % carouselItems.length);
-        }, 5000);
-        return () => clearInterval(timer);
-    }, []);
+    const titleWords = "ברוכים הבאים לשכונת רמות".split(' ');
+    // const { scrollY } = useViewportScroll();
+    // const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+    // const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
 
     const togglePlay = () => {
         if (videoRef.current) {
@@ -124,9 +114,6 @@ const HomePage: React.FC = () => {
             setIsPlaying(!isPlaying);
         }
     };
-
-
-    const titleWords = "ברוכים הבאים לאתר שכונת רמות".split(' ');
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -159,6 +146,15 @@ const HomePage: React.FC = () => {
         },
     };
 
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
 
     const carouselItems = [
         {
@@ -235,43 +231,83 @@ const HomePage: React.FC = () => {
                 <div className="ad-placeholder">פרסומת</div>
                 <img className="ad-placeholder rounded" src='/images/ads1top.jpg' />
             </div> */}
-            <section className="video-section">
-                <div className="video-container">
-                    <video
-                        ref={videoRef}
-                        src="/videos/panorama2.mp4"
-                        autoPlay
-                        loop
-                        muted
-                        className="video-background"
-                    />
+                <motion.section className="video-section">
+                    <div className="video-container">
+                        <video
+                            ref={videoRef}
+                            src="/videos/panorama2.mp4"
+                            autoPlay
+                            loop
+                            muted
+                            className="video-background"
+                        />
+                    </div>
                     <button onClick={togglePlay} className="video-control" title="playVideo">
                         <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
                     </button>
-                </div>
+                    <div className="hero-overlay"></div>
+                    <div className="hero-content">
 
-                <div className="hero-overlay"></div>
-                <div className="hero-content">
-                    <motion.h1
-                        className="hero-title"
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="visible"
+                        <motion.h1
+                            className="hero-title"
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            {titleWords.map((word, index) => (
+                                <motion.span
+                                    key={index}
+                                    className="word"
+                                    variants={wordVariants}
+                                    style={{ display: 'inline-block', marginRight: '0.3em' }}
+                                >
+                                    {word}
+                                </motion.span>
+                            ))}
+                        </motion.h1>
+                        <motion.p
+                            className="hero-subtitle"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 1, duration: 0.8 }}
+                        >
+                            גלו את הקהילה המיוחדת שלנו
+                        </motion.p>
+                        <motion.div
+                            className="cta-container"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 1.5, duration: 0.5 }}
+                        >
+                            <Link href="#statistics-section" className="cta-button">גלו עוד</Link>
+                        </motion.div>
+                    </div>
+                    {/* <motion.div
+                        className="scroll-indicator d-md-none"
+                        animate={{ y: [0, 10, 0] }}
+                        transition={{ repeat: Infinity, duration: 1.5 }}
                     >
-                        {titleWords.map((word, index) => (
-                            <motion.span
-                                key={index}
-                                className="word"
-                                variants={wordVariants}
-                                style={{ display: 'inline-block', marginRight: '0.3em' }}
-                            >
-                                {word}
-                            </motion.span>
-                        ))}
-                    </motion.h1>
+                        <FontAwesomeIcon icon={faChevronDown} />
+                    </motion.div> */}
+                    <div className="info-overlay">
+                        <div className="info-item">
+                            <FontAwesomeIcon icon={faMapMarkerAlt} />
+                            <span>ירושלים, ישראל</span>
+                        </div>
+                        <div className="info-item">
+                            <FontAwesomeIcon icon={faClock} />
+                            <span>{currentTime.toLocaleTimeString('he-IL')}</span>
+                        </div>
+                    </div>
+                </motion.section>
+            {/* <section className="content-section">
+                <div className="wave-divider">
+                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="shape-fill"></path>
+                    </svg>
                 </div>
-            </section>
-            <div className="mobile-ad-space ad-space-1 d-md-none my-2">
+            </section> */}
+            <div className="mobile-ad-space ad-space-1 d-md-none" style={{zIndex:'1', position:'relative'}}>
                 {/* <div className="ad-placeholder">פרסומת</div> */}
                 <img src='/images/saleAds.gif' width={auto} height={auto} alt='ads-phone' className='rounded' />
             </div>
@@ -337,7 +373,7 @@ const HomePage: React.FC = () => {
                             <div className="mobile-ad-space ad-space-2 d-md-none my-2">
                                 <img src='/images/saleAds.gif' alt='ads-phone' className='rounded' />
                             </div>
-                            <section className="statistics-section">
+                            <section className="statistics-section" id='statistics-section'>
                                 <motion.h2
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
