@@ -1,19 +1,16 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
 import './style1.css'
-import { AnimatePresence, motion, useScroll, useTransform, useViewportScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { CldImage } from 'next-cloudinary';
 import { useInView } from 'react-intersection-observer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faUsers, faSchool, faBaby, faTree, faSynagogue, faShoppingCart,
-    faHospital, faRoad, faHome, faCalendarAlt, faStore, faSearch,
-    faMountain, faChevronLeft, faChevronRight,
+    faHospital, faRoad, faHome, faCalendarAlt, faStore,
+    faMountain,
     faGraduationCap, faHeartbeat, faPlay, faPause,
-    faChevronDown,
-    faMapMarkerAlt,
-    faTimes,
-    faClock
+    faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -23,9 +20,7 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { gsap } from 'gsap';
 import { useRouter } from 'next/navigation';
-import { auto } from '@popperjs/core';
 
 interface CounterStatisticProps {
     label: string;
@@ -33,48 +28,48 @@ interface CounterStatisticProps {
     icon: IconDefinition;
 }
 
-const CounterStatistic: React.FC<CounterStatisticProps> = ({ label, endValue, icon }) => {
-    const [count, setCount] = useState(0);
-    const [ref, inView] = useInView({
-        triggerOnce: true,
-        threshold: 0.1,
-    });
+// const CounterStatistic: React.FC<CounterStatisticProps> = ({ label, endValue, icon }) => {
+//     const [count, setCount] = useState(0);
+//     const [ref, inView] = useInView({
+//         triggerOnce: true,
+//         threshold: 0.1,
+//     });
 
-    useEffect(() => {
-        if (inView) {
-            let start = 0;
-            const end = parseInt(endValue.replace(/,/g, ''));
-            const duration = 2000;
-            const increment = end / (duration / 16);
+//     useEffect(() => {
+//         if (inView) {
+//             let start = 0;
+//             const end = parseInt(endValue.replace(/,/g, ''));
+//             const duration = 2000;
+//             const increment = end / (duration / 16);
 
-            const timer = setInterval(() => {
-                start += increment;
-                if (start >= end) {
-                    clearInterval(timer);
-                    setCount(end);
-                } else {
-                    setCount(Math.floor(start));
-                }
-            }, 16);
+//             const timer = setInterval(() => {
+//                 start += increment;
+//                 if (start >= end) {
+//                     clearInterval(timer);
+//                     setCount(end);
+//                 } else {
+//                     setCount(Math.floor(start));
+//                 }
+//             }, 16);
 
-            return () => clearInterval(timer);
-        }
-    }, [inView, endValue]);
+//             return () => clearInterval(timer);
+//         }
+//     }, [inView, endValue]);
 
-    return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="statistic-item text-center"
-        >
-            <FontAwesomeIcon icon={icon} className="statistic-icon" />
-            <div className="statistic-value">{count.toLocaleString()}</div>
-            <div className="statistic-label">{label}</div>
-        </motion.div>
-    );
-};
+//     return (
+//         <motion.div
+//             ref={ref}
+//             initial={{ opacity: 0, y: 20 }}
+//             animate={inView ? { opacity: 1, y: 0 } : {}}
+//             transition={{ duration: 0.5 }}
+//             className="statistic-item text-center"
+//         >
+//             <FontAwesomeIcon icon={icon} className="statistic-icon" />
+//             <div className="statistic-value">{count.toLocaleString()}</div>
+//             <div className="statistic-label">{label}</div>
+//         </motion.div>
+//     );
+// };
 
 interface InfoCardProps {
     icon: IconDefinition;
@@ -83,16 +78,16 @@ interface InfoCardProps {
     link: string;
 }
 
-const InfoCard: React.FC<InfoCardProps> = ({ icon, title, content, link }) => (
-    <div className="info-card">
-        <div className="info-card-content">
-            <FontAwesomeIcon icon={icon} className="info-card-icon" />
-            <h3>{title}</h3>
-            <p>{content}</p>
-        </div>
-        <Link href={link} className="info-card-link">גלה עוד</Link>
-    </div>
-);
+// const InfoCard: React.FC<InfoCardProps> = ({ icon, title, content, link }) => (
+//     <div className="info-card">
+//         <div className="info-card-content">
+//             <FontAwesomeIcon icon={icon} className="info-card-icon" />
+//             <h3>{title}</h3>
+//             <p>{content}</p>
+//         </div>
+//         <Link href={link} className="info-card-link">גלה עוד</Link>
+//     </div>
+// );
 
 const HomePage: React.FC = () => {
     const router = useRouter();
@@ -103,6 +98,13 @@ const HomePage: React.FC = () => {
     // const { scrollY } = useViewportScroll();
     // const opacity = useTransform(scrollY, [0, 300], [1, 0]);
     // const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
+
+    const images = [
+        'hose1_qejtcw',
+        'ramot_view2_bwqqhu',
+        'ramot_view3_yojt8w',
+        'house2_vd8yke',
+    ];
 
     const togglePlay = () => {
         if (videoRef.current) {
@@ -227,145 +229,92 @@ const HomePage: React.FC = () => {
 
     return (
         <Container fluid className="px-0 py-0 home-container">
-            {/* <div className="desktop-top-ad d-none d-md-block">
-                <div className="ad-placeholder">פרסומת</div>
-                <img className="ad-placeholder rounded" src='/images/ads1top.jpg' />
-            </div> */}
-                <motion.section className="video-section">
-                    <div className="video-container">
-                        <video
-                            ref={videoRef}
-                            src="/videos/panorama2.mp4"
-                            autoPlay
-                            loop
-                            muted
-                            className="video-background"
-                        />
-                    </div>
-                    <button onClick={togglePlay} className="video-control" title="playVideo">
-                        <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
-                    </button>
-                    <div className="hero-overlay"></div>
-                    <div className="hero-content">
-
-                        <motion.h1
-                            className="hero-title"
-                            variants={containerVariants}
-                            initial="hidden"
-                            animate="visible"
-                        >
-                            {titleWords.map((word, index) => (
-                                <motion.span
-                                    key={index}
-                                    className="word"
-                                    variants={wordVariants}
-                                    style={{ display: 'inline-block', marginRight: '0.3em' }}
-                                >
-                                    {word}
-                                </motion.span>
-                            ))}
-                        </motion.h1>
-                        <motion.p
-                            className="hero-subtitle"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 1, duration: 0.8 }}
-                        >
-                            גלו את הקהילה המיוחדת שלנו
-                        </motion.p>
-                        <motion.div
-                            className="cta-container"
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 1.5, duration: 0.5 }}
-                        >
-                            <Link href="#statistics-section" className="cta-button">גלו עוד</Link>
-                        </motion.div>
-                    </div>
-                    {/* <motion.div
-                        className="scroll-indicator d-md-none"
-                        animate={{ y: [0, 10, 0] }}
-                        transition={{ repeat: Infinity, duration: 1.5 }}
-                    >
-                        <FontAwesomeIcon icon={faChevronDown} />
-                    </motion.div> */}
-                    <div className="info-overlay">
-                        <div className="info-item">
-                            <FontAwesomeIcon icon={faMapMarkerAlt} />
-                            <span>ירושלים, ישראל</span>
-                        </div>
-                        <div className="info-item">
-                            <FontAwesomeIcon icon={faClock} />
-                            <span>{currentTime.toLocaleTimeString('he-IL')}</span>
-                        </div>
-                    </div>
-                </motion.section>
-            {/* <section className="content-section">
-                <div className="wave-divider">
-                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="shape-fill"></path>
+            <section className="hero-section">
+                <div className="video-container">
+                    <video
+                        ref={videoRef}
+                        src="/videos/panorama2.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        className="video-background"
+                    />
+                    <div className="video-overlay" />
+                </div>
+                <motion.div
+                    className="hero-content"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                >
+                    <h1 className="hero-title">ברוכים הבאים לשכונת רמות</h1>
+                </motion.div>
+                <button onClick={togglePlay} className="video-control">
+                    <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+                </button>
+                <div className="diagonal-cut">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path fill="#ffffff" fill-opacity="1" d="M0,160L48,138.7C96,117,192,75,288,69.3C384,64,480,96,576,122.7C672,149,768,171,864,165.3C960,160,1056,128,1152,117.3C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
                     </svg>
                 </div>
-            </section> */}
-            <div className="mobile-ad-space ad-space-1 d-md-none" style={{zIndex:'1', position:'relative'}}>
-                {/* <div className="ad-placeholder">פרסומת</div> */}
-                <img src='/images/saleAds.gif' width={auto} height={auto} alt='ads-phone' className='rounded' />
-            </div>
+            </section>
+
             <Container fluid className="content-container">
                 <Row>
                     <Col lg={2} className="d-none d-lg-block">
-                        {/* אזור פרסומות שמאלי */}
-                        <div className="ad-container">
+                        <div className="sticky-ad-container">
                             <div className="ad-space">
-                                <img src='/images/bookgif.webp' width={auto} height={auto} alt='ads-left' className='rounded' />
+                                <img src='/images/bookgif.webp' width="auto" height="auto" alt='ads-left' className='rounded' />
                             </div>
                         </div>
                     </Col>
                     <Col lg={8}>
-
-                        <div className="main-content">
-                            <section className="info-section">
-                                <motion.h2
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="section-title"
-                                >
-                                    מה חדש ברמות?
-                                </motion.h2>
+                        <div className='main-content'>
+                            <section className="info-cards-section">
+                                <h2 className="section-title">מה חדש ברמות?</h2>
                                 <Swiper
-                                    spaceBetween={20}
                                     slidesPerView={3}
+                                    spaceBetween={20}
                                     autoplay={{
-                                        delay: 3000,
+                                        delay: 5000,
                                         disableOnInteraction: false,
                                     }}
-                                    pagination={{ clickable: true }}
+                                    pagination={{
+                                        clickable: true,
+                                    }}
                                     navigation={true}
                                     modules={[Autoplay, Pagination, Navigation]}
-                                    className="info-swiper p-3"
+                                    className="info-cards-slider"
                                     breakpoints={{
                                         320: {
                                             slidesPerView: 1,
-                                            spaceBetween: 10,
+                                            spaceBetween: 10
                                         },
-                                        768: {
+                                        640: {
                                             slidesPerView: 2,
-                                            spaceBetween: 20,
+                                            spaceBetween: 15
                                         },
                                         1024: {
-                                            slidesPerView: 2,
-                                            spaceBetween: 25,
-                                        },
-                                        1500: {
                                             slidesPerView: 3,
-                                            spaceBetween: 25,
-                                        },
+                                            spaceBetween: 20
+                                        }
                                     }}
                                 >
                                     {infoCards.map((card, index) => (
-                                        <SwiperSlide key={index} className='py-3'>
-                                            <InfoCard {...card} />
+                                        <SwiperSlide key={index}>
+                                            <div className="info-card">
+                                                <div className="card-content">
+                                                    <div className="card-icon">
+                                                        <FontAwesomeIcon icon={card.icon} />
+                                                    </div>
+                                                    <h3>{card.title}</h3>
+                                                    <p>{card.content}</p>
+                                                </div>
+                                                <Link href={card.link} className="card-link">
+                                                    גלה עוד
+                                                    <FontAwesomeIcon icon={faArrowLeft} className="arrow-icon" />
+                                                </Link>
+                                            </div>
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
@@ -373,7 +322,7 @@ const HomePage: React.FC = () => {
                             <div className="mobile-ad-space ad-space-2 d-md-none my-2">
                                 <img src='/images/saleAds.gif' alt='ads-phone' className='rounded' />
                             </div>
-                            <section className="statistics-section" id='statistics-section'>
+                            <section className="statistics-section">
                                 <motion.h2
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
@@ -382,28 +331,54 @@ const HomePage: React.FC = () => {
                                 >
                                     סטטיסטיקות שכונת רמות
                                 </motion.h2>
-                                <Row className="justify-content-center">
-                                    {statistics.map((stat, index) => (
-                                        <Col key={index} xs={6} sm={4} md={4} lg={3} className="mb-4">
-                                            <CounterStatistic {...stat} />
-                                        </Col>
-                                    ))}
-                                </Row>
+
+                                {[0, 1, 2, 3].map((rowIndex) => (
+                                    <div key={rowIndex} className={`statistics-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
+                                        <motion.div
+                                            className="image-container"
+                                            initial={{ opacity: 0, x: rowIndex % 2 === 0 ? -50 : 50 }}
+                                            whileInView={{ opacity: 1, x: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <CldImage
+                                                src={images[rowIndex]}
+                                                width={500}
+                                                height={300}
+                                                alt={`Statistics image ${rowIndex + 1}`}
+                                                className="diagonal-cut-image"
+                                            />
+                                        </motion.div>
+                                        <div className="statistics-group">
+                                            {statistics.slice(rowIndex * 2, (rowIndex * 2) + 2).map((stat, index) => (
+                                                <motion.div
+                                                    key={index}
+                                                    className="statistic-item"
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    whileInView={{ opacity: 1, y: 0 }}
+                                                    transition={{ duration: 0.5, delay: index * 0.2 }}
+                                                >
+                                                    <FontAwesomeIcon icon={stat.icon} className="statistic-icon" style={{ color: '#0d6efd' }} />
+                                                    <div className="statistic-value">{stat.endValue}</div>
+                                                    <div className="statistic-label">{stat.label}</div>
+                                                </motion.div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
                             </section>
-                        </div >
+                        </div>
                     </Col>
-                    <Col lg={2} className="d-none d-lg-block ">
-                        {/* אזור פרסומות ימני */}
-                        <div className="ad-container">
+                    <Col lg={2} className="d-none d-lg-block">
+                        <div className="sticky-ad-container">
                             <div className="ad-space">
-                                <img src='/images/timegif.webp' width={auto} height={auto} alt='ads-right' className='rounded' />
-                                {/* כאן תוכל להוסיף את קוד הפרסומת שלך */}
+                                <img src='/images/timegif.webp' width="auto" height="auto" alt='ads-right' className='rounded' />
                             </div>
                         </div>
                     </Col>
                 </Row>
             </Container>
         </Container>
+        // </Container >
     );
 };
 
