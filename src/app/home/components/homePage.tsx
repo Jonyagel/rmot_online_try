@@ -106,6 +106,18 @@ const HomePage: React.FC = () => {
         'house2_vd8yke',
     ];
 
+    const neighborhoodInfo = [
+        {
+            title: "היסטוריה של רמות",
+            description: "שכונת רמות הוקמה ב-1970 ומאז התפתחה להיות אחת השכונות המובילות בעיר..."
+        },
+        {
+            title: "חינוך ברמות",
+            description: "רמות מתגאה במוסדות חינוך מצוינים, כולל בתי ספר יסודיים, תיכונים וגני ילדים..."
+        },
+        // הוסף עוד פריטי מידע כנדרש
+    ];
+
     const togglePlay = () => {
         if (videoRef.current) {
             if (isPlaying) {
@@ -329,11 +341,11 @@ const HomePage: React.FC = () => {
                                     transition={{ duration: 0.5 }}
                                     className="section-title"
                                 >
-                                    סטטיסטיקות שכונת רמות
+                                    שכונת רמות - נתונים ומידע
                                 </motion.h2>
 
                                 {[0, 1, 2, 3].map((rowIndex) => (
-                                    <div key={rowIndex} className={`statistics-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
+                                    <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
                                         <motion.div
                                             className="image-container"
                                             initial={{ opacity: 0, x: rowIndex % 2 === 0 ? -50 : 50 }}
@@ -344,24 +356,38 @@ const HomePage: React.FC = () => {
                                                 src={images[rowIndex]}
                                                 width={500}
                                                 height={300}
-                                                alt={`Statistics image ${rowIndex + 1}`}
+                                                alt={`Image ${rowIndex + 1}`}
                                                 className="diagonal-cut-image"
                                             />
                                         </motion.div>
-                                        <div className="statistics-group">
-                                            {statistics.slice(rowIndex * 2, (rowIndex * 2) + 2).map((stat, index) => (
+                                        <div className="content-container">
+                                            {rowIndex % 2 === 0 ? (
+                                                <div className="statistics-group">
+                                                    {statistics.slice(rowIndex * 2, (rowIndex * 2) + 4).map((stat, index) => (
+                                                        <motion.div
+                                                            key={index}
+                                                            className="statistic-item"
+                                                            initial={{ opacity: 0, y: 20 }}
+                                                            whileInView={{ opacity: 1, y: 0 }}
+                                                            transition={{ duration: 0.5, delay: index * 0.1 }}
+                                                        >
+                                                            <FontAwesomeIcon icon={stat.icon} className="statistic-icon" />
+                                                            <div className="statistic-value">{stat.endValue}</div>
+                                                            <div className="statistic-label">{stat.label}</div>
+                                                        </motion.div>
+                                                    ))}
+                                                </div>
+                                            ) : (
                                                 <motion.div
-                                                    key={index}
-                                                    className="statistic-item"
+                                                    className="neighborhood-info"
                                                     initial={{ opacity: 0, y: 20 }}
                                                     whileInView={{ opacity: 1, y: 0 }}
-                                                    transition={{ duration: 0.5, delay: index * 0.2 }}
+                                                    transition={{ duration: 0.5 }}
                                                 >
-                                                    <FontAwesomeIcon icon={stat.icon} className="statistic-icon" style={{ color: '#0d6efd' }} />
-                                                    <div className="statistic-value">{stat.endValue}</div>
-                                                    <div className="statistic-label">{stat.label}</div>
+                                                    <h3>{neighborhoodInfo[Math.floor(rowIndex / 2)].title}</h3>
+                                                    <p>{neighborhoodInfo[Math.floor(rowIndex / 2)].description}</p>
                                                 </motion.div>
-                                            ))}
+                                            )}
                                         </div>
                                     </div>
                                 ))}
