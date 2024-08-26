@@ -66,9 +66,12 @@ body {
   cursor: pointer;
   transition: background 0.3s ease, transform 0.3s ease;
   z-index: 10;
-  font-size: 16px; /* התאם לפי הצורך */
-  width: 40px; /* התאם לפי הצורך */
-  height: 40px; /* התאם לפי הצורך */
+  font-size: 16px;
+  /* התאם לפי הצורך */
+  width: 40px;
+  /* התאם לפי הצורך */
+  height: 40px;
+  /* התאם לפי הצורך */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,7 +93,8 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 80px; /* התאם את הגובה לפי הצורך */
+  height: 80px;
+  /* התאם את הגובה לפי הצורך */
   overflow: hidden;
   line-height: 0;
 }
@@ -99,11 +103,13 @@ body {
   position: relative;
   display: block;
   width: calc(100% + 1.3px);
-  height: 150px; /* התאם את הגובה לפי הצורך */
+  height: 150px;
+  /* התאם את הגובה לפי הצורך */
 }
 
 .diagonal-cut path {
-  fill: #ffffff; /* צבע הרקע של החלק הבא */
+  fill: #ffffff;
+  /* צבע הרקע של החלק הבא */
 }
 
 .content-container {
@@ -232,6 +238,24 @@ body {
   overflow: hidden;
 }
 
+.statistics-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px; /* מרווח בין הסטטיסטיקות לתמונות */
+}
+
+.statistic-item {
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 5px;
+  padding-bottom: 15px;
+  margin: 5px; /* רווח בין פריטי הסטטיסטיקות */
+  width: calc(25% - 100px); /* ארבעה פריטים בשורה */
+}
+
 .info-row {
   display: flex;
   align-items: center;
@@ -240,7 +264,7 @@ body {
 }
 
 .row-reverse {
-  flex-direction: row-reverse;
+  flex-direction: row-reverse; /* תמונות והסברים נכנסים מצדדים מנוגדים */
 }
 
 .image-container {
@@ -258,61 +282,9 @@ body {
   transition: transform 0.3s ease;
 }
 
-.image-container::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0) 60%,
-    rgba(255, 255, 255, 0.5) 100%
-  );
-  transform: rotate(45deg);
-  z-index: 1;
-  transition: all 0.3s ease;
-}
-
-.content-container {
+.neighborhood-info {
   flex: 1;
   padding: 0 20px;
-}
-
-.statistics-group {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
-.statistic-item {
-  text-align: center;
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 15px;
-  /* transition: all 0.3s ease; */
-  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
-}
-
-
-.statistic-icon {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #0d6efd;
-}
-
-.statistic-value {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-.statistic-label {
-  font-size: 0.9rem;
-  color: #7f8c8d;
-  margin-top: 5px;
 }
 
 .neighborhood-info h3 {
@@ -328,29 +300,31 @@ body {
 }
 
 @media (max-width: 768px) {
-  .info-row {
+  .statistics-group {
     flex-direction: column;
+  }
+
+  .statistic-item {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .info-row {
+    flex-direction: column; /* במובייל, התוכן יתארגן בעמודה */
   }
 
   .row-reverse {
-    flex-direction: column;
+    flex-direction: column; /* במובייל, התוכן יתארגן בעמודה גם כשהוא הפוך */
   }
 
-  .image-container, .content-container {
+  .image-container,
+  .neighborhood-info {
     width: 100%;
     margin-bottom: 20px;
   }
-
-  .statistics-group {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
-@media (max-width: 480px) {
-  .statistics-group {
-    grid-template-columns: 1fr;
-  }
-}
+
 
 @media (max-width: 992px) {
   .sticky-ad-container {
@@ -374,9 +348,11 @@ body {
   .statistics-row {
     flex-direction: column;
   }
+
   .info-row {
     flex-direction: column;
   }
+
   .row-reverse {
     flex-direction: column;
   }

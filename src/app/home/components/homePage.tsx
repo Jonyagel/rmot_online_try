@@ -28,48 +28,48 @@ interface CounterStatisticProps {
     icon: IconDefinition;
 }
 
-// const CounterStatistic: React.FC<CounterStatisticProps> = ({ label, endValue, icon }) => {
-//     const [count, setCount] = useState(0);
-//     const [ref, inView] = useInView({
-//         triggerOnce: true,
-//         threshold: 0.1,
-//     });
+const CounterStatistic: React.FC<CounterStatisticProps> = ({ label, endValue, icon }) => {
+    const [count, setCount] = useState(0);
+    const [ref, inView] = useInView({
+        triggerOnce: true,
+        threshold: 0.1,
+    });
 
-//     useEffect(() => {
-//         if (inView) {
-//             let start = 0;
-//             const end = parseInt(endValue.replace(/,/g, ''));
-//             const duration = 2000;
-//             const increment = end / (duration / 16);
+    useEffect(() => {
+        if (inView) {
+            let start = 0;
+            const end = parseInt(endValue.replace(/,/g, ''));
+            const duration = 2000;
+            const increment = end / (duration / 16);
 
-//             const timer = setInterval(() => {
-//                 start += increment;
-//                 if (start >= end) {
-//                     clearInterval(timer);
-//                     setCount(end);
-//                 } else {
-//                     setCount(Math.floor(start));
-//                 }
-//             }, 16);
+            const timer = setInterval(() => {
+                start += increment;
+                if (start >= end) {
+                    clearInterval(timer);
+                    setCount(end);
+                } else {
+                    setCount(Math.floor(start));
+                }
+            }, 16);
 
-//             return () => clearInterval(timer);
-//         }
-//     }, [inView, endValue]);
+            return () => clearInterval(timer);
+        }
+    }, [inView, endValue]);
 
-//     return (
-//         <motion.div
-//             ref={ref}
-//             initial={{ opacity: 0, y: 20 }}
-//             animate={inView ? { opacity: 1, y: 0 } : {}}
-//             transition={{ duration: 0.5 }}
-//             className="statistic-item text-center"
-//         >
-//             <FontAwesomeIcon icon={icon} className="statistic-icon" />
-//             <div className="statistic-value">{count.toLocaleString()}</div>
-//             <div className="statistic-label">{label}</div>
-//         </motion.div>
-//     );
-// };
+    return (
+        <motion.div
+            ref={ref}
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="statistic-item text-center"
+        >
+            <FontAwesomeIcon icon={icon} className="statistic-icon" style={{color: '#0d6efd'}}/>
+            <div className="statistic-value">{count.toLocaleString()}</div>
+            <div className="statistic-label">{label}</div>
+        </motion.div>
+    );
+};
 
 interface InfoCardProps {
     icon: IconDefinition;
@@ -109,14 +109,22 @@ const HomePage: React.FC = () => {
     const neighborhoodInfo = [
         {
             title: "היסטוריה של רמות",
-            description: "שכונת רמות הוקמה ב-1970 ומאז התפתחה להיות אחת השכונות המובילות בעיר..."
+            description: "שכונת רמות הוקמה ב-1970 ומאז התפתחה להיות אחת השכונות המובילות בעיר. השכונה נבנתה כחלק מתוכנית התרחבות עירונית וכוללת מספר אזורים תושבים משכבות סוציו-אקונומיות שונות. לאורך השנים התפתחו בשכונה מרכזים קהילתיים, בתי כנסת, פארקים ציבוריים ומוסדות תרבות. השכונה ידועה בסביבה הירוקה שלה ובשילוב המעניין של ארכיטקטורה מודרנית עם שימור מרקם החיים המסורתי."
         },
         {
             title: "חינוך ברמות",
-            description: "רמות מתגאה במוסדות חינוך מצוינים, כולל בתי ספר יסודיים, תיכונים וגני ילדים..."
+            description: "רמות מתגאה במוסדות חינוך מצוינים, כולל בתי ספר יסודיים, תיכונים וגני ילדים. בתי הספר בשכונה מדורגים מהגבוהים בעיר במבחני מיצ\"ב וישנם גם מספר מוסדות חינוך ייחודיים המציעים תוכניות חינוך מיוחדות ואינטגרטיביות. בנוסף, השכונה מציעה חוגים שונים לתלמידים ובני נוער, החל מפעילות ספורטיבית ועד למרכזי למידה מתקדמים."
         },
-        // הוסף עוד פריטי מידע כנדרש
+        {
+            title: "שירותים קהילתיים ותרבות",
+            description: "שכונת רמות מציעה מגוון רחב של שירותים קהילתיים ותרבותיים לכל הגילאים. במרכז השכונה נמצא המרכז הקהילתי הגדול אשר מארגן פעילויות לכל המשפחה, חוגים וסדנאות בתחומים מגוונים כמו אמנות, ספורט, מוזיקה וריקוד. בנוסף, ישנם מספר בתי כנסת בשכונה המציעים שירותי דת, שיעורי תורה ופעילויות קהילתיות נוספות. פארקים ציבוריים וגני משחקים פזורים ברחבי השכונה ומציעים אפשרויות רבות לפעילות פנאי ובילוי בטבע."
+        },
+        {
+            title: "תחבורה ונגישות",
+            description: "שכונת רמות נהנית ממערכת תחבורה נוחה המאפשרת גישה מהירה לכל חלקי העיר. השכונה מחוברת לרשת התחבורה הציבורית עם מספר קווי אוטובוסים המגיעים לאזורי מפתח בעיר, כמו גם לרכבת הקלה המתוכננת להגיע לשכונה בעתיד הקרוב. בנוסף, השכונה ממוקמת בסמוך לכבישים מרכזיים המאפשרים גישה נוחה ברכב פרטי. ישנם שבילי אופניים המקשרים בין חלקי השכונה ומהווים אפשרות נהדרת לתחבורה ירוקה."
+        }
     ];
+
 
     const togglePlay = () => {
         if (videoRef.current) {
@@ -197,7 +205,7 @@ const HomePage: React.FC = () => {
         { label: 'מרכזי קניות', endValue: '5', icon: faShoppingCart },
         { label: 'מרפאות', endValue: '8', icon: faHospital },
         { label: 'קווי אוטובוס', endValue: '12', icon: faRoad },
-        { label: 'גובה מעל פני הים', endValue: '885', icon: faMountain },
+        // { label: 'גובה מעל פני הים', endValue: '885', icon: faMountain },
     ];
     // מקסימום 80 תווים 3 שורות בתוכן פירוט של הכרטיס לא יותר של יגלוש
     const infoCards: InfoCardProps[] = [
@@ -344,6 +352,19 @@ const HomePage: React.FC = () => {
                                     שכונת רמות - נתונים ומידע
                                 </motion.h2>
 
+                                {/* סטטיסטיקות למעלה בשורה אחת */}
+                                <div className="statistics-group pb-28">
+                                    {statistics.map((stat, index) => (
+                                        <CounterStatistic
+                                            key={index}
+                                            label={stat.label}
+                                            endValue={stat.endValue}
+                                            icon={stat.icon}
+                                        />
+                                    ))}
+                                </div>
+
+                                {/* תמונות והסברים מתחת */}
                                 {[0, 1, 2, 3].map((rowIndex) => (
                                     <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
                                         <motion.div
@@ -360,38 +381,22 @@ const HomePage: React.FC = () => {
                                                 className="diagonal-cut-image"
                                             />
                                         </motion.div>
-                                        <div className="content-container">
-                                            {rowIndex % 2 === 0 ? (
-                                                <div className="statistics-group">
-                                                    {statistics.slice(rowIndex * 2, (rowIndex * 2) + 4).map((stat, index) => (
-                                                        <motion.div
-                                                            key={index}
-                                                            className="statistic-item"
-                                                            initial={{ opacity: 0, y: 20 }}
-                                                            whileInView={{ opacity: 1, y: 0 }}
-                                                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                                                        >
-                                                            <FontAwesomeIcon icon={stat.icon} className="statistic-icon" />
-                                                            <div className="statistic-value">{stat.endValue}</div>
-                                                            <div className="statistic-label">{stat.label}</div>
-                                                        </motion.div>
-                                                    ))}
-                                                </div>
-                                            ) : (
-                                                <motion.div
-                                                    className="neighborhood-info"
-                                                    initial={{ opacity: 0, y: 20 }}
-                                                    whileInView={{ opacity: 1, y: 0 }}
-                                                    transition={{ duration: 0.5 }}
-                                                >
-                                                    <h3>{neighborhoodInfo[Math.floor(rowIndex / 2)].title}</h3>
-                                                    <p>{neighborhoodInfo[Math.floor(rowIndex / 2)].description}</p>
-                                                </motion.div>
-                                            )}
-                                        </div>
+                                        {neighborhoodInfo[rowIndex] && ( // בדיקה אם הערך קיים
+                                            <motion.div
+                                                className="neighborhood-info"
+                                                initial={{ opacity: 0, y: 20 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.5 }}
+                                            >
+                                                <h3>{neighborhoodInfo[rowIndex].title}</h3>
+                                                <p>{neighborhoodInfo[rowIndex].description}</p>
+                                            </motion.div>
+                                        )}
                                     </div>
                                 ))}
                             </section>
+
+
                         </div>
                     </Col>
                     <Col lg={2} className="d-none d-lg-block">
