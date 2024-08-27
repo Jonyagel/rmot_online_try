@@ -1,0 +1,54 @@
+.statistics-section {
+    padding: 50px 0;
+    overflow: hidden;
+}
+
+.statistics-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    /* מרווח בין הסטטיסטיקות לתמונות */
+}
+
+.statistic-item {
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 5px;
+    padding-bottom: 15px;
+    margin: 5px;
+    /* רווח בין פריטי הסטטיסטיקות */
+    width: calc(25% - 100px);
+    /* ארבעה פריטים בשורה */
+}
+
+@media (max-width: 768px) {
+    /* .statistics-group {
+        flex-direction: column;
+    } */
+
+    .statistic-item {
+        width: 20%;
+        margin-bottom: 10px;
+    }
+
+    .statistics-row {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .statistic-icon {
+        font-size: 1.3rem;
+    }
+
+    .statistic-value {
+        font-size: 1rem;
+    }
+
+    .statistic-label {
+        font-size: 0.65rem;
+    }
+}

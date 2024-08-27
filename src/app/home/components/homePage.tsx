@@ -3,12 +3,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import './style1.css'
 import { motion } from 'framer-motion';
 import { CldImage } from 'next-cloudinary';
-import { useInView } from 'react-intersection-observer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faUsers, faSchool, faBaby, faTree, faSynagogue, faShoppingCart,
-    faHospital, faRoad, faHome, faCalendarAlt, faStore,
-    faMountain,
+    faTree, faHome, faCalendarAlt, faStore,
     faGraduationCap, faHeartbeat, faPlay, faPause,
     faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
@@ -21,55 +18,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useRouter } from 'next/navigation';
-
-interface CounterStatisticProps {
-    label: string;
-    endValue: string;
-    icon: IconDefinition;
-}
-
-const CounterStatistic: React.FC<CounterStatisticProps> = ({ label, endValue, icon }) => {
-    const [count, setCount] = useState(0);
-    const [ref, inView] = useInView({
-        triggerOnce: true,
-        threshold: 0.1,
-    });
-
-    useEffect(() => {
-        if (inView) {
-            let start = 0;
-            const end = parseInt(endValue.replace(/,/g, ''));
-            const duration = 2000;
-            const increment = end / (duration / 16);
-
-            const timer = setInterval(() => {
-                start += increment;
-                if (start >= end) {
-                    clearInterval(timer);
-                    setCount(end);
-                } else {
-                    setCount(Math.floor(start));
-                }
-            }, 16);
-
-            return () => clearInterval(timer);
-        }
-    }, [inView, endValue]);
-
-    return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5 }}
-            className="statistic-item text-center"
-        >
-            <FontAwesomeIcon icon={icon} className="statistic-icon" style={{color: '#0d6efd'}}/>
-            <div className="statistic-value">{count.toLocaleString()}</div>
-            <div className="statistic-label">{label}</div>
-        </motion.div>
-    );
-};
+import Statistic from './statistic';
 
 interface InfoCardProps {
     icon: IconDefinition;
@@ -78,26 +27,9 @@ interface InfoCardProps {
     link: string;
 }
 
-// const InfoCard: React.FC<InfoCardProps> = ({ icon, title, content, link }) => (
-//     <div className="info-card">
-//         <div className="info-card-content">
-//             <FontAwesomeIcon icon={icon} className="info-card-icon" />
-//             <h3>{title}</h3>
-//             <p>{content}</p>
-//         </div>
-//         <Link href={link} className="info-card-link">גלה עוד</Link>
-//     </div>
-// );
+
 
 const HomePage: React.FC = () => {
-    const router = useRouter();
-    // const titleRef = useRef<HTMLHeadingElement | null>(null);
-    const videoRef = useRef<HTMLVideoElement | null>(null);
-    const [isPlaying, setIsPlaying] = useState(true);
-    const titleWords = "ברוכים הבאים לשכונת רמות".split(' ');
-    // const { scrollY } = useViewportScroll();
-    // const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-    // const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
 
     const images = [
         'hose1_qejtcw',
@@ -123,89 +55,6 @@ const HomePage: React.FC = () => {
             title: "תחבורה ונגישות",
             description: "שכונת רמות נהנית ממערכת תחבורה נוחה המאפשרת גישה מהירה לכל חלקי העיר. השכונה מחוברת לרשת התחבורה הציבורית עם מספר קווי אוטובוסים המגיעים לאזורי מפתח בעיר, כמו גם לרכבת הקלה המתוכננת להגיע לשכונה בעתיד הקרוב. בנוסף, השכונה ממוקמת בסמוך לכבישים מרכזיים המאפשרים גישה נוחה ברכב פרטי. ישנם שבילי אופניים המקשרים בין חלקי השכונה ומהווים אפשרות נהדרת לתחבורה ירוקה."
         }
-    ];
-
-
-    const togglePlay = () => {
-        if (videoRef.current) {
-            if (isPlaying) {
-                videoRef.current.pause();
-            } else {
-                videoRef.current.play();
-            }
-            setIsPlaying(!isPlaying);
-        }
-    };
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1,
-                delayChildren: 0.2,
-            },
-        },
-    };
-
-    const wordVariants = {
-        hidden: {
-            opacity: 0,
-            y: 20,
-            rotateX: -45,
-            filter: "blur(10px)"
-        },
-        visible: {
-            opacity: 1,
-            y: 0,
-            rotateX: 0,
-            filter: "blur(0px)",
-            transition: {
-                type: "spring",
-                damping: 12,
-                stiffness: 100,
-            },
-        },
-    };
-
-    const [currentTime, setCurrentTime] = useState(new Date());
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
-
-    const carouselItems = [
-        {
-            image: 'neighborhood2_irtkau',
-            title: '14/08/2024',
-            description: 'טקס פתיחת שנת הלימודים בבית ספר רמות.'
-        },
-        {
-            image: 'ramot_ai1_x5bxdh',
-            title: '10/08/2024',
-            description: 'עבודות תשתית ברחוב הרב אויערבך - צפויים שיבושי תנועה.'
-        },
-        {
-            image: 'neighborhood1_wcwkgs',
-            title: '05/08/2024',
-            description: 'פתיחת ההרשמה לחוגי הספורט העירוניים לשנת תשפ"ה.'
-        }
-    ];
-
-    const statistics: CounterStatisticProps[] = [
-        { label: 'תושבים', endValue: '55000', icon: faUsers },
-        { label: 'בתי ספר', endValue: '15', icon: faSchool },
-        { label: 'גני ילדים', endValue: '50', icon: faBaby },
-        { label: 'פארקים', endValue: '10', icon: faTree },
-        { label: 'בתי כנסת', endValue: '30', icon: faSynagogue },
-        { label: 'מרכזי קניות', endValue: '5', icon: faShoppingCart },
-        { label: 'מרפאות', endValue: '8', icon: faHospital },
-        { label: 'קווי אוטובוס', endValue: '12', icon: faRoad },
-        // { label: 'גובה מעל פני הים', endValue: '885', icon: faMountain },
     ];
     // מקסימום 80 תווים 3 שורות בתוכן פירוט של הכרטיס לא יותר של יגלוש
     const infoCards: InfoCardProps[] = [
@@ -246,6 +95,23 @@ const HomePage: React.FC = () => {
             link: "/"
         }
     ];
+
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const [isPlaying, setIsPlaying] = useState(true);
+
+    const togglePlay = () => {
+        if (videoRef.current) {
+            if (isPlaying) {
+                videoRef.current.pause();
+            } else {
+                videoRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
+        }
+    };
+
+
+
 
     return (
         <Container fluid className="px-0 py-0 home-container">
@@ -352,19 +218,8 @@ const HomePage: React.FC = () => {
                                     שכונת רמות - נתונים ומידע
                                 </motion.h2>
 
-                                {/* סטטיסטיקות למעלה בשורה אחת */}
-                                <div className="statistics-group pb-28">
-                                    {statistics.map((stat, index) => (
-                                        <CounterStatistic
-                                            key={index}
-                                            label={stat.label}
-                                            endValue={stat.endValue}
-                                            icon={stat.icon}
-                                        />
-                                    ))}
-                                </div>
+                                <Statistic />
 
-                                {/* תמונות והסברים מתחת */}
                                 {[0, 1, 2, 3].map((rowIndex) => (
                                     <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
                                         <motion.div

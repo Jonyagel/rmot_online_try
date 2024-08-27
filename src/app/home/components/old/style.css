@@ -1,0 +1,266 @@
+.home-title {
+    font-size: 2rem;
+    color: #000000;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    /* position: relative; */
+
+
+}
+
+.home-title:after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: #3498db;
+    margin: 10px auto;
+}
+
+
+.statistics-title {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    /* position: relative; */
+
+
+}
+
+.statistics-title:after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: #3498db;
+    margin: 10px auto;
+}
+
+.statistics-section {
+    background-color: #ffffff;
+    padding: 3rem 0;
+    border-radius: 10px;
+    /* box-shadow: 0 4px 6px rgba(0,0,0,0.1); */
+}
+
+.statistics-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.statistic-item {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1rem;
+    width: 200px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.statistic-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.statistic-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #007bff;
+}
+
+.statistic-item h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.statistic-item p {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .statistics-container {
+        /* flex-direction: column; */
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .statistic-item {
+        width: 40%;
+        max-width: 300px;
+    }
+}
+
+.info-title {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    /* position: relative; */
+
+
+}
+
+.info-title:after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: #3498db;
+    margin: 10px auto;
+}
+
+.info-section {
+    background-color: #ffffff;
+    padding: 3rem 0;
+    border-radius: 10px;
+    /* box-shadow: 0 4px 6px rgba(0,0,0,0.1); */
+}
+
+.info-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.info-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1rem;
+    width: 250px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.info-icon {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.info-card h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.info-card p {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.info-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.info-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .info-card {
+        width: 80%;
+        max-width: 300px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    /* .carousel-image-container {
+        width: 100%;
+       height: 100%;
+       padding-bottom: 56.25%; */
+       /* יחס של 16:9 */
+       /* position: relative;
+       overflow: hidden; 
+   } */
+   
+   /* .carousel-image { */
+       /* position: absolute; */
+       /* top: 0;
+       left: 0; */
+       /* width: 100%; */
+       /* height: 100%; */
+       /* padding: 10px; */
+       /* object-fit: center;
+   } */
+    .carousel-caption {
+        position: relative;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background: #ff4040;
+    }
+
+    .carousel-caption h3 {
+        font-size: 1.2rem;
+    }
+
+    .carousel-caption p {
+        font-size: 0.9rem;
+    }
+}
+
+.neighborhood-description {
+    background-color: #f8f9fa;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.neighborhood-description:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
+
+.description-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.neighborhood-description h2 {
+    font-size: 2rem;
+    color: #007bff;
+}
+
+.neighborhood-description p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .neighborhood-description {
+        padding: 1.5rem;
+    }
+
+    .neighborhood-description h2 {
+        font-size: 1.8rem;
+    }
+
+    .neighborhood-description p {
+        font-size: 1rem;
+    }
+}

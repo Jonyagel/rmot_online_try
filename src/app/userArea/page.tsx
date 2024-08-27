@@ -8,6 +8,7 @@ import { faEdit, faTrash, faUser, faEnvelope, faCalendarAlt, faBed, faRulerCombi
 import { CldImage } from 'next-cloudinary';
 import { motion, AnimatePresence } from 'framer-motion';
 import './userArea.css';
+import { useSession } from 'next-auth/react';
 
 interface UserPost {
     id: string;
@@ -48,14 +49,16 @@ interface ForumPost {
 }
 
 interface User {
-    _id: string;
-    name: string;
-    email: string;
-    createdAt: string;
+    _id?: string;
+    name: string | null | undefined;
+    email: string | null | undefined;
+    createdAt?: string;
     avatar?: string;
+    image?: string | null | undefined;
 }
 
 export default function UserArea() {
+    const { data: session } = useSession();
     const [user, setUser] = useState<User | null>(null);
     const [NadlanPosts, setNadlanPosts] = useState<nadlanPost[]>([]);
     const [forumPosts, setForumPosts] = useState<ForumPost[]>([]);
@@ -70,13 +73,25 @@ export default function UserArea() {
     }, []);
 
     const fetchUserData = async () => {
-        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/users`;
-        const resp = await fetch(url, { cache: 'no-store' });
-        const data = await resp.json();
-        console.log(data);
-        setUser(data);
-        fetchNadlanPosts(data);
-        fetchForumPosts(data);
+        if (!session) {
+            const url = `${process.env.NEXT_PUBLIC_API_URL}/api/users`;
+            const resp = await fetch(url, { cache: 'no-store' });
+            const data = await resp.json();
+            console.log(data);
+            setUser(data);
+            fetchNadlanPosts(data);
+            fetchForumPosts(data);
+        }
+        else if (session && session.user) {
+            const userData: User = {
+                name: session.user.name ?? '',
+                email: session.user.email ?? '',
+                image: session.user.image ?? undefined,
+            };
+            setUser(userData);
+            fetchNadlanPosts(userData);
+            fetchForumPosts(userData);
+        }
     };
 
     const fetchNadlanPosts = async (user: any) => {
@@ -152,15 +167,16 @@ export default function UserArea() {
                             <Row className="align-items-center">
                                 <Col md={4} className="text-center">
                                     <div className="avatar-container">
-                                        {user.avatar ? (
-                                            <CldImage
-                                                src={user.avatar}
-                                                width="200"
-                                                height="200"
-                                                crop="fill"
-                                                alt="תמונת פרופיל"
-                                                className="user-avatar"
-                                            />
+                                        {user.image ? (
+                                            <img src={user.image} alt="user image" style={{ width: '100%', height: '100%' }} />
+                                            // <CldImage
+                                            //     src={user.avatar}
+                                            //     width="200"
+                                            //     height="200"
+                                            //     crop="fill"
+                                            //     alt="תמונת פרופיל"
+                                            //     className="user-avatar"
+                                            // />
                                         ) : (
                                             <div className="avatar-placeholder">
                                                 <FontAwesomeIcon icon={faUser} />
@@ -172,7 +188,12 @@ export default function UserArea() {
                                     <h2 className="user-name">{user.name}</h2>
                                     <div className="user-info">
                                         <p><FontAwesomeIcon icon={faEnvelope} /> {user.email}</p>
-                                        <p><FontAwesomeIcon icon={faCalendarAlt} /> הצטרף/ה בתאריך: {new Date(user.createdAt).toLocaleDateString('he-IL')}</p>
+                                        <p><FontAwesomeIcon icon={faCalendarAlt} /> הצטרף/ה בתאריך: {
+                                            user.createdAt ?
+                                                new Date(user.createdAt).toLocaleDateString('he-IL')
+                                                :
+                                                'אין תאריך'
+                                        }</p>
                                     </div>
                                     <Button variant="outline-primary" className="mt-3">
                                         <FontAwesomeIcon icon={faEdit} /> ערוך פרופיל
@@ -200,10 +221,10 @@ export default function UserArea() {
             </div>
 
             {activeTab === 'nadlan' && (
-                <>
+                <div>
                     <h3 className="user-posts-title">הפוסטים שלי בנדל"ן</h3>
                     <div className="user-posts-grid">
-                        {NadlanPosts ? NadlanPosts.map((post, index) => (
+                        {NadlanPosts.length > 0 ? NadlanPosts.map((post, index) => (
                             <motion.div
                                 key={post.id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -252,16 +273,17 @@ export default function UserArea() {
                                     </Card.Footer>
                                 </Card>
                             </motion.div>
-                        )) :
-                            (<div></div>)}
+                        )) : (
+                            <p>אין פוסטים להצגה</p>
+                        )}
                     </div>
-                </>
+                </div>
             )}
             {activeTab === 'forum' && (
                 <>
                     <h3 className="user-posts-title">הפוסטים שלי בפורום</h3>
                     <div className="user-posts-grid">
-                        {forumPosts && forumPosts.map((post, index) => (
+                        {forumPosts.length > 0 ? forumPosts.map((post, index) => (
                             <motion.div
                                 key={post._id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -274,7 +296,9 @@ export default function UserArea() {
                                     </Card.Header>
                                     <Card.Body>
                                         <Card.Title>{post.tittle}</Card.Title>
+
                                         <Card.Text>{post.description}</Card.Text>
+
                                     </Card.Body>
                                     <Card.Footer>
                                         <Button variant="outline-primary" className="me-2">
@@ -286,7 +310,9 @@ export default function UserArea() {
                                     </Card.Footer>
                                 </Card>
                             </motion.div>
-                        ))}
+                        )) : (
+                            <p>אין פוסטים בפורום להצגה</p>
+                        )}
                     </div>
                 </>
             )}

@@ -3,10 +3,6 @@ body {
   background-color: #ffffff;
 }
 
-/* .home-container {
-  overflow-x: hidden;
-} */
-
 .hero-section {
   position: relative;
   height: 70vh;
@@ -233,28 +229,7 @@ body {
 }
 
 
-.statistics-section {
-  padding: 50px 0;
-  overflow: hidden;
-}
 
-.statistics-group {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 20px; /* מרווח בין הסטטיסטיקות לתמונות */
-}
-
-.statistic-item {
-  text-align: center;
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 5px;
-  padding-bottom: 15px;
-  margin: 5px; /* רווח בין פריטי הסטטיסטיקות */
-  width: calc(25% - 100px); /* ארבעה פריטים בשורה */
-}
 
 .info-row {
   display: flex;
@@ -300,14 +275,7 @@ body {
 }
 
 @media (max-width: 768px) {
-  .statistics-group {
-    flex-direction: column;
-  }
-
-  .statistic-item {
-    width: 100%;
-    margin-bottom: 10px;
-  }
+  
 
   .info-row {
     flex-direction: column; /* במובייל, התוכן יתארגן בעמודה */
@@ -322,17 +290,6 @@ body {
     width: 100%;
     margin-bottom: 20px;
   }
-}
-
-
-
-@media (max-width: 992px) {
-  .sticky-ad-container {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
   .hero-section {
     height: 60vh;
   }
@@ -345,25 +302,14 @@ body {
     font-size: 1.2rem;
   }
 
-  .statistics-row {
-    flex-direction: column;
-  }
-
-  .info-row {
-    flex-direction: column;
-  }
-
-  .row-reverse {
-    flex-direction: column;
-  }
-
-  .image-container,
-  .statistics-group {
-    width: 100%;
-  }
-
   .info-card {
     width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .sticky-ad-container {
+    display: none;
   }
 }
 
@@ -390,17 +336,5 @@ body {
 
   .info-card-link {
     font-size: 0.8rem;
-  }
-
-  .statistic-icon {
-    font-size: 1.3rem;
-  }
-
-  .statistic-value {
-    font-size: 1rem;
-  }
-
-  .statistic-label {
-    font-size: 0.65rem;
   }
 }
