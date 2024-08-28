@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { Card, Badge, Button, Modal, Form, Row, Col, Container, Carousel, Alert } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHome, faPhone, faRulerCombined, faSun, faTimes, faBell, faEye, faImage, faPaintRoller, faCompass } from '@fortawesome/free-solid-svg-icons';
+import { faBed, faBuilding, faCalendarAlt, faCar, faCloudUploadAlt, faCouch, faElevator, faHome, faPhone, faRulerCombined, faSun, faTimes, faBell, faEye, faImage, faPaintRoller, faCompass, faCoins, faSearch, faKey } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 // import 'bootstrap/dist/css/bootstrap.min.css';
@@ -59,6 +59,7 @@ export default function RealEstate() {
   const [nadlanPosted, setNadlanPosted] = useState();
   const [showAlert, setShowAlert] = useState(false);
   const [status, setStatus] = useState<string>('');
+  const [currentCategory, setCurrentCategory] = useState<'rent' | 'sale'>('sale');
 
   const typeRef = useRef<HTMLSelectElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
@@ -265,6 +266,7 @@ export default function RealEstate() {
   });
 
 
+
   const handleUploadSuccess = (result: any) => {
     if (result.event === 'success') {
       const publicId = result.info.public_id;
@@ -285,16 +287,26 @@ export default function RealEstate() {
     </div>
   );
 
+  const getFilteredProperties = () => {
+    return nadlanAr.filter((item: any) => {
+      // if (currentCategory === 'all') return true;
+      if (currentCategory === 'rent') return item.type === 'השכרה';
+      if (currentCategory === 'sale') return item.type === 'מכירה';
+      return true;
+    });
+  };
+
 
   return (
     <div className='container-fluid'>
-      {showAlert && (
+      {/* {showAlert && (
         <Alert variant={status.includes('בהצלחה') ? "success" : "danger"} onClose={() => setShowAlert(false)} dismissible className="mb-4">
           <Alert.Heading>{status.includes('בהצלחה') ? "תודה שפנית אלינו!" : "שגיאה"}</Alert.Heading>
           <p>{status}</p>
         </Alert>
-      )}
-      <Container fluid className="content-container">
+      )} */}
+      {/* <Container fluid className="content-container bg-red-500"> */}
+      <div>
         <Row>
           <Col lg={2} className="d-none d-lg-block">
             {/* אזור פרסומות שמאלי */}
@@ -320,58 +332,63 @@ export default function RealEstate() {
                 <FaPlus />
               </motion.button>
             </div>
-            <Form className="mb-4 filter-nadlan">
-              <Row>
-                <Col md={4}>
-                  <Form.Group>
-                    <Form.Label>סוג עסקה</Form.Label>
-                    <Form.Control
-                      as="select"
-                      name="type"
-                      onChange={handleFilterChange}
-                    >
-                      <option value="all">הכל</option>
-                      <option value="מכירה">מכירה</option>
-                      <option value="השכרה">השכרה</option>
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-                <Col md={4}>
-                  <Form.Group>
-                    <Form.Label>מספר חדרים</Form.Label>
-                    <Form.Control
-                      as="select"
-                      name="rooms"
-                      onChange={handleFilterChange}
-                    >
-                      <option value="all">הכל</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4+</option>
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-                <Col md={4}>
-                  <Form.Group>
-                    <Form.Label>טווח מחירים</Form.Label>
-                    <Form.Control
-                      as="select"
-                      name="priceRange"
-                      onChange={handleFilterChange}
-                    >
-                      <option value="all">הכל</option>
-                      <option value="low">עד מיליון ₪</option>
-                      <option value="medium">1-2 מיליון ₪</option>
-                      <option value="high">מעל 2 מיליון ₪</option>
-                    </Form.Control>
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Form>
+            <div className="nadlan-filter-section mb-4 ">
+              <div className="category-buttons d-flex justify-content-center mb-3 ">
+                <Button
+                  variant={currentCategory === 'sale' ? "primary" : "outline-primary"}
+                  onClick={() => setCurrentCategory('sale')}
+                  className="me-2 btn-sm"
+                >
+                  למכירה
+                </Button>
+                <Button
+                  variant={currentCategory === 'rent' ? "primary" : "outline-primary"}
+                  onClick={() => setCurrentCategory('rent')}
+                  className="btn-sm"
+                >
+                  להשכרה
+                </Button>
+              </div>
+
+              <Form className="filter-nadlan  flex justify-content-around">
+                {/* <Row className="g-2"> */}
+                {/* <Col sm={6} md={4}> */}
+                <Form.Group className='w-2/6'>
+                  <Form.Label className="small text-muted">מספר חדרים</Form.Label>
+                  <Form.Select
+                    name="rooms"
+                    onChange={handleFilterChange}
+                    size="sm"
+                  >
+                    <option value="all">הכל</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4+</option>
+                  </Form.Select>
+                </Form.Group>
+                {/* </Col> */}
+                {/* <Col sm={6} md={4}> */}
+                <Form.Group className='w-2/6'>
+                  <Form.Label className="small text-muted">טווח מחירים</Form.Label>
+                  <Form.Select
+                    name="priceRange"
+                    onChange={handleFilterChange}
+                    size="sm"
+                  >
+                    <option value="all">הכל</option>
+                    <option value="low">עד מיליון ₪</option>
+                    <option value="medium">1-2 מיליון ₪</option>
+                    <option value="high">מעל 2 מיליון ₪</option>
+                  </Form.Select>
+                </Form.Group>
+                {/* </Col> */}
+                {/* </Row> */}
+              </Form>
+            </div>
             <Row>
               <div className="nadlan-ar-grid">
-                {nadlanAr.map((item: any, index: number) => (
+                {getFilteredProperties().map((item: any, index: number) => (
                   <React.Fragment key={item._id}>
                     <motion.div
                       className="nadlan-ar-card border"
@@ -447,7 +464,8 @@ export default function RealEstate() {
             </div>
           </Col>
         </Row>
-      </Container>
+      </div>
+      {/* </Container> */}
       {/* מודל לפרטי הנכס */}
       <AnimatePresence>
         {showModal && selectedProperty && (

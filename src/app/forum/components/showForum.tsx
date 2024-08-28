@@ -1,88 +1,44 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddQuestion from './addQuestion';
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Button, Popover, OverlayTrigger, Dropdown, Form, InputGroup, Modal, Col, Row } from 'react-bootstrap';
+import { Card, Badge, Popover, OverlayTrigger, Dropdown, Form, InputGroup, Modal, Col, Row } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import './showForum.css'
-import { useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FaChevronDown } from 'react-icons/fa';
+import { FaChevronDown, FaSearch } from 'react-icons/fa';
+import TagFilter from './tagFilter';
 
 export const dynamic = 'force-dynamic';
 
 export default function ShowForum(props: any) {
     const [addForum, setAddForum] = useState(false);
     const [forum_ar, setForum_ar] = useState(props.forumData);
-    const [show, setShow] = useState(false);
     const [sortBy, setSortBy] = useState('date');
-    // const [viewMode, setViewMode] = useState('list');
     const [searchTerm, setSearchTerm] = useState('');
-    const [showScrollTop, setShowScrollTop] = useState(false);
     const [selectedTopic, setSelectedTopic] = useState('');
     const [showAllTags, setShowAllTags] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(props.totalPages);
     const [showImageModal, setShowImageModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState('');
-    // const [displayedPosts, setDisplayedPosts] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [lengthOfForum, setLengthOfForum] = useState(10);
     const [loading, setLoading] = useState(2);
 
-
-    const popularTags = ['שאלה', 'עזרה', 'בעיה', 'תקלה'];
-
-    // useEffect(() => {
-    //     setDisplayedPosts(sortedAndFilteredPosts.slice(0, 10)); // מציג 10 פוסטים ראשונים
-    //     setHasMore(sortedAndFilteredPosts.length > 10);
-    // }, [sortedAndFilteredPosts]);
-
-    // const loadMorePosts = () => {
-
-    //     const currentLength = displayedPosts.length;
-    //     const nextPosts = sortedAndFilteredPosts.slice(currentLength, currentLength + 10);
-    //     setDisplayedPosts([...displayedPosts, ...nextPosts]);
-    //     setHasMore(currentLength + 10 < sortedAndFilteredPosts.length);
-    // };
-
-    const router = useRouter();
-
     const saerchRef = useRef<HTMLInputElement>(null);
-
 
     const getAllTags = () => {
         const allTags = new Set(forum_ar.map((post: any) => post.topic));
         return Array.from(allTags);
     };
 
-    const showAllQuestions = () => {
-        setSelectedTopic('');
-        setSearchTerm('');
-    };
-
-
     const onSearchClick = (e: any) => {
         e.preventDefault();
-        const search = saerchRef.current?.value
         doApi(1);
-    };
-
-    const handlePageChange = (newPage: number) => {
-        if (newPage >= 1 && newPage <= totalPages) {
-            setCurrentPage(newPage);
-            console.log(`Page ${newPage}`);
-            doApi(newPage);
-            window.scrollTo({
-                top: 300,
-                behavior: 'smooth'
-            });
-        }
     };
 
     async function doApi(newPage: any) {
@@ -104,8 +60,6 @@ export default function ShowForum(props: any) {
         if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
         const daysAgo = Math.floor(hoursAgo / 24);
         if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
-
-        const dateTest = new Date(date * 1000);
         const formatter = new Intl.DateTimeFormat('he-IL', {
             year: 'numeric',
             month: '2-digit',
@@ -147,6 +101,7 @@ export default function ShowForum(props: any) {
         } else {
             setSelectedTopic(topic);
         }
+        setShowAllTags(false);
     };
 
     return (
@@ -170,34 +125,30 @@ export default function ShowForum(props: any) {
                         <h2 className='my-4 text-3xl forum-title'>פורום תושבי רמות</h2>
                         {/* <p className='lead text-muted'>שואלים, עונים, ומחברים את הקהילה</p> */}
                     </motion.div>
-
-                    <div className='d-flex justify-content-end'>
-                        <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
-                    </div>
-
-                    <div className='mb-3 search-container-forum'>
-                        <InputGroup style={{ direction: 'ltr' }}>
-                            <Form.Control
-                                placeholder="חיפוש בפורום"
-                                ref={saerchRef}
-                                className='rounded-end'
-                            />
-                            <InputGroup.Text className='rounded-start' onClick={(e: any) => (
-                                onSearchClick(e)
-                            )}>   <FontAwesomeIcon icon={faSearch} /></InputGroup.Text>
-                        </InputGroup>
-                    </div>
-
-                    <div className="my-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-                        <div className='mb-3 mb-md-0'>
-                            <Button variant="light" onClick={() => setShowAllTags(true)} className="border">
-                                סנן לפי תגים
-                            </Button>
-                            <Button variant="primary" onClick={showAllQuestions} className='ms-2'>
-                                הצג את כל התגים
-                            </Button>
+                    <div  className='align-items-center justify-content-center'>
+                        <div className='d-flex justify-content-end'>
+                            <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
                         </div>
 
+                        <div className="search-container-forum w-3/5   mx-auto">
+                            <InputGroup>
+                                <Form.Control
+                                    placeholder="חיפוש בפורום"
+                                    ref={saerchRef}
+                                    className='rounded-end search-input'
+                                />
+                                <InputGroup.Text className='rounded-start search-button' onClick={(e: any) => (
+                                    onSearchClick(e)
+                                )}>   <FaSearch /></InputGroup.Text>
+                            </InputGroup>
+                        </div>
+                    </div>
+                    <div className="my-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                        <TagFilter
+                            getAllTags={getAllTags}
+                            handleTopicClick={handleTopicClick}
+                            selectedTopic={selectedTopic}
+                        />
                         <div className='d-flex align-items-center'>
                             <Dropdown className="">
                                 <Dropdown.Toggle variant="light" id="dropdown-sort" className='border' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: '150px' }}>
@@ -208,14 +159,6 @@ export default function ShowForum(props: any) {
                                     <Dropdown.Item onClick={() => setSortBy('comments')}>תגובות</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                            {/* <div className="d-none d-md-block">
-                        <Button variant="outline-secondary" onClick={() => setViewMode('list')} className="me-2">
-                            <i className="bi bi-list"></i>
-                        </Button>
-                        <Button variant="outline-secondary" onClick={() => setViewMode('grid')}>
-                            <i className="bi bi-grid"></i>
-                        </Button>
-                    </div> */}
                         </div>
                     </div>
 
@@ -323,7 +266,7 @@ export default function ShowForum(props: any) {
                                     setLoading(loading + 1);
                                     console.log(loading);
                                     doApi(loading);
-                                    if(lengthOfForum === forum_ar.length) {
+                                    if (lengthOfForum === forum_ar.length) {
                                         setHasMore(false);
                                     }
                                 }}
@@ -351,31 +294,6 @@ export default function ShowForum(props: any) {
                 </Col>
             </Row >
 
-            <Modal show={showAllTags} onHide={() => setShowAllTags(false)}>
-                <Modal.Header closeButton>
-                    <Modal.Title className="w-100">
-                        <div className="d-flex justify-content-between align-items-center">
-                            <span>כל התגים</span>
-                        </div>
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body className='forumModalBody'>
-                    {getAllTags().map((tag: any) => (
-                        <Badge
-                            key={tag}
-                            bg={'secondary'}
-                            className="me-2 mb-2"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                                handleTopicClick(tag);
-                                setShowAllTags(false);
-                            }}
-                        >
-                            {tag}
-                        </Badge>
-                    ))}
-                </Modal.Body>
-            </Modal>
             <Modal show={showImageModal} onHide={() => setShowImageModal(false)} size="lg" centered>
                 <Modal.Header closeButton>
                     <Modal.Title>תמונה מצורפת</Modal.Title>

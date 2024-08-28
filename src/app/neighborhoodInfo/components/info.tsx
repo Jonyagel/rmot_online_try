@@ -201,12 +201,16 @@ export default function ShopCards(props: any) {
 
 
     const doApi = async (subCategory: any) => {
+        if (subCategory === null) {
+            subCategory = '';
+        }
         let url = `${process.env.NEXT_PUBLIC_API_URL}/api/shops?category=${subCategory}`;
         const resp = await fetch(url, { cache: 'no-store' })
         const data = await resp.json();
         console.log(data);
         setCardsAr(data)
         console.log(`Fetching data for category: ${subCategory}`);
+
     }
 
     const doApiGmach = async (subCategory: any) => {
@@ -589,7 +593,10 @@ export default function ShopCards(props: any) {
                                                 </div>
                                                 <div className="shop-card-footer">
                                                     <button className="more-info-btn" onClick={() => handleShopClick(card)}>למידע נוסף</button>
-                                                    <span className="shop-address"><FaMapMarkerAlt /> {card.address}</span>
+                                                    <div className="shop-address">
+                                                        <FaMapMarkerAlt />
+                                                        <span>{card.address}</span>
+                                                    </div>
                                                 </div>
                                             </motion.div>
                                             {(index + 1) % 6 === 0 && (

@@ -107,7 +107,7 @@ export default function AddQuestion(props: any) {
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="add-forum-button rounded-circle shadow-sm p-3 m-4 btn-primary"
+                className="add-forum-button rounded-circle shadow-sm p-3 btn-primary"
                 onClick={checkSignIn}>
                 <FaPlus />
             </motion.button>
