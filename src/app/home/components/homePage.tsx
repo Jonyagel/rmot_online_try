@@ -36,24 +36,29 @@ const HomePage: React.FC = () => {
         'ramot_view2_bwqqhu',
         'ramot_view3_yojt8w',
         'house2_vd8yke',
+        'neighborhood1_wcwkgs',
     ];
 
     const neighborhoodInfo = [
         {
-            title: "היסטוריה של רמות",
-            description: "שכונת רמות הוקמה ב-1970 ומאז התפתחה להיות אחת השכונות המובילות בעיר. השכונה נבנתה כחלק מתוכנית התרחבות עירונית וכוללת מספר אזורים תושבים משכבות סוציו-אקונומיות שונות. לאורך השנים התפתחו בשכונה מרכזים קהילתיים, בתי כנסת, פארקים ציבוריים ומוסדות תרבות. השכונה ידועה בסביבה הירוקה שלה ובשילוב המעניין של ארכיטקטורה מודרנית עם שימור מרקם החיים המסורתי."
+            title: "מידע",
+            description: "עמוד המידע הוא המקום המרכזי לכל המידע השימושי על השכונה. כאן תמצאו פרטים מקיפים על חנויות מקומיות, עסקים שכונתיים, מוסדות ציבור וגמ\"חים. זהו המקור המהימן ביותר למידע עדכני ומדויק על כל השירותים והמשאבים הזמינים לתושבי השכונה."
         },
         {
-            title: "חינוך ברמות",
-            description: "רמות מתגאה במוסדות חינוך מצוינים, כולל בתי ספר יסודיים, תיכונים וגני ילדים. בתי הספר בשכונה מדורגים מהגבוהים בעיר במבחני מיצ\"ב וישנם גם מספר מוסדות חינוך ייחודיים המציעים תוכניות חינוך מיוחדות ואינטגרטיביות. בנוסף, השכונה מציעה חוגים שונים לתלמידים ובני נוער, החל מפעילות ספורטיבית ועד למרכזי למידה מתקדמים."
+            title: "פורומים",
+            description: "הפורומים הם הלב הפועם של הקהילה המקוונת שלנו. כאן תושבי השכונה יכולים לתקשר זה עם זה, לשתף מידע, לשאול שאלות ולהציע עצות. זו פלטפורמה מצוינת ליצירת קשרים, לפתרון בעיות משותפות ולחיזוק תחושת הקהילתיות בשכונה."
         },
         {
-            title: "שירותים קהילתיים ותרבות",
-            description: "שכונת רמות מציעה מגוון רחב של שירותים קהילתיים ותרבותיים לכל הגילאים. במרכז השכונה נמצא המרכז הקהילתי הגדול אשר מארגן פעילויות לכל המשפחה, חוגים וסדנאות בתחומים מגוונים כמו אמנות, ספורט, מוזיקה וריקוד. בנוסף, ישנם מספר בתי כנסת בשכונה המציעים שירותי דת, שיעורי תורה ופעילויות קהילתיות נוספות. פארקים ציבוריים וגני משחקים פזורים ברחבי השכונה ומציעים אפשרויות רבות לפעילות פנאי ובילוי בטבע."
+            title: "קהילה",
+            description: "עמוד הקהילה מוקדש לחיי הקהילה העשירים בשכונה. כאן תמצאו מידע חיוני כמו זמני תפילות בבתי הכנסת, מתכונים מסורתיים, סיפורי השגחה פרטית מרגשים, הלכות יומיות ועוד תכנים רוחניים ותרבותיים. זהו המקום לחגוג את המורשת והמסורת המשותפת שלנו."
         },
         {
-            title: "תחבורה ונגישות",
-            description: "שכונת רמות נהנית ממערכת תחבורה נוחה המאפשרת גישה מהירה לכל חלקי העיר. השכונה מחוברת לרשת התחבורה הציבורית עם מספר קווי אוטובוסים המגיעים לאזורי מפתח בעיר, כמו גם לרכבת הקלה המתוכננת להגיע לשכונה בעתיד הקרוב. בנוסף, השכונה ממוקמת בסמוך לכבישים מרכזיים המאפשרים גישה נוחה ברכב פרטי. ישנם שבילי אופניים המקשרים בין חלקי השכונה ומהווים אפשרות נהדרת לתחבורה ירוקה."
+            title: "נדל\"ן",
+            description: "עמוד הנדל\"ן הוא המקום המרכזי לכל ענייני הדיור בשכונה. כאן תוכלו למצוא מידע מקיף על בתים למכירה והשכרה, לעקוב אחר מגמות שוק הנדל\"ן המקומי, ולקבל טיפים מועילים בנושאי דיור. זו הכתובת הראשונה לכל מי שמחפש את ביתו הבא בשכונה."
+        },
+        {
+            title: "לוח",
+            description: "הלוח הוא המרכז הווירטואלי לכל הקניות והמכירות בשכונה. כאן תוכלו למצוא מגוון רחב של פריטים יד שנייה, לפרסם או להירשם לקורסים מקומיים, למסור חפצים שאינכם זקוקים להם, לדווח על אבידות ומציאות ועוד. זהו המקום האידיאלי לחסוך כסף ולתרום לכלכלה המעגלית של הקהילה."
         }
     ];
     // מקסימום 80 תווים 3 שורות בתוכן פירוט של הכרטיס לא יותר של יגלוש
@@ -95,6 +100,47 @@ const HomePage: React.FC = () => {
             link: "/"
         }
     ];
+
+     const NeighborhoodInfo: React.FC<{ title: string; description: string }> = ({ title, description }) => {
+        const [isVisible, setIsVisible] = useState(false);
+        const titleRef = useRef<HTMLHeadingElement>(null);
+
+        useEffect(() => {
+            const observer = new IntersectionObserver(
+                ([entry]) => {
+                    if (entry.isIntersecting) {
+                        setIsVisible(true);
+                        observer.unobserve(entry.target);
+                    }
+                },
+                { threshold: 0.1 }
+            );
+
+            if (titleRef.current) {
+                observer.observe(titleRef.current);
+            }
+
+            return () => {
+                if (titleRef.current) {
+                    observer.unobserve(titleRef.current);
+                }
+            };
+        }, []);
+
+        return (
+            <motion.div
+                className="neighborhood-info"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <h3 ref={titleRef} className={isVisible ? 'visible' : ''}>
+                    {title}
+                </h3>
+                <p>{description}</p>
+            </motion.div>
+        );
+    };
 
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isPlaying, setIsPlaying] = useState(true);
@@ -170,7 +216,7 @@ const HomePage: React.FC = () => {
                                     }}
                                     navigation={true}
                                     modules={[Autoplay, Pagination, Navigation]}
-                                    className="info-cards-slider"
+                                    className="info-cards-slider pb-5"
                                     breakpoints={{
                                         320: {
                                             slidesPerView: 1,
@@ -220,7 +266,7 @@ const HomePage: React.FC = () => {
 
                                 <Statistic />
 
-                                {[0, 1, 2, 3].map((rowIndex) => (
+                                {[0, 1, 2, 3, 4].map((rowIndex) => (
                                     <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
                                         <motion.div
                                             className="image-container"
@@ -236,7 +282,7 @@ const HomePage: React.FC = () => {
                                                 className="diagonal-cut-image"
                                             />
                                         </motion.div>
-                                        {neighborhoodInfo[rowIndex] && ( // בדיקה אם הערך קיים
+                                        {neighborhoodInfo[rowIndex] && (
                                             <motion.div
                                                 className="neighborhood-info"
                                                 initial={{ opacity: 0, y: 20 }}

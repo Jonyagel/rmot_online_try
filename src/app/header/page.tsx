@@ -66,7 +66,9 @@ export default function Header() {
                                 {user.image ? (
                                     <img src={user.image} width={40} height={40} className="avatar" alt="User Avatar" />
                                 ) : (
-                                    <FaUser size={40} />
+                                    <div className='border border-black rounded-circle p-2'>
+                                        <FaUser size={20}  />
+                                    </div>
                                 )}
                             </Link>
                         ) : (

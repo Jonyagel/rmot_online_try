@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload, FaSearch, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload, FaSearch, FaChevronLeft, FaChevronRight, FaMedkit, FaGlassCheers, FaMoneyBillWave, FaBabyCarriage, FaTools, FaAppleAlt, FaScroll, FaHandHoldingUsd, FaWheelchair, FaRing } from 'react-icons/fa';
 import { Button, Modal, Form, InputGroup, Col, Container, Row, NavLink, Nav } from 'react-bootstrap';
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,6 +13,23 @@ import { faFontAwesome, faImage } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaShoppingBasket, FaTshirt, FaLaptop, FaHome, FaHeartbeat, FaFootballBall, FaBook, FaGamepad, FaGem, FaPaw, FaCar, FaPaintBrush, FaGift, FaCouch, FaUtensils } from 'react-icons/fa';
 import CategorySlider from './subCategorySlider';
+import {
+    FaSchool,
+    FaSynagogue,
+    FaHospital,
+    FaUniversity,
+    FaBookReader,
+    FaLandmark,
+    FaChild,
+    FaUserFriends,
+    FaHandsHelping,
+    FaSwimmer,
+    FaTheaterMasks,
+    FaMusic,
+    FaBusAlt,
+    FaStore,
+    FaGavel
+} from 'react-icons/fa';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,6 +67,7 @@ export default function ShopCards(props: any) {
     const [image, setImage] = useState('');
     const [cardsAr, setCardsAr] = useState(props.shopsData);
     const [gmachAr, setGmachAr] = useState(props.gmachData);
+    const [mosadsAr, setMosadsAr] = useState(props.MosadsData);
     const [selectType, setSelectType] = useState(null);
     const [activeTab, setActiveTab] = useState<string>('shop');
     const [items, setItems] = useState<Card[]>(cardsAr);
@@ -84,6 +102,42 @@ export default function ShopCards(props: any) {
         { name: "מתנות ומזכרות", icon: <FaGift /> },
         { name: "ריהוט ועיצוב פנים", icon: <FaCouch /> },
         { name: "כלי בית ומטבח", icon: <FaUtensils /> }
+    ];
+
+    const categoriesMosads = [
+        { name: "בתי ספר", icon: <FaSchool /> },
+        { name: "בתי כנסת", icon: <FaSynagogue /> },
+        { name: "מרפאות ובתי חולים", icon: <FaHospital /> },
+        { name: "מוסדות השכלה גבוהה", icon: <FaUniversity /> },
+        { name: "ספריות", icon: <FaBookReader /> },
+        { name: "מוסדות ציבור", icon: <FaLandmark /> },
+        { name: "גני ילדים", icon: <FaChild /> },
+        { name: "מרכזים קהילתיים", icon: <FaUserFriends /> },
+        { name: "ארגוני צדקה וחסד", icon: <FaHandsHelping /> },
+        { name: "מרכזי ספורט", icon: <FaSwimmer /> },
+        { name: "מוסדות תרבות", icon: <FaTheaterMasks /> },
+        { name: "מוסדות מוזיקה", icon: <FaMusic /> },
+        { name: "תחבורה ציבורית", icon: <FaBusAlt /> },
+        { name: "שווקים וקניונים", icon: <FaStore /> },
+        { name: "מוסדות משפטיים", icon: <FaGavel /> }
+    ];
+
+    const categoriesGmachim = [
+        { name: "כלי בית", icon: <FaUtensils /> },
+        { name: "בריאות", icon: <FaMedkit /> },
+        { name: "אירועים", icon: <FaGlassCheers /> },
+        { name: "חינוך", icon: <FaBook /> },
+        { name: "כספים", icon: <FaMoneyBillWave /> },
+        { name: "ביגוד", icon: <FaTshirt /> },
+        { name: "ילדים", icon: <FaBabyCarriage /> },
+        { name: "כלי עבודה", icon: <FaTools /> },
+        { name: "מזון", icon: <FaAppleAlt /> },
+        { name: "ספרי קודש", icon: <FaScroll /> },
+        { name: "הלוואות", icon: <FaHandHoldingUsd /> },
+        { name: "ציוד רפואי", icon: <FaWheelchair /> },
+        { name: "חתונות", icon: <FaRing /> },
+        { name: "ריהוט", icon: <FaCouch /> },
+        { name: "מחשבים וטכנולוגיה", icon: <FaLaptop /> }
     ];
 
     const NextArrow = (props: any) => {
@@ -165,6 +219,16 @@ export default function ShopCards(props: any) {
         console.log(`Fetching Gmach data for category: ${subCategory}`);
     }
 
+    const doApiMosads = async (subCategory: any) => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/mosads?category=${subCategory}`;
+        const resp = await fetch(url, { cache: 'no-store' })
+        const data = await resp.json();
+        console.log(data);
+        // setCardsAr(data)
+        setMosadsAr(data);
+        console.log(`Fetching mosads data for category: ${subCategory}`);
+    }
+
     const formAnimation = {
         hidden: { opacity: 0, y: 50 },
         visible: {
@@ -196,6 +260,13 @@ export default function ShopCards(props: any) {
             card.description.toLowerCase().includes(searchTerm.toLowerCase()))
         );
     }, [searchTerm, gmachAr]);
+
+    const filteredMosads = useMemo(() => {
+        return mosadsAr.filter((card: any) =>
+        (card.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            card.description.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+    }, [searchTerm, mosadsAr]);
 
     // useEffect(() => {
     //     typeFilter();
@@ -263,6 +334,36 @@ export default function ShopCards(props: any) {
         handleCloseModal();
     };
 
+    const handleAddMosads = async () => {
+        const name = nameRef.current?.value;
+        const description = descriptionRef.current?.value;
+        const content = contentRef.current?.value;
+        const address = addressRef.current?.value;
+        const hours = hoursRef.current?.value;
+        const phone = phoneRef.current?.value;
+        const email = emailRef.current?.value;
+        const website = websiteRef.current?.value;
+        const category = categoryRef.current?.value;
+        try {
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/mosads`, {
+                method: 'POST',
+                body: JSON.stringify({ name, description, content, hours, address, phone, email, website, category, logo, image }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await resp.json();
+            console.log(data);
+            doApiMosads('');
+            handleCloseModal();
+            router.push('/neighborhoodInfo');
+        } catch (error: any) {
+            console.error('Error:', error);
+        }
+        toast.success('החנות נוספה בהצלחה!');
+        handleCloseModal();
+    };
+
 
     const handleAddGmach = async () => {
         const name = nameRef.current?.value;
@@ -313,33 +414,32 @@ export default function ShopCards(props: any) {
                     >
                         <h1 className="my-4 text-3xl neighborhoodInfo-title">מידע שכונתי</h1>
                     </motion.div>
-                    <div className='w-full flex justify-content-end'>
-                        <motion.button
-                            className="add-shop-button p-3 m-4"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={handleShowModal}
-                        >
-                            <FaPlus />
-                        </motion.button>
-                    </div>
-                    <div className="search-container mb-3" >
-                        <InputGroup style={{ direction: 'ltr' }}>
-                            <Form.Control
-                                type="text"
-                                placeholder="חיפוש חנויות..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="rounded"
-
-                            />
-                            <InputGroup.Text
-                                className="rounded-start search-button"
-                            // onClick={() => handleSearch()}
+                    <div className='  align-items-center justify-content-center'>
+                        <div className='flex justify-content-end'>
+                            <motion.button
+                                className="add-shop-button p-3"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={handleShowModal}
                             >
-                                <FaSearch />
-                            </InputGroup.Text>
-                        </InputGroup>
+                                <FaPlus />
+                            </motion.button>
+                        </div>
+                        <div className="search-container w-3/5   mx-auto">
+                            <InputGroup>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="חיפוש חנויות..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="search-input"
+                                />
+                                <InputGroup.Text className="search-button">
+                                    <FaSearch />
+                                </InputGroup.Text>
+                            </InputGroup>
+                        </div>
+
                     </div>
                     <motion.div
                         className="navigation-container"
@@ -358,11 +458,15 @@ export default function ShopCards(props: any) {
                                     doApi("");
                                     setActiveSubcategory('')
                                 }
+                                else if (k === 'mosads') {
+                                    doApiMosads("");
+                                    setActiveSubcategory('')
+                                }
                             }}
                             className='main-nav'
                         >
                             <NavLink className={`nav-link ${activeTab === 'shop' ? 'active' : ''}`} eventKey="shop">חנויות</NavLink>
-                            <NavLink className={`nav-link ${activeTab === 'mosdot' ? 'active' : ''}`} eventKey="mosdot">מוסדות</NavLink>
+                            <NavLink className={`nav-link ${activeTab === 'mosads' ? 'active' : ''}`} eventKey="mosads">מוסדות</NavLink>
                             <NavLink className={`nav-link ${activeTab === 'gmach' ? 'active' : ''}`} eventKey="gmach">גמ״חים</NavLink>
                         </Nav>
                         {activeTab === 'shop' && (
@@ -372,93 +476,134 @@ export default function ShopCards(props: any) {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <CategorySlider
-                                    categories={categories}
-                                    activeSubcategory={activeSubcategory}
-                                    setActiveSubcategory={setActiveSubcategory}
-                                    doApi={doApi}
-                                />
+                                {activeTab === 'shop' && (
+                                    <CategorySlider
+                                        categories={categories}
+                                        activeSubcategory={activeSubcategory}
+                                        setActiveSubcategory={setActiveSubcategory}
+                                        doApi={doApi}
+                                    />
+                                )}
+
+
+                            </motion.div>
+                        )}
+                        {activeTab === 'mosads' && (
+                            <motion.div
+                                className="subcategory-container"
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {activeTab === 'mosads' && (
+                                    <CategorySlider
+                                        categories={categoriesMosads}
+                                        activeSubcategory={activeSubcategory}
+                                        setActiveSubcategory={setActiveSubcategory}
+                                        doApi={doApiMosads}
+                                    />
+                                )}
+                            </motion.div>
+                        )}
+                        {activeTab === 'gmach' && (
+                            <motion.div
+                                className="subcategory-container"
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {activeTab === 'gmach' && (
+                                    <CategorySlider
+                                        categories={categoriesGmachim}
+                                        activeSubcategory={activeSubcategory}
+                                        setActiveSubcategory={setActiveSubcategory}
+                                        doApi={doApiGmach}
+                                    />
+                                )}
                             </motion.div>
                         )}
                     </motion.div>
                     <div className="shop-grid">
-                        {(activeTab === 'shop' ? filteredCards : filteredGmach).map((card: Card, index: number) => (
-                            <React.Fragment key={card.id}>
-                                <motion.div
-                                    className="shop-card border"
-                                    whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-                                >
-                                    <div className="shop-card-content">
-                                        <div className="shop-card-header">
-                                            {card.image ? (
-                                                <CldImage
-                                                    src={card.image}
-                                                    width="400"
-                                                    height="200"
-                                                    crop="fill"
-                                                    className="shop-image rounded-t"
-                                                    alt={card.name}
-                                                    loading='lazy'
-                                                    format="auto"
-                                                    quality="auto"
-                                                />
-                                            ) : (
-                                                <div className="w-full bg-gray-200 rounded-t flex items-center justify-center" style={{ height: '150px' }}>
-                                                    <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
-                                                </div>
-                                            )}
-                                            {activeTab === 'shop' && (
-                                                <div className="shop-logo">
-                                                    {card.logo ? (
-                                                        <CldImage
-                                                            src={card.logo}
-                                                            width="50"
-                                                            height="50"
-                                                            crop="fill"
-                                                            className="logo-image"
-                                                            alt={`${card.name} logo`}
-                                                            loading='lazy'
-                                                            format="auto"
-                                                            quality="auto"
-                                                        />
-                                                    ) : (
-                                                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                                                            <FontAwesomeIcon icon={faFontAwesome} size="2x" color="#adb5bd" />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            )}
-                                            {activeTab === 'gmach' && (
-                                                <div></div>
-                                            )}
-                                        </div>
+                        {(activeTab === 'shop' ? filteredCards :
+                            activeTab === 'gmach' ? filteredGmach :
+                                activeTab === 'mosads' ? filteredMosads :
+                                    []).map((card: Card, index: number) => (
+                                        <React.Fragment key={card.id}>
+                                            <motion.div
+                                                className="shop-card border"
+                                                whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+                                            >
+                                                <div className="shop-card-content">
+                                                    <div className="shop-card-header">
+                                                        {card.image ? (
+                                                            <CldImage
+                                                                src={card.image}
+                                                                width="400"
+                                                                height="200"
+                                                                crop="fill"
+                                                                className="shop-image rounded-t"
+                                                                alt={card.name}
+                                                                loading='lazy'
+                                                                format="auto"
+                                                                quality="auto"
+                                                            />
+                                                        ) : (
+                                                            <div className="w-full bg-gray-200 rounded-t flex items-center justify-center" style={{ height: '150px' }}>
+                                                                <FontAwesomeIcon icon={faImage} size="3x" color="#adb5bd" />
+                                                            </div>
+                                                        )}
+                                                        {activeTab === 'shop' && (
+                                                            <div className="shop-logo">
+                                                                {card.logo ? (
+                                                                    <CldImage
+                                                                        src={card.logo}
+                                                                        width="50"
+                                                                        height="50"
+                                                                        crop="fill"
+                                                                        className="logo-image"
+                                                                        alt={`${card.name} logo`}
+                                                                        loading='lazy'
+                                                                        format="auto"
+                                                                        quality="auto"
+                                                                    />
+                                                                ) : (
+                                                                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                                                        <FontAwesomeIcon icon={faFontAwesome} size="2x" color="#adb5bd" />
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                        {activeTab === 'gmach' && (
+                                                            <div></div>
+                                                        )}
+                                                    </div>
 
-                                        <div className="shop-description">
-                                            <h3>{card.name}</h3>
-                                            <p>
-                                                {card.description.length > 100
-                                                    ? `${card.description.substring(0, 100)}...`
-                                                    : card.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="shop-card-footer">
-                                        <button className="more-info-btn" onClick={() => handleShopClick(card)}>למידע נוסף</button>
-                                        <span className="shop-address"><FaMapMarkerAlt /> {card.address}</span>
-                                    </div>
-                                </motion.div>
-                                {(index + 1) % 6 === 0 && (
-                                    <motion.div
-                                        className="shop-card border ad-card"
-                                        whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-                                    >
-                                        <div className="ad-content">
-                                            <img src="/images/timegif.webp" alt="פרסומת" className="ad-image" />
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </React.Fragment>
-                        ))}
+                                                    <div className="shop-description">
+                                                        <h3>{card.name}</h3>
+                                                        <p>
+                                                            {card.description.length > 100
+                                                                ? `${card.description.substring(0, 100)}...`
+                                                                : card.description}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="shop-card-footer">
+                                                    <button className="more-info-btn" onClick={() => handleShopClick(card)}>למידע נוסף</button>
+                                                    <span className="shop-address"><FaMapMarkerAlt /> {card.address}</span>
+                                                </div>
+                                            </motion.div>
+                                            {(index + 1) % 6 === 0 && (
+                                                <motion.div
+                                                    className="shop-card border ad-card"
+                                                    whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+                                                >
+                                                    <div className="ad-content">
+                                                        <img src="/images/timegif.webp" alt="פרסומת" className="ad-image" />
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </React.Fragment>
+                                    ))}
                     </div>
 
                     <AnimatePresence>
@@ -481,74 +626,89 @@ export default function ShopCards(props: any) {
                                         <FaTimes />
                                     </button>
                                     <div className="ys-modal-scroll-container">
-                                        <div className="ys-modal-inner-content">
-                                            <div className="ys-shop-image-container">
-                                                <CldImage
-                                                    src={selectedCard.image}
-                                                    width="400"
-                                                    height="300"
-                                                    crop="fill"
-                                                    className="ys-shop-detail-image"
-                                                    alt={selectedCard.name}
-                                                    loading='lazy'
-                                                    format="auto"
-                                                    quality="auto"
-                                                />
+                                        <div className="ys-shop-card-header">
+                                            <CldImage
+                                                src={selectedCard.image}
+                                                width="800"
+                                                height="300"
+                                                crop="fill"
+                                                className="ys-shop-detail-image"
+                                                alt={selectedCard.name}
+                                                loading='lazy'
+                                                format="auto"
+                                                quality="auto"
+                                            />
+                                            {selectedCard.logo && (
+                                                <div className="ys-shop-logo">
+                                                    <CldImage
+                                                        src={selectedCard.logo}
+                                                        width="100"
+                                                        height="100"
+                                                        crop="fill"
+                                                        className="ys-logo-image"
+                                                        alt={`${selectedCard.name} logo`}
+                                                        loading='lazy'
+                                                        format="auto"
+                                                        quality="auto"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
 
+                                        <div className="ys-shop-card-content">
+                                            <h1 className="ys-shop-title">{selectedCard.name}</h1>
+
+                                            <div className="ys-shop-description">
+                                                <p>{selectedCard.description}</p>
                                             </div>
-                                            <div className="ys-shop-details-content">
-                                                <div className="ys-shop-info-grid">
-                                                    <div className="ys-info-card">
-                                                        <FaMapMarkerAlt className="ys-info-icon" />
-                                                        <div className="ys-info-content">
-                                                            <h4>כתובת</h4>
-                                                            <p>{selectedCard.address}</p>
+
+                                            <div className="ys-shop-info-grid">
+                                                <div className="ys-info-item">
+                                                    <FaMapMarkerAlt className="ys-info-icon" />
+                                                    <div>
+                                                        <h3>כתובת</h3>
+                                                        <p>{selectedCard.address}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="ys-info-item">
+                                                    <FaPhone className="ys-info-icon" />
+                                                    <div>
+                                                        <h3>טלפון</h3>
+                                                        <Link href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</Link>
+                                                    </div>
+                                                </div>
+                                                <div className="ys-info-item">
+                                                    <FaEnvelope className="ys-info-icon" />
+                                                    <div>
+                                                        <h3>אימייל</h3>
+                                                        <Link href={`mailto:${selectedCard.email}`}>{selectedCard.email}</Link>
+                                                    </div>
+                                                </div>
+                                                {selectedCard.website && (
+                                                    <div className="ys-info-item">
+                                                        <FaGlobe className="ys-info-icon" />
+                                                        <div>
+                                                            <h3>אתר אינטרנט</h3>
+                                                            <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer">
+                                                                {selectedCard.website}
+                                                            </Link>
                                                         </div>
                                                     </div>
-                                                    <div className="ys-info-card">
-                                                        <FaPhone className="ys-info-icon" />
-                                                        <div className="ys-info-content">
-                                                            <h4>טלפון</h4>
-                                                            <Link className=' link-underline link-underline-opacity-0' href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</Link>
-                                                        </div>
-                                                    </div>
-                                                    <div className="ys-info-card">
-                                                        <FaEnvelope className="ys-info-icon" />
-                                                        <div className="ys-info-content">
-                                                            <h4>אימייל</h4>
-                                                            <Link className=' link-underline link-underline-opacity-0' href={`mailto:${selectedCard.email}`}>{selectedCard.email}</Link>
-                                                        </div>
-                                                    </div>
-                                                    {selectedCard.website && (
-                                                        <div className="ys-info-card">
-                                                            <FaGlobe className="ys-info-icon" />
-                                                            <div className="ys-info-content">
-                                                                <h4>אתר אינטרנט</h4>
-                                                                <Link className=' link-underline link-underline-opacity-0' href={selectedCard.website} target="_blank" rel="noopener noreferrer">
-                                                                    {selectedCard.website}
-                                                                </Link>
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                    <div className="ys-info-card">
-                                                        <FaClock className="ys-info-icon" />
-                                                        <div className="ys-info-content" style={{ width: '90%' }}>
-                                                            <h4>שעות פעילות</h4>
-                                                            <p>{selectedCard.hours}</p>
-                                                        </div>
+                                                )}
+                                                <div className="ys-info-item">
+                                                    <FaClock className="ys-info-icon" />
+                                                    <div>
+                                                        <h3>שעות פעילות</h3>
+                                                        <p>{selectedCard.hours}</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className=''>
-                                            <h2 className="ys-shop-title">{selectedCard.name}</h2>
-                                            <p className="ys-shop-description">{selectedCard.description}</p>
-                                        </div>
-                                        {/* {selectedCard.website && ( */}
-                                        <div className="ys-shop-ad">
-                                            <img src='./images/ads gif3.gif' alt="Special offer" />
-                                        </div>
-                                        {/* )} */}
+                                        {activeTab === 'shop' && (
+                                            <div className="ys-shop-ad">
+                                                <img src='./images/ads shop1.jpg' alt="Special offer" />
+                                            </div>
+                                        )}
                                     </div>
                                 </motion.div>
                             </motion.div>
@@ -572,6 +732,9 @@ export default function ShopCards(props: any) {
                         {activeTab === 'shop' && (
                             <Modal.Title>הוספת עסק חדש</Modal.Title>
                         )}
+                        {activeTab === 'mosads' && (
+                            <Modal.Title>הוספת מוסד חדש</Modal.Title>
+                        )}
                         {activeTab === 'gmach' && (
                             <Modal.Title>הוספת גמ"ח חדש</Modal.Title>
                         )}
@@ -584,6 +747,9 @@ export default function ShopCards(props: any) {
                                 e.preventDefault();
                                 if (activeTab === 'shop') {
                                     handleAddShop()
+                                }
+                                else if (activeTab === 'mosads') {
+                                    handleAddMosads()
                                 }
                                 else if (activeTab === 'gmach') {
                                     handleAddGmach()
@@ -642,7 +808,7 @@ export default function ShopCards(props: any) {
                                 <Form.Control ref={emailRef} type="email" required />
                             </Form.Group>
                         </motion.div>
-                        {activeTab === 'shop' && (
+                        {(activeTab === 'shop' || activeTab === 'mosads') && (
                             <motion.div variants={itemAnimation}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>אתר אינטרנט</Form.Label>
@@ -657,7 +823,7 @@ export default function ShopCards(props: any) {
                                 <Form.Control ref={categoryRef} type="text" required />
                             </Form.Group>
                         </motion.div>
-                        {activeTab === 'shop' && (
+                        {(activeTab === 'shop' || activeTab === 'mosads') && (
                             <motion.div variants={itemAnimation}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>לוגו</Form.Label>

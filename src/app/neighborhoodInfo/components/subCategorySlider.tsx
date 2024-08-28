@@ -21,14 +21,14 @@ const CategorySlider: React.FC<CategorySliderProps> = ({
   doApi,
 }) => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
-  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showLeftArrow, setShowLeftArrow] = useState(true);
   const [showRightArrow, setShowRightArrow] = useState(true);
 
   const checkArrows = () => {
     if (sliderRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-      setShowLeftArrow(scrollLeft > -1);
-      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 1);
+      setShowLeftArrow(scrollLeft > -10);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth);
     }
   };
 
@@ -41,7 +41,7 @@ const CategorySlider: React.FC<CategorySliderProps> = ({
   const scroll = (direction: 'left' | 'right') => {
     const container = sliderRef.current;
     if (container) {
-      const scrollAmount = direction === 'left' ? -container.clientWidth : container.clientWidth;
+      const scrollAmount = direction === 'left' ? -100 : 100;
       container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       setTimeout(checkArrows, 300);
     }

@@ -10,10 +10,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './addQuestion.css'
 import { FaPlus } from 'react-icons/fa';
+import { useSession } from 'next-auth/react';
 
 export const dynamic = 'auto';
 
 export default function AddQuestion(props: any) {
+    const { data: session } = useSession();
     const router = useRouter();
     const topicRef = useRef<HTMLSelectElement>(null);
     const tittleRef = useRef<HTMLInputElement>(null);
@@ -56,18 +58,25 @@ export default function AddQuestion(props: any) {
     }
 
     const checkSignIn = async () => {
-        try {
-            const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
-            const data = await resp.json();
-            if (data.status === 401) {
-                notify();
-                setSignIn(false);
-            } else {
-                setSignIn(true);
-                handleShow();
+        if (session) {
+            setSignIn(true);
+            handleShow();
+        }
+        else {
+            try {
+                const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
+                const data = await resp.json();
+                if (data.status === 401) {
+                    // console.log(session);
+                    notify();
+                    setSignIn(false);
+                } else if (data.status === 200) {
+                    setSignIn(true);
+                    handleShow();
+                }
+            } catch (error) {
+                console.error('Error:', error);
             }
-        } catch (error) {
-            console.error('Error:', error);
         }
     }
 

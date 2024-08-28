@@ -8,7 +8,7 @@ import { faEdit, faTrash, faUser, faEnvelope, faCalendarAlt, faBed, faRulerCombi
 import { CldImage } from 'next-cloudinary';
 import { motion, AnimatePresence } from 'framer-motion';
 import './userArea.css';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 interface UserPost {
     id: string;
@@ -198,6 +198,12 @@ export default function UserArea() {
                                     <Button variant="outline-primary" className="mt-3">
                                         <FontAwesomeIcon icon={faEdit} /> ערוך פרופיל
                                     </Button>
+                                    <button className='btn btn-outline-dark w-40 my-2 flex' onClick={() => {
+                                        signOut()
+                                    }}>
+                                        <i className="bi bi-google"></i>
+                                        <p className='m-0'>התנתק מחשבון גוגל</p>
+                                    </button>
                                 </Col>
                             </Row>
                         </Card.Body>
