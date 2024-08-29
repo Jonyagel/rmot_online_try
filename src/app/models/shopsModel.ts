@@ -13,7 +13,7 @@ const shopsSchema = new mongoose.Schema({
     phone: String,
     email: String,
     website: String,
-    image: String,
+    images: [String],
     features: [String],
     specialOffer: String,
     category: String,
@@ -38,7 +38,7 @@ export const validateShops = (_body: any) => {
         features: Joi.array().items(Joi.string().min(0).max(200)).allow(null, '').optional(),
         specialOffer: Joi.string().min(0).max(200).allow(null, ''),
         category: Joi.string().min(2).max(500).allow(null, ''),
-        image: Joi.string().min(2).max(150).allow(null, ''),
+        images: Joi.array().items(Joi.string().min(0).max(200)).allow(null, '').optional(),
     })
     return joiSchema.validate(_body)
 }

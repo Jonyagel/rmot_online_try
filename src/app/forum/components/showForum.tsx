@@ -1,6 +1,5 @@
 "use client"
-
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddQuestion from './addQuestion';
 import Link from 'next/link';
@@ -8,9 +7,6 @@ import { CldImage } from 'next-cloudinary';
 import { Card, Badge, Popover, OverlayTrigger, Dropdown, Form, InputGroup, Modal, Col, Row } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import './showForum.css'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FaChevronDown, FaSearch } from 'react-icons/fa';
 import TagFilter from './tagFilter';
 
@@ -28,12 +24,21 @@ export default function ShowForum(props: any) {
     const [hasMore, setHasMore] = useState(true);
     const [lengthOfForum, setLengthOfForum] = useState(10);
     const [loading, setLoading] = useState(2);
+    const [allTopics, setAllTopics] = useState(['']);
 
     const saerchRef = useRef<HTMLInputElement>(null);
 
-    const getAllTags = () => {
-        const allTags = new Set(forum_ar.map((post: any) => post.topic));
-        return Array.from(allTags);
+    useEffect(() => {
+        getAllTags();
+    }, []);
+
+    const getAllTags = async () => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/getAllTopic`;
+        const resp = await fetch(url, { cache: 'no-store' });
+        const data = await resp.json();
+        // const allTags = new Set(forum_ar.map((post: any) => post.topic));
+        console.log(data);
+        setAllTopics(data.topics)
     };
 
     const onSearchClick = (e: any) => {
@@ -88,16 +93,27 @@ export default function ShowForum(props: any) {
     };
 
     const filteredPosts = forum_ar.filter((post: any) =>
-        (post.tittle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             post.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
         (selectedTopic ? post.topic === selectedTopic : true)
     );
 
     const sortedAndFilteredPosts = sortPosts(filteredPosts, sortBy);
 
-    const handleTopicClick = (topic: any) => {
+    const handleTopicClick = async (topic: any) => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum?page=${''}&search=${''}&topic=${topic}`;
+        const resp = await fetch(url, { cache: 'no-store' });
+        const data = await resp.json();
+        console.log(data);
+        setForum_ar(data.data);
+        // setLengthOfForum(data.totalPages)
         if (selectedTopic === topic) {
             setSelectedTopic('');
+            let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum?page=${''}&search=${''}&topic=${''}`;
+            const resp = await fetch(url, { cache: 'no-store' });
+            const data = await resp.json();
+            console.log(data);
+            setForum_ar(data.data);
         } else {
             setSelectedTopic(topic);
         }
@@ -125,7 +141,7 @@ export default function ShowForum(props: any) {
                         <h2 className='my-4 text-3xl forum-title'>פורום תושבי רמות</h2>
                         {/* <p className='lead text-muted'>שואלים, עונים, ומחברים את הקהילה</p> */}
                     </motion.div>
-                    <div  className='align-items-center justify-content-center'>
+                    <div className='align-items-center justify-content-center'>
                         <div className='d-flex justify-content-end'>
                             <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
                         </div>
@@ -143,12 +159,14 @@ export default function ShowForum(props: any) {
                             </InputGroup>
                         </div>
                     </div>
-                    <div className="my-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
-                        <TagFilter
-                            getAllTags={getAllTags}
-                            handleTopicClick={handleTopicClick}
-                            selectedTopic={selectedTopic}
-                        />
+                    <div className="my-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-start">
+                        <div>
+                            <TagFilter
+                                getAllTags={allTopics}
+                                handleTopicClick={handleTopicClick}
+                                selectedTopic={selectedTopic}
+                            />
+                        </div>
                         <div className='d-flex align-items-center'>
                             <Dropdown className="">
                                 <Dropdown.Toggle variant="light" id="dropdown-sort" className='border' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: '150px' }}>
@@ -191,7 +209,7 @@ export default function ShowForum(props: any) {
                                                                 </div>
                                                             </OverlayTrigger>
                                                             <div className='d-flex flex-column justify-content-center'>
-                                                                <h5 className='mb-0 fw-bold'>{item.tittle}</h5>
+                                                                <h5 className='mb-0 fw-bold'>{item.title}</h5>
                                                                 <Card.Text className='mt-2' style={{ whiteSpace: "pre-wrap" }}>
                                                                     {item.description.length > 150
                                                                         ? `${item.description.substring(0, 150)}...`
@@ -243,8 +261,8 @@ export default function ShowForum(props: any) {
                                             exit={{ opacity: 0, scale: 0.9 }}
                                             transition={{ duration: 0.3 }}
                                         >
-                                            <Card className='forumCard shadow-sm hover-card position-relative' style={{ minHeight: '100px' }}>
-                                                <Card.Body className='forumCardBody'>
+                                            <Card className='forumCard shadow-sm hover-card position-relative p-0' style={{ minHeight: '100px' }}>
+                                                <Card.Body className='forumCardBody p-0'>
                                                     <div className='text-center'>
                                                         <img src='/images/ads1top.jpg' alt="Advertisement" className="img-fluid" />
                                                     </div>

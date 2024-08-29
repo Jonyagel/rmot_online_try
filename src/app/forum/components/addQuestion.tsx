@@ -18,7 +18,7 @@ export default function AddQuestion(props: any) {
     const { data: session } = useSession();
     const router = useRouter();
     const topicRef = useRef<HTMLSelectElement>(null);
-    const tittleRef = useRef<HTMLInputElement>(null);
+    const titleRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
     const [signIn, setSignIn] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -31,14 +31,14 @@ export default function AddQuestion(props: any) {
         e.preventDefault();
 
         const topic = topicRef.current?.value;
-        const tittle = tittleRef.current?.value;
+        const title = titleRef.current?.value;
         const description = descriptionRef.current?.value;
         const numOfComments = 0;
 
         try {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum`, {
                 method: 'POST',
-                body: JSON.stringify({ topic, tittle, description, numOfComments, fileName }),
+                body: JSON.stringify({ topic, title, description, numOfComments, fileName }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -134,7 +134,7 @@ export default function AddQuestion(props: any) {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>כותרת</Form.Label>
-                            <Form.Control ref={tittleRef} type="text" required />
+                            <Form.Control ref={titleRef} type="text" required />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>תוכן</Form.Label>

@@ -30,6 +30,11 @@ import {
     FaStore,
     FaGavel
 } from 'react-icons/fa';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -45,7 +50,7 @@ interface Card {
     phone: string;
     email: string;
     website?: string;
-    image: string;
+    images: string[];
     features?: string[];
     specialOffer?: string;
     category: string;
@@ -539,9 +544,9 @@ export default function ShopCards(props: any) {
                                             >
                                                 <div className="shop-card-content">
                                                     <div className="shop-card-header">
-                                                        {card.image ? (
+                                                        {card.images ? (
                                                             <CldImage
-                                                                src={card.image}
+                                                                src={card.images[0]}
                                                                 width="400"
                                                                 height="200"
                                                                 crop="fill"
@@ -634,17 +639,34 @@ export default function ShopCards(props: any) {
                                     </button>
                                     <div className="ys-modal-scroll-container">
                                         <div className="ys-shop-card-header">
-                                            <CldImage
-                                                src={selectedCard.image}
-                                                width="800"
-                                                height="300"
-                                                crop="fill"
-                                                className="ys-shop-detail-image"
-                                                alt={selectedCard.name}
-                                                loading='lazy'
-                                                format="auto"
-                                                quality="auto"
-                                            />
+                                            <Swiper
+                                                modules={[Pagination, Navigation]}
+                                                spaceBetween={30}
+                                                slidesPerView={1}
+                                                navigation
+                                                pagination={{ clickable: true }}
+                                                className="ys-shop-image-slider"
+                                            >
+                                                {selectedCard.images.map((image: any, index: any) => (
+                                                    <SwiperSlide key={index}>
+                                                        <div style={{ width: '800px', height: '300px', overflow: 'hidden', position: 'relative' }}>
+                                                            <CldImage
+                                                                src={image}
+                                                                fill
+                                                                style={{
+                                                                    objectFit: 'cover',
+                                                                    objectPosition: 'center'
+                                                                }}
+                                                                className="ys-shop-detail-image"
+                                                                alt={`${selectedCard.name} - Image ${index + 1}`}
+                                                                loading='lazy'
+                                                                format="webp"
+                                                                quality="auto"
+                                                            />
+                                                        </div>
+                                                    </SwiperSlide>
+                                                ))}
+                                            </Swiper>
                                             {selectedCard.logo && (
                                                 <div className="ys-shop-logo">
                                                     <CldImage

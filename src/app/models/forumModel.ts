@@ -4,7 +4,7 @@ import Joi, { array } from "joi";
 const forumSchema = new mongoose.Schema({
     userId: String,
     userName:String,
-    tittle: String,
+    title: String,
     description: String,
     date: String,
     numOfComments:{ 
@@ -24,7 +24,7 @@ export const ForumModel = mongoose.models["forums"] || mongoose.model("forums", 
 
 export const validateForum = (_body: any) => {
     const joiSchema = Joi.object({
-        tittle: Joi.string().min(2).max(100).required(),
+        title: Joi.string().min(2).max(100).required(),
         description: Joi.string().min(2).max(2000),
         topic: Joi.string().min(2).max(20),
         numOfComments: Joi.number().min(0).max(9999).required(),

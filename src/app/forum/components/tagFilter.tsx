@@ -6,13 +6,13 @@ const TagFilter = ({ getAllTags, handleTopicClick, selectedTopic, showAllQuestio
   const [showTags, setShowTags] = useState(false);
 
   return (
-    <div className="my-4">
+    <div className="mb-4">
       <div className="d-flex flex-wrap justify-content-between align-items-center">
         <div className="mb-3 mb-md-0">
           <Button 
             variant={showTags ? "primary" : "light"} 
             onClick={() => setShowTags(!showTags)} 
-            className="border me-2"
+            className="border me-0"
           >
             {showTags ? "הסתר תגים" : "סנן לפי תגים"}
           </Button>
@@ -24,7 +24,7 @@ const TagFilter = ({ getAllTags, handleTopicClick, selectedTopic, showAllQuestio
       
       <Collapse in={showTags}>
         <div className="mt-3">
-          {getAllTags().map((tag:any) => (
+          {getAllTags.map((tag:any) => (
             <Badge
               key={tag}
               bg={selectedTopic === tag ? "primary" : "secondary"}
