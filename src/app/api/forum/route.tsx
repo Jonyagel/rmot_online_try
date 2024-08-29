@@ -11,24 +11,44 @@ export const dynamic = 'auto';
 
 export async function GET(req: any, route: any) {
     const { searchParams } = new URL(req.url);
+    const topicQuery = searchParams.get('topic') || '';
     const pageQuery = searchParams.get('page');
     const perPage = 10;
     const page = pageQuery ? parseInt(pageQuery) : 1;
     const searchQuery = searchParams.get('search') || '';
     const searchExp = new RegExp(searchQuery, "i")
-    // route.setHeader('Access-Control-Allow-Origin', '*');
+
     try {
         await connectDb();
-        const totalDocuments = await ForumModel.countDocuments();
 
-        const data = await ForumModel.find({ $or: [{ tittle: searchExp }, { description: searchExp }] })
+        // בניית אובייקט החיפוש
+        let searchObject:any = {};
+        if (searchQuery) {
+            searchObject.$or = [{ title: searchExp }, { description: searchExp }];
+        }
+        if (topicQuery) {
+            searchObject.topic = topicQuery;
+        }
+
+        // חישוב מספר המסמכים הכולל לפי החיפוש
+        const totalDocuments = await ForumModel.countDocuments(searchObject);
+
+        // ביצוע החיפוש עם הסינון
+        const data = await ForumModel.find(searchObject)
             .sort({ createdAt: -1 })
-            .limit(perPage * page)
-            return NextResponse.json({ data, totalPages: totalDocuments, });
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+
+        return NextResponse.json({
+            data,
+            totalPages: Math.ceil(totalDocuments / perPage),
+            currentPage: page,
+            totalDocuments: totalDocuments
+        });
     }
     catch (err) {
         console.log(err);
-        return NextResponse.json({ err, msg: "There problem try again later" }, { status: 502 })
+        return NextResponse.json({ err, msg: "There was a problem, try again later" }, { status: 502 })
     }
 }
 
@@ -63,3 +83,29 @@ export async function POST(req: any, route: any) {
     }
 
 } 
+
+
+
+// export async function GET(req: any, route: any) {
+//     const { searchParams } = new URL(req.url);
+//     const topicQuery = searchParams.get('topic') || '';
+//     const pageQuery = searchParams.get('page');
+//     const perPage = 10;
+//     const page = pageQuery ? parseInt(pageQuery) : 1;
+//     const searchQuery = searchParams.get('search') || '';
+//     const searchExp = new RegExp(searchQuery, "i")
+//     // route.setHeader('Access-Control-Allow-Origin', '*');
+//     try {
+//         await connectDb();
+//         const totalDocuments = await ForumModel.countDocuments();
+
+//         const data = await ForumModel.find({ $or: [{ title: searchExp }, { description: searchExp } , {topic: topicQuery}] })
+//             .sort({ createdAt: -1 })
+//             .limit(perPage * page)
+//             return NextResponse.json({ data, totalPages: totalDocuments, });
+//     }
+//     catch (err) {
+//         console.log(err);
+//         return NextResponse.json({ err, msg: "There problem try again later" }, { status: 502 })
+//     }
+// }
