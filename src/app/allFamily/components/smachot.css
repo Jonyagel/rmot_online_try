@@ -1,0 +1,67 @@
+.engagement-card {
+    max-width: 600px;
+    margin: 20px auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    font-family: 'Arial', sans-serif;
+}
+
+.card-header {
+    background-color: #0d6efd;
+    padding: 15px;
+    text-align: center;
+    color: white;
+}
+
+.engagement-title {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.couple-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.person-details {
+    width: 45%;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.groom-details {
+    border-right: 3px solid #0d6efd; /* קו דק להפרדה */
+}
+
+.bride-details {
+    border-left: 3px solid #0d6efd; /* קו דק להפרדה */
+}
+
+.person-details h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.person-details p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.engagement-date {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+}

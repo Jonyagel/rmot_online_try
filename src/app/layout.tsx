@@ -56,6 +56,7 @@ export default function RootLayout({
           <Analytics />
           <SpeedInsights />
           {/* <script src="./nagishli_beta.js"></script> */}
+          <script src="https://cdn.enable.co.il/licenses/enable-L29851bpdrqshwli-0824-62952/init.js"></script>
         </body>
         <GoogleAnalytics gaId="G-7P3W0FCXJ2" />
       </html>
