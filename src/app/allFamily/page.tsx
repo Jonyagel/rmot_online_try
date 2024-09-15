@@ -291,7 +291,7 @@ const AllFamilyPage: React.FC = () => {
           </motion.div>
 
           <div className='mt-4'>
-            <div className='border shadow-sm flex justify-content-between'>
+            {/* <div className='border shadow-sm flex justify-content-between'>
               <div className='text-center'>
                 <h4 className='font-bold'>זריחה</h4>
                 <hr className='w-75 mx-auto' />
@@ -299,137 +299,138 @@ const AllFamilyPage: React.FC = () => {
               </div>
               <div>
                 <h4 className='font-bold'>זריחה</h4>
-                <hr className='w-75 mx-auto' />
-                <p className='>05:24</p>
+              <hr className='w-75 mx-auto' />
+              <p className='>05:24</p>
               </div>
-            </div>
+            </div> */}
             <Row>
               <Col lg={3}>
                 <div className='scroll-card shadow-sm text-center' style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                  <h4 className='font-bold'>עיתונים</h4>
-                  <div className='mt-2'>
-                    <img src='/images/לוח קיר.png' className='w-50 mx-auto mt-2'></img>
-                    <a href="/pdf/pdf1.pdf" target="_blank" rel="noopener noreferrer">
-                      <button className='btn btn-outline-secondary border-0'>לצפייה</button>
-                    </a>
-                    <a href="/pdf/pdf1.pdf" download>
-                      <button className='btn btn-outline-primary border-0 me-1 mt-2'>להורדה</button>
-                    </a>
-                  </div>
-                  <hr className='w-75 mx-auto' />
-                  <div className='mt-2'>
-                    <img src='/images/קהילות רמות.png' className='w-50 mx-auto mt-2'></img>
-                    <a href="/pdf/pdf1.pdf" target="_blank" rel="noopener noreferrer">
-                      <button className='btn btn-outline-secondary border-0'>לצפייה</button>
-                    </a>
-                    <a href="/pdf/pdf1.pdf" download>
-                      <button className='btn btn-outline-primary border-0 me-1 mt-2'>להורדה</button>
-                    </a>
-                  </div>
-                  <hr className='w-75 mx-auto' />
-                  <div className='mt-2'>
-                    <img src='/images/קהילות רמות.png' className='w-50 mx-auto mt-2'></img>
-                    <a href="/pdf/pdf1.pdf" target="_blank" rel="noopener noreferrer">
-                      <button className='btn btn-outline-secondary border-0'>לצפייה</button>
-                    </a>
-                    <a href="/pdf/pdf1.pdf" download>
-                      <button className='btn btn-outline-primary border-0 me-1 mt-2'>להורדה</button>
-                    </a>
-                  </div>
-                  <hr className='w-75 mx-auto' />
-                  <div className='mt-2'>
-                    <img src='/images/קהילות רמות.png' className='w-50 mx-auto mt-2'></img>
-                    <a href="/pdf/pdf1.pdf" target="_blank" rel="noopener noreferrer">
-                      <button className='btn btn-outline-secondary border-0'>לצפייה</button>
-                    </a>
-                    <a href="/pdf/pdf1.pdf" download>
-                      <button className='btn btn-outline-primary border-0 me-1 mt-2'>להורדה</button>
-                    </a>
-                  </div>
-                </div>
-                <div className='scroll-card shadow-sm text-center mt-3' style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                  <h4 className='font-bold'>קופונים לחנויות</h4>
-                  <div className='mt-2'>
-                    <ul className='list-unstyled'>
-                      <li className='mb-3 border-bottom pb-2'>
-                        <p className='mb-1'><strong>קופון 1:</strong> <span>10% הנחה על רכישות מעל 100 ש"ח</span></p>
-                        <button className='btn btn-link' onClick={toggleCodes}>
-                          {showCodes ? 'הסתר קוד קופון' : 'הצג קוד קופון'}
-                        </button>
-                        {showCodes && <p className='text-muted'>קוד קופון: <strong>DISCOUNT10</strong></p>}
-                      </li>
-                      <li className='mb-3 border-bottom pb-2'>
-                        <p className='mb-1'><strong>קופון 2:</strong> <span>15% הנחה על כל המוצרים</span></p>
-                        <button className='btn btn-link' onClick={toggleCodes}>
-                          {showCodes ? 'הסתר קוד קופון' : 'הצג קוד קופון'}
-                        </button>
-                        {showCodes && <p className='text-muted'>קוד קופון: <strong>SAVE15</strong></p>}
-                      </li>
-                      <li className='mb-3 border-bottom pb-2'>
-                        <p className='mb-1'><strong>קופון 3:</strong> <span>קנה אחד קבל אחד חינם על פריטים נבחרים</span></p>
-                        <button className='btn btn-link' onClick={toggleCodes}>
-                          {showCodes ? 'הסתר קוד קופון' : 'הצג קוד קופון'}
-                        </button>
-                        {showCodes && <p className='text-muted'>קוד קופון: <strong>BOGOFREE</strong></p>}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </Col>
-              <Col lg={6}>
-                <div className="news-card shadow-sm p-3 mb-3 rounded">
-                  <h4 className="font-bold text-center mb-3">חדשות</h4>
-                  <div className="news-container">
-                    <ul className="list-unstyled news-list">
-                      <li className="mb-4 news-item border-bottom pb-3">
-                        <h5 className="font-weight-bold">כותרת החדשה הראשונה</h5>
-                        <p className="text-muted">תיאור קצר של החדשה הראשונה. זה יכול להיות עדכון חשוב או אירוע מעניין בקהילה.</p>
-                        <div className="news-image">
-                          <img src="/images/car1.jpg" alt="תמונת חדשות" className="img-fluid rounded" />
-                        </div>
-                      </li>
-                      <li className="mb-4 news-item border-bottom pb-3">
-                        <h5 className="font-weight-bold">כותרת החדשה השנייה</h5>
-                        <p className="text-muted">תיאור קצר של החדשה השנייה. זה יכול להיות הודעה על אירוע קרוב או שינוי חשוב.</p>
-                        <div className="news-image">
-                          <img src="/images/car1.jpg" alt="תמונת חדשות" className="img-fluid rounded" />
-                        </div>
-                      </li>
-                      <li className="news-item">
-                        <h5 className="font-weight-bold">כותרת החדשה השלישית</h5>
-                        <p className="text-muted">תיאור קצר של החדשה השלישית. זה יכול להיות סיפור מעניין או הישג של חבר קהילה.</p>
-                        <div className="news-image">
-                          <img src="/images/car1.jpg" alt="תמונת חדשות" className="img-fluid rounded" />
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="text-center mt-3">
-                    <button className="btn btn-outline-primary">לכל החדשות</button>
-                  </div>
-                </div>
-              </Col>
-              <Col lg={3}>
-                <div className='shadow-sm p-1 scroll-card mb-3' style={{ maxHeight: '500px', overflowY: 'auto' }}>
-                  <CelebrationsContent />
-                </div>
-                <div className='shadow-sm p-1 scroll-card my-3' style={{ maxHeight: '500px', overflowY: 'auto' }}>
-                  <EvelContent />
-                </div>
-              </Col>
-            </Row>
-
-          </div>
-        </Col >
-        <Col lg={2} className="d-none d-lg-block ">
-          <div className="ad-container">
-            <div className="ad-space">
-              <img src='/images/timegif.webp' className='rounded' />
+              <h4 className='font-bold'>עיתונים</h4>
+              <div className='mt-2'>
+                <img src='/images/לוח קיר.png' className='w-50 mx-auto mt-2'></img>
+                <a href="/pdf/pdf1.pdf" target="_blank" rel="noopener noreferrer">
+                  <button className='btn btn-outline-secondary border-0'>לצפייה</button>
+                </a>
+                <a href="/pdf/pdf1.pdf" download>
+                  <button className='btn btn-outline-primary border-0 me-1 mt-2'>להורדה</button>
+                </a>
+              </div>
+              <hr className='w-75 mx-auto' />
+              <div className='mt-2'>
+                <img src='/images/קהילות רמות.png' className='w-50 mx-auto mt-2'></img>
+                <a href="/pdf/pdf1.pdf" target="_blank" rel="noopener noreferrer">
+                  <button className='btn btn-outline-secondary border-0'>לצפייה</button>
+                </a>
+                <a href="/pdf/pdf1.pdf" download>
+                  <button className='btn btn-outline-primary border-0 me-1 mt-2'>להורדה</button>
+                </a>
+              </div>
+              <hr className='w-75 mx-auto' />
+              <div className='mt-2'>
+                <img src='/images/קהילות רמות.png' className='w-50 mx-auto mt-2'></img>
+                <a href="/pdf/pdf1.pdf" target="_blank" rel="noopener noreferrer">
+                  <button className='btn btn-outline-secondary border-0'>לצפייה</button>
+                </a>
+                <a href="/pdf/pdf1.pdf" download>
+                  <button className='btn btn-outline-primary border-0 me-1 mt-2'>להורדה</button>
+                </a>
+              </div>
+              <hr className='w-75 mx-auto' />
+              <div className='mt-2'>
+                <img src='/images/קהילות רמות.png' className='w-50 mx-auto mt-2'></img>
+                <a href="/pdf/pdf1.pdf" target="_blank" rel="noopener noreferrer">
+                  <button className='btn btn-outline-secondary border-0'>לצפייה</button>
+                </a>
+                <a href="/pdf/pdf1.pdf" download>
+                  <button className='btn btn-outline-primary border-0 me-1 mt-2'>להורדה</button>
+                </a>
+              </div>
             </div>
+            <div className='scroll-card shadow-sm text-center mt-3' style={{ maxHeight: '200px', overflowY: 'auto' }}>
+              <h4 className='font-bold'>קופונים לחנויות</h4>
+              <div className='mt-2'>
+                <ul className='list-unstyled'>
+                  <li className='mb-3 border-bottom pb-2'>
+                    <p className='mb-1'><strong>קופון 1:</strong> <span>10% הנחה על רכישות מעל 100 ש"ח</span></p>
+                    <button className='btn btn-link' onClick={toggleCodes}>
+                      {showCodes ? 'הסתר קוד קופון' : 'הצג קוד קופון'}
+                    </button>
+                    {showCodes && <p className='text-muted'>קוד קופון: <strong>DISCOUNT10</strong></p>}
+                  </li>
+                  <li className='mb-3 border-bottom pb-2'>
+                    <p className='mb-1'><strong>קופון 2:</strong> <span>15% הנחה על כל המוצרים</span></p>
+                    <button className='btn btn-link' onClick={toggleCodes}>
+                      {showCodes ? 'הסתר קוד קופון' : 'הצג קוד קופון'}
+                    </button>
+                    {showCodes && <p className='text-muted'>קוד קופון: <strong>SAVE15</strong></p>}
+                  </li>
+                  <li className='mb-3 border-bottom pb-2'>
+                    <p className='mb-1'><strong>קופון 3:</strong> <span>קנה אחד קבל אחד חינם על פריטים נבחרים</span></p>
+                    <button className='btn btn-link' onClick={toggleCodes}>
+                      {showCodes ? 'הסתר קוד קופון' : 'הצג קוד קופון'}
+                    </button>
+                    {showCodes && <p className='text-muted'>קוד קופון: <strong>BOGOFREE</strong></p>}
+                  </li>
+                </ul>
+              </div>
+            </div>
+      </Col>
+
+      <Col lg={6}>
+        <div className="news-card shadow-sm p-3 mb-3 rounded">
+          <h4 className="font-bold text-center mb-3">חדשות</h4>
+          <div className="news-container">
+            <ul className="list-unstyled news-list">
+              <li className="mb-4 news-item border-bottom pb-3">
+                <h5 className="font-weight-bold">כותרת החדשה הראשונה</h5>
+                <p className="text-muted">תיאור קצר של החדשה הראשונה. זה יכול להיות עדכון חשוב או אירוע מעניין בקהילה.</p>
+                <div className="news-image">
+                  <img src="/images/car1.jpg" alt="תמונת חדשות" className="img-fluid rounded" />
+                </div>
+              </li>
+              <li className="mb-4 news-item border-bottom pb-3">
+                <h5 className="font-weight-bold">כותרת החדשה השנייה</h5>
+                <p className="text-muted">תיאור קצר של החדשה השנייה. זה יכול להיות הודעה על אירוע קרוב או שינוי חשוב.</p>
+                <div className="news-image">
+                  <img src="/images/car1.jpg" alt="תמונת חדשות" className="img-fluid rounded" />
+                </div>
+              </li>
+              <li className="news-item">
+                <h5 className="font-weight-bold">כותרת החדשה השלישית</h5>
+                <p className="text-muted">תיאור קצר של החדשה השלישית. זה יכול להיות סיפור מעניין או הישג של חבר קהילה.</p>
+                <div className="news-image">
+                  <img src="/images/car1.jpg" alt="תמונת חדשות" className="img-fluid rounded" />
+                </div>
+              </li>
+            </ul>
           </div>
-        </Col>
-      </Row>
-      {/* <div className="tab-buttons">
+          <div className="text-center mt-3">
+            <button className="btn btn-outline-primary">לכל החדשות</button>
+          </div>
+        </div>
+      </Col>
+      <Col lg={3}>
+        <div className='shadow-sm p-1 scroll-card mb-3' style={{ maxHeight: '500px', overflowY: 'auto' }}>
+          <CelebrationsContent />
+        </div>
+        <div className='shadow-sm p-1 scroll-card my-3' style={{ maxHeight: '500px', overflowY: 'auto' }}>
+          <EvelContent />
+        </div>
+      </Col>
+    </Row>
+
+    </div >
+        </Col >
+  <Col lg={2} className="d-none d-lg-block ">
+    <div className="ad-container">
+      <div className="ad-space">
+        <img src='/images/timegif.webp' className='rounded' />
+      </div>
+    </div>
+  </Col>
+      </Row >
+{/* <div className="tab-buttons">
         <button className={`tab-button ${activeTab === 'judaism' ? 'active' : ''}`} onClick={() => setActiveTab('judaism')}>
           <FaBook /> יהדות
         </button>
@@ -445,7 +446,7 @@ const AllFamilyPage: React.FC = () => {
         {activeTab === 'publications' && <PublicationsContent />}
         {activeTab === 'celebrations' && <CelebrationsContent />}
       </div> */}
-    </div>
+    </div >
   );
 };
 
