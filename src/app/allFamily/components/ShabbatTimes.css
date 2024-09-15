@@ -1,0 +1,66 @@
+.shabbat-times {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 16px;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); */
+    border: #0d6efd 1px solid;
+    max-width: 400px;
+    margin: 16px auto;
+    font-size: 14px;
+  }
+  
+  .shabbat-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .shabbat-icon {
+    color: #0d6efd ;
+    margin-left: 8px;
+    font-size: 18px;
+  }
+  
+  .shabbat-times h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+  
+  .times-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .city-time {
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f5f5;
+    border-radius: 6px;
+    padding: 10px;
+  }
+  
+  .city {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+  }
+  
+  .time {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .enter::before {
+    content: 'כניסה: ';
+    color: #3f51b5;
+  }
+  
+  .exit::before {
+    content: 'יציאה: ';
+    color: #3f51b5;
+  }

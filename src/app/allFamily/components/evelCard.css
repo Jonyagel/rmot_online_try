@@ -1,0 +1,50 @@
+.death-card {
+    background-color: #f8d7da; /* צבע רקע אדום בהיר */
+    border-radius: 8px;
+    border: 1px solid #f5c6cb; /* גבול אדום */
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.death-card h4 {
+    color: #721c24; /* צבע טקסט כהה */
+    text-align: center;
+}
+
+.death-card .news-container {
+    margin-top: 10px;
+}
+
+.news-item {
+    margin-bottom: 12px;
+}
+
+.news-item h5 {
+    font-size: 18px;
+    color: #c82333; /* צבע טקסט אדום */
+}
+
+.news-item p {
+    font-size: 14px;
+    color: #6c757d; /* צבע טקסט אפור */
+}
+
+.text-center {
+    margin-top: 20px;
+}
+
+.btn-outline-danger {
+    color: #721c24; /* צבע טקסט אדום */
+    border-color: #f5c6cb; /* גבול אדום */
+}
+
+.btn-outline-danger:hover {
+    background-color: #f5c6cb; /* צבע רקע אדום בהיר בהעברה */
+}
+
+@media (max-width: 600px) {
+    .death-card {
+        padding: 12px;
+    }
+}

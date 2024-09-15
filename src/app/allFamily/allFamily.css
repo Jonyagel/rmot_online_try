@@ -1,0 +1,307 @@
+body {
+  background-color: #ffffff;
+  color: #333;
+}
+
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.tab-button {
+  padding: 12px 24px;
+  background-color: #fff;
+  color: #333;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 0 10px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tab-button:hover,
+.tab-button.active {
+  background-color: #007bff;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.tab-content {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #007bff;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  color: #333;
+  font-size: 22px;
+  margin-top: 30px;
+}
+
+p,
+li {
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+.card {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.halacha {
+  background-color: #e6f3ff;
+}
+
+.parasha {
+  background-color: #fff5e6;
+}
+
+.shabbat-times {
+  background-color: #e6ffe6;
+}
+
+.shabbat-times ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.shabbat-times li {
+  margin-bottom: 10px;
+}
+
+
+.articles ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.articles li {
+  margin-bottom: 15px;
+}
+
+.articles a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.articles a:hover {
+  text-decoration: underline;
+}
+
+.congrats-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.congrats-button:hover {
+  background-color: #218838;
+}
+
+.engagement {
+  background-color: #ffe6e6;
+}
+
+.birth {
+  background-color: #e6f9ff;
+}
+
+.bar-mitzvah {
+  background-color: #fff0e6;
+}
+
+.articles-section {
+  margin-top: 40px;
+}
+
+.articles-section h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.articles-section h2 svg {
+  margin-left: 10px;
+}
+
+.articles-list {
+  display: flex;
+  /* flex-direction: column; */
+}
+
+.add-engagement-button {
+  display: block;
+  margin: 0 auto 20px;
+  padding: 10px 20px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-engagement-button:hover {
+  background-color: #303f9f;
+}
+
+.header-container {
+  background-image: url('/images/background try2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+  padding: 20px;
+  color: white;
+  min-height: 200px;
+  /* או כל גובה אחר שתרצה */
+}
+
+.search-bar-container {
+  width: 90%;
+  max-width: 1100px;
+  /* border-radius: 10px; */
+  margin-top: -40px;
+  z-index: 1;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+}
+
+.search-bar-container .form-control {
+  border: none;
+  box-shadow: none;
+}
+
+.search-bar-container .input-group-text {
+  background: none;
+  border: none;
+}
+
+.filter-container {
+  margin-left: 20px;
+}
+
+
+
+.subcategory-container {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* padding: 20px; */
+  /* background-color: #ff0000; */
+  /* border-radius: 10px; */
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  /* margin-top: 20px; */
+}
+
+
+
+
+.search-button {
+  border: none;
+  border-radius: 0 0.25rem 0.25rem 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  padding: 20px;
+}
+
+.ad-container {
+  position: sticky;
+  top: 100px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.ad-space {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ad-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ad-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* border-radius: 8px; */
+  /* או כל ערך אחר שמתאים לעיצוב שלך */
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #a8bbbf ;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #0d6efd;
+}
+
+.news-container {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+}
+.news-image {
+  flex: 0 0 30%;
+  margin-left: 20px;
+}
+.news-list {
+  flex: 1;
+}
+.news-item {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+.news-item:last-child {
+  border-bottom: none;
+}

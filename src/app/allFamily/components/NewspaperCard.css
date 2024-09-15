@@ -1,0 +1,79 @@
+.newspaper-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .newspaper-card-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    overflow: hidden;
+  }
+  
+  .newspaper-card-content {
+    padding: 16px;
+  }
+  
+  .newspaper-card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #333;
+  }
+  
+  .newspaper-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .newspaper-card-distance {
+    font-size: 14px;
+    color: #888;
+  }
+  
+  .newspaper-card-download {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .newspaper-card-download:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .newspaper-card-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .newspaper-card-view,
+  .newspaper-card-download {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .newspaper-card-view:hover,
+  .newspaper-card-download:hover {
+    background-color: #e0e0e0;
+  }
