@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
-import './style1.css'
+import './homePage.css'
 import { motion } from 'framer-motion';
 import { CldImage } from 'next-cloudinary';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

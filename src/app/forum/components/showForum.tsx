@@ -4,7 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddQuestion from './addQuestion';
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Popover, OverlayTrigger, Dropdown, Form, InputGroup, Modal, Col, Row } from 'react-bootstrap';
+import { Card, Badge, Popover, OverlayTrigger, Dropdown, Form, InputGroup, Modal, Col, Row, Nav } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import './showForum.css'
 import { FaChevronDown, FaSearch } from 'react-icons/fa';
@@ -133,52 +133,92 @@ export default function ShowForum(props: any) {
                 </Col>
                 <Col lg={8}>
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
+                        // initial={{ opacity: 0, y: -20 }}
+                        // animate={{ opacity: 1, y: 0 }}
+                        // transition={{ duration: 0.5 }}
+                        className='title text-center'
+                    >
+                        <div className="header-container text-white rounded-bottom shadow-sm">
+                            <h1 className='display-6 forum-title'>פורום תושבי רמות</h1>
+                        </div>
+                    </motion.div>
+                    <motion.div
+                        className="mb-4"
+                        initial={{ opacity: 1, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className='title text-center mt-5'
                     >
-                        <h2 className='my-4 text-3xl forum-title'>פורום תושבי רמות</h2>
-                        {/* <p className='lead text-muted'>שואלים, עונים, ומחברים את הקהילה</p> */}
+                        <div className=''>
+                            <div className='mt-3'>
+                                <div className="search-bar-container bg-white shadow-sm  p-3 rounded-top align-items-center mx-auto">
+                                    <Row className="align-items-center">
+                                        {/* <Col lg={3}>
+                                           
+                                        </Col> */}
+                                        <Col lg={3}>
+                                            <Nav>
+                                                <Nav.Item>
+                                                    <Nav.Link className={'nav-link-forum me-4'}>פורומים</Nav.Link>
+                                                </Nav.Item>
+                                                <TagFilter
+                                                    getAllTags={allTopics}
+                                                    handleTopicClick={handleTopicClick}
+                                                    selectedTopic={selectedTopic}
+                                                />
+                                            </Nav>
+                                        </Col>
+                                        {/* <Col lg={0}>
+                                           
+                                        </Col> */}
+                                        <Col lg={9} className='d-flex justify-content-end'>
+                                            <InputGroup className="search-bar-all border rounded w-50 me-1" style={{ maxHeight: '36px', maxWidth: '200px' }}>
+                                                <Form.Control
+                                                    type="text"
+                                                    ref={saerchRef}
+                                                    placeholder="חיפוש בפורום"
+                                                    value={searchTerm}
+                                                    className=""
+                                                />
+                                                <InputGroup.Text className="search-button" onClick={(e: any) => (
+                                                    onSearchClick(e)
+                                                )}>
+                                                    <FaSearch />
+                                                </InputGroup.Text>
+                                            </InputGroup>
+                                            <div className='me-1' >
+                                                <div className="sort-toggle rounded border" style={{ maxHeight: '36px' }}>
+                                                    <span className="sort-icon">
+                                                        <i className="bi bi-funnel"></i>
+                                                    </span>
+                                                    <div className="options-wrapper">
+                                                        <span
+                                                            className={sortBy === 'date' ? 'active' : ''}
+                                                            onClick={() => setSortBy('date')}
+                                                        >
+                                                            תאריך
+                                                        </span>
+                                                        <span
+                                                            className={sortBy === 'comments' ? 'active' : ''}
+                                                            onClick={() => setSortBy('comments')}
+                                                        >
+                                                            תגובות
+                                                        </span>
+                                                        <div className="slider rounded"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col className='mt-2'>
+                                            <div id="tagListContainer"></div>
+                                        </Col>
+                                    </Row>
+                                </div>
+                            </div>
+                        </div>
                     </motion.div>
-                    <div className='align-items-center justify-content-center'>
-                        <div className='d-flex justify-content-end'>
-                            <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
-                        </div>
-
-                        <div className="search-container-forum w-3/5   mx-auto">
-                            <InputGroup>
-                                <Form.Control
-                                    placeholder="חיפוש בפורום"
-                                    ref={saerchRef}
-                                    className='rounded-end search-input'
-                                />
-                                <InputGroup.Text className='rounded-start search-button' onClick={(e: any) => (
-                                    onSearchClick(e)
-                                )}>   <FaSearch /></InputGroup.Text>
-                            </InputGroup>
-                        </div>
-                    </div>
-                    <div className="my-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-start">
-                        <div>
-                            <TagFilter
-                                getAllTags={allTopics}
-                                handleTopicClick={handleTopicClick}
-                                selectedTopic={selectedTopic}
-                            />
-                        </div>
-                        <div className='d-flex align-items-center'>
-                            <Dropdown className="">
-                                <Dropdown.Toggle variant="light" id="dropdown-sort" className='border' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: '150px' }}>
-                                    <span>מיין לפי: {sortBy === 'date' ? 'תאריך' : 'תגובות'}</span>
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className='text-end'>
-                                    <Dropdown.Item onClick={() => setSortBy('date')}>תאריך</Dropdown.Item>
-                                    <Dropdown.Item onClick={() => setSortBy('comments')}>תגובות</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </div>
-                    </div>
 
                     <div className='row' >
                         <AnimatePresence>

@@ -130,7 +130,7 @@ const WeatherWidget = () => {
                 hebDate.map((item: any) => {
                   return (
                     <div className=''>
-                      <p className=''>{item.d} {item.m} {item.y} </p>
+                      <p className='' style={{fontSize:'13px'}}>{item.d} {item.m} {item.y} </p>
                     </div>
                   )
                 })

@@ -26,7 +26,7 @@
 }
 
 .logo {
-    border-radius: 50%;
+    /* border-radius: 50%; */
     transition: transform 0.2s ease;
 }
 
@@ -42,8 +42,8 @@
 .nav-linkHeader {
     color: #333;
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
+    /* font-size: 0.9rem; */
+    /* font-weight: 500; */
     transition: color 0.2s ease;
     position: relative;
     padding: 0.5rem 0;

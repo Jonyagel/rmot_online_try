@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
 import { CldImage } from 'next-cloudinary';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Card, Badge, Button, Modal, Form, Row, Col, Tabs, Tab, InputGroup, FormControl, Nav, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faHeart, faShare, faPlus, faCalendarAlt, faEnvelope, faPhone, faShekelSign, faInfoCircle, faTag, faImage } from '@fortawesome/free-solid-svg-icons';
@@ -11,8 +12,15 @@ import { faCloudUploadAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import styled from 'styled-components';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus, FaSearch } from 'react-icons/fa';
 import { auto } from '@popperjs/core';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/swiper-bundle.css';
+
 
 export const dynamic = 'auto';
 
@@ -23,7 +31,7 @@ interface BoardItem {
   description: string;
   price?: number;
   contact: string;
-  image?: string;
+  image?: [string];
   date: string;
 }
 
@@ -43,6 +51,10 @@ export default function CommunityBoard() {
   useEffect(() => {
     fetchItems();
   }, []);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0); // מצב למעקב אחרי התמונה הנוכחית
+
+  const swiperRef = useRef<any>(null);
 
   const typeRef = useRef<HTMLSelectElement>(null);
   const tittleRef = useRef<HTMLInputElement>(null);
@@ -99,6 +111,7 @@ export default function CommunityBoard() {
       toast.success('התמונה הועלתה בהצלחה');
     }
   };
+
 
   const handleClose = () => {
     setShowModal(false);
@@ -166,80 +179,13 @@ export default function CommunityBoard() {
       return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
 
-  const StyledNav = styled(Nav)`
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: start;
-  
-    @media (max-width: 768px) {
-      display: none;
-    }
-  
-    .nav-link {
-      color: #2c3e50;
-      font-weight: bold;
-      padding: 10px 15px;
-      
-      &:hover {
-        color: #3498db;
-      }
-  
-      &.active {
-        color: #3498db;
-        position: relative;
-  
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          height: 2px;
-          background-color: #3498db;
-        }
-      }
-    }
-  `;
 
-  const StyledNavLink = styled(Nav.Link)`
-    white-space: normal;
-    word-wrap: break-word;
-    max-width: 100%;
-  `;
 
-  const StyledSelect = styled.select`
-    background-color: #f8f9fa;
-    border: none;
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    font-weight: bold;
-    color: #2c3e50;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%232c3e50" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 0.7rem center;
-    padding-right: 2rem;
-  `;
-
-  // const TabContent = ({ children, isActive }: any) => (
-  //   <motion.div
-  //   // initial={{ opacity: 0, y: 20 }}
-  //   // animate={{ opacity: isActive ? 1 : 1, y: isActive ? 0 : 0 }}
-  //   // transition={{ duration: 0.3 }}
-  //   >
-  //     {children}
-  //   </motion.div>
-  // );
 
   const InfoCard = ({ icon, title, value }: any) => (
-    <div className="nadlan-info-card">
-      <FontAwesomeIcon icon={icon} className="nadlan-info-icon" />
-      <div className="nadlan-info-content">
+    <div className="board-info-card">
+      <i className={`bi bi-${icon} me-1`} ></i>
+      <div className="board-info-content">
         <h4>{title}</h4>
         <p>{value}</p>
       </div>
@@ -259,119 +205,134 @@ export default function CommunityBoard() {
         </Col>
         <Col lg={8}>
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className='title text-center mt-5'
+            className='text-center'
           >
-            <h1 className="my-4 text-3xl board-title">לוח קהילתי</h1>
-          </motion.div>
-          <div className="d-flex justify-content-end align-items-center">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="add-board-button rounded-circle shadow-sm p-3 m-4 btn-primary"
-              onClick={() => setShowAddModal(true)}
+            <div className="header-container text-white my-auto rounded-bottom shadow-sm">
+              <h1 className="display-6">לוח קהילתי</h1>
+            </div>
+            <motion.div
+              className="mb-4"
+              initial={{ opacity: 1, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             >
-              <FaPlus />
-            </motion.button>
-            {/* <Button variant="primary" className="add-board-button rounded-circle shadow-sm p-3 m-4" onClick={() => setShowAddModal(true)}>
-              <FaPlus />
-            </Button> */}
-            {/* <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <StyledSelect
-            value={sortBy}
-            onChange={(e: any) => setSortBy(e.target.value)}
-          >
-            <option value="date">מיון לפי תאריך</option>
-            <option value="likes">מיון לפי לייקים</option>
-          </StyledSelect>
-        </motion.div> */}
-          </div>
-          <div className="mb-4 search-container-board">
-            <InputGroup style={{ direction: 'ltr' }}>
-              <FormControl
-                className='rounded'
-                placeholder="חיפוש..."
-                aria-label="חיפוש"
-                value={searchTerm}
-                onChange={(e: any) => setSearchTerm(e.target.value)}
-              />
-              <InputGroup.Text className='rounded'>
-                <FontAwesomeIcon icon={faSearch} />
-              </InputGroup.Text>
-            </InputGroup>
-          </div>
-
-          <motion.div
-            className="d-flex justify-content-between align-items-center mb-4"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <StyledNav activeKey={activeTab} onSelect={(k: any) => setActiveTab(k)}>
-              <StyledNavLink eventKey="all">הכל</StyledNavLink>
-              <StyledNavLink eventKey="sale">מכירה</StyledNavLink>
-              <StyledNavLink eventKey="lost-found">אבידה ומציאה</StyledNavLink>
-              <StyledNavLink eventKey="gmach">גמ״ח</StyledNavLink>
-              <StyledNavLink eventKey="class">חוגים</StyledNavLink>
-            </StyledNav>
+              <div className=''>
+                <div className='mt-3'>
+                  <div className="search-bar-container bg-white shadow-sm  p-3 rounded-top align-items-center mx-auto">
+                    <Row className="align-items-center">
+                      <Col lg={8}>
+                        <Nav>
+                          <Nav.Item>
+                            <Nav.Link className={`nav-link-board me-3 ${activeTab === 'all' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('all')}>הכל</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link className={`nav-link-board me-3 ${activeTab === 'sale' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('sale')}>מכירה</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link className={`nav-link-board me-3 ${activeTab === 'rent' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('rent')}>השכרה</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link className={`nav-link-board me-3 ${activeTab === 'delivery' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('delivery')}>מסירה</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link className={`nav-link-board me-3 ${activeTab === 'needed' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('needed')}>דרושים</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link className={`nav-link-board me-3 ${activeTab === 'work' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('work')}>עבודה</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link className={`nav-link-board me-3 ${activeTab === 'lost-found' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('lost-found')}>השבת אבידה</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link className={`nav-link-board me-3 ${activeTab === 'Transportation' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('Transportation')}>הסעות</Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link className={`nav-link-board me-3 ${activeTab === 'variance' ? 'active' : ''}`}
+                              onClick={() => setActiveTab('variance')}>שונות</Nav.Link>
+                          </Nav.Item>
+                        </Nav>
+                      </Col>
+                      <Col lg={4} className=''>
+                        <div className='d-flex justify-content-end'>
+                          <InputGroup className="border rounded w-50 me-1" style={{ maxHeight: '36px', maxWidth: '200px' }}>
+                            <Form.Control
+                              type="text"
+                              placeholder="חיפוש בלוח..."
+                              value={searchTerm}
+                              // onChange={(e: any) => setSearchTerm(e.target.value)}
+                              onKeyDown={(e: any) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  setSearchTerm(e.target.value);
+                                }
+                              }}
+                              className=""
+                            />
+                            <InputGroup.Text
+                              className="search-button"
+                              onClick={(e: any) => setSearchTerm(e.target.value)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <FaSearch />
+                            </InputGroup.Text>
+                          </InputGroup>
+                          <button
+                            className="btn rounded border"
+                            onClick={() => setShowAddModal(true)}
+                          >
+                            הוסף כרטיס
+                          </button>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg={6} className='mt-4'>
+                        <div className="flex">
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
 
-          <Row>
+          <div className="board-grid">
             {filteredAndSortedItems.map(item => (
-              <Col key={item.id} md={4} lg={3} sm={6} className="mb-4">
-                <motion.div
-                  className="board-card border"
-                  whileHover={{ y: -2, boxShadow: '0 4px 8px rgba(13, 110, 253, 0.08)' }}
+              <div key={item.id} className="position-relative mt-2">
+                <div
+                  className="board-card shadow-sm border rounded"
                 >
                   <div className="board-card-content">
-                    <div className="board-card-header">
-                      {item.image ? (
-                        <CldImage
-                          src={item.image}
-                          width="400"
-                          height="200"
-                          crop="fill"
-                          alt={item.title}
-                          className="board-image"
-                          loading="lazy"
-                          format="auto"
-                          quality="auto"
-                        />
-                      ) : (
-                        <div className="board-image-placeholder">
-                          <FontAwesomeIcon icon={faImage} size="lg" color="#0d6efd" />
-                        </div>
-                      )}
-                      <div className="board-type-badge">
-                        {getItemTypeName(item.type)}
-                      </div>
-                    </div>
 
                     <div className="board-description">
-                      <h3 className="board-address">{item.title}</h3>
-                      {item.price && (
-                        <div className="board-price">
-                          {item.price.toLocaleString()} ₪
-                        </div>
-                      )}
-                      <p className="board-desc-text">{item.description}</p>
-                      <div className="board-features">
-                        <span><FontAwesomeIcon icon={faCalendarAlt} /> {new Date(Number(item.date)).toLocaleDateString('he-IL')}</span>
-                      </div>
+                      <h3 className="board-title">{item.title}</h3>
+                      <p className="board-desc-text">
+                        {item.description.length > 100
+                          ? `${item.description.substring(0, 100)}...`
+                          : item.description}</p>
+                      <Badge className="ms-2 align-self-start top-0 end-5 translate-middle position-absolute">{item.type}</Badge>
                     </div>
                   </div>
-                  <div className="board-card-footer">
-                    <button className="board-more-info-btn" onClick={() => handleShow(item)}>פרטים נוספים</button>
+                  <hr className='w-75 mx-auto' />
+                  <div className="board-card-footer flex justify-content-between align-items-center">
+                    <div className="board-date">
+                      <span>  <i className='bi bi-calendar me-1' ></i>{new Date(Number(item.date)).toLocaleDateString('he-IL')}</span>
+                    </div>
+                    <button className="board-more-info-btn btn border rounded" onClick={() => handleShow(item)}>מידע נוסף</button>
                   </div>
-                </motion.div>
-              </Col>
+                </div>
+              </div>
             ))}
-          </Row>
+          </div>
         </Col>
 
         <Col lg={2} className="d-none d-lg-block ">
@@ -395,61 +356,156 @@ export default function CommunityBoard() {
             onClick={handleClose}
           >
             <motion.div
-              className="board-modal-content board-item-detail-modal"
+              className="board-item-detail-modal rounded relative"
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
             >
+              <Badge className="ms-2 align-self-start top-0 end-5 translate-middle position-absolute">{selectedItem.type}</Badge>
               <button className="board-close-button" onClick={handleClose}>
                 <FontAwesomeIcon icon={faTimes} />
               </button>
-              <div className="board-modal-inner-content">
-                <div className="board-item-image-container">
-                  {selectedItem.image ? (
-                    <CldImage
-                      src={selectedItem.image}
-                      width="800"
-                      height="600"
-                      crop="fill"
-                      alt={selectedItem.title}
-                      className="board-item-detail-image"
-                    />
+              <div className="flex flex-column justify-content-between" style={{ height: 'auto' }}>
+                <div className="board-item-image-container p-2">
+                  {selectedItem.image && selectedItem.image.length > 0 ? (
+                    <div className="flex">
+                      {selectedItem.image.length === 1 ? ( // אם יש תמונה אחת
+                        <div className="mb-2 cursor-pointer w-full" onClick={() => setShowImageModal(true)}>
+                          <CldImage
+                            src={selectedItem.image[0]}
+                            width={300} // גובה קבוע
+                            height={200} // גובה קבוע
+                            crop="fill"
+                            className="board-item-detail-image shadow-sm rounded"
+                            alt={`תמונה של ${selectedItem.title}`}
+                            loading="lazy"
+                            format="auto"
+                            quality="auto"
+                          />
+                        </div>
+                      ) : (
+                        <>
+                          <div className="mb-2 cursor-pointer" onClick={() => setShowImageModal(true)}>
+                            <CldImage
+                              src={selectedItem.image[0]}
+                              width={300} // גודל מלא
+                              height={200} // גובה מלא
+                              crop="fill"
+                              className="board-item-detail-image shadow-sm rounded"
+                              alt={`תמונה של ${selectedItem.title}`}
+                              loading="lazy"
+                              format="auto"
+                              quality="auto"
+                            />
+                          </div>
+                          <div className="flex flex-col space-y-2 ms-2">
+                            {selectedItem.image.slice(1, 3).map((image: any, index: any) => ( // הצגת עד 3 תמונות נוספות
+                              <div key={index} onClick={() => setShowImageModal(true)} className="cursor-pointer">
+                                <CldImage
+                                  src={image}
+                                  width={100} // גודל קטן יותר
+                                  height={75} // גובה קטן יותר
+                                  crop="fill"
+                                  className="board-item-detail-image shadow-sm rounded"
+                                  alt={`תמונה ${index + 1} של ${selectedItem.title}`}
+                                  loading="lazy"
+                                  format="auto"
+                                  quality="auto"
+                                />
+                              </div>
+                            ))}
+                            {selectedItem.image.length > 3 && ( // כפתור "הצג עוד" אם יש יותר מ-3 תמונות
+                              <div onClick={() => setShowImageModal(true)} className="cursor-pointer text-gray-600 text-center">
+                                <span>הצג עוד</span>
+                              </div>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
                   ) : (
-                    <div className="board-no-image">
-                      <FontAwesomeIcon icon={faImage} size="5x" />
+                    <div className="">
                     </div>
                   )}
                 </div>
-                <div className="board-item-details-content">
-                  <h2 className="board-item-title">{selectedItem.title}</h2>
+                {showImageModal && (
+                  <Modal show={showImageModal} onHide={() => setShowImageModal(false)} centered size="lg">
+                    <Modal.Body>
+                      <Swiper
+                        ref={swiperRef} // הוספת הייחוס ל-Swiper
+                        spaceBetween={10}
+                        // pagination={{ clickable: true }}
+                        navigation // הוספת ניווט
+                        modules={[Navigation, Pagination]} // הוספת המודולים
+                        onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)} // עדכון המצב כאשר התמונה משתנה
+                        style={{ height: '80vh' }} // גובה המודל
+                      >
+                        {selectedItem.image?.map((image: any, index: any) => (
+                          <SwiperSlide key={index}>
+                            <CldImage
+                              src={image}
+                              width="800"
+                              height="600"
+                              crop="fill"
+                              className="nadlan-property-detail-image rounded"
+                              alt={`תמונה ${index + 1} של ${selectedItem.title}`}
+                              loading="lazy"
+                              format="auto"
+                              quality="auto"
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }} // התאם את התמונה לגובה ולרוחב
+                            />
+                          </SwiperSlide>
+                        ))}
+                      </Swiper>
+                      <div className="flex justify-center mt-2">
+                        {selectedItem.image?.map((image: any, index: any) => (
+                          <div key={index} className="thumbnail-container" onClick={() => swiperRef.current?.swiper.slideTo(index)}>
+                            <CldImage
+                              src={image}
+                              width="100" // גודל קטן יותר לתמונות המוקטנות
+                              height="75" // גובה קטן יותר לתמונות המוקטנות
+                              crop="fill"
+                              className={`rounded thumbnail ${index === currentIndex ? 'active' : ''}`} // הוספת מחלקת active לתמונה הנוכחית
+                              alt={`תמונה ${index + 1} של ${selectedItem.title}`}
+                              loading="lazy"
+                              format="auto"
+                              quality="auto"
+                              style={{ cursor: 'pointer', objectFit: 'cover' }} // התאם את התמונה לגובה ולרוחב
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </Modal.Body>
+                  </Modal>
+                )}
+                <div className="overflow-y-auto px-4 my-1" style={{ height: '55%' }}>
+                  <div className=''>
+                    <h2 className="board-item-title">{selectedItem.title}</h2>
+                    <p>{selectedItem.description}</p>
+                  </div>
+                  <hr className='w-75 mx-auto my-4' style={{ color: 'gray' }} />
                   <div className="board-item-info-grid">
-                    <InfoCard icon={faTag} title="סוג" value={getItemTypeName(selectedItem.type)} />
+                    <InfoCard icon={'tag'} title="סוג" value={getItemTypeName(selectedItem.type)} />
                     {selectedItem.price && (
-                      <InfoCard icon={faShekelSign} title="מחיר" value={`${selectedItem.price} ₪`} />
+                      <InfoCard icon={"receipt"} title="מחיר" value={`${selectedItem.price.toLocaleString()} ₪`} />
                     )}
-                    <InfoCard icon={faInfoCircle} title="תיאור" value={selectedItem.description} />
-                    <InfoCard icon={faPhone} title="יצירת קשר" value={selectedItem.contact} />
+                    <InfoCard icon={'telephone'} title="יצירת קשר" value={selectedItem.contact} />
                     <InfoCard
-                      icon={faCalendarAlt}
+                      icon={'calendar'}
                       title="תאריך פרסום"
                       value={new Date(Number(selectedItem.date)).toLocaleDateString('he-IL')}
                     />
                   </div>
                 </div>
               </div>
-              <div className="board-modal-footer">
-                {/* <button className="board-close-button-secondary" onClick={handleClose}>
-                  <FontAwesomeIcon icon={faTimes} className="board-button-icon" /> סגור
-                </button> */}
-                <button className="board-contact-button">
-                  <FontAwesomeIcon icon={faEnvelope} className="board-button-icon" /> יצירת קשר
-                </button>
-              </div>
             </motion.div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        )
+        }
+      </AnimatePresence >
+
+
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)} centered size="lg">
         <Modal.Header closeButton className="bg-primary text-white">
           <div className="w-100 d-flex justify-content-between align-items-start">
@@ -459,15 +515,6 @@ export default function CommunityBoard() {
         <Modal.Body>
           <Form onSubmit={(e) => {
             e.preventDefault();
-            // const formData = new FormData(e.currentTarget);
-            // const newItem = {
-            //   type: formData.get('type') as 'sale' | 'lost-found' | 'gmach' | 'class',
-            //   title: formData.get('title') as string,
-            //   description: formData.get('description') as string,
-            //   price: formData.get('price') ? Number(formData.get('price')) : undefined,
-            //   contact: formData.get('contact') as string,
-            //   image: uploadedImageUrl
-            // };
             handleAddItem();
           }}>
             <Row>
@@ -551,9 +598,6 @@ export default function CommunityBoard() {
                   </div>
                 )}
                 <div className="text-end">
-                  {/* <Button variant="secondary" onClick={() => setShowAddModal(false)} className="me-2">
-                    ביטול
-                  </Button> */}
                   <Button variant="primary" type="submit">
                     הוסף פריט
                   </Button>
@@ -565,15 +609,6 @@ export default function CommunityBoard() {
           </Form>
         </Modal.Body>
       </Modal>
-    </Container>
+    </Container >
   )
 }
-
-
-
-// const mockData: BoardItem[] = [
-//     { id: 1, type: 'sale', title: 'אופניים למכירה', description: 'אופניים במצב מצוין', price: 500, contact: '050-1234567', image: 'bicycle_wvuwcc', date: '2024-07-28' },
-//     { id: 2, type: 'lost-found', title: 'נמצא ארנק', description: 'נמצא ארנק ברחוב הרצל', contact: '052-7654321', image: 'Purse_hxsdo3', date: '2024-07-27' },
-//     { id: 3, type: 'gmach', title: 'גמ"ח כלי עבודה', description: 'השאלת כלי עבודה לתושבי השכונה', contact: 'gmach@example.com', image: 'tools_hnozjm', date: '2024-07-26' },
-//     { id: 4, type: 'class', title: 'חוג יוגה', description: 'חוג יוגה בימי שלישי בערב', price: 40, contact: '053-9876543', image: 'yoga_inydwp', date: '2024-07-25' },
-//   ];

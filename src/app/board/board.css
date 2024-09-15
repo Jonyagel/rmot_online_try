@@ -1,3 +1,95 @@
+.header-container {
+  background-image: url('/images/background try2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+  padding: 20px;
+  color: white;
+  min-height: 150px;
+  /* או כל גובה אחר שתרצה */
+}
+
+.search-bar-container {
+  width: 90%;
+  max-width: 1100px;
+  /* border-radius: 10px; */
+  margin-top: -40px;
+  z-index: 1;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: space-between; */
+}
+
+.search-bar-container .form-control {
+  border: none;
+  box-shadow: none;
+}
+
+.search-bar-container .input-group-text {
+  background: none;
+  border: none;
+}
+
+.nav-link-board {
+  color: #333;
+  text-decoration: none;
+  /* font-size: 0.9rem; */
+  /* font-weight: 500; */
+  transition: color 0.2s ease;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.nav-link-board:hover {
+  color: #0d6efd;
+}
+
+.nav-link-board.active {
+  color: #0d6efd;
+}
+
+.nav-link-board::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #0d6efd;
+  transition: width 0.3s ease;
+}
+
+.nav-link-board:hover::after,
+.nav-link-board.active::after {
+  width: 100%;
+}
+.dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 5px;
+  background-color: gray;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: blue;
+}
+.thumbnail-container {
+  margin: 0 5px; /* רווחים בין התמונות הקטנות */
+}
+
+.thumbnail {
+  border: 2px solid transparent; /* גבול שקוף ברירת מחדל */
+  transition: border-color 0.3s; /* אנימציה לשינוי צבע הגבול */
+}
+
+.thumbnail.active {
+  border-color: blue; /* צבע גבול שונה לתמונה הנוכחית */
+}
+
 .add-board-button {
   display: flex;
   align-items: center;
@@ -39,20 +131,10 @@
   /* או כל ערך אחר שמתאים לעיצוב שלך */
 }
 
-.board-title {
-  font-weight: bold;
-  color: #000000;
-  /* margin: 1.5rem 0; */
-  text-align: center;
-}
-
-.board-title:after {
-  content: '';
-  display: block;
-  width: 50px;
-  height: 3px;
-  background: #3498db;
-  margin: 10px auto;
+.board-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
 }
 
 select.form-select {
@@ -71,7 +153,7 @@ textarea.form-control:focus {
   border-color: #007bff;
 }
 
-.search-container-board {
+/* .search-container-board {
   display: flex;
   align-items: center;
 }
@@ -106,7 +188,7 @@ textarea.form-control:focus {
 
 .search-container-board .input-group-text .bi {
   font-size: 1.2rem;
-}
+} */
 
 .hover-card {
   transition: transform 0.3s ease-in-out;
@@ -121,9 +203,9 @@ textarea.form-control:focus {
   height: 200px;
 }
 
-.badge {
+/* .badge {
   font-size: 0.8rem;
-}
+} */
 
 /* .btn-light {
     background-color: #f8f9fa;
@@ -144,10 +226,10 @@ textarea.form-control:focus {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-.badge {
+/* .badge {
   font-size: 0.8rem;
   padding: 0.35em 0.65em;
-}
+} */
 
 .btn-primary {
   background-color: #007bff;
@@ -162,12 +244,12 @@ textarea.form-control:focus {
 .board-card {
   display: flex;
   flex-direction: column;
-  height: 320px;
+  /* height: 320px; */
   background-color: #ffffff;
-  border-radius: 6px;
+  /* border-radius: 10px; */
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(13, 110, 253, 0.05);
-  transition: all 0.2s ease;
+  /* box-shadow: 0 1px 3px rgba(13, 110, 253, 0.05); */
+  /* transition: all 0.2s ease; */
 }
 
 .board-card-content {
@@ -176,7 +258,14 @@ textarea.form-control:focus {
   flex-grow: 1;
 }
 
-.board-card-header {
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  padding: 20px;
+}
+
+/* .board-card-header {
   position: relative;
 }
 
@@ -203,7 +292,7 @@ textarea.form-control:focus {
   padding: 2px 6px;
   font-size: 11px;
   border-radius: 3px;
-}
+} */
 
 .board-description {
   padding: 12px;
@@ -212,7 +301,7 @@ textarea.form-control:focus {
   flex-direction: column;
 }
 
-.board-address {
+/* .board-address {
   font-size: 14px;
   font-weight: 600;
   color: #333333;
@@ -220,6 +309,33 @@ textarea.form-control:focus {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+} */
+
+
+
+.board-date {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  color: #888888;
+  max-width: 60%;
+  overflow: hidden;
+}
+
+.board-date svg {
+  margin-left: 4px;
+  color: #585858;
+  flex-shrink: 0;
+}
+
+.board-date span {
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .board-price {
@@ -259,24 +375,16 @@ textarea.form-control:focus {
 
 .board-card-footer {
   padding: 12px;
-  margin-top: auto;
+  /* margin-top: auto; */
 }
 
 .board-more-info-btn {
-  width: 100%;
-  padding: 6px 10px;
-  background-color: #0d6efd;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  font-size: 15px;
-  font-weight: bolder;
+  font-size: 13px;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
 
 .board-more-info-btn:hover {
-  background-color: #0b5ed7;
+  background-color: #0d6dfd26;
 }
 
 .board-modal-overlay {
@@ -295,30 +403,32 @@ textarea.form-control:focus {
 
 .board-item-detail-modal {
   background-color: #ffffff;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 1200px;
-  height: 90vh;
+  /* border-radius: 16px; */
+  width: 30%;
+  max-width: 600px;
+  height: auto;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  position: relative;
-  overflow: hidden;
+  /* position: relative;
+  overflow: hidden; */
 }
 
-.board-modal-inner-content {
+/* .board-modal-inner-content {
   display: flex;
   flex-direction: row;
   height: calc(90vh - 80px);
   overflow: hidden;
-}
+} */
 
 .board-item-image-container {
-  flex: 0 0 50%;
-  padding: 24px;
-  display: flex;
+  /* flex: 0 0 50%; */
+  /* padding: 24px; */
+  height: 40%;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 .board-item-detail-image {
@@ -326,8 +436,8 @@ textarea.form-control:focus {
   height: auto;
   max-height: 100%;
   object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  /* border-radius: 12px; */
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); */
 }
 
 .board-no-image {
@@ -342,7 +452,7 @@ textarea.form-control:focus {
 }
 
 .board-item-details-content {
-  flex: 0 0 50%;
+  /* flex: 0 0 50%; */
   padding: 24px;
   overflow-y: auto;
 }
@@ -350,32 +460,30 @@ textarea.form-control:focus {
 .board-item-title {
   font-size: 1.8rem;
   color: #333;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   font-weight: 600;
 }
 
 .board-item-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
 }
 
-.board-info-card {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 1rem;
-  display: flex;
-  align-items: flex-start;
-  transition: all 0.3s ease;
-  border: 1px solid #eaeaea;
-}
+
 
 /* .board-info-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     background-color: #ffffff;
   } */
+
+.board-info-card {
+
+  padding: 8px;
+  display: flex;
+  align-items: flex-start;
+
+}
 
 .board-info-icon {
   font-size: 1.2rem;
@@ -397,14 +505,12 @@ textarea.form-control:focus {
 
 .board-close-button {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.452);
   border: none;
   color: #333;
-  font-size: 1rem;
-  width: 30px;
-  height: 30px;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -412,10 +518,10 @@ textarea.form-control:focus {
   cursor: pointer;
   transition: all 0.3s ease;
   z-index: 10;
+  margin: 5px;
 }
 
 .board-close-button:hover {
-  background: #fff;
   transform: rotate(90deg);
 }
 
@@ -467,13 +573,9 @@ textarea.form-control:focus {
 }
 
 @media (max-width: 1024px) {
-  .board-modal-inner-content {
-    flex-direction: column;
-    overflow-y: auto;
-  }
 
-  .board-item-image-container,
-  .board-item-details-content {
+
+  .board-item-image-container {
     flex: none;
     width: 100%;
   }

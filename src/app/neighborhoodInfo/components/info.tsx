@@ -1,8 +1,8 @@
 "use client"
 import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaClock, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe, FaTimes, FaStar, FaTag, FaCreditCard, FaPlus, FaImage, FaUpload, FaSearch, FaChevronLeft, FaChevronRight, FaMedkit, FaGlassCheers, FaMoneyBillWave, FaBabyCarriage, FaTools, FaAppleAlt, FaScroll, FaHandHoldingUsd, FaWheelchair, FaRing } from 'react-icons/fa';
-import { Button, Modal, Form, InputGroup, Col, Container, Row, NavLink, Nav } from 'react-bootstrap';
+import { FaTimes, FaImage, FaUpload, FaSearch, FaChevronLeft, FaChevronRight, FaMedkit, FaGlassCheers, FaMoneyBillWave, FaBabyCarriage, FaTools, FaAppleAlt, FaScroll, FaHandHoldingUsd, FaWheelchair, FaRing } from 'react-icons/fa';
+import { Button, Modal, Form, InputGroup, Col, Row, Nav } from 'react-bootstrap';
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,30 +11,16 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { faFontAwesome, faImage } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FaShoppingBasket, FaTshirt, FaLaptop, FaHome, FaHeartbeat, FaFootballBall, FaBook, FaGamepad, FaGem, FaPaw, FaCar, FaPaintBrush, FaGift, FaCouch, FaUtensils } from 'react-icons/fa';
-import CategorySlider from './subCategorySlider';
-import {
-    FaSchool,
-    FaSynagogue,
-    FaHospital,
-    FaUniversity,
-    FaBookReader,
-    FaLandmark,
-    FaChild,
-    FaUserFriends,
-    FaHandsHelping,
-    FaSwimmer,
-    FaTheaterMasks,
-    FaMusic,
-    FaBusAlt,
-    FaStore,
-    FaGavel
-} from 'react-icons/fa';
+import { FaTshirt, FaLaptop, FaBook, FaCouch, FaUtensils } from 'react-icons/fa';
+import CategorySlider from './CategoryTags';
+import { FaSynagogue, FaUniversity, FaLandmark, FaChild, FaUserFriends, FaHandsHelping, FaSwimmer, FaTheaterMasks, FaMusic, FaBusAlt, FaStore, FaGavel } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+
+
 
 export const dynamic = 'force-dynamic';
 
@@ -57,11 +43,6 @@ interface Card {
     type: string;
 }
 
-interface Category {
-    name: string;
-    icon: React.ReactNode;
-}
-
 export default function ShopCards(props: any) {
     const router = useRouter();
 
@@ -73,16 +54,15 @@ export default function ShopCards(props: any) {
     const [cardsAr, setCardsAr] = useState(props.shopsData);
     const [gmachAr, setGmachAr] = useState(props.gmachData);
     const [mosadsAr, setMosadsAr] = useState(props.MosadsData);
-    const [selectType, setSelectType] = useState(null);
     const [activeTab, setActiveTab] = useState<string>('shop');
-    const [items, setItems] = useState<Card[]>(cardsAr);
     const [activeSubcategory, setActiveSubcategory] = useState('');
-    // const [gmachitems, setGmachItems] = useState<Card[]>(gmachAr);
+    const [inputValue, setInputValue] = useState('');
+
 
 
 
     const nameRef = useRef<HTMLInputElement>(null);
-    const descriptionRef = useRef<HTMLTextAreaElement>(null);
+    const descriptionRef = useRef<HTMLInputElement>(null);
     const contentRef = useRef<HTMLTextAreaElement>(null);
     const hoursRef = useRef<HTMLInputElement>(null);
     const addressRef = useRef<HTMLInputElement>(null);
@@ -92,29 +72,31 @@ export default function ShopCards(props: any) {
     const categoryRef = useRef<HTMLInputElement>(null);
 
     const categories = [
-        { name: "מזון וקמעונאות", icon: <FaShoppingBasket /> },
-        { name: "אופנה והלבשה", icon: <FaTshirt /> },
-        { name: "אלקטרוניקה וטכנולוגיה", icon: <FaLaptop /> },
-        { name: "בית וגינון", icon: <FaHome /> },
-        { name: "בריאות ויופי", icon: <FaHeartbeat /> },
-        { name: "ספורט ופנאי", icon: <FaFootballBall /> },
-        { name: "ספרים ומדיה", icon: <FaBook /> },
-        { name: "צעצועים ומשחקים", icon: <FaGamepad /> },
-        { name: "תכשיטים ואביזרים", icon: <FaGem /> },
-        { name: "חיות מחמד", icon: <FaPaw /> },
-        { name: "רכב ותחבורה", icon: <FaCar /> },
-        { name: "אמנות ויצירה", icon: <FaPaintBrush /> },
-        { name: "מתנות ומזכרות", icon: <FaGift /> },
-        { name: "ריהוט ועיצוב פנים", icon: <FaCouch /> },
-        { name: "כלי בית ומטבח", icon: <FaUtensils /> }
+        { name: "חנויות מזון", icon: 'cart2' },
+        { name: "מזון מהיר", icon: 'basket3' },
+        { name: "הלבשה", icon: 'bag' },
+        { name: "טכנולוגיה", icon: 'laptop' },
+        { name: "אירועים", icon: 'stars' },
+        { name: "נקיון", icon: 'droplet' },
+        { name: "בית וגינון", icon: 'house' },
+        { name: "טיפוח", icon: 'duffle' },
+        { name: "בריאות", icon: 'heart-pulse' },
+        { name: "ספורט ופנאי", icon: 'bicycle' },
+        { name: "ספרים ומדיה", icon: 'book' },
+        { name: "משחקים", icon: 'dice-3' },
+        { name: "תכשיטים ואביזרים", icon: 'gem' },
+        { name: "רכב", icon: 'car-front' },
+        { name: "אמנות ויצירה", icon: 'brush' },
+        { name: "מתנות ומזכרות", icon: 'gift' },
+        { name: "כלי בית ומטבח", icon: 'cup-hot' }
     ];
 
     const categoriesMosads = [
-        { name: "בתי ספר", icon: <FaSchool /> },
+        { name: "בתי ספר", icon: 'backpack' },
         { name: "בתי כנסת", icon: <FaSynagogue /> },
-        { name: "מרפאות ובתי חולים", icon: <FaHospital /> },
+        { name: "מרפאות ובתי חולים", icon: 'h-circle' },
         { name: "מוסדות השכלה גבוהה", icon: <FaUniversity /> },
-        { name: "ספריות", icon: <FaBookReader /> },
+        { name: "ספריות", icon: 'book' },
         { name: "מוסדות ציבור", icon: <FaLandmark /> },
         { name: "גני ילדים", icon: <FaChild /> },
         { name: "מרכזים קהילתיים", icon: <FaUserFriends /> },
@@ -145,67 +127,7 @@ export default function ShopCards(props: any) {
         { name: "מחשבים וטכנולוגיה", icon: <FaLaptop /> }
     ];
 
-    const NextArrow = (props: any) => {
-        const { className, onClick } = props;
-        return (
-            <div className={className} onClick={onClick}>
-                <FaChevronLeft />
-            </div>
-        );
-    };
-
-    const PrevArrow = (props: any) => {
-        const { className, onClick } = props;
-        return (
-            <div className={className} onClick={onClick}>
-                <FaChevronRight />
-            </div>
-        );
-    };
-
-    const sliderSettings = {
-        dots: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 6,
-        slidesToScroll: 3,
-        rtl: true,
-        nextArrow: <NextArrow />,
-        prevArrow: <PrevArrow />,
-        responsive: [
-            {
-                breakpoint: 1200,
-                settings: {
-                    slidesToShow: 5,
-                    slidesToScroll: 2,
-                }
-            },
-            {
-                breakpoint: 992,
-                settings: {
-                    slidesToShow: 4,
-                    slidesToScroll: 2,
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                }
-            },
-            {
-                breakpoint: 576,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                }
-            }
-        ]
-    };
-
-
-    const doApi = async (subCategory: any) => {
+    const doApiShop = async (subCategory: any) => {
         if (subCategory === null) {
             subCategory = '';
         }
@@ -238,22 +160,9 @@ export default function ShopCards(props: any) {
         console.log(`Fetching mosads data for category: ${subCategory}`);
     }
 
-    const formAnimation = {
-        hidden: { opacity: 0, y: 50 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: {
-                duration: 0.5,
-                when: "beforeChildren",
-                staggerChildren: 0.1
-            }
-        }
-    };
-
     const itemAnimation = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 }
+        // hidden: { opacity: 0, y: 20 },
+        // visible: { opacity: 1, y: 0 }
     };
 
     const filteredCards = useMemo(() => {
@@ -277,17 +186,6 @@ export default function ShopCards(props: any) {
         );
     }, [searchTerm, mosadsAr]);
 
-    // useEffect(() => {
-    //     typeFilter();
-    // },[]);
-
-    const typeFilter = (typeActive: any) => {
-        // doApiGmach();
-        // const filteredAndSortedItems = items.filter((item: any) => item.type === typeActive)
-        // console.log(filteredAndSortedItems)
-        // setShopsAr(filteredAndSortedItems)
-        // console.log(shopsAr);
-    }
 
 
     const handleShopClick = (card: Card) => {
@@ -299,6 +197,7 @@ export default function ShopCards(props: any) {
     };
 
     const handleShowModal = () => setShowModal(true);
+
     const handleCloseModal = () => {
         setShowModal(false);
         setLogo('');
@@ -333,7 +232,7 @@ export default function ShopCards(props: any) {
             });
             const data = await resp.json();
             console.log(data);
-            doApi('');
+            doApiShop('');
             handleCloseModal();
             router.push('/neighborhoodInfo');
         } catch (error: any) {
@@ -416,121 +315,138 @@ export default function ShopCards(props: any) {
                 </Col>
                 <Col lg={8}>
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className='title text-center mt-5'
+                        className='text-center'
                     >
-                        <h1 className="my-4 text-3xl neighborhoodInfo-title">מידע שכונתי</h1>
-                    </motion.div>
-                    <div className='  align-items-center justify-content-center'>
-                        <div className='flex justify-content-end'>
-                            <motion.button
-                                className="add-shop-button p-3"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={handleShowModal}
-                            >
-                                <FaPlus />
-                            </motion.button>
+                        <div className="header-container text-white my-auto rounded-bottom shadow-sm">
+                            <h1 className="display-6">מידע שכונתי</h1>
                         </div>
-                        <div className="search-container w-3/5   mx-auto">
-                            <InputGroup>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="חיפוש חנויות..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="search-input"
-                                />
-                                <InputGroup.Text className="search-button">
-                                    <FaSearch />
-                                </InputGroup.Text>
-                            </InputGroup>
-                        </div>
-
-                    </div>
-                    <motion.div
-                        className="navigation-container"
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <Nav
-                            activeKey={activeTab}
-                            onSelect={(k: any) => {
-                                setActiveTab(k);
-                                if (k === 'gmach') {
-                                    doApiGmach('');
-                                }
-                                else if (k === 'shop') {
-                                    doApi("");
-                                    setActiveSubcategory('')
-                                }
-                                else if (k === 'mosads') {
-                                    doApiMosads("");
-                                    setActiveSubcategory('')
-                                }
-                            }}
-                            className='main-nav'
+                        <motion.div
+                            className="mb-4"
+                            initial={{ opacity: 1, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
                         >
-                            <NavLink className={`nav-link ${activeTab === 'shop' ? 'active' : ''}`} eventKey="shop">חנויות</NavLink>
-                            <NavLink className={`nav-link ${activeTab === 'mosads' ? 'active' : ''}`} eventKey="mosads">מוסדות</NavLink>
-                            <NavLink className={`nav-link ${activeTab === 'gmach' ? 'active' : ''}`} eventKey="gmach">גמ״חים</NavLink>
-                        </Nav>
-                        {activeTab === 'shop' && (
-                            <motion.div
-                                className="subcategory-container"
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                {activeTab === 'shop' && (
-                                    <CategorySlider
-                                        categories={categories}
-                                        activeSubcategory={activeSubcategory}
-                                        setActiveSubcategory={setActiveSubcategory}
-                                        doApi={doApi}
-                                    />
-                                )}
+                            <div className=''>
+                                <div className='mt-3'>
+                                    <div className="search-bar-container bg-white shadow-sm  p-3 rounded-top align-items-center mx-auto">
+                                        <Row>
 
+                                            <Col lg={6} className='flex justify-content-start'>
+                                                <Nav
+                                                    activeKey={activeTab}
+                                                    onSelect={(k: any) => {
+                                                        setActiveTab(k);
+                                                        if (k === 'gmach') {
+                                                            doApiGmach('');
+                                                        }
+                                                        else if (k === 'shop') {
+                                                            doApiShop("");
+                                                            setActiveSubcategory('')
+                                                        }
+                                                        else if (k === 'mosads') {
+                                                            doApiMosads("");
+                                                            setActiveSubcategory('')
+                                                        }
+                                                    }}
+                                                    className='justify-content-center'
+                                                >
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="shop" className={`nav-link me-4 ${activeTab === 'shop' ? 'active' : ''}`}>עסקים</Nav.Link>
+                                                    </Nav.Item>
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="mosads" className={`nav-link me-4 ${activeTab === 'mosads' ? 'active' : ''}`}>מוסדות</Nav.Link>
+                                                    </Nav.Item>
+                                                    <Nav.Item>
+                                                        <Nav.Link eventKey="gmach" className={`nav-link me-4 ${activeTab === 'gmach' ? 'active' : ''}`}>גמ״חים</Nav.Link>
+                                                    </Nav.Item>
+                                                </Nav>
+                                            </Col>
+                                            <Col lg={6} className=' d-flex justify-content-end align-content-center'>
+                                                <InputGroup className="border rounded w-50" style={{ maxHeight: '36px', maxWidth: '200px' }}>
+                                                    <Form.Control
+                                                        type="text"
+                                                        placeholder="חיפוש חנויות..."
+                                                        value={inputValue}
+                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+                                                        onKeyDown={(e: any) => {
+                                                            if (e.key === 'Enter') {
+                                                                e.preventDefault();
+                                                                setSearchTerm(inputValue);
+                                                            }
+                                                        }}
+                                                        className=""
+                                                    />
+                                                    <InputGroup.Text
+                                                        className="search-button"
+                                                        onClick={() => {
+                                                            setSearchTerm(inputValue);
+                                                        }}
+                                                        style={{ cursor: 'pointer' }}
+                                                    >
+                                                        <FaSearch />
+                                                    </InputGroup.Text>
+                                                </InputGroup>
+                                                <button
+                                                    className="btn btn-add-shop rounded border w-auto ms-1"
+                                                    onClick={handleShowModal}
+                                                    style={{ maxHeight: '36px' }}
+                                                >
+                                                    הוסף חנות
+                                                </button>
+                                            </Col>
+                                        </Row>
+                                    </div>
 
-                            </motion.div>
-                        )}
-                        {activeTab === 'mosads' && (
-                            <motion.div
-                                className="subcategory-container"
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                {activeTab === 'mosads' && (
-                                    <CategorySlider
-                                        categories={categoriesMosads}
-                                        activeSubcategory={activeSubcategory}
-                                        setActiveSubcategory={setActiveSubcategory}
-                                        doApi={doApiMosads}
-                                    />
-                                )}
-                            </motion.div>
-                        )}
-                        {activeTab === 'gmach' && (
-                            <motion.div
-                                className="subcategory-container"
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                {activeTab === 'gmach' && (
-                                    <CategorySlider
-                                        categories={categoriesGmachim}
-                                        activeSubcategory={activeSubcategory}
-                                        setActiveSubcategory={setActiveSubcategory}
-                                        doApi={doApiGmach}
-                                    />
-                                )}
-                            </motion.div>
-                        )}
+                                    {activeTab === 'shop' && (
+                                        <motion.div
+                                            className="subcategory-container shadow-sm bg-white pb-3 pt-2 rounded-bottom  mx-auto align-items-center"
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <CategorySlider
+                                                categories={categories}
+                                                activeSubcategory={activeSubcategory}
+                                                setActiveSubcategory={setActiveSubcategory}
+                                                doApi={doApiShop}
+                                            />
+                                        </motion.div>
+                                    )}
+                                    {activeTab === 'mosads' && (
+                                        <motion.div
+                                            className="subcategory-container shadow-sm bg-white pb-3 pt-2 rounded-bottom  mx-auto align-items-center"
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <CategorySlider
+                                                categories={categoriesMosads}
+                                                activeSubcategory={activeSubcategory}
+                                                setActiveSubcategory={setActiveSubcategory}
+                                                doApi={doApiMosads}
+                                            />
+                                        </motion.div>
+                                    )}
+                                    {activeTab === 'gmach' && (
+                                        <motion.div
+                                            className="subcategory-container shadow-sm bg-white pb-3 pt-2 rounded-bottom  mx-auto align-items-center"
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                        >
+                                            <CategorySlider
+                                                categories={categoriesGmachim}
+                                                activeSubcategory={activeSubcategory}
+                                                setActiveSubcategory={setActiveSubcategory}
+                                                doApi={doApiGmach}
+                                            />
+                                        </motion.div>
+                                    )}
+
+                                </div>
+
+                            </div>
+                        </motion.div>
                     </motion.div>
                     <div className="shop-grid">
                         {(activeTab === 'shop' ? filteredCards :
@@ -539,7 +455,7 @@ export default function ShopCards(props: any) {
                                     []).map((card: Card, index: number) => (
                                         <React.Fragment key={card.id}>
                                             <motion.div
-                                                className="shop-card border"
+                                                className="shop-card shadow-sm border rounded"
                                                 whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
                                             >
                                                 <div className="shop-card-content">
@@ -596,21 +512,18 @@ export default function ShopCards(props: any) {
                                                         </p>
                                                     </div>
                                                 </div>
+                                                <hr className='w-75 mx-auto' style={{ color: 'gray' }} />
                                                 <div className="shop-card-footer">
-                                                    <button className="more-info-btn" onClick={() => handleShopClick(card)}>למידע נוסף</button>
                                                     <div className="shop-address">
-                                                        <FaMapMarkerAlt />
-                                                        <span>{card.address}</span>
+                                                        <span>  <i className="bi bi-geo-alt" style={{ fontSize: '10px', marginLeft: '2px' }}></i>{card.address}</span>
                                                     </div>
+                                                    <button className="more-info-btn btn border" onClick={() => handleShopClick(card)}>למידע נוסף</button>
                                                 </div>
                                             </motion.div>
                                             {(index + 1) % 6 === 0 && (
-                                                <motion.div
-                                                    className="shop-card border ad-card"
-                                                    whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
-                                                >
+                                                <motion.div className="shop-card shadow-sm border rounded">
                                                     <div className="ad-content">
-                                                        <img src="/images/timegif.webp" alt="פרסומת" className="ad-image" />
+                                                        <img src="/images/bookgif.webp" alt="פרסומת" className="rounded object-contain" />
                                                     </div>
                                                 </motion.div>
                                             )}
@@ -620,127 +533,143 @@ export default function ShopCards(props: any) {
 
                     <AnimatePresence>
                         {selectedCard && (
-                            <motion.div
-                                className="ys-modal-overlay"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={closeModal}
-                            >
+                            <Row>
                                 <motion.div
-                                    className="ys-modal-content ys-shop-detail-modal"
-                                    initial={{ y: 50, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: 50, opacity: 0 }}
-                                    onClick={(e) => e.stopPropagation()}
+                                    className="ys-modal-overlay"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    onClick={closeModal}
                                 >
-                                    <button className="ys-close-button" onClick={closeModal}>
-                                        <FaTimes />
-                                    </button>
-                                    <div className="ys-modal-scroll-container">
-                                        <div className="ys-shop-card-header">
-                                            <Swiper
-                                                modules={[Pagination, Navigation]}
-                                                spaceBetween={30}
-                                                slidesPerView={1}
-                                                navigation
-                                                pagination={{ clickable: true }}
-                                                className="ys-shop-image-slider"
-                                            >
-                                                {selectedCard.images.map((image: any, index: any) => (
-                                                    <SwiperSlide key={index}>
-                                                        <div style={{ width: '800px', height: '300px', overflow: 'hidden', position: 'relative' }}>
-                                                            <CldImage
-                                                                src={image}
-                                                                fill
-                                                                style={{
-                                                                    objectFit: 'cover',
-                                                                    objectPosition: 'center'
-                                                                }}
-                                                                className="ys-shop-detail-image"
-                                                                alt={`${selectedCard.name} - Image ${index + 1}`}
-                                                                loading='lazy'
-                                                                format="webp"
-                                                                quality="auto"
-                                                            />
-                                                        </div>
-                                                    </SwiperSlide>
-                                                ))}
-                                            </Swiper>
-                                            {selectedCard.logo && (
-                                                <div className="ys-shop-logo">
-                                                    <CldImage
-                                                        src={selectedCard.logo}
-                                                        width="100"
-                                                        height="100"
-                                                        crop="fill"
-                                                        className="ys-logo-image"
-                                                        alt={`${selectedCard.name} logo`}
-                                                        loading='lazy'
-                                                        format="auto"
-                                                        quality="auto"
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="ys-shop-card-content">
-                                            <h1 className="ys-shop-title">{selectedCard.name}</h1>
-
-                                            <div className="ys-shop-description">
-                                                <p>{selectedCard.description}</p>
-                                            </div>
-
-                                            <div className="ys-shop-info-grid">
-                                                <div className="ys-info-item">
-                                                    <FaMapMarkerAlt className="ys-info-icon" />
-                                                    <div>
-                                                        <h3>כתובת</h3>
-                                                        <p>{selectedCard.address}</p>
-                                                    </div>
-                                                </div>
-                                                <div className="ys-info-item">
-                                                    <FaPhone className="ys-info-icon" />
-                                                    <div>
-                                                        <h3>טלפון</h3>
-                                                        <Link href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</Link>
-                                                    </div>
-                                                </div>
-                                                <div className="ys-info-item">
-                                                    <FaEnvelope className="ys-info-icon" />
-                                                    <div>
-                                                        <h3>אימייל</h3>
-                                                        <Link href={`mailto:${selectedCard.email}`}>{selectedCard.email}</Link>
-                                                    </div>
-                                                </div>
-                                                {selectedCard.website && (
-                                                    <div className="ys-info-item">
-                                                        <FaGlobe className="ys-info-icon" />
-                                                        <div>
-                                                            <h3>אתר אינטרנט</h3>
-                                                            <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer">
-                                                                {selectedCard.website}
-                                                            </Link>
-                                                        </div>
+                                    <motion.div
+                                        className={`ys-modal-content ys-shop-detail-modal rounded ${activeTab !== 'shop' ? 'ys-half-width' : ''}`}
+                                        initial={{ y: 50, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        exit={{ y: 50, opacity: 0 }}
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <button className="ys-close-button" onClick={closeModal}>
+                                            <FaTimes />
+                                        </button>
+                                        <div className="">
+                                            {/* <Row> */}
+                                            {/* <Col md={`${activeTab == 'shop' ? '6' : '12'}`} className="ys-left-column"> */}
+                                            <div className="ys-shop-card-header" style={{ height: '40%' }}>
+                                                <Swiper
+                                                    modules={[Pagination, Navigation]}
+                                                    spaceBetween={30}
+                                                    slidesPerView={1}
+                                                    navigation
+                                                    pagination={{ clickable: true }}
+                                                    className="ys-shop-image-slider"
+                                                >
+                                                    {selectedCard.images.map((image: any, index: any) => (
+                                                        <SwiperSlide key={index}>
+                                                            <div className="ys-shop-image-wrapper">
+                                                                <CldImage
+                                                                    src={image}
+                                                                    width="600"
+                                                                    height="200"
+                                                                    style={{
+                                                                        objectFit: 'cover',
+                                                                        objectPosition: 'center',
+                                                                        height: '40vh'
+                                                                    }}
+                                                                    className="ys-shop-detail-image rounded-top"
+                                                                    alt={`${selectedCard.name} - Image ${index + 1}`}
+                                                                    loading='lazy'
+                                                                    format="webp"
+                                                                    quality="auto"
+                                                                />
+                                                            </div>
+                                                        </SwiperSlide>
+                                                    ))}
+                                                </Swiper>
+                                                {selectedCard.logo && (
+                                                    <div className="ys-shop-logo">
+                                                        <CldImage
+                                                            src={selectedCard.logo}
+                                                            width="80"
+                                                            height="80"
+                                                            crop="fill"
+                                                            className="ys-logo-image"
+                                                            alt={`${selectedCard.name} logo`}
+                                                            loading='lazy'
+                                                            format="auto"
+                                                            quality="auto"
+                                                        />
                                                     </div>
                                                 )}
-                                                <div className="ys-info-item">
-                                                    <FaClock className="ys-info-icon" />
-                                                    <div>
-                                                        <h3>שעות פעילות</h3>
-                                                        <p>{selectedCard.hours}</p>
+                                            </div>
+
+                                            <div className="ys-shop-card-content overflow-y-auto px-4">
+                                                <h1 className="ys-shop-title">{selectedCard.name}</h1>
+                                                <div className="ys-shop-description">
+                                                    <p>{selectedCard.description}</p>
+                                                </div>
+                                                <div className="ys-shop-info-grid">
+                                                    <div className="ys-info-item">
+                                                        <i className="bi bi-geo-alt ys-info-icon" ></i>
+                                                        <div>
+                                                            <h3>כתובת</h3>
+                                                            <p>{selectedCard.address}</p>
+                                                        </div>
                                                     </div>
+                                                    <div className="ys-info-item">
+                                                        <i className="bi bi-telephone ys-info-icon" ></i>
+                                                        <div>
+                                                            <h3>טלפון</h3>
+                                                            <Link href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</Link>
+                                                        </div>
+                                                    </div>
+                                                    <div className="ys-info-item">
+                                                        <i className="bi bi-envelope ys-info-icon" ></i>
+                                                        <div>
+                                                            <h3>אימייל</h3>
+                                                            <Link href={`mailto:${selectedCard.email}`}>{selectedCard.email}</Link>
+                                                        </div>
+                                                    </div>
+                                                    {selectedCard.website && (
+                                                        <div className="ys-info-item">
+                                                            <i className="bi bi-globe ys-info-icon" ></i>
+                                                            <div>
+                                                                <h3>אתר אינטרנט</h3>
+                                                                <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer">
+                                                                    {selectedCard.website}
+                                                                </Link>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    <div className="ys-info-item">
+                                                        <i className="bi bi-clock ys-info-icon" ></i>
+                                                        <div>
+                                                            <h3>שעות פעילות</h3>
+                                                            <p>{selectedCard.hours}</p>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
+                                            {/* </Col> */}
+                                            {/* {activeTab === 'shop' && (
+                                                    <Col md={1} className="d-flex align-items-center justify-content-center">
+                                                        <div style={{ width: '1px', backgroundColor: '#ccc', height: '90%' }}></div> {/* קו הפרדה */}
+                                            {/* </Col> */}
+                                            {/* )} */}
+                                            {/* {activeTab === 'shop' && (
+                                                    <Col md={5} className="ys-right-column">
+                                                        {activeTab === 'shop' && (
+                                                            <div className="ys-shop-ad p-md-2 pe-md-0" style={{ maxHeight: '90vh' }}>
+                                                                <img src='./images/ads shop1.jpg' className='rounded' alt="Special offer" style={{ maxHeight: '85vh', objectFit: 'contain' }} />
+                                                            </div>
+                                                        )}
+                                                    </Col>
+                                                )} */}
+                                            {/* </Row> */}
                                         </div>
-                                        {activeTab === 'shop' && (
-                                            <div className="ys-shop-ad">
-                                                <img src='./images/ads shop1.jpg' alt="Special offer" />
-                                            </div>
-                                        )}
-                                    </div>
+                                    </motion.div>
                                 </motion.div>
-                            </motion.div>
+                            </Row>
                         )}
                     </AnimatePresence>
 
@@ -755,114 +684,216 @@ export default function ShopCards(props: any) {
             </Row >
 
 
-            <Modal show={showModal} onHide={handleCloseModal} centered className="shop-modal">
-                <Modal.Header closeButton className="bg-primary text-white">
-                    <div className="w-100 d-flex justify-content-between align-items-start">
-                        {activeTab === 'shop' && (
-                            <Modal.Title>הוספת עסק חדש</Modal.Title>
-                        )}
-                        {activeTab === 'mosads' && (
-                            <Modal.Title>הוספת מוסד חדש</Modal.Title>
-                        )}
-                        {activeTab === 'gmach' && (
-                            <Modal.Title>הוספת גמ"ח חדש</Modal.Title>
-                        )}
-                    </div>
+            <Modal show={showModal} onHide={handleCloseModal} centered size="xl" className="shop-modal">
+                <Modal.Header className="  rounded-top p-4">
+                    <Modal.Title className="font-bold text-2xl">
+                        {activeTab === 'shop' && 'הוספת עסק חדש'}
+                        {activeTab === 'mosads' && 'הוספת מוסד חדש'}
+                        {activeTab === 'gmach' && 'הוספת גמ"ח חדש'}
+                    </Modal.Title>
+                    <button
+                        className="text-white hover:text-gray-200 transition-colors duration-200"
+                        onClick={handleCloseModal}
+                    >
+                        <FaTimes size={24} />
+                    </button>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className="p-6">
                     <motion.form
-                        onSubmit={
-                            (e: any) => {
-                                e.preventDefault();
-                                if (activeTab === 'shop') {
-                                    handleAddShop()
-                                }
-                                else if (activeTab === 'mosads') {
-                                    handleAddMosads()
-                                }
-                                else if (activeTab === 'gmach') {
-                                    handleAddGmach()
+                        onSubmit={(e: React.FormEvent) => {
+                            e.preventDefault();
+                            if (activeTab === 'shop') {
+                                handleAddShop()
+                            } else if (activeTab === 'mosads') {
+                                handleAddMosads()
+                            } else if (activeTab === 'gmach') {
+                                handleAddGmach()
+                            }
+                        }}
+                        variants={{
+                            hidden: { opacity: 0, y: 50 },
+                            visible: {
+                                opacity: 1,
+                                y: 0,
+                                transition: {
+                                    duration: 0.5,
+                                    when: "beforeChildren",
+                                    staggerChildren: 0.1
                                 }
                             }
-                        }
-                        variants={formAnimation}
+                        }}
                         initial="hidden"
                         animate="visible"
+                        className="space-y-6"
                     >
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                {activeTab === 'shop' && (
-                                    <Form.Label>שם העסק</Form.Label>
-                                )}
-                                {activeTab === 'gmach' && (
-                                    <Form.Label>שם הגמ"ח</Form.Label>
-                                )}
-                                <Form.Control ref={nameRef} type="text" required />
-                            </Form.Group>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <motion.div>
+                                <div className='form-floating'>
+                                    <input
+                                        ref={nameRef}
+                                        type="text"
+                                        required
+                                        className=" border rounded form-control"
+                                        placeholder="הזן שם..."
+                                    />
+                                    <label className="text-center">
+                                        {activeTab === 'shop' ? 'שם העסק' : activeTab === 'gmach' ? 'שם הגמ"ח' : 'שם המוסד'}
+                                    </label>
+                                </div>
+                            </motion.div>
+                            <motion.div>
+                                <div className='form-floating'>
+                                    <input
+                                        ref={descriptionRef}
+                                        type="text"
+                                        required
+                                        className=" border rounded form-control"
+                                        placeholder="הזן סלוגן קצר..."
+                                    />
+                                    <label className="text-center">סלוגן</label>
+                                </div>
+                            </motion.div>
+                            <motion.div>
+                                <div className='form-floating'>
+                                    <input
+                                        ref={hoursRef}
+                                        type="text"
+                                        required
+                                        className=" border rounded form-control"
+                                        placeholder="לדוגמה: א'-ה' 9:00-18:00"
+                                    />
+                                    <label className="text-center">שעות פעילות</label>
+                                </div>
+                            </motion.div>
+                            <motion.div>
+                                <div className='form-floating'>
+                                    <input
+                                        ref={addressRef}
+                                        type="text"
+                                        required
+                                        className=" border rounded form-control"
+                                        placeholder="הזן כתובת מלאה..."
+                                    />
+                                    <label className="text-center">כתובת</label>
+                                </div>
+                            </motion.div>
+                            <motion.div>
+                                <div className='form-floating'>
+                                    <input
+                                        ref={phoneRef}
+                                        type="tel"
+                                        required
+                                        className=" border rounded form-control"
+                                        placeholder="הזן מספר טלפון..."
+                                    />
+                                    <label className="text-center">טלפון</label>
+                                </div>
+                            </motion.div>
+                            <motion.div>
+                                <div className='form-floating'>
+                                    <input
+                                        ref={emailRef}
+                                        type="email"
+                                        required
+                                        className=" border rounded form-control"
+                                        placeholder="הזן כתובת אימייל..."
+                                    />
+                                    <label className="text-center">אימייל</label>
+                                </div>
+                            </motion.div>
+                            <motion.div>
+                                <div className='form-floating'>
+                                    <input
+                                        ref={websiteRef}
+                                        type="url"
+                                        className=" border rounded form-control"
+                                        placeholder="הזן כתובת אתר (אופציונלי)..."
+                                    />
+                                    <label className="text-center">אתר אינטרנט</label>
+                                </div>
+                            </motion.div>
+                            <motion.div>
+                                <div className='form-floating'>
+                                    <input
+                                        ref={categoryRef}
+                                        type="text"
+                                        required
+                                        className=" border rounded form-control"
+                                        placeholder="בחר קטגוריה..."
+                                    />
+                                    <label className="text-center">קטגוריה</label>
+                                </div>
+                            </motion.div>
+                        </div>
+
+                        <motion.div>
+                            <div className='form-floating'>
+                                <textarea
+                                    ref={contentRef}
+                                    rows={3}
+                                    required
+                                    className="border rounded form-control"
+                                    placeholder="הזן תיאור מפורט..."
+                                />
+                                <label className="text-center">תוכן מפורט</label>
+                            </div>
                         </motion.div>
 
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>סלוגן</Form.Label>
-                                <Form.Control ref={descriptionRef} as="textarea" rows={2} required />
-                            </Form.Group>
-                        </motion.div>
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>תוכן מפורט</Form.Label>
-                                <Form.Control ref={contentRef} as="textarea" rows={3} required />
-                            </Form.Group>
-                        </motion.div>
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>שעות פעילות</Form.Label>
-                                <Form.Control ref={hoursRef} type="text" required />
-                            </Form.Group>
-                        </motion.div>
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>כתובת</Form.Label>
-                                <Form.Control ref={addressRef} type="text" required />
-                            </Form.Group>
-                        </motion.div>
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>טלפון</Form.Label>
-                                <Form.Control ref={phoneRef} type="tel" required />
-                            </Form.Group>
-                        </motion.div>
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>אימייל</Form.Label>
-                                <Form.Control ref={emailRef} type="email" required />
-                            </Form.Group>
-                        </motion.div>
-                        {(activeTab === 'shop' || activeTab === 'mosads') && (
-                            <motion.div variants={itemAnimation}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>אתר אינטרנט</Form.Label>
-                                    <Form.Control ref={websiteRef} type="url" required />
-                                </Form.Group>
-                            </motion.div>
-                        )}
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                {/* לשנות את זה לסלקט מתוך מבחר מסוים של קטגוריות */}
-                                <Form.Label>קטגוריה</Form.Label>
-                                <Form.Control ref={categoryRef} type="text" required />
-                            </Form.Group>
-                        </motion.div>
-                        {(activeTab === 'shop' || activeTab === 'mosads') && (
-                            <motion.div variants={itemAnimation}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>לוגו</Form.Label>
-                                    <div className="upload-container">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {(activeTab === 'shop' || activeTab === 'mosads') && (
+                                <motion.div>
+                                    <Form.Group>
+                                        {/* <Form.Label className="text-sm font-semibold text-gray-700 mb-1 block">לוגו</Form.Label> */}
+                                        <div className="mt-1 flex items-center space-x-4">
+                                            <CldUploadButton
+                                                className='btn upload-logo border rounded  flex items-center'
+                                                uploadPreset="my_upload_test"
+                                                onSuccess={handleUploadLogo}
+                                                onError={(error) => {
+                                                    console.error('Upload error:', error);
+                                                    toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
+                                                }}
+                                                options={{
+                                                    sources: ['local'],
+                                                    maxFileSize: 5000000,
+                                                    maxImageWidth: 2000,
+                                                    maxImageHeight: 2000,
+                                                    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                                                }}
+                                            >
+                                                <i className="bi bi-brilliance me-2"></i> העלאת לוגו
+                                            </CldUploadButton>
+                                            {logo && (
+                                                <div className="relative">
+                                                    <motion.img
+                                                        src={logo}
+                                                        alt="לוגו"
+                                                        className="w-16 h-16 object-cover rounded-lg border border-primary shadow-sm me-3"
+                                                        initial={{ opacity: 0, scale: 0.5 }}
+                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        transition={{ duration: 0.3 }}
+                                                    />
+                                                    <button
+                                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center hover:bg-red-600 transition-colors duration-200"
+                                                        onClick={() => setLogo('')}
+                                                    >
+                                                        <FaTimes size={12} />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </Form.Group>
+                                </motion.div>
+                            )}
+
+                            <motion.div>
+                                <Form.Group>
+                                    {/* <Form.Label className="text-sm font-semibold text-gray-700 mb-1 block">תמונות (עד 4)</Form.Label> */}
+                                    <div className="mt-1 flex items-center space-x-4">
                                         <CldUploadButton
-                                            className='btn btn-outline-primary me-2 mb-2'
+                                            className='btn upload-image border rounded  flex items-center'
                                             uploadPreset="my_upload_test"
-                                            onSuccess={(result) => {
-                                                handleUploadLogo(result);
-                                            }}
+                                            onSuccess={handleUploadImage}
                                             onError={(error) => {
                                                 console.error('Upload error:', error);
                                                 toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
@@ -876,63 +907,39 @@ export default function ShopCards(props: any) {
                                                 multiple: true
                                             }}
                                         >
-                                            <FaUpload /> העלאת לוגו
+                                            <i className="bi bi-card-image me-2"></i> העלאת תמונות
                                         </CldUploadButton>
-                                        {logo && (
-                                            <motion.img
-                                                src={logo}
-                                                alt="לוגו"
-                                                className="uploaded-image"
-                                                initial={{ opacity: 0, scale: 0.5 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ duration: 0.3 }}
-                                            />
+                                    </div>
+                                    <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                        {image && (
+                                            <div className="relative">
+                                                <motion.img
+                                                    src={image}
+                                                    alt="תמונה"
+                                                    className="w-full h-24 object-cover rounded-lg border border-primary shadow-sm me-3"
+                                                    initial={{ opacity: 0, scale: 0.5 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    transition={{ duration: 0.3 }}
+                                                />
+                                                <button
+                                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center hover:bg-red-600 transition-colors duration-200"
+                                                    onClick={() => setImage('')}
+                                                >
+                                                    <FaTimes size={12} />
+                                                </button>
+                                            </div>
                                         )}
                                     </div>
                                 </Form.Group>
                             </motion.div>
-                        )}
-                        <motion.div variants={itemAnimation}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>תמונות (עד 4)</Form.Label>
-                                <div className="upload-container">
-                                    <CldUploadButton
-                                        className='btn btn-outline-primary me-2 mb-2'
-                                        uploadPreset="my_upload_test"
-                                        onSuccess={(result) => {
-                                            handleUploadImage(result);
-                                        }}
-                                        onError={(error) => {
-                                            console.error('Upload error:', error);
-                                            toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
-                                        }}
-                                        options={{
-                                            sources: ['local'],
-                                            maxFileSize: 5000000,
-                                            maxImageWidth: 2000,
-                                            maxImageHeight: 2000,
-                                            clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-                                            multiple: true
-                                        }}
-                                    >
-                                        <FaImage /> העלאת תמונה
-                                    </CldUploadButton>
-                                    {image && (
-                                        <motion.img
-                                            src={image}
-                                            alt="תמונה"
-                                            className="uploaded-image"
-                                            initial={{ opacity: 0, scale: 0.5 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ duration: 0.3 }}
-                                        />
-                                    )}
-                                </div>
-                            </Form.Group>
-                        </motion.div>
+                        </div>
 
-                        <motion.div variants={itemAnimation}>
-                            <Button type="submit" variant="primary" className="submit-button">
+                        <motion.div className="flex justify-end mt-6">
+                            <Button
+                                type="submit"
+                                // variant=""
+                                className="btn border rounded"
+                            >
                                 שלח לאישור
                             </Button>
                         </motion.div>

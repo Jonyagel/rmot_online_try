@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import './bootstrap.min.css';
+import './bootstrap.rtl.min.css';
 import Header from "./header/page";
 import localFont from 'next/font/local'
 import { Analytics } from "@vercel/analytics/react"
@@ -47,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <SessionWrapper>
-      <html lang="en" className={assistantFont.className}>
+      <html lang="he" dir="rtl" className={assistantFont.className} >
         <body className={inter.className}>
           <Header />
           {children}

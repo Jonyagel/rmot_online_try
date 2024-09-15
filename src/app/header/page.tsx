@@ -94,7 +94,7 @@ export default function Header() {
                     </nav>
 
                     <Link href="/" className="logo-link">
-                        <Image src='/images/logo.jpg' width={40} height={40} className="logo" alt="Logo" />
+                        <Image src='/images/ramot online logo test.png' width={100} height={100} className="logo" alt="Logo" />
                     </Link>
                 </div>
             </div>

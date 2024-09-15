@@ -4,7 +4,7 @@ import Joi from "joi";
 const nadlanSchema = new mongoose.Schema({
     // id: String,
     userId: String,
-    userName:String,
+    userName: String,
     type: String,
     rooms: Number,
     price: Number,
@@ -17,8 +17,10 @@ const nadlanSchema = new mongoose.Schema({
     direction: String,
     condition: String,
     description: String,
+    tivuch: String,
     images: [String],
     date: String,
+    favoriteUser: [String],
 }, { timestamps: true })
 
 export const NadlanModel = mongoose.models["nadlan"] || mongoose.model("nadlan", nadlanSchema);
@@ -38,8 +40,10 @@ export const validateNadlan = (_body: any) => {
         entryDate: Joi.string().min(2).max(150).required(),
         direction: Joi.string().min(0).max(200).required(),
         condition: Joi.string().min(0).max(200).required(),
+        tivuch: Joi.string().min(0).max(200).required(),
         description: Joi.string().min(2).max(500).required(),
         images: Joi.array().items(Joi.string().min(0).max(200)).allow(null, '').optional(),
+        favoriteUser: Joi.array().items(Joi.string().min(0).max(200)).allow(null, '').optional(),
     })
     return joiSchema.validate(_body)
 }

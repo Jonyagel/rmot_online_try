@@ -21,6 +21,7 @@ export default function CommentById(props: any) {
   const handleShow = () => setShow(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     doApiGet();
     doApiForum();
   }, [])

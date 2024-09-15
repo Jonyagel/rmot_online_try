@@ -10,7 +10,7 @@ const boardSchema = new mongoose.Schema({
     description: String,
     price: Number,
     contact: String,
-    image: String,
+    image: [String],
     date: {
         type: String, default: ""
     },
@@ -27,7 +27,7 @@ export const validateBoard = (_body: any) => {
         description: Joi.string().min(2).max(2000),
         price: Joi.number().min(0).max(999999).required(),
         contact: Joi.string().min(2).max(150).required(),
-        image: Joi.string().min(0).max(200).allow("", null),
+        images: Joi.array().items(Joi.string().min(0).max(200)).allow(null, '').optional(),
     })
     return joiSchema.validate(_body)
 }

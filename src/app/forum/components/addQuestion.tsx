@@ -104,14 +104,12 @@ export default function AddQuestion(props: any) {
 
     return (
         <div>
-            <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="add-forum-button rounded-circle shadow-sm p-3 btn-primary"
-                onClick={checkSignIn}>
-                <FaPlus />
-            </motion.button>
-
+            <button
+                className="btn rounded border"
+                onClick={checkSignIn}
+                style={{ maxHeight: '36px' }}>
+                הוסף פורום
+            </button>
             <Modal show={showModal} onHide={handleClose} centered className='addForumModal'>
                 <Modal.Header className=" bg-primary text-white">
                     <div className="w-100 d-flex justify-content-between align-items-start">
