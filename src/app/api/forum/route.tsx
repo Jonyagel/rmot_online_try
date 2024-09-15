@@ -36,8 +36,8 @@ export async function GET(req: any, route: any) {
         // ביצוע החיפוש עם הסינון
         const data = await ForumModel.find(searchObject)
             .sort({ createdAt: -1 })
-         //   .skip((page - 1) * perPage)
-            .limit(page * perPage);
+            .skip((page - 1) * perPage)
+            .limit(perPage);
 
         return NextResponse.json({
             data,
