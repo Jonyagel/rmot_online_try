@@ -731,3 +731,73 @@ height: 45%;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.opening-hours-form {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.opening-hours-form h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.day-container {
+  margin-bottom: 15px;
+}
+
+.day-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.time-slot-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.time-input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  flex: 1;
+}
+
+.separator {
+  margin: 0 10px;
+  color: #777;
+}
+
+.add-button {
+  /* background-color: #28a745; */
+  /* color: white; */
+  /* border: none; */
+  /* padding: 5px 10px; */
+  /* border-radius: 4px; */
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.add-button:hover {
+  background-color: #0d6dfd26;
+}
+
+.remove-button {
+  /* background-color: #dc3545; */
+  /* color: white; */
+  border: #dc3545 1px solid;
+  /* padding: 5px 10px; */
+  /* border-radius: 4px; */
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.remove-button:hover {
+  background-color: #c82333;
+}

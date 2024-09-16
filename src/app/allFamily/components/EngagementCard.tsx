@@ -26,7 +26,7 @@ const EngagementCard: React.FC<EngagementCardProps> = ({
   date
 }) => {
   return (
-    <div className="engagement-card mt-2 shadow-sm">
+    <div className="engagement-card border mt-2 ">
       <div className="card-header">
         {/* <FaRing className="card-icon" /> */}
         <h3 >מאורסים</h3>

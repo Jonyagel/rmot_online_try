@@ -130,38 +130,38 @@ export default function RealEstate() {
 
   const handleFavorite = async (id: number) => {
     setFavorites(prev => {
-        const isFavorite = prev[id] || false; // בדוק אם הנכס הוא מועדף
-        const updatedFavorites = {
-            ...prev,
-        };
+      const isFavorite = prev[id] || false; // בדוק אם הנכס הוא מועדף
+      const updatedFavorites = {
+        ...prev,
+      };
 
-        if (isFavorite) {
-            // אם הנכס הוא מועדף, הסר את ה-ID מהמארך
-            delete updatedFavorites[id]; // מחק את ה-ID מהמארך
-            // שלח בקשה להסרת ה-favorite במאגר הנתונים
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id }), // שלח את ה-ID להסרה
-            });
-        } else {
-            // אם הנכס לא היה מועדף, הוסף את ה-ID למארך
-            updatedFavorites[id] = true; // הוסף את ה-ID
-            // שלח בקשה לעדכון ה-favorite במאגר הנתונים
-            fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id, favorite: true }), // שלח את ה-ID ואת המצב המעודכן
-            });
-        }
+      if (isFavorite) {
+        // אם הנכס הוא מועדף, הסר את ה-ID מהמארך
+        delete updatedFavorites[id]; // מחק את ה-ID מהמארך
+        // שלח בקשה להסרת ה-favorite במאגר הנתונים
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id }), // שלח את ה-ID להסרה
+        });
+      } else {
+        // אם הנכס לא היה מועדף, הוסף את ה-ID למארך
+        updatedFavorites[id] = true; // הוסף את ה-ID
+        // שלח בקשה לעדכון ה-favorite במאגר הנתונים
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/nadlan`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id, favorite: true }), // שלח את ה-ID ואת המצב המעודכן
+        });
+      }
 
-        return updatedFavorites;
+      return updatedFavorites;
     });
-};
+  };
 
 
   const sendEmailToUser = async (dadaPosted: any, email: any) => {
@@ -470,7 +470,7 @@ export default function RealEstate() {
             </motion.div>
 
 
-            <div className="nadlan-grid">
+            <div className="nadlan-grid px-0">
               {getFilteredProperties().map((item: any, index: number) => (
                 <div key={item._id} className='position-relative mt-2'>
                   <div
@@ -497,10 +497,10 @@ export default function RealEstate() {
                         </div>
                       )}
                       {item.tivuch && (
-                        <Badge bg='primary' className="ms-2 align-self-start top-0 end-5 translate-middle position-absolute">{`${item.tivuch}`}</Badge>
+                        <Badge bg='white' className="ms-2 text-primary border shadow-sm align-self-start top-0 end-0 translate-middle position-absolute">{`${item.tivuch}`}</Badge>
                       )}
                     </div>
-                    <div className="nadlan-description mt-4 px-2 flex justify-content-between">
+                    <div className="nadlan-description mt-2 px-3 flex justify-content-between">
                       <h3 className='font-bold'>{item.address}</h3>
                       <button
                         className={`love-btn ${favorites[item._id] ? 'text-danger' : ''}`} // הוספת מחלקת טקסט אדום אם מועדף
@@ -509,27 +509,29 @@ export default function RealEstate() {
                         <i className="bi bi-heart"></i>
                       </button>
                     </div>
-                    <div className="m-4 flex justify-between">
-                      <div className="flex flex-column text-sm text-gray-600 justify-content-between">
+                    <div className="p-3 flex justify-between">
+                      <div className="flex flex-column text-sm text-gray-600 justify-content-between align-items-start w-50">
                         <span className='mb-2'><i className="bi bi-door-closed me-1"></i> {`${item.rooms ? item.rooms : ''} חד'`} </span>
                         <span><i className="bi bi-aspect-ratio me-1"></i>{`${item.size ? item.size : ''} מ"ר`}</span>
                       </div>
-                      <div className="flex flex-column text-sm text-gray-600 justify-content-between">
+                      <div className="flex flex-column text-sm text-gray-600 justify-content-between align-items-start w-50">
                         <span className='mb-2'><i className="bi bi-arrows-vertical me-1"></i>קומה {item.floor}</span>
                         <span><i className="bi bi-house me-1"></i>{item.condition}</span>
                       </div>
                     </div>
                     <hr className='w-75 mx-auto' style={{ color: 'gray' }} />
-                    <div className="flex align-items-center justify-content-between p-2 px-4">
-                      <div className="nadlan-price">
+                    <div className="flex p-3 py-2">
+                      <div className="nadlan-price w-50">
                         <span>{`${item.price.toLocaleString()} ₪`}</span>
                       </div>
-                      <button
-                        className="more-nadlan-info btn rounded border"
-                        onClick={() => handleShow(item)}
-                      >
-                        למידע נוסף
-                      </button>
+                      <div className='w-50'>
+                        <button
+                          className="more-nadlan-info btn rounded border w-full"
+                          onClick={() => handleShow(item)}
+                        >
+                          למידע נוסף
+                        </button>
+                      </div>
                     </div>
 
                   </div>

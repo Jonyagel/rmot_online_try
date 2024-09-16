@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaTimes, FaImage, FaUpload, FaSearch, FaChevronLeft, FaChevronRight, FaMedkit, FaGlassCheers, FaMoneyBillWave, FaBabyCarriage, FaTools, FaAppleAlt, FaScroll, FaHandHoldingUsd, FaWheelchair, FaRing } from 'react-icons/fa';
+import { FaTimes, FaSearch, FaMedkit, FaGlassCheers, FaMoneyBillWave, FaBabyCarriage, FaTools, FaAppleAlt, FaScroll, FaHandHoldingUsd, FaWheelchair, FaRing } from 'react-icons/fa';
 import { Button, Modal, Form, InputGroup, Col, Row, Nav } from 'react-bootstrap';
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
@@ -24,21 +24,17 @@ import 'swiper/css/navigation';
 
 export const dynamic = 'force-dynamic';
 
-
 interface Card {
     id: string;
     name: string;
     description: string;
     logo?: string;
-    content: string;
     hours: string;
     address: string;
     phone: string;
     email: string;
     website?: string;
     images: string[];
-    features?: string[];
-    specialOffer?: string;
     category: string;
     type: string;
 }
@@ -62,8 +58,7 @@ export default function ShopCards(props: any) {
 
 
     const nameRef = useRef<HTMLInputElement>(null);
-    const descriptionRef = useRef<HTMLInputElement>(null);
-    const contentRef = useRef<HTMLTextAreaElement>(null);
+    const descriptionRef = useRef<HTMLTextAreaElement>(null);
     const hoursRef = useRef<HTMLInputElement>(null);
     const addressRef = useRef<HTMLInputElement>(null);
     const phoneRef = useRef<HTMLInputElement>(null);
@@ -215,7 +210,6 @@ export default function ShopCards(props: any) {
     const handleAddShop = async () => {
         const name = nameRef.current?.value;
         const description = descriptionRef.current?.value;
-        const content = contentRef.current?.value;
         const address = addressRef.current?.value;
         const hours = hoursRef.current?.value;
         const phone = phoneRef.current?.value;
@@ -225,7 +219,7 @@ export default function ShopCards(props: any) {
         try {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/shops`, {
                 method: 'POST',
-                body: JSON.stringify({ name, description, content, hours, address, phone, email, website, category, logo, image }),
+                body: JSON.stringify({ name, description, hours, address, phone, email, website, category, logo, image }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -245,7 +239,6 @@ export default function ShopCards(props: any) {
     const handleAddMosads = async () => {
         const name = nameRef.current?.value;
         const description = descriptionRef.current?.value;
-        const content = contentRef.current?.value;
         const address = addressRef.current?.value;
         const hours = hoursRef.current?.value;
         const phone = phoneRef.current?.value;
@@ -255,7 +248,7 @@ export default function ShopCards(props: any) {
         try {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/mosads`, {
                 method: 'POST',
-                body: JSON.stringify({ name, description, content, hours, address, phone, email, website, category, logo, image }),
+                body: JSON.stringify({ name, description, hours, address, phone, email, website, category, logo, image }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -276,7 +269,6 @@ export default function ShopCards(props: any) {
     const handleAddGmach = async () => {
         const name = nameRef.current?.value;
         const description = descriptionRef.current?.value;
-        const content = contentRef.current?.value;
         const address = addressRef.current?.value;
         const hours = hoursRef.current?.value;
         const phone = phoneRef.current?.value;
@@ -285,7 +277,7 @@ export default function ShopCards(props: any) {
         try {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/gmach`, {
                 method: 'POST',
-                body: JSON.stringify({ name, description, content, hours, address, phone, email, category, image }),
+                body: JSON.stringify({ name, description, hours, address, phone, email, category, image }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -300,6 +292,54 @@ export default function ShopCards(props: any) {
         }
         toast.success('הגמ"ח נוספה בהצלחה!');
         handleCloseModal();
+    };
+
+
+    type TimeSlot = { open: string; close: string };
+    type Day = 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
+    type OpeningHours = { [key in Day]: TimeSlot[] };
+
+    const [openingHours, setOpeningHours] = useState<OpeningHours>({
+        sunday: [{ open: '', close: '' }],
+        monday: [{ open: '', close: '' }],
+        tuesday: [{ open: '', close: '' }],
+        wednesday: [{ open: '', close: '' }],
+        thursday: [{ open: '', close: '' }],
+        friday: [{ open: '', close: '' }],
+        saturday: [{ open: '', close: '' }],
+    });
+
+    const handleChange = (day: Day, index: number, field: 'open' | 'close', value: string) => {
+        setOpeningHours(prevHours => ({
+            ...prevHours,
+            [day]: prevHours[day].map((slot, i) =>
+                i === index ? { ...slot, [field]: value } : slot
+            )
+        }));
+    };
+
+    const addTimeSlot = (day: Day) => {
+        setOpeningHours(prevHours => ({
+            ...prevHours,
+            [day]: [...prevHours[day], { open: '', close: '' }]
+        }));
+    };
+
+    const removeTimeSlot = (day: Day, index: number) => {
+        setOpeningHours(prevHours => ({
+            ...prevHours,
+            [day]: prevHours[day].filter((_, i) => i !== index)
+        }));
+    };
+
+    const daysInHebrew: { [key in Day]: string } = {
+        sunday: 'ראשון',
+        monday: 'שני',
+        tuesday: 'שלישי',
+        wednesday: 'רביעי',
+        thursday: 'חמישי',
+        friday: 'שישי',
+        saturday: 'שבת',
     };
 
 
@@ -741,36 +781,23 @@ export default function ShopCards(props: any) {
                                     </label>
                                 </div>
                             </motion.div>
-                            <motion.div>
-                                <div className='form-floating'>
-                                    <input
-                                        ref={descriptionRef}
-                                        type="text"
-                                        required
-                                        className=" border rounded form-control"
-                                        placeholder="הזן סלוגן קצר..."
-                                    />
-                                    <label className="text-center">סלוגן</label>
-                                </div>
-                            </motion.div>
-                            <motion.div>
+
+                            {/* <motion.div>
                                 <div className='form-floating'>
                                     <input
                                         ref={hoursRef}
                                         type="text"
-                                        required
                                         className=" border rounded form-control"
                                         placeholder="לדוגמה: א'-ה' 9:00-18:00"
                                     />
                                     <label className="text-center">שעות פעילות</label>
                                 </div>
-                            </motion.div>
+                            </motion.div> */}
                             <motion.div>
                                 <div className='form-floating'>
                                     <input
                                         ref={addressRef}
                                         type="text"
-                                        required
                                         className=" border rounded form-control"
                                         placeholder="הזן כתובת מלאה..."
                                     />
@@ -782,7 +809,6 @@ export default function ShopCards(props: any) {
                                     <input
                                         ref={phoneRef}
                                         type="tel"
-                                        required
                                         className=" border rounded form-control"
                                         placeholder="הזן מספר טלפון..."
                                     />
@@ -794,7 +820,6 @@ export default function ShopCards(props: any) {
                                     <input
                                         ref={emailRef}
                                         type="email"
-                                        required
                                         className=" border rounded form-control"
                                         placeholder="הזן כתובת אימייל..."
                                     />
@@ -829,26 +854,109 @@ export default function ShopCards(props: any) {
                         <motion.div>
                             <div className='form-floating'>
                                 <textarea
-                                    ref={contentRef}
+                                    ref={descriptionRef}
                                     rows={3}
-                                    required
                                     className="border rounded form-control"
                                     placeholder="הזן תיאור מפורט..."
                                 />
                                 <label className="text-center">תוכן מפורט</label>
                             </div>
                         </motion.div>
+                        <div className='flex'>
+                            <motion.div className="opening-hours-form overflow-y-auto w-50 mx-auto" style={{ maxHeight: '300px' }}>
+                                <h3>שעות פעילות</h3>
+                                <div className="opening-hours-grid">
+                                    {(Object.entries(openingHours) as [Day, TimeSlot[]][]).map(([day, slots]) => (
+                                        <div key={day} className="day-container">
+                                            <div className='day-header'>
+                                                <div className="day-label">{daysInHebrew[day]}</div>
+                                                <button className="add-button btn" onClick={() => addTimeSlot(day)}>
+                                                    +
+                                                </button>
+                                            </div>
+                                            {slots.map((slot, index) => (
+                                                <div key={index} className="time-slot-container">
+                                                    <input
+                                                        type="time"
+                                                        className="time-input"
+                                                        value={slot.open}
+                                                        onChange={(e) => handleChange(day, index, 'open', e.target.value)}
+                                                        placeholder="שעת פתיחה"
+                                                    />
+                                                    <span className="separator">-</span>
+                                                    <input
+                                                        type="time"
+                                                        className="time-input"
+                                                        value={slot.close}
+                                                        onChange={(e) => handleChange(day, index, 'close', e.target.value)}
+                                                        placeholder="שעת סגירה"
+                                                    />
+                                                    {slots.length > 1 && (
+                                                        <button className="remove-button btn" onClick={() => removeTimeSlot(day, index)}>
+                                                            -
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-50">
+                                {(activeTab === 'shop' || activeTab === 'mosads') && (
+                                    <motion.div>
+                                        <Form.Group>
+                                            {/* <Form.Label className="text-sm font-semibold text-gray-700 mb-1 block">לוגו</Form.Label> */}
+                                            <div className="mt-1 flex items-center space-x-4">
+                                                <CldUploadButton
+                                                    className='btn upload-logo border rounded  flex items-center'
+                                                    uploadPreset="my_upload_test"
+                                                    onSuccess={handleUploadLogo}
+                                                    onError={(error) => {
+                                                        console.error('Upload error:', error);
+                                                        toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
+                                                    }}
+                                                    options={{
+                                                        sources: ['local'],
+                                                        maxFileSize: 5000000,
+                                                        maxImageWidth: 2000,
+                                                        maxImageHeight: 2000,
+                                                        clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                                                    }}
+                                                >
+                                                    <i className="bi bi-brilliance me-2"></i> העלאת לוגו
+                                                </CldUploadButton>
+                                                {logo && (
+                                                    <div className="relative">
+                                                        <motion.img
+                                                            src={logo}
+                                                            alt="לוגו"
+                                                            className="w-16 h-16 object-cover rounded-lg border border-primary shadow-sm me-3"
+                                                            initial={{ opacity: 0, scale: 0.5 }}
+                                                            animate={{ opacity: 1, scale: 1 }}
+                                                            transition={{ duration: 0.3 }}
+                                                        />
+                                                        <button
+                                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center hover:bg-red-600 transition-colors duration-200"
+                                                            onClick={() => setLogo('')}
+                                                        >
+                                                            <FaTimes size={12} />
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </Form.Group>
+                                    </motion.div>
+                                )}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {(activeTab === 'shop' || activeTab === 'mosads') && (
                                 <motion.div>
                                     <Form.Group>
-                                        {/* <Form.Label className="text-sm font-semibold text-gray-700 mb-1 block">לוגו</Form.Label> */}
+                                        {/* <Form.Label className="text-sm font-semibold text-gray-700 mb-1 block">תמונות (עד 4)</Form.Label> */}
                                         <div className="mt-1 flex items-center space-x-4">
                                             <CldUploadButton
-                                                className='btn upload-logo border rounded  flex items-center'
+                                                className='btn upload-image border rounded  flex items-center'
                                                 uploadPreset="my_upload_test"
-                                                onSuccess={handleUploadLogo}
+                                                onSuccess={handleUploadImage}
                                                 onError={(error) => {
                                                     console.error('Upload error:', error);
                                                     toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
@@ -859,23 +967,26 @@ export default function ShopCards(props: any) {
                                                     maxImageWidth: 2000,
                                                     maxImageHeight: 2000,
                                                     clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
+                                                    multiple: true
                                                 }}
                                             >
-                                                <i className="bi bi-brilliance me-2"></i> העלאת לוגו
+                                                <i className="bi bi-card-image me-2"></i> העלאת תמונות
                                             </CldUploadButton>
-                                            {logo && (
+                                        </div>
+                                        <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                            {image && (
                                                 <div className="relative">
                                                     <motion.img
-                                                        src={logo}
-                                                        alt="לוגו"
-                                                        className="w-16 h-16 object-cover rounded-lg border border-primary shadow-sm me-3"
+                                                        src={image}
+                                                        alt="תמונה"
+                                                        className="w-full h-24 object-cover rounded-lg border border-primary shadow-sm me-3"
                                                         initial={{ opacity: 0, scale: 0.5 }}
                                                         animate={{ opacity: 1, scale: 1 }}
                                                         transition={{ duration: 0.3 }}
                                                     />
                                                     <button
                                                         className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center hover:bg-red-600 transition-colors duration-200"
-                                                        onClick={() => setLogo('')}
+                                                        onClick={() => setImage('')}
                                                     >
                                                         <FaTimes size={12} />
                                                     </button>
@@ -884,55 +995,10 @@ export default function ShopCards(props: any) {
                                         </div>
                                     </Form.Group>
                                 </motion.div>
-                            )}
-
-                            <motion.div>
-                                <Form.Group>
-                                    {/* <Form.Label className="text-sm font-semibold text-gray-700 mb-1 block">תמונות (עד 4)</Form.Label> */}
-                                    <div className="mt-1 flex items-center space-x-4">
-                                        <CldUploadButton
-                                            className='btn upload-image border rounded  flex items-center'
-                                            uploadPreset="my_upload_test"
-                                            onSuccess={handleUploadImage}
-                                            onError={(error) => {
-                                                console.error('Upload error:', error);
-                                                toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
-                                            }}
-                                            options={{
-                                                sources: ['local'],
-                                                maxFileSize: 5000000,
-                                                maxImageWidth: 2000,
-                                                maxImageHeight: 2000,
-                                                clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-                                                multiple: true
-                                            }}
-                                        >
-                                            <i className="bi bi-card-image me-2"></i> העלאת תמונות
-                                        </CldUploadButton>
-                                    </div>
-                                    <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-4">
-                                        {image && (
-                                            <div className="relative">
-                                                <motion.img
-                                                    src={image}
-                                                    alt="תמונה"
-                                                    className="w-full h-24 object-cover rounded-lg border border-primary shadow-sm me-3"
-                                                    initial={{ opacity: 0, scale: 0.5 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    transition={{ duration: 0.3 }}
-                                                />
-                                                <button
-                                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center hover:bg-red-600 transition-colors duration-200"
-                                                    onClick={() => setImage('')}
-                                                >
-                                                    <FaTimes size={12} />
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                </Form.Group>
-                            </motion.div>
+                            </div>
                         </div>
+
+
 
                         <motion.div className="flex justify-end mt-6">
                             <Button

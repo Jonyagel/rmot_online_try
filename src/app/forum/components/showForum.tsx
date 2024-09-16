@@ -136,10 +136,10 @@ export default function ShowForum(props: any) {
                         // initial={{ opacity: 0, y: -20 }}
                         // animate={{ opacity: 1, y: 0 }}
                         // transition={{ duration: 0.5 }}
-                        className='title text-center'
+                        className='text-center'
                     >
                         <div className="header-container text-white rounded-bottom shadow-sm">
-                            <h1 className='display-6 forum-title'>פורום תושבי רמות</h1>
+                            <h1 className='p-6' style={{fontSize:'30px'}}>פורום תושבי רמות</h1>
                         </div>
                     </motion.div>
                     <motion.div
@@ -149,7 +149,7 @@ export default function ShowForum(props: any) {
                         transition={{ duration: 0.5 }}
                     >
                         <div className=''>
-                            <div className='mt-3'>
+                            <div className=''>
                                 <div className="search-bar-container bg-white shadow-sm  p-3 rounded-top align-items-center mx-auto">
                                     <Row className="align-items-center">
                                         {/* <Col lg={3}>
@@ -176,12 +176,13 @@ export default function ShowForum(props: any) {
                                                     type="text"
                                                     ref={saerchRef}
                                                     placeholder="חיפוש בפורום"
-                                                    value={searchTerm}
                                                     className=""
                                                 />
-                                                <InputGroup.Text className="search-button" onClick={(e: any) => (
-                                                    onSearchClick(e)
-                                                )}>
+                                                <InputGroup.Text
+                                                    className="search-button custom-hover-effect"
+                                                    style={{cursor: 'pointer'}}
+                                                    onClick={(e: any) => onSearchClick(e)}
+                                                >
                                                     <FaSearch />
                                                 </InputGroup.Text>
                                             </InputGroup>
@@ -257,9 +258,9 @@ export default function ShowForum(props: any) {
                                                                 </Card.Text>
                                                             </div>
                                                         </div>
-                                                        <Badge bg='primary' className="ms-2 align-self-start top-0 end-20 translate-middle position-absolute">{item.topic}</Badge>
+                                                        <Badge bg='primary' className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute">{item.topic}</Badge>
                                                     </div>
-                                                    {item.fileName && (
+                                                    {/* {item.fileName && (
                                                         <div className="mb-3">
                                                             <CldImage
                                                                 src={item.fileName}
@@ -281,10 +282,10 @@ export default function ShowForum(props: any) {
                                                                 }}
                                                             />
                                                         </div>
-                                                    )}
+                                                    )} */}
                                                     <div className='d-flex justify-content-end align-items-center'>
-                                                        <small className='me-2'>
-                                                            <i className="bi bi-chat-dots me-2"></i>
+                                                        <small className='me-2 text-muted'>
+                                                            <i className="bi bi-chat me-2"></i>
                                                             {item.numOfComments} תגובות
                                                         </small>
                                                         <small className='text-muted'><i className="bi bi-clock me-2"></i>{formatPostAgo(item.date)}</small>
