@@ -164,7 +164,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 10px;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .shop-card,
@@ -363,15 +363,7 @@
   background-color: #0d6dfd26;
 }
 
-@media (max-width: 768px) {
-  .shop-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
 
-  .modal-content {
-    width: 95%;
-  }
-}
 
 .ys-modal-overlay {
   position: fixed;
@@ -392,7 +384,8 @@
   /* border-radius: 10px; */
   width: 30%;
   max-width: 600px;
-  height: 90vh;
+  height: auto;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
@@ -456,7 +449,8 @@
 }
 
 .ys-shop-card-content {
-height: 45%;
+height: auto;
+max-height: 50vh;
 }
 
 .ys-shop-title {
@@ -583,6 +577,19 @@ height: 45%;
     width: 80px;
     height: 80px;
     bottom: -30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .shop-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+  .ys-shop-detail-modal{
+    width: 95%;
   }
 }
 

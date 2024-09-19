@@ -193,7 +193,7 @@ export default function CommunityBoard() {
   );
 
   return (
-    <Container fluid className="content-container px-3">
+    <Container fluid className="px-3">
       <Row>
         <Col lg={2} className="d-none d-lg-block">
           {/* אזור פרסומות שמאלי */}
@@ -217,7 +217,7 @@ export default function CommunityBoard() {
               transition={{ duration: 0.5 }}
             >
               <div className=''>
-                <div className='mt-3'>
+                <div className=''>
                   <div className="search-bar-container bg-white shadow-sm  p-3 rounded-top align-items-center mx-auto">
                     <Row className="align-items-center">
                       <Col lg={8}>

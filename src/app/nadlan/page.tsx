@@ -386,7 +386,7 @@ export default function RealEstate() {
                             </Nav.Item>
                           </Nav>
                         </Col>
-                        <Col lg={9} className='d-flex justify-content-end'>
+                        <Col sm={6} lg={9} className='d-flex justify-content-end'>
                           <div className=''>
                             {/* <InputGroup className="border rounded w-50" style={{ maxHeight: '36px', maxWidth: '200px' }}>
                               <Form.Control
@@ -429,7 +429,7 @@ export default function RealEstate() {
                         </Col>
                       </Row>
                       <Row>
-                        <Col lg={6} className='mt-4'>
+                        <Col sm={6} lg={6} className='mt-4'>
                           <div className="flex">
                             <div className='me-1'>
                               <div className="">
@@ -501,7 +501,7 @@ export default function RealEstate() {
                       )}
                     </div>
                     <div className="nadlan-description mt-2 px-3 flex justify-content-between">
-                      <h3 className='font-bold'>{item.address}</h3>
+                      <h3 className='font-bold' style={{fontSize: '13px'}}>{item.address}</h3>
                       <button
                         className={`love-btn ${favorites[item._id] ? 'text-danger' : ''}`} // הוספת מחלקת טקסט אדום אם מועדף
                         onClick={() => handleFavorite(item._id)} // לוגיקת שמירה
@@ -587,8 +587,8 @@ export default function RealEstate() {
                 <button className="nadlan-close-button" onClick={handleClose}>
                   <FaTimes />
                 </button>
-                <div className="flex flex-column justify-content-between" style={{ height: '90vh' }}>
-                  <div className="nadlan-property-image-container p-2" style={{ height: '30%' }}>
+                <div className="flex flex-column justify-content-start" style={{ maxHeight: '90vh', height:'auto' }}>
+                  <div className="nadlan-property-image-container p-2" style={{ height: 'auto', maxHeight:'50vh' }}>
                     {selectedProperty.images && selectedProperty.images.length > 0 ? (
                       <div className="flex">
                         {selectedProperty.images.length === 1 ? ( // אם יש תמונה אחת
@@ -646,7 +646,7 @@ export default function RealEstate() {
                         )}
                       </div>
                     ) : (
-                      <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded" style={{ height: '150%' }}>
+                      <div className="w-full py-5 h-full bg-gray-200 flex items-center justify-center rounded">
                         <FontAwesomeIcon icon={faImage} size="2x" className="text-gray-400" />
                       </div>
                     )}
@@ -662,7 +662,7 @@ export default function RealEstate() {
                           navigation // הוספת ניווט
                           modules={[Navigation, Pagination]} // הוספת המודולים
                           onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)} // עדכון המצב כאשר התמונה משתנה
-                          style={{ height: '80vh' }} // גובה המודל
+                          style={{ maxHeight: '80vh', height:'auto' }} // גובה המודל
                         >
                           {selectedProperty.images.map((image, index) => (
                             <SwiperSlide key={index}>
@@ -707,11 +707,11 @@ export default function RealEstate() {
                     <div className=''>
                       <div className='nadlan-property-title-div pb-2'>
                         <h2 className="nadlan-property-title m-0">{selectedProperty.address}</h2>
-                        <p className="text-primary font-bold">
+                        <h3 className="text-primary font-bold">
                           {selectedProperty.price
                             ? `${selectedProperty.price.toLocaleString()} ₪${selectedProperty.type === 'השכרה' ? ' לחודש' : ''}`
                             : 'מחיר לא צוין'}
-                        </p>
+                        </h3>
                       </div>
                       {selectedProperty.description && (
                         <div className="nadlan-property-description pb-2">

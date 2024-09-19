@@ -71,7 +71,21 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 10px;
-  padding: 20px;
+  padding-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .nadlan-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  p, .btn, span{
+font-size: 10px;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
 }
 
 .search-container .search-input {
@@ -222,7 +236,8 @@
 }
 
 .nadlan-property-details-content {
-  height: 50%;
+  height: auto;
+  max-height: 80%;
 }
 
 .nadlan-property-title {
@@ -238,6 +253,8 @@
   /* gap: 2px; */
   /* margin-bottom: 1.5rem; */
 }
+
+
 
 .nadlan-info-card {
   /* background-color: #f8f9fa; */

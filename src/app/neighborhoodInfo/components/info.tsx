@@ -582,7 +582,8 @@ export default function ShopCards(props: any) {
                                     onClick={closeModal}
                                 >
                                     <motion.div
-                                        className={`ys-modal-content ys-shop-detail-modal rounded ${activeTab !== 'shop' ? 'ys-half-width' : ''}`}
+                                        // className={`ys-modal-content ys-shop-detail-modal rounded ${activeTab !== 'shop' ? 'ys-half-width' : ''}`}
+                                        className={`ys-modal-content ys-shop-detail-modal rounded`}
                                         initial={{ y: 50, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         exit={{ y: 50, opacity: 0 }}
@@ -594,7 +595,7 @@ export default function ShopCards(props: any) {
                                         <div className="">
                                             {/* <Row> */}
                                             {/* <Col md={`${activeTab == 'shop' ? '6' : '12'}`} className="ys-left-column"> */}
-                                            <div className="ys-shop-card-header" style={{ height: '40%' }}>
+                                            <div className="ys-shop-card-header" style={{ height: 'auto' }}>
                                                 <Swiper
                                                     modules={[Pagination, Navigation]}
                                                     spaceBetween={30}
