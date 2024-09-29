@@ -1,19 +1,17 @@
-/* .sticky-bottom {
-    position: sticky;
-    bottom: 0;
-    z-index: 1000;
-    background-color: #f8f9fa;
-    padding: 1rem 0;
-  } */
-  
-  textarea {
+  .add-comment-forum-textarea {
     resize: none;
     overflow: hidden;
   }
   
-  .card {
+  .add-comment-forum {
     border: none;
-    /* border-radius: 15px; */
+  }
+
+  .send-comment-forum-btn:hover{
+    background: #0d6dfd26;
+  }
+  .add-file-comment-forum-btn:hover{
+    background: #0d6dfd26;
   }
   
   
@@ -22,11 +20,11 @@
     border-color: #80bdff;
   }
 
-  .card.bg-light {
+  .add-comment-forum.bg-light {
     transition: all 0.3s ease;
   }
   
-  .card.bg-light:hover {
+  .add-comment-forum.bg-light:hover {
     background-color: #f8f9fa !important;
   }
   

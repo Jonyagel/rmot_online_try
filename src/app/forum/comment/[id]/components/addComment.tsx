@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react'
-import { Button, OverlayTrigger, Popover, Card, Row, Col } from 'react-bootstrap';
+import { Button, Popover, Card } from 'react-bootstrap';
 import { CldUploadButton } from 'next-cloudinary';
 import EmojiPicker from 'emoji-picker-react';
 import { EmojiStyle } from 'emoji-picker-react';
@@ -27,16 +27,15 @@ export default function AddComment(props: any) {
 
   const notify = () => toast.error("אתה צריך להירשם");
 
-  const popover = (
-    <Popover id="popover-basic" className=''>
-      <Popover.Body>
-        <EmojiPicker onEmojiClick={onEmojiSelect} emojiStyle={EmojiStyle.GOOGLE} searchDisabled={true} width={240}
-          height={400}
-        // hiddenEmojis={[ '1f600' ,  '1f601' ,  '1f602' ,"1f607","1f970"]}
-        />
-      </Popover.Body>
-    </Popover>
-  );
+  // const popover = (
+  //   <Popover id="popover-basic" className=''>
+  //     <Popover.Body>
+  //       <EmojiPicker onEmojiClick={onEmojiSelect} emojiStyle={EmojiStyle.GOOGLE} searchDisabled={true} width={240}
+  //         height={400}
+  //       />
+  //     </Popover.Body>
+  //   </Popover>
+  // );
 
   const doApi = async (commentBody: any) => {
     if (props.replay === false) {
@@ -58,7 +57,6 @@ export default function AddComment(props: any) {
     const data = await resp.json();
     console.log(data);
     props.doApiGet();
-    // props.doApiForum();
     getForum();
   }
 
@@ -68,11 +66,7 @@ export default function AddComment(props: any) {
     const resp = await fetch(url);
     const data = await resp.json();
     const ForumAr = data;
-    // setDataForum(ForumAr.numOfComments + 1);
     putForum(ForumAr.numOfComments + 1)
-    // console.log(dataForum);
-    // console.log(data);
-    // console.log((ForumAr.numOfComments + 1) + "fffffffff");
 
   }
 
@@ -139,7 +133,6 @@ export default function AddComment(props: any) {
     checkSignIn();
     if (signIn) {
       addComment();
-      // setShowEmoji(false);
     }
   };
 
@@ -162,39 +155,31 @@ export default function AddComment(props: any) {
   });
 
   return (
-    <div className='sticky-bottom mt-4'>
-      <Card className='shadow-sm rounded'>
+    <div className='sticky-bottom my-4'>
+      <Card className='shadow-sm rounded add-comment-forum'>
         <Card.Body className='p-2'>
           {props.replay && (
-            // <Row>
-            //   <Col lg={11}>
-            //      <div className='flex w-full justify-content-end'>
-            //      <Col lg={11}>
-                    <Card className='mb-2 bg-light rounded' style={{ borderRight: 'solid #0275d8 6px' }}>
-                      <Card.Body className='py-2 px-3'>
-                        <div className='d-flex justify-content-between align-items-center'>
-                          <div className='overflow-hidden'>
-                            <Card.Title className='h6 mb-1'>{props.commentReplying.userComment}</Card.Title>
-                            <Card.Text className='text-muted small text-truncate' style={{ maxWidth: '250px' }}>
-                              {props.commentReplying.dataComment}
-                            </Card.Text>
-                          </div>
-                          <Button variant="link" className='text-muted p-0 ms-2' onClick={() => props.setReplay(false)}>
-                            <i className="bi bi-x"></i>
-                          </Button>
-                        </div>
-                      </Card.Body>
-                    </Card>
-                  // </Col>
-                // </div>
-            //  </Col> 
-            //  </Row> 
+            <Card className='mb-2 bg-light rounded' style={{ borderRight: 'solid #0275d8 6px' }}>
+              <Card.Body className='py-2 px-3'>
+                <div className='d-flex justify-content-between align-items-center'>
+                  <div className='overflow-hidden'>
+                    <Card.Title className='h6 mb-1'>{props.commentReplying.userComment}</Card.Title>
+                    <Card.Text className='text-muted small text-truncate' style={{ maxWidth: '250px' }}>
+                      {props.commentReplying.dataComment}
+                    </Card.Text>
+                  </div>
+                  <Button variant="link" className='text-muted p-0 ms-2' onClick={() => props.setReplay(false)}>
+                    <i className="bi bi-x"></i>
+                  </Button>
+                </div>
+              </Card.Body>
+            </Card>
           )}
           <div className='d-flex justify-content-between flex-column'>
             <div className='d-flex'>
               <div className='d-flex align-items-center'>
                 <CldUploadButton
-                  className='btn btn-outline-primary border-0'
+                  className='btn add-file-comment-forum-btn me-1'
                   uploadPreset="my_upload_test"
                   onSuccess={handleUpload}
                   onError={(error) => {
@@ -211,11 +196,6 @@ export default function AddComment(props: any) {
                 >
                   <i className="bi bi-paperclip"></i>
                 </CldUploadButton>
-                <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
-                  <Button variant="btn btn-outline-primary border-0" className='ms-md-1' onClick={() => setShowEmoji(!showEmoji)}>
-                    <i className="bi bi-emoji-smile"></i>
-                  </Button>
-                </OverlayTrigger>
               </div>
               <div className='flex-grow-1'>
                 <textarea
@@ -224,16 +204,16 @@ export default function AddComment(props: any) {
                   onChange={handleExpand}
                   onKeyDown={handleKeyDown}
                   placeholder='הוסף תגובה'
-                  className='form-control'
+                  className='form-control add-comment-forum-textarea'
                   maxLength={1000}
                   rows={1}
                   style={{ resize: 'none', minHeight: '38px', maxHeight: '200px', overflowY: 'auto' }}
                 />
               </div>
               <div className='d-flex align-items-center '>
-                <Button type="submit" variant="primary" onClick={handleSubmit}>
+                <button type="submit" onClick={handleSubmit} className='btn send-comment-forum-btn ms-1'>
                   <i className="bi bi-send" style={{ transform: 'rotate(45deg)' }}></i>
-                </Button>
+                </button>
               </div>
             </div>
             {fileName && (
@@ -251,3 +231,12 @@ export default function AddComment(props: any) {
     </div>
   )
 }
+
+
+
+
+{/* <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
+                  <Button variant="btn btn-outline-primary border-0" className='ms-md-1' onClick={() => setShowEmoji(!showEmoji)}>
+                    <i className="bi bi-emoji-smile"></i>
+                  </Button>
+                </OverlayTrigger> */}
