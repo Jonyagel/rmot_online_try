@@ -10,6 +10,7 @@ interface Message {
   text: string;
   sender: string;
   timestamp: number;
+  type: 'text' | 'image';
 }
 
 export default function ChatPage() {
@@ -17,6 +18,7 @@ export default function ChatPage() {
   const [inputMessage, setInputMessage] = useState('');
   const [username, setUsername] = useState('');
   const chatBoxRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [channel] = useChannel('chat-channel', (message) => {
     setMessages((prevMessages) => [...prevMessages, message.data as Message]);
@@ -43,15 +45,28 @@ export default function ChatPage() {
     }
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (inputMessage.trim() !== '') {
+  const sendMessage = async (text: string, type: 'text' | 'image' = 'text') => {
+    if (text.trim() !== '') {
       const newMessage: Message = {
-        text: inputMessage,
+        text,
         sender: username,
         timestamp: Date.now(),
+        type,
       };
       await channel.publish('chat-message', newMessage);
       setInputMessage('');
+    }
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageData = e.target?.result as string;
+        sendMessage(imageData, 'image');
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -61,26 +76,41 @@ export default function ChatPage() {
 
   return (
     <div className="chat-container" dir="rtl">
-      <h1 className="chat-title">צ'אט בזמן אמת</h1>
+      <div className="chat-header">
+        <h1>צ'אט קבוצתי</h1>
+      </div>
       <div className="chat-box" ref={chatBoxRef}>
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.sender === username ? 'own-message' : ''}`}>
-            <strong>{message.sender}: </strong>
-            {message.text}
+            {message.type === 'text' && <p>{message.text}</p>}
+            {message.type === 'image' && <img src={message.text} alt="תמונה שהועלתה" className="uploaded-image" />}
             <span className="message-time">{formatTime(message.timestamp)}</span>
           </div>
         ))}
       </div>
       <div className="input-container">
+        <button className="emoji-button">😀</button>
         <input
           type="text"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-          placeholder="הקלד הודעה..."
+          onKeyPress={(e) => e.key === 'Enter' && sendMessage(inputMessage)}
+          placeholder="הקלד הודעה"
           className="message-input"
         />
-        <button onClick={sendMessage} className="send-button">שלח</button>
+        <button className="attach-button" onClick={() => fileInputRef.current?.click()}>📎</button>
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileUpload}
+          accept="image/*"
+          style={{ display: 'none' }}
+        />
+        {inputMessage ? (
+          <button onClick={() => sendMessage(inputMessage)} className="send-button">➤</button>
+        ) : (
+          <button className="voice-button">🎤</button>
+        )}
       </div>
     </div>
   );
