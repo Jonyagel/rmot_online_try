@@ -1,121 +1,124 @@
-
 .signup-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f8f9fa;
-    padding: 2rem;
-  }
-  
-  .signup-form {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 20px;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
-    overflow: hidden;
-  }
-  
-  .signup-form h2 {
-    color: #007bff;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  
-  .signup-form p {
-    color: #6c757d;
-  }
-  
-  .signup-form .form-label {
-    font-weight: 500;
-    color: #007bff;
-    margin-bottom: 0.5rem;
-    display: block;
-  }
-  
-  .signup-form .form-control {
-    border-radius: 10px;
-    border: 2px solid #e0e0e0;
-    padding: 0.75rem 1rem;
-    transition: all 0.3s ease;
-    width: 100%;
-  }
-  
-  .signup-form .form-control:focus {
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  .signup-form .btn {
-    border-radius: 10px;
-    padding: 0.75rem 1.5rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .signup-form .signupBtn {
-    background-color: #007bff;
-    border: none;
-    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.11), 0 1px 3px rgba(0, 123, 255, 0.08);
-    color: white;
-  }
-  
-  .signup-form .signupBtn:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-    box-shadow: 0 7px 14px rgba(0, 123, 255, 0.1), 0 3px 6px rgba(0, 123, 255, 0.07);
-  }
-  
-  .signup-form .btn-outline-dark {
-    border: 2px solid #343a40;
-    color: #343a40;
-    background-color: transparent;
-  }
-  
-  .signup-form .btn-outline-dark:hover {
-    background-color: #343a40;
-    color: white;
-  }
-  
-  .signup-form .btn-outline-dark i {
-    margin-left: 0.5rem;
-  }
-  
-  .signup-form a {
-    color: #007bff;
-    transition: color 0.3s ease;
-  }
-  
-  .signup-form a:hover {
-    color: #0056b3;
-  }
-  
-  /* RTL Support */
-  .signup-form {
-    direction: rtl;
-    text-align: right;
-  }
-  
-  /* Custom scrollbar for long forms */
-  .signup-form::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .signup-form::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-  }
-  
-  .signup-form::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-  }
-  
-  .signup-form::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
+  background-image: url('/images/background try2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* background-color: #f8f9fa; */
+  padding: 2rem;
+}
+
+.signup-form {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 123, 255, 0.1);
+  overflow: hidden;
+}
+
+.signup-form h2 {
+  color: #007bff;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.signup-form p {
+  color: #6c757d;
+}
+
+.signup-form .form-label {
+  font-weight: 500;
+  color: #007bff;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.signup-form .form-control {
+  border-radius: 10px;
+  border: 2px solid #e0e0e0;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.signup-form .form-control:focus {
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  border-color: #007bff;
+  outline: none;
+}
+
+.signup-form .btn {
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signup-form .signupBtn {
+  background-color: #007bff;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 123, 255, 0.11), 0 1px 3px rgba(0, 123, 255, 0.08);
+  color: white;
+}
+
+.signup-form .signupBtn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0, 123, 255, 0.1), 0 3px 6px rgba(0, 123, 255, 0.07);
+}
+
+.signup-form .btn-outline-dark {
+  border: 2px solid #343a40;
+  color: #343a40;
+  background-color: transparent;
+}
+
+.signup-form .btn-outline-dark:hover {
+  background-color: #343a40;
+  color: white;
+}
+
+.signup-form .btn-outline-dark i {
+  margin-left: 0.5rem;
+}
+
+.signup-form a {
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.signup-form a:hover {
+  color: #0056b3;
+}
+
+/* RTL Support */
+.signup-form {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Custom scrollbar for long forms */
+.signup-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.signup-form::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.signup-form::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.signup-form::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

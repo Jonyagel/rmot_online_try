@@ -541,9 +541,8 @@ export default function ShopCards(props: any) {
                             <div className=''>
                                 <div className='mt-3'>
                                     <div className="search-bar-container bg-white shadow-sm  p-3 rounded-top align-items-center mx-auto">
-                                        <Row>
-
-                                            <Col sm={12} lg={6} className='flex justify-content-start'>
+                                        <Row className="flex-column-reverse flex-lg-row">
+                                            <Col xs={12} lg={6} className='d-flex justify-content-center justify-content-lg-start mt-3 mt-lg-0'>
                                                 <Nav
                                                     activeKey={activeTab}
                                                     onSelect={(k: any) => {
@@ -569,41 +568,43 @@ export default function ShopCards(props: any) {
                                                         <Nav.Link eventKey="mosads" className={`nav-link me-4 ${activeTab === 'mosads' ? 'active' : ''}`}>מוסדות</Nav.Link>
                                                     </Nav.Item>
                                                     <Nav.Item>
-                                                        <Nav.Link eventKey="gmach" className={`nav-link me-4 ${activeTab === 'gmach' ? 'active' : ''}`}>גמ״חים</Nav.Link>
+                                                        <Nav.Link eventKey="gmach" className={`nav-link ${activeTab === 'gmach' ? 'active' : ''}`}>גמ״חים</Nav.Link>
                                                     </Nav.Item>
                                                 </Nav>
                                             </Col>
-                                            <Col sm={12} lg={6} className=' d-flex justify-content-end align-content-center'>
-                                                <InputGroup className="border rounded w-50" style={{ maxHeight: '36px', maxWidth: '200px' }}>
-                                                    <Form.Control
-                                                        type="text"
-                                                        placeholder="חיפוש חנויות..."
-                                                        value={inputValue}
-                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
-                                                        onKeyDown={(e: any) => {
-                                                            if (e.key === 'Enter') {
-                                                                e.preventDefault();
+                                            <Col xs={12} lg={6} className='d-flex justify-content-center justify-content-lg-end align-items-center'>
+                                                <div className="d-flex">
+                                                    <InputGroup className="border rounded" style={{ maxHeight: '36px', maxWidth: '200px' }}>
+                                                        <Form.Control
+                                                            type="text"
+                                                            placeholder="חיפוש חנויות..."
+                                                            value={inputValue}
+                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+                                                            onKeyDown={(e: any) => {
+                                                                if (e.key === 'Enter') {
+                                                                    e.preventDefault();
+                                                                    setSearchTerm(inputValue);
+                                                                }
+                                                            }}
+                                                        />
+                                                        <InputGroup.Text
+                                                            className="search-button"
+                                                            onClick={() => {
                                                                 setSearchTerm(inputValue);
-                                                            }
-                                                        }}
-                                                    />
-                                                    <InputGroup.Text
-                                                        className="search-button"
-                                                        onClick={() => {
-                                                            setSearchTerm(inputValue);
-                                                        }}
-                                                        style={{ cursor: 'pointer' }}
+                                                            }}
+                                                            style={{ cursor: 'pointer' }}
+                                                        >
+                                                            <FaSearch />
+                                                        </InputGroup.Text>
+                                                    </InputGroup>
+                                                    <button
+                                                        className="btn btn-add-shop rounded border ms-2"
+                                                        onClick={checkSignIn}
+                                                        style={{ maxHeight: '36px', fontSize: '13px', whiteSpace: 'nowrap' }}
                                                     >
-                                                        <FaSearch />
-                                                    </InputGroup.Text>
-                                                </InputGroup>
-                                                <button
-                                                    className="btn btn-add-shop rounded border w-auto ms-1"
-                                                    onClick={checkSignIn}
-                                                    style={{ maxHeight: '36px', fontSize: '13px' }}
-                                                >
-                                                    הוסף חנות
-                                                </button>
+                                                        הוסף חנות
+                                                    </button>
+                                                </div>
                                             </Col>
                                         </Row>
                                     </div>
@@ -741,7 +742,7 @@ export default function ShopCards(props: any) {
                                     onClick={closeModal}
                                 >
                                     <motion.div
-                                        className='ys-shop-detail-modal rounded relative p-2 p-md-2'
+                                        className='ys-shop-detail-modal rounded relative p-2 p-md-2 overflow-y-auto'
                                         initial={{ y: 50, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         exit={{ y: 50, opacity: 0 }}
@@ -854,16 +855,16 @@ export default function ShopCards(props: any) {
                                                                         <div className="space-y-4">
                                                                             <table className="w-75 text-sm">
                                                                                 <tbody>
-                                                                                    {renderGroupedHours(selectedCard.hours).map((row:any, index:any) => (
+                                                                                    {renderGroupedHours(selectedCard.hours).map((row: any, index: any) => (
                                                                                         <React.Fragment key={index}>
-                                                                                            <tr className="">
-                                                                                                <td className="py-1 pr-1 font-medium text-gray-700">{row.days}</td>
-                                                                                                <td className="py-1 pl-1 text-gray-600">{row.timeRange}</td>
+                                                                                            <tr className={`${row.note ? '' : 'border-b'}`}>
+                                                                                                <td className="py-1 pe-2">{row.days}</td>
+                                                                                                <td className="py-1 whitespace-nowrap">{row.timeRange}</td>
                                                                                             </tr>
                                                                                             {row.note && (
-                                                                                                <tr className='border-b border-gray-100'>
-                                                                                                    <td colSpan={2} className="pb-1 px-2">
-                                                                                                        <div className="bg-blue-50 text-blue-700 text-xs rounded p-2 mt-1 flex items-start">
+                                                                                                <tr className={`${row.note ? 'border-b' : ''}`}>
+                                                                                                    <td colSpan={2} className="pb-1 px-1">
+                                                                                                        <div className="bg-blue-50 text-blue-700 text-xs rounded p-1 mt-1 flex items-start">
                                                                                                             <i className="bi bi-info-circle me-1"></i>
                                                                                                             <span>{row.note}</span>
                                                                                                         </div>

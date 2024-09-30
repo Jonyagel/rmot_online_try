@@ -3,6 +3,7 @@
 import React, { useRef, useState } from 'react';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
+import { useAppContext } from '../../context/appContext';
 import './signup.css';
 import Link from 'next/link';
 
@@ -13,6 +14,7 @@ export default function Signup() {
   const { data: session } = useSession();
 
   const router = useRouter();
+  const { setIsLogin } = useAppContext();
 
   const nameRef: any = useRef();
   const emailRef: any = useRef();
@@ -36,6 +38,7 @@ export default function Signup() {
     });
     const data = await resp.json();
     console.log(data);
+    setIsLogin(true);
     router.push('/');
   }
 

@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { FaUser } from 'react-icons/fa'
 import { useSession } from 'next-auth/react'
+import { useAppContext } from '../context/appContext';
 
 interface User {
     name?: string | null;
@@ -22,6 +23,30 @@ export default function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const pathname = usePathname();
     const [user, setUser] = useState<User | null>(null);
+    const { isLogin } = useAppContext();
+
+    useEffect(() => {
+        checkSignIn();
+    }, [isLogin]);
+
+    const checkSignIn = async () => {
+        try {
+            const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
+            const data = await resp.json();
+            if (data.status === 401) {
+                setIsLoggedIn(false);
+            } else {
+                setIsLoggedIn(true);
+                setUser({
+                    name: data.name ?? null,
+                    email: data.email ?? null,
+                    image: data.image ?? null
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
     useEffect(() => {
         if (status === "authenticated" && session?.user) {
@@ -67,7 +92,7 @@ export default function Header() {
                                     <img src={user.image} width={40} height={40} className="avatar" alt="User Avatar" />
                                 ) : (
                                     <div className='border border-black rounded-circle p-2'>
-                                        <FaUser size={20}  />
+                                        <FaUser size={20} />
                                     </div>
                                 )}
                             </Link>

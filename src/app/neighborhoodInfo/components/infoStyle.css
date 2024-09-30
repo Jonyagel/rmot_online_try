@@ -43,8 +43,7 @@
   text-align: center;
   padding: 20px;
   color: white;
-  min-height: 150px;
-  /* או כל גובה אחר שתרצה */
+  min-height: 120px;
 }
 
 .search-bar-container {
@@ -422,7 +421,8 @@
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
   .ys-shop-detail-modal {
-    width: 90%;
+    max-width: 90%;
+    width: auto;
     height: auto;
     max-height: 90vh;
 }
