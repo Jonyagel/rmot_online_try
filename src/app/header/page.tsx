@@ -34,7 +34,7 @@ export default function Header() {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
             const data = await resp.json();
             if (data.status === 401) {
-                setIsLoggedIn(false);
+           //     setIsLoggedIn(false);
             } else {
                 setIsLoggedIn(true);
                 setUser({
