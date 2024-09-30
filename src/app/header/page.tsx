@@ -34,7 +34,7 @@ export default function Header() {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
             const data = await resp.json();
             if (data.status === 401) {
-           //     setIsLoggedIn(false);
+                // setIsLoggedIn(false);
             } else {
                 setIsLoggedIn(true);
                 setUser({
@@ -57,8 +57,8 @@ export default function Header() {
                 image: session.user.image ?? null
             });
         } else {
-            setIsLoggedIn(false);
-            setUser(null);
+            // setIsLoggedIn(false);
+            // setUser(null);
         }
     }, [session, status]);
 
