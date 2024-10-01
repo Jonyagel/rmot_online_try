@@ -32,11 +32,11 @@ interface InfoCardProps {
 const HomePage: React.FC = () => {
 
     const images = [
-        'hose1_qejtcw',
-        'ramot_view2_bwqqhu',
-        'ramot_view3_yojt8w',
-        'house2_vd8yke',
-        'neighborhood1_wcwkgs',
+        'Asset_5_1.5x_ltbaw3',
+        'Asset_6_1.5x_fjwvvo',
+        'Asset_7_1.5x_tutyuo',
+        'Asset_8_1.5x_yj5pm0',
+        'Asset_9_1.5x_feu4ow',
     ];
 
     const neighborhoodInfo = [
@@ -96,12 +96,12 @@ const HomePage: React.FC = () => {
         {
             icon: faHeartbeat,
             title: "בריאות וספורט",
-            content: "מרכז  העירוני מציע קורסי יוגה חינמיים לגיל השלישי. הצטרפו אלינו לחיים בריאים!",
+            content: "מרכז  העירוני מציע קורסי יוגה חינמיים לגיל השלישי. הצטרפו אלינו לחיים לחיים לחיים בריאים!",
             link: "/"
         }
     ];
 
-     const NeighborhoodInfo: React.FC<{ title: string; description: string }> = ({ title, description }) => {
+    const NeighborhoodInfo: React.FC<{ title: string; description: string }> = ({ title, description }) => {
         const [isVisible, setIsVisible] = useState(false);
         const titleRef = useRef<HTMLHeadingElement>(null);
 
@@ -184,11 +184,11 @@ const HomePage: React.FC = () => {
                 <button onClick={togglePlay} className="video-control">
                     <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
                 </button>
-                <div className="diagonal-cut">
+                {/* <div className="diagonal-cut">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
                         <path fill="#ffffff" fill-opacity="1" d="M0,160L48,138.7C96,117,192,75,288,69.3C384,64,480,96,576,122.7C672,149,768,171,864,165.3C960,160,1056,128,1152,117.3C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
                     </svg>
-                </div>
+                </div> */}
             </section>
 
             <Container fluid className="content-container">
@@ -201,103 +201,105 @@ const HomePage: React.FC = () => {
                         </div>
                     </Col>
                     <Col lg={8}>
-                        <div className='main-content'>
-                            <section className="info-cards-section">
-                                <h2 className="section-title">מה חדש ברמות?</h2>
-                                <Swiper
-                                    slidesPerView={3}
-                                    spaceBetween={20}
-                                    autoplay={{
-                                        delay: 5000,
-                                        disableOnInteraction: false,
-                                    }}
-                                    pagination={{
-                                        clickable: true,
-                                    }}
-                                    navigation={true}
-                                    modules={[Autoplay, Pagination, Navigation]}
-                                    className="info-cards-slider pb-5"
-                                    breakpoints={{
-                                        320: {
-                                            slidesPerView: 1,
-                                            spaceBetween: 10
-                                        },
-                                        640: {
-                                            slidesPerView: 2,
-                                            spaceBetween: 15
-                                        },
-                                        1024: {
-                                            slidesPerView: 3,
-                                            spaceBetween: 20
-                                        }
-                                    }}
-                                >
-                                    {infoCards.map((card, index) => (
-                                        <SwiperSlide key={index}>
-                                            <div className="info-card">
-                                                <div className="card-content">
-                                                    <div className="card-icon">
-                                                        <FontAwesomeIcon icon={card.icon} />
+                        <div className='main-content-container rounded-t mx-auto'>
+                            <div className='main-content rounded-t'>
+                                <section className="info-cards-section">
+                                    <h2 className="section-title">מה חדש ברמות?</h2>
+                                    <Swiper
+                                        slidesPerView={3}
+                                        spaceBetween={20}
+                                        autoplay={{
+                                            delay: 5000,
+                                            disableOnInteraction: false,
+                                        }}
+                                        pagination={{
+                                            clickable: true,
+                                        }}
+                                        navigation={true}
+                                        modules={[Autoplay, Pagination, Navigation]}
+                                        className="info-cards-slider pb-5 px-5"
+                                        breakpoints={{
+                                            320: {
+                                                slidesPerView: 1,
+                                                spaceBetween: 10
+                                            },
+                                            640: {
+                                                slidesPerView: 2,
+                                                spaceBetween: 15
+                                            },
+                                            1024: {
+                                                slidesPerView: 3,
+                                                spaceBetween: 20
+                                            }
+                                        }}
+                                    >
+                                        {infoCards.map((card, index) => (
+                                            <SwiperSlide key={index}>
+                                                <div className="info-card shadow-sm rounded">
+                                                    <div className="card-content">
+                                                        <div className="card-icon">
+                                                            <FontAwesomeIcon icon={card.icon} />
+                                                        </div>
+                                                        <h3>{card.title}</h3>
+                                                        <p>{card.content}</p>
                                                     </div>
-                                                    <h3>{card.title}</h3>
-                                                    <p>{card.content}</p>
+                                                    <Link href={card.link} className="card-link">
+                                                        גלה עוד
+                                                        <FontAwesomeIcon icon={faArrowLeft} className="arrow-icon" />
+                                                    </Link>
                                                 </div>
-                                                <Link href={card.link} className="card-link">
-                                                    גלה עוד
-                                                    <FontAwesomeIcon icon={faArrowLeft} className="arrow-icon" />
-                                                </Link>
-                                            </div>
-                                        </SwiperSlide>
-                                    ))}
-                                </Swiper>
-                            </section>
-                            <div className="mobile-ad-space ad-space-2 d-md-none my-2">
-                                <img src='/images/saleAds.gif' alt='ads-phone' className='rounded' />
-                            </div>
-                            <section className="statistics-section">
-                                <motion.h2
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                    className="section-title"
-                                >
-                                    שכונת רמות - נתונים ומידע
-                                </motion.h2>
+                                            </SwiperSlide>
+                                        ))}
+                                    </Swiper>
+                                </section>
+                                <div className="mobile-ad-space ad-space-2 d-md-none my-2">
+                                    <img src='/images/saleAds.gif' alt='ads-phone' className='rounded' />
+                                </div>
+                                <section className="statistics-section">
+                                    <motion.h2
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.5 }}
+                                        className="section-title"
+                                    >
+                                        שכונת רמות - נתונים ומידע
+                                    </motion.h2>
 
-                                <Statistic />
+                                    <Statistic />
 
-                                {[0, 1, 2, 3, 4].map((rowIndex) => (
-                                    <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
-                                        <motion.div
-                                            className="image-container"
-                                            initial={{ opacity: 0, x: rowIndex % 2 === 0 ? -50 : 50 }}
-                                            whileInView={{ opacity: 1, x: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                        >
-                                            <CldImage
-                                                src={images[rowIndex]}
-                                                width={500}
-                                                height={300}
-                                                alt={`Image ${rowIndex + 1}`}
-                                                className="diagonal-cut-image"
-                                            />
-                                        </motion.div>
-                                        {neighborhoodInfo[rowIndex] && (
+                                    {[0, 1, 2, 3, 4].map((rowIndex) => (
+                                        <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
                                             <motion.div
-                                                className="neighborhood-info"
-                                                initial={{ opacity: 0, y: 20 }}
-                                                whileInView={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 0.5 }}
+                                                className="image-container"
+                                                initial={{ opacity: 0, x: rowIndex % 2 === 0 ? -50 : 50 }}
+                                                whileInView={{ opacity: 1, x: 0 }}
+                                                transition={{ duration: 0.3 }}
                                             >
-                                                <h3>{neighborhoodInfo[rowIndex].title}</h3>
-                                                <p>{neighborhoodInfo[rowIndex].description}</p>
+                                                <CldImage
+                                                    src={images[rowIndex]}
+                                                    width={500}
+                                                    height={300}
+                                                    alt={`Image ${rowIndex + 1}`}
+                                                    className="diagonal-cut-image"
+                                                />
                                             </motion.div>
-                                        )}
-                                    </div>
-                                ))}
-                            </section>
+                                            {neighborhoodInfo[rowIndex] && (
+                                                <motion.div
+                                                    className="neighborhood-info"
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    whileInView={{ opacity: 1, y: 0 }}
+                                                    transition={{ duration: 0.5 }}
+                                                >
+                                                    <h3>{neighborhoodInfo[rowIndex].title}</h3>
+                                                    <p>{neighborhoodInfo[rowIndex].description}</p>
+                                                </motion.div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </section>
 
 
+                            </div>
                         </div>
                     </Col>
                     <Col lg={2} className="d-none d-lg-block">

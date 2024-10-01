@@ -69,7 +69,7 @@ const CounterStatistic = React.forwardRef<HTMLDivElement, CounterStatisticProps 
                 initial={{ opacity: 0, y: 20 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5 }}
-                className="statistic-item text-center"
+                className="statistic-item text-center shadow-sm"
             >
                 <FontAwesomeIcon icon={icon} className="statistic-icon" style={{ color: '#0d6efd' }} />
                 <div className="statistic-value">{count.toLocaleString()}</div>
