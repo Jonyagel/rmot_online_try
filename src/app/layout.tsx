@@ -15,8 +15,8 @@ import { ContextProvider } from './context/appContext';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "רמות אונליין",
-  description: "כל המידע על השכונה שלך!",
+  title: "קהילאפ",
+  description: "הבית לקהילה שלי",
 };
 
 

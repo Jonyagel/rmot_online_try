@@ -1,350 +1,398 @@
- 
-  .hero-section {
-    position: relative;
-    height: 70vh;
-    overflow: hidden;
-  }
-  
-  .video-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .video-background {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-  }
-  
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    color: white;
-    padding-top: 20vh;
-  }
-  
-  .hero-title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
-  
-  .hero-subtitle {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .video-control {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
-    padding: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.3s ease;
-    z-index: 10;
-    font-size: 16px;
-    /* התאם לפי הצורך */
-    width: 40px;
-    /* התאם לפי הצורך */
-    height: 40px;
-    /* התאם לפי הצורך */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .video-control:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-  }
-  
-  .video-control .fa-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .diagonal-cut {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    /* התאם את הגובה לפי הצורך */
-    overflow: hidden;
-    line-height: 0;
-  }
-  
-  .diagonal-cut svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 150px;
-    /* התאם את הגובה לפי הצורך */
-  }
-  
-  .diagonal-cut path {
-    fill: #ffffff;
-    /* צבע הרקע של החלק הבא */
-  }
-  
-  .content-container {
-    position: relative;
-    background-color: #f5f8fc;
-    padding-top: 1rem;
-    z-index: 1;
-  }
+ .hero-section {
+   position: relative;
+   height: 70vh;
+   overflow: hidden;
+ }
 
-  .main-content-container{
-    /* width: 90%; */
-    /* max-width: 1100px; */
-    margin-top: -100px;
-    z-index: 1;
-  }
-  
-  .main-content {
-    background: #f5f8fc;
-    /* padding: 3rem; */
-    padding-top: 0;
-    position: relative;
-    z-index: 1;
-  }
-  
-  .sticky-ad-container {
-    z-index: 100;
-    position: sticky;
-    top: 100px;
-    height: calc(100vh - 100px);
-    overflow-y: auto;
-  }
-  
-  .ad-space {
-    margin-bottom: 20px;
-  }
-  
-  .ad-space img {
-    width: 100%;
-    height: auto;
-    max-height: 100%;
-    object-fit: contain;
-  }
-  
-  .section-title {
-    font-size: 2.2rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 2.5rem;
-    /* color: #34495e; */
-  }
-  
-  .section-title::after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 2px;
-    background-color: #0d6efd;
-    margin: 0.8rem auto 0;
-  }
-  
-  .info-cards-section {
-    padding: 50px 0;
-    /* background-color: #f8f9fa; */
-  }
-  
-  .info-cards-slider {
-    padding: 30px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  
-  .info-card {
-    background: #ffffff;
-    /* border-radius: 8px; */
-    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); */
-    padding: 1.8rem;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.3s ease;
-    /* border: 1px solid #f0f0f0; */
-  }
-  
-  .card-icon {
-    font-size: 2rem;
-    color: #0d6efd;
-    margin-bottom: 1.2rem;
-    transition: all 0.3s ease;
-  }
-  
-  .info-card h3 {
-    font-size: 1.3rem;
-    /* color: #34495e; */
-    margin-bottom: 0.8rem;
-    font-weight: bolder;
-  }
-  
-  .info-card p {
-    font-size: 0.95rem;
-    color: #5d6d7e;
-    line-height: 1.5;
-    margin-bottom: 1.2rem;
-  }
-  
-  .card-link {
-    color: #0d6efd;
-    font-weight: 400;
-    font-size: 0.95rem;
-  }
-  
-  .card-link:hover {
-    color: #2980b9;
-  }
-  
-  @media (max-width: 1024px) {
-    .info-card {
-      padding: 1.4rem;
-    }
-  
-    .info-card h3 {
-      font-size: 1.1rem;
-    }
-  
-    .info-card p {
-      font-size: 0.85rem;
-    }
-  }
-  
-  .info-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 70px;
-    position: relative;
-  }
-  
-  .row-reverse {
-    flex-direction: row-reverse;
-  }
-  
-  .image-container {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    /* border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; */
-    transition: all 0.3s ease;
-    /* box-shadow: 0 10px 20px rgba(0,0,0,0.1); */
-  }
-  
-  .image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .neighborhood-info {
-    flex: 1;
-    padding: 30px;
-    border-radius: 15px;
-    transition: all 0.3s ease;
-  }
-  
-  
-  .neighborhood-info h3 {
-    width: 50%;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #2c3e50;
-    border-bottom: 2px solid #0d6efd;
-    padding-bottom: 10px;
-    font-family: 'Rubik', sans-serif;
-  }
-  
-  .neighborhood-info p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #34495e;
-    text-align: justify;
-    font-family: 'Assistant', sans-serif;
-  }
-  
-  @media (max-width: 768px) {
-    
-  
-    .info-row {
-      flex-direction: column; /* במובייל, התוכן יתארגן בעמודה */
-    }
-  
-    .row-reverse {
-      flex-direction: column; /* במובייל, התוכן יתארגן בעמודה גם כשהוא הפוך */
-    }
-  
-    .image-container,
-    .neighborhood-info {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    .hero-section {
-      height: 60vh;
-    }
-  
-    .hero-title {
-      font-size: 2rem;
-    }
-  
-    .hero-subtitle {
-      font-size: 1.2rem;
-    }
-  
-    .info-card {
-      width: 100%;
-    }
-  }
-  
-  @media (max-width: 992px) {
-    .sticky-ad-container {
-      display: none;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .hero-section {
-      height: 50vh;
-    }
-  
-    .hero-title {
-      font-size: 1.5rem;
-    }
-  
-    .hero-subtitle {
-      font-size: 0.8rem;
-    }
-  
-    .info-card h3 {
-      font-size: 1.2rem;
-    }
-  
-    .info-card p {
-      font-size: 0.9rem;
-    }
-  
-    .info-card-link {
-      font-size: 0.8rem;
-    }
-  }
+ .video-container {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+ }
+
+ .video-background {
+   object-fit: cover;
+   width: 100%;
+   height: 100%;
+ }
+
+ .video-overlay {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: rgba(0, 0, 0, 0.4);
+ }
+
+ .hero-content {
+   position: relative;
+   z-index: 2;
+   text-align: center;
+   color: white;
+   padding-top: 20vh;
+ }
+
+ .hero-title {
+   font-size: 3rem;
+   margin-bottom: 1rem;
+ }
+
+ .hero-subtitle {
+   font-size: 1.5rem;
+   margin-bottom: 2rem;
+ }
+
+ .video-control {
+   position: absolute;
+   right: 20px;
+   top: 20px;
+   background: rgba(255, 255, 255, 0.2);
+   border: none;
+   color: white;
+   padding: 10px;
+   border-radius: 50%;
+   cursor: pointer;
+   transition: background 0.3s ease, transform 0.3s ease;
+   z-index: 10;
+   font-size: 16px;
+   /* התאם לפי הצורך */
+   width: 40px;
+   /* התאם לפי הצורך */
+   height: 40px;
+   /* התאם לפי הצורך */
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+
+ .video-control:hover {
+   background: rgba(255, 255, 255, 0.3);
+   transform: scale(1.1);
+ }
+
+ .video-control .fa-icon {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+
+ .diagonal-cut {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: 80px;
+   /* התאם את הגובה לפי הצורך */
+   overflow: hidden;
+   line-height: 0;
+ }
+
+ .diagonal-cut svg {
+   position: relative;
+   display: block;
+   width: calc(100% + 1.3px);
+   height: 150px;
+   /* התאם את הגובה לפי הצורך */
+ }
+
+ .diagonal-cut path {
+   fill: #ffffff;
+   /* צבע הרקע של החלק הבא */
+ }
+
+ .content-container {
+   position: relative;
+   background-color: #f9fcff;
+   padding-top: 1rem;
+   z-index: 1;
+ }
+
+ .main-content-container {
+   /* width: 90%; */
+   /* max-width: 1100px; */
+   margin-top: -100px;
+   z-index: 1;
+ }
+
+ .main-content {
+   background: #f9fcff;
+   /* padding: 3rem; */
+   padding-top: 0;
+   position: relative;
+   z-index: 1;
+ }
+
+ .sticky-ad-container {
+   z-index: 100;
+   position: sticky;
+   top: 100px;
+   height: calc(100vh - 100px);
+   overflow-y: auto;
+ }
+
+ .ad-space {
+   margin-bottom: 20px;
+ }
+
+ .ad-space img {
+   width: 100%;
+   height: auto;
+   max-height: 100%;
+   object-fit: contain;
+ }
+
+ .section-title {
+   font-size: 20px;
+   font-weight: 600;
+   text-align: center;
+   /* margin-bottom: 2.5rem; */
+   /* color: #34495e; */
+ }
+
+ .section-title::after {
+   content: '';
+   display: block;
+   width: 40px;
+   height: 2px;
+   background-color: #0d6efd;
+   margin: 0.8rem auto 0;
+ }
+
+ .info-cards-section {
+   padding-top: 20px;
+   background-color: #ffffff;
+ }
+
+ .info-cards-slider {
+   padding: 30px;
+   max-width: 1100px;
+   margin: 0 auto;
+ }
+
+ .custom-pagination {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 2px;
+   margin-top: 20px;
+ }
+
+ .swiper-pagination {
+   bottom: 10px !important;
+ }
+
+ .custom-bullet {
+   width: 30px !important;
+   height: 3px !important;
+   display: inline-block !important;
+   border-radius: 0 !important;
+   /* מבטל לחלוטין את העיגול */
+   background-color: #0d6efd !important;
+   margin: 0 5px !important;
+   transition: all 0.3s ease;
+ }
+
+ .custom-bullet-active {
+   background-color: rgb(219, 46, 46) !important;
+ }
+
+ .custom-arrows-swiper .swiper-button-next,
+ .custom-arrows-swiper .swiper-button-prev {
+   /* width: 10px; */
+   /* height: 40px ; */
+ }
+
+ .custom-arrows-swiper .swiper-button-next:after,
+ .custom-arrows-swiper .swiper-button-prev:after {
+   font-size: 20px;
+   color: #0d6efd ;
+ }
+
+
+ .info-card {
+   background: #ffffff;
+   /* border-radius: 8px; */
+   /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); */
+   /* padding: 1.8rem; */
+   height: 150px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   transition: all 0.3s ease;
+   /* border: 1px solid #f0f0f0; */
+ }
+
+ .card-icon {
+   /* font-size: 2rem; */
+   /* color: #0d6efd; */
+   /* margin-bottom: 1.2rem; */
+   transition: all 0.3s ease;
+ }
+
+ .info-card h3 {
+   /* font-size: 1.3rem; */
+   /* color: #34495e; */
+   /* margin-bottom: 0.8rem; */
+   /* font-weight: bold; */
+ }
+ .info-card p {
+   font-size: 13px;
+   color: #5d6d7e;
+   /* line-height: 1.5; */
+   /* margin-bottom: 1.2rem; */
+ }
+
+ .home-info-card-footer {
+  /* padding: 12px 18px; */
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  /* border-top: 1px solid #f0f0f0; */
+  margin-top: auto;
+}
+
+ .btn-link-home-card{
+  font-size: 13px;
+ }
+
+ .btn-link-home-card:hover {
+   background-color: #0d6dfd26;
+ }
+
+ @media (max-width: 1024px) {
+   .info-card {
+     padding: 1.4rem;
+   }
+
+   .info-card h3 {
+     font-size: 1.1rem;
+   }
+
+   .info-card p {
+     font-size: 0.85rem;
+   }
+ }
+
+ .info-row {
+   display: flex;
+   align-items: center;
+   margin-bottom: 70px;
+   position: relative;
+ }
+
+ .row-reverse {
+   flex-direction: row-reverse;
+ }
+
+ .image-container {
+   flex: 1;
+   position: relative;
+   overflow: hidden;
+   /* border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; */
+   transition: all 0.3s ease;
+   /* box-shadow: 0 10px 20px rgba(0,0,0,0.1); */
+ }
+
+ .image-container img {
+   width: 60%;
+   height: 60%;
+   object-fit: cover;
+   transition: transform 0.3s ease;
+ }
+
+ .neighborhood-info {
+   flex: 1;
+   padding: 30px;
+   border-radius: 15px;
+   transition: all 0.3s ease;
+ }
+
+
+ .neighborhood-info h3 {
+   width: 50%;
+   font-size: 2rem;
+   margin-bottom: 20px;
+   color: #2c3e50;
+   border-bottom: 2px solid #0d6efd;
+   padding-bottom: 10px;
+   font-family: 'Rubik', sans-serif;
+ }
+
+ .neighborhood-info p {
+   font-size: 1.1rem;
+   line-height: 1.8;
+   color: #34495e;
+   text-align: justify;
+   font-family: 'Assistant', sans-serif;
+ }
+
+ @media (max-width: 768px) {
+
+
+   .info-row {
+     flex-direction: column;
+     /* במובייל, התוכן יתארגן בעמודה */
+   }
+
+   .row-reverse {
+     flex-direction: column;
+     /* במובייל, התוכן יתארגן בעמודה גם כשהוא הפוך */
+   }
+
+   .image-container,
+   .neighborhood-info {
+     width: 100%;
+     margin-bottom: 20px;
+   }
+
+   .hero-section {
+     height: 60vh;
+   }
+
+   .hero-title {
+     font-size: 2rem;
+   }
+
+   .hero-subtitle {
+     font-size: 1.2rem;
+   }
+
+   .info-card {
+     width: 100%;
+   }
+ }
+
+ @media (max-width: 992px) {
+   .sticky-ad-container {
+     display: none;
+   }
+ }
+
+ @media (max-width: 480px) {
+   .hero-section {
+     height: 50vh;
+   }
+
+   .hero-title {
+     font-size: 1.5rem;
+   }
+
+   .hero-subtitle {
+     font-size: 0.8rem;
+   }
+
+   .info-card h3 {
+     font-size: 1.2rem;
+   }
+
+   .info-card p {
+     font-size: 0.9rem;
+   }
+
+   .info-card-link {
+     font-size: 0.8rem;
+   }
+ }

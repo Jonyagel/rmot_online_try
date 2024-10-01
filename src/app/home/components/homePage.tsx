@@ -9,6 +9,7 @@ import {
     faGraduationCap, faHeartbeat, faPlay, faPause,
     faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Container, Row, Col } from 'react-bootstrap';
 import Link from 'next/link';
@@ -21,7 +22,7 @@ import { useRouter } from 'next/navigation';
 import Statistic from './statistic';
 
 interface InfoCardProps {
-    icon: IconDefinition;
+    icon: string;
     title: string;
     content: string;
     link: string;
@@ -64,37 +65,37 @@ const HomePage: React.FC = () => {
     // מקסימום 80 תווים 3 שורות בתוכן פירוט של הכרטיס לא יותר של יגלוש
     const infoCards: InfoCardProps[] = [
         {
-            icon: faHome,
+            icon: 'house',
             title: "נדל\"ן חדש",
             content: "פרויקט  חדשני ברמות ג' - דירות יוקרה עם נוף פנורמי לירושלים. הזדמנות להשקעה!",
             link: "/nadlan"
         },
         {
-            icon: faCalendarAlt,
+            icon: 'calendar',
             title: "אירועי תרבות",
             content: "פסטיבל  של רמות - שבוע של מופעים, סדנאות ופעילויות לכל המשפחה. הכניסה חופשית!",
             link: "/allFamily"
         },
         {
-            icon: faStore,
+            icon: 'shop-window',
             title: "עסקים מקומיים",
             content: "חנות הספרים 'קריאה מהנה' - מבצע השבוע: קנו שני ספרים וקבלו את השלישי במתנה!",
             link: "/neighborhoodInfo"
         },
         {
-            icon: faTree,
+            icon: 'tree',
             title: "פארקים וטבע",
             content: "גן החיות   נפתח! בואו לפגוש את בעלי החיים ולהנות מפינות ליטוף ופעילויות לילדים.",
             link: "/"
         },
         {
-            icon: faGraduationCap,
+            icon: 'book',
             title: "חינוך",
             content: "בית הספר 'אופק'  החינוך הארצי! תכנית הלימודים החדשנית מושכת תשומת לב ארצית.",
             link: "/"
         },
         {
-            icon: faHeartbeat,
+            icon: 'heart-pulse',
             title: "בריאות וספורט",
             content: "מרכז  העירוני מציע קורסי יוגה חינמיים לגיל השלישי. הצטרפו אלינו לחיים לחיים לחיים בריאים!",
             link: "/"
@@ -160,7 +161,7 @@ const HomePage: React.FC = () => {
 
 
     return (
-        <Container fluid className="px-0 py-0 home-container">
+        <Container fluid className="px-0 py-0">
             <section className="hero-section">
                 <div className="video-container">
                     <video
@@ -179,7 +180,7 @@ const HomePage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h1 className="hero-title">ברוכים הבאים לשכונת רמות</h1>
+                    <h1 className="hero-title">ברוכים הבאים לקהילאפ</h1>
                 </motion.div>
                 <button onClick={togglePlay} className="video-control">
                     <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
@@ -203,8 +204,8 @@ const HomePage: React.FC = () => {
                     <Col lg={8}>
                         <div className='main-content-container rounded-t mx-auto'>
                             <div className='main-content rounded-t'>
-                                <section className="info-cards-section">
-                                    <h2 className="section-title">מה חדש ברמות?</h2>
+                                <section className="info-cards-section rounded shadow-sm mb-5">
+                                    <h2 className="section-title mb-3">מה חדש ברמות?</h2>
                                     <Swiper
                                         slidesPerView={3}
                                         spaceBetween={20}
@@ -213,11 +214,16 @@ const HomePage: React.FC = () => {
                                             disableOnInteraction: false,
                                         }}
                                         pagination={{
+                                            el: '.custom-pagination',
                                             clickable: true,
+                                            type: 'bullets',
+                                            renderBullet: function (index, className) {
+                                                return '<span class="' + className + ' custom-bullet"></span>';
+                                            },
                                         }}
                                         navigation={true}
                                         modules={[Autoplay, Pagination, Navigation]}
-                                        className="info-cards-slider pb-5 px-5"
+                                        className="info-cards-slider pb-3 px-4 custom-arrows-swiper w-75"
                                         breakpoints={{
                                             320: {
                                                 slidesPerView: 1,
@@ -229,34 +235,39 @@ const HomePage: React.FC = () => {
                                             },
                                             1024: {
                                                 slidesPerView: 3,
-                                                spaceBetween: 20
+                                                spaceBetween: 40
                                             }
                                         }}
                                     >
                                         {infoCards.map((card, index) => (
                                             <SwiperSlide key={index}>
-                                                <div className="info-card shadow-sm rounded">
+                                                <div className="info-card p-2 shadow-sm rounded">
                                                     <div className="card-content">
-                                                        <div className="card-icon">
-                                                            <FontAwesomeIcon icon={card.icon} />
+                                                        <div className="card-icon flex align-items-center mb-2">
+                                                            <i className={`bi bi-${card.icon} me-2`} style={{color:'#0d6efd '}}></i>
+                                                            <h3>{card.title}</h3>
                                                         </div>
-                                                        <h3>{card.title}</h3>
                                                         <p>{card.content}</p>
                                                     </div>
-                                                    <Link href={card.link} className="card-link">
-                                                        גלה עוד
-                                                        <FontAwesomeIcon icon={faArrowLeft} className="arrow-icon" />
-                                                    </Link>
+                                                    <div className="home-info-card-footer mt-auto my-2">
+                                                        <button className='btn btn-link-home-card border w-75 mx-auto my-auto'>
+                                                            <Link href={card.link} className="link no-underline">
+                                                                גלה עוד
+                                                                {/* <FontAwesomeIcon icon={faArrowLeft} className="arrow-icon" /> */}
+                                                            </Link>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </SwiperSlide>
                                         ))}
+                                        <div className="custom-pagination"></div>
                                     </Swiper>
                                 </section>
                                 <div className="mobile-ad-space ad-space-2 d-md-none my-2">
                                     <img src='/images/saleAds.gif' alt='ads-phone' className='rounded' />
                                 </div>
                                 <section className="statistics-section">
-                                    <motion.h2
+                                    {/* <motion.h2
                                         initial={{ opacity: 0, y: 20 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5 }}
@@ -265,7 +276,7 @@ const HomePage: React.FC = () => {
                                         שכונת רמות - נתונים ומידע
                                     </motion.h2>
 
-                                    <Statistic />
+                                    <Statistic /> */}
 
                                     {[0, 1, 2, 3, 4].map((rowIndex) => (
                                         <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
@@ -280,7 +291,7 @@ const HomePage: React.FC = () => {
                                                     width={500}
                                                     height={300}
                                                     alt={`Image ${rowIndex + 1}`}
-                                                    className="diagonal-cut-image"
+                                                    className="mx-auto"
                                                 />
                                             </motion.div>
                                             {neighborhoodInfo[rowIndex] && (
