@@ -24,6 +24,10 @@
     /* ארבעה פריטים בשורה */
 }
 
+.statistic-label {
+    font-size: 13px;
+}
+
 @media (max-width: 768px) {
     /* .statistics-group {
         flex-direction: column;

@@ -204,7 +204,7 @@ const HomePage: React.FC = () => {
                     <Col lg={8}>
                         <div className='main-content-container rounded-t mx-auto'>
                             <div className='main-content rounded-t'>
-                                <section className="info-cards-section rounded shadow-sm mb-5">
+                                <section className="info-cards-section rounded mb-5">
                                     <h2 className="section-title mb-3">מה חדש ברמות?</h2>
                                     <Swiper
                                         slidesPerView={3}
@@ -233,15 +233,15 @@ const HomePage: React.FC = () => {
                                                 slidesPerView: 2,
                                                 spaceBetween: 15
                                             },
-                                            1024: {
+                                            1225: {
                                                 slidesPerView: 3,
-                                                spaceBetween: 40
+                                                spaceBetween: 5
                                             }
                                         }}
                                     >
                                         {infoCards.map((card, index) => (
                                             <SwiperSlide key={index}>
-                                                <div className="info-card p-2 shadow-sm rounded">
+                                                <div className="info-card mt-3 mx-4 p-2 rounded shadow-sm">
                                                     <div className="card-content">
                                                         <div className="card-icon flex align-items-center mb-2">
                                                             <i className={`bi bi-${card.icon} me-2`} style={{color:'#0d6efd '}}></i>
@@ -250,7 +250,7 @@ const HomePage: React.FC = () => {
                                                         <p>{card.content}</p>
                                                     </div>
                                                     <div className="home-info-card-footer mt-auto my-2">
-                                                        <button className='btn btn-link-home-card border w-75 mx-auto my-auto'>
+                                                        <button className='btn btn-link-home-card w-75 mx-auto my-auto'>
                                                             <Link href={card.link} className="link no-underline">
                                                                 גלה עוד
                                                                 {/* <FontAwesomeIcon icon={faArrowLeft} className="arrow-icon" /> */}
@@ -267,7 +267,7 @@ const HomePage: React.FC = () => {
                                     <img src='/images/saleAds.gif' alt='ads-phone' className='rounded' />
                                 </div>
                                 <section className="statistics-section">
-                                    {/* <motion.h2
+                                    <motion.h2
                                         initial={{ opacity: 0, y: 20 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5 }}
@@ -276,7 +276,7 @@ const HomePage: React.FC = () => {
                                         שכונת רמות - נתונים ומידע
                                     </motion.h2>
 
-                                    <Statistic /> */}
+                                    <Statistic />
 
                                     {[0, 1, 2, 3, 4].map((rowIndex) => (
                                         <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>

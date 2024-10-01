@@ -9,18 +9,18 @@ import './statistic.css'
 interface CounterStatisticProps {
     label: string;
     endValue: string;
-    icon: IconDefinition;
+    icon: string;
 }
 
 const statistics: CounterStatisticProps[] = [
-    { label: 'תושבים', endValue: '55000', icon: faUsers },
-    { label: 'בתי ספר', endValue: '15', icon: faSchool },
-    { label: 'גני ילדים', endValue: '50', icon: faBaby },
-    { label: 'פארקים', endValue: '10', icon: faTree },
-    { label: 'בתי כנסת', endValue: '30', icon: faSynagogue },
-    { label: 'מרכזי קניות', endValue: '5', icon: faShoppingCart },
-    { label: 'מרפאות', endValue: '8', icon: faHospital },
-    { label: 'קווי אוטובוס', endValue: '12', icon: faRoad },
+    { label: 'תושבים', endValue: '55000', icon: 'person' },
+    { label: 'בתי ספר', endValue: '15', icon: 'backpack' },
+    { label: 'גני ילדים', endValue: '50', icon: 'dice-5' },
+    { label: 'פארקים', endValue: '10', icon: 'tree' },
+    { label: 'בתי כנסת', endValue: '30', icon: 'book' },
+    { label: 'מרכזי קניות', endValue: '5', icon: 'cart' },
+    { label: 'מרפאות', endValue: '8', icon: 'h-circle' },
+    { label: 'קווי אוטובוס', endValue: '12', icon: 'bus-front' },
 ];
 
 export default function Statistic() {
@@ -30,7 +30,7 @@ export default function Statistic() {
     });
 
     return (
-        <div className="statistics-group pb-28">
+        <div className="statistics-group pb-28 mt-4">
             {statistics.map((stat, index) => (
                 <CounterStatistic key={index} {...stat} inView={inView} ref={ref} />
             ))}
@@ -71,7 +71,7 @@ const CounterStatistic = React.forwardRef<HTMLDivElement, CounterStatisticProps 
                 transition={{ duration: 0.5 }}
                 className="statistic-item text-center shadow-sm"
             >
-                <FontAwesomeIcon icon={icon} className="statistic-icon" style={{ color: '#0d6efd' }} />
+                   <i className={`bi bi-${icon} statistic-icon`} style={{color:'#0d6efd '}}></i>
                 <div className="statistic-value">{count.toLocaleString()}</div>
                 <div className="statistic-label">{label}</div>
             </motion.div>
