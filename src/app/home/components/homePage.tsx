@@ -3,14 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './homePage.css'
 import { motion } from 'framer-motion';
 import { CldImage } from 'next-cloudinary';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faTree, faHome, faCalendarAlt, faStore,
-    faGraduationCap, faHeartbeat, faPlay, faPause,
-    faArrowLeft,
-} from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Container, Row, Col } from 'react-bootstrap';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -18,7 +11,6 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { useRouter } from 'next/navigation';
 import Statistic from './statistic';
 
 interface InfoCardProps {
@@ -157,23 +149,67 @@ const HomePage: React.FC = () => {
         }
     };
 
-
+    const heroImages = [
+        'neighborhood1_wcwkgs',
+        'neighborhood2_irtkau',
+        'sport_m04xaa',
+        'work_street_mo1w1b',
+        'school_v0elcf',
+    ];
 
 
     return (
         <Container fluid className="px-0 py-0">
             <section className="hero-section">
-                <div className="video-container">
-                    <video
-                        ref={videoRef}
-                        src="/videos/panorama2.mp4"
-                        autoPlay
-                        loop
-                        muted
-                        className="video-background"
-                    />
-                    <div className="video-overlay" />
-                </div>
+                <Swiper
+                    slidesPerView={1}
+                    spaceBetween={0}
+                    autoplay={{
+                        delay: 5000,
+                        disableOnInteraction: false,
+                    }}
+                    pagination={{
+                        clickable: true,
+                    }}
+                    navigation={false}
+                    modules={[Autoplay, Pagination, Navigation]}
+                    className="hero-swiper"
+                >
+                    {heroImages.map((image, index) => (
+                        <SwiperSlide key={index}>
+                            <div className="hero-slide">
+                                <CldImage
+                                    src={image}
+                                    alt={`תמונת גיבור ${index + 1}`}
+                                    layout="fill"
+                                    objectFit="cover"
+                                    quality={100}
+                                />
+                                <div className="hero-overlay" />
+                                <div className="hero-content-wrapper">
+                                    <motion.div
+                                        className="hero-content"
+                                        initial={{ opacity: 0, y: 50 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.8, delay: 0.2 }}
+                                    >
+                                        <h1 className="hero-title">ברוכים הבאים לקהילאפ</h1>
+                                        <p className="hero-subtitle">המקום שלך לחיבור, מידע ושיתוף בקהילת רמות</p>
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.5, delay: 0.8 }}
+                                        >
+                                            <Link href="/about" className="hero-cta-button">
+                                                גלה עוד על הקהילה שלנו
+                                            </Link>
+                                        </motion.div>
+                                    </motion.div>
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
                 <motion.div
                     className="hero-content"
                     initial={{ opacity: 0, y: 50 }}
@@ -182,14 +218,6 @@ const HomePage: React.FC = () => {
                 >
                     <h1 className="hero-title">ברוכים הבאים לקהילאפ</h1>
                 </motion.div>
-                <button onClick={togglePlay} className="video-control">
-                    <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
-                </button>
-                {/* <div className="diagonal-cut">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
-                        <path fill="#ffffff" fill-opacity="1" d="M0,160L48,138.7C96,117,192,75,288,69.3C384,64,480,96,576,122.7C672,149,768,171,864,165.3C960,160,1056,128,1152,117.3C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                    </svg>
-                </div> */}
             </section>
 
             <Container fluid className="content-container">
@@ -242,15 +270,17 @@ const HomePage: React.FC = () => {
                                         {infoCards.map((card, index) => (
                                             <SwiperSlide key={index}>
                                                 <div className="info-card mt-3 mx-4 p-2 rounded shadow-sm">
-                                                    <div className="card-content">
-                                                        <div className="card-icon flex align-items-center mb-2">
-                                                            <i className={`bi bi-${card.icon} me-2`} style={{color:'#0d6efd '}}></i>
-                                                            <h3>{card.title}</h3>
-                                                        </div>
+                                                    {/* <div className="bg-danger"> */}
+                                                    <div className="card-icon flex align-items-center mb-2">
+                                                        <i className={`bi bi-${card.icon} me-2`} style={{ color: '#0d6efd ' }}></i>
+                                                        <h3>{card.title}</h3>
+                                                    </div>
+                                                    <div className="my-auto">
                                                         <p>{card.content}</p>
                                                     </div>
+                                                    {/* </div> */}
                                                     <div className="home-info-card-footer mt-auto my-2">
-                                                        <button className='btn btn-link-home-card w-75 mx-auto my-auto'>
+                                                        <button className='btn btn-link-home-card w-75 border mx-auto my-auto'>
                                                             <Link href={card.link} className="link no-underline">
                                                                 גלה עוד
                                                                 {/* <FontAwesomeIcon icon={faArrowLeft} className="arrow-icon" /> */}
@@ -296,7 +326,7 @@ const HomePage: React.FC = () => {
                                             </motion.div>
                                             {neighborhoodInfo[rowIndex] && (
                                                 <motion.div
-                                                    className="neighborhood-info"
+                                                    className="neighborhood-info rounded"
                                                     initial={{ opacity: 0, y: 20 }}
                                                     whileInView={{ opacity: 1, y: 0 }}
                                                     transition={{ duration: 0.5 }}
