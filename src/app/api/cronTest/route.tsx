@@ -1,18 +1,16 @@
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
-    const authHeader = req.headers.get('Authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        return new Response('Unauthorized', {
+    const authHeader = req.headers.get('authorization');
+    if (authHeader !== `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`) {
+        return new NextResponse('Unauthorized', {
             status: 401,
         });
     }
     try {
-        // כאן תוכל להוסיף את הלוגיקה שאתה רוצה שתרוץ מדי יום
         const currentTime = new Date().toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' });
         
-        // לדוגמה, נשמור את זמן הריצה בקובץ או במסד נתונים
-        // כאן אתה יכול להוסיף קוד לשמירת המידע
+        // כאן תוכל להוסיף לוגיקה לשמירת זמן הריצה
 
         return NextResponse.json({ msg: `הפעולה התקופתית הופעלה בתאריך: ${currentTime}` });
     }
