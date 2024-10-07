@@ -177,7 +177,7 @@ export default function AddComment(props: any) {
           )}
           <div className='d-flex justify-content-between flex-column'>
             <div className='d-flex'>
-              <div className='d-flex align-items-center'>
+              {/* <div className='d-flex align-items-center'>
                 <CldUploadButton
                   className='btn add-file-comment-forum-btn me-1'
                   uploadPreset="my_upload_test"
@@ -196,7 +196,7 @@ export default function AddComment(props: any) {
                 >
                   <i className="bi bi-paperclip"></i>
                 </CldUploadButton>
-              </div>
+              </div> */}
               <div className='flex-grow-1'>
                 <textarea
                   ref={commentRef}
@@ -204,7 +204,7 @@ export default function AddComment(props: any) {
                   onChange={handleExpand}
                   onKeyDown={handleKeyDown}
                   placeholder='הוסף תגובה'
-                  className='form-control add-comment-forum-textarea'
+                  className='form-control border-0 add-comment-forum-textarea'
                   maxLength={1000}
                   rows={1}
                   style={{ resize: 'none', minHeight: '38px', maxHeight: '200px', overflowY: 'auto' }}
@@ -216,14 +216,14 @@ export default function AddComment(props: any) {
                 </button>
               </div>
             </div>
-            {fileName && (
+            {/* {fileName && (
               <div className="mt-2">
                 <small className="text-muted">
                   <i className="bi bi-file-earmark-image me-md-1"></i>
                   קובץ מצורף: {fileName}
                 </small>
               </div>
-            )}
+            )} */}
           </div>
         </Card.Body>
       </Card>

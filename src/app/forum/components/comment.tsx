@@ -6,6 +6,7 @@ import { CldImage } from 'next-cloudinary';
 import { Card, Badge, Button, Modal } from 'react-bootstrap';
 import './comment.css'
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const dynamic = 'auto';
 
@@ -74,9 +75,15 @@ export default function CommentById(props: any) {
   }
 
   return (
-    <div className='container mt-3'>
-
-      <Modal show={show} onHide={handleClose} centered size="lg">
+    <div className='container'>
+      <motion.div
+        className='text-center'
+      >
+        <div className="header-container text-white my-auto rounded-bottom shadow-sm">
+          <p className="tittle-heeder">תגובות</p>
+        </div>
+      </motion.div>
+      {/* <Modal show={show} onHide={handleClose} centered size="lg">
         {dataForum && (
           <Modal.Body className="p-0">
             <button onClick={handleClose} className="btn-close position-absolute top-0 end-0 m-3 z-3" aria-label="Close"></button>
@@ -95,58 +102,59 @@ export default function CommentById(props: any) {
             />
           </Modal.Body>
         )}
-      </Modal>
+      </Modal> */}
 
 
-      <Card className='shadow-sm hover-card mb-3 rounded'>
-      {dataForum && (
-        <Card.Body>
-          <div className='d-flex justify-content-between align-items-start mb-3'>
-            <div className='d-flex'>
-              <div className='text-center me-3'>
-                <div className='bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px' }}>
-                  <h5 className='m-0'>{dataForum.userName[0]}</h5>
+      <Card className='shadow-sm mb-3 rounded mx-auto' style={{ width: '90%', marginTop: '-40px' }}>
+        {dataForum && (
+          <Card.Body>
+            <div className='d-flex justify-content-between align-items-start mb-3'>
+              <div className='d-flex'>
+                <div className='text-center me-3'>
+                  <div className='bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px' }}>
+                    <h5 className='m-0'>{dataForum.userName[0]}</h5>
+                  </div>
+                  <small className='text-muted'>{dataForum.userName}</small>
                 </div>
-                <small className='text-muted'>{dataForum.userName}</small>
+                <div className='d-flex flex-column justify-content-center'>
+                  <h5 className='mb-0 fw-bold'>{dataForum.title}</h5>
+                  <Card.Text className='mt-2' style={{ whiteSpace: "pre-wrap" }}>
+                    {dataForum.description}
+                  </Card.Text>
+                </div>
               </div>
-              <div className='d-flex flex-column justify-content-center'>
-                <h5 className='mb-0 fw-bold'>{dataForum.tittle}</h5>
-                <Card.Text className='mt-2' style={{ whiteSpace: "pre-wrap" }}>
-                  {dataForum.description}
-                </Card.Text>
+              <Badge className="ms-2 align-self-start top-0 end-20 translate-middle position-absolute text-primary bg-white shadow-sm">{dataForum.topic}</Badge>
+            </div>
+            {/* {dataForum.fileName && (
+              <div className="mb-3">
+                <CldImage
+                  src={dataForum.fileName}
+                  width="100"
+                  height="100"
+                  sizes="100vw"
+                  crop={{
+                    type: 'fill',
+                    source: true
+                  }}
+                  className="rounded"
+                  alt='תמונה מצורפת'
+                  priority
+                />
               </div>
+            )} */}
+            <div className='d-flex justify-content-end align-items-center'>
+
+              <small className='me-2 text-muted'>
+                <i className="bi bi-chat-dots me-2"></i>
+                {dataForum.numOfComments} תגובות
+              </small>
+              <small className='text-muted'><i className="bi bi-clock me-1"></i>{formatPostAgo(dataForum.date)}</small>
             </div>
-            <Badge className="ms-2 align-self-start top-0 end-20 translate-middle position-absolute bg-primary shadow-sm">{dataForum.topic}</Badge>
-          </div>
-          {dataForum.fileName && (
-            <div className="mb-3">
-              <CldImage
-                src={dataForum.fileName}
-                width="100"
-                height="100"
-                sizes="100vw"
-                crop={{
-                  type: 'fill',
-                  source: true
-                }}
-                className="rounded"
-                alt='תמונה מצורפת'
-                priority
-              />
-            </div>
-          )}
-          <div className='d-flex justify-content-between align-items-center'>
-            <div >
-              <i className="bi bi-chat-dots me-2"></i>
-              {dataForum.numOfComments} תגובות
-            </div>
-            <small className='text-muted'><i className="bi bi-clock me-1"></i>{formatPostAgo(dataForum.date)}</small>
-          </div>
-        </Card.Body>
+          </Card.Body>
         )}
       </Card>
 
-      <div className="d-flex flex-column align-items-end">
+      <div className="d-flex flex-column align-items-end mx-auto" style={{ width: '90%' }}>
         {dataComment && dataComment.map((item: any) => (
           <Card
             key={item._id}
@@ -186,7 +194,7 @@ export default function CommentById(props: any) {
                 <div className="flex-grow-1">
                   <h6 className="mb-1 font-bold">{item.userName}</h6>
                   <p className="mb-1" style={{ whiteSpace: "pre-wrap" }}>{item.comment}</p>
-                  {item.fileName && (
+                  {/* {item.fileName && (
                     <div className="mt-2 mb-2">
                       <CldImage
                         src={item.fileName}
@@ -202,9 +210,9 @@ export default function CommentById(props: any) {
                         onClick={handleShow}
                       />
                     </div>
-                  )}
+                  )} */}
                 </div>
-                <div>
+                <div className='d-flex justify-content-end align-items-end'>
                   <small className="text-muted">
                     <i className="bi bi-clock me-1"></i>{formatPostAgo(item.date)}
                   </small>

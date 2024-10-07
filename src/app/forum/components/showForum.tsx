@@ -60,7 +60,6 @@ export default function ShowForum(props: any) {
 
     const showCommentFunction = (id: any) => {
         setForumId(id);
-
         setShowComment(true);
     }
 
@@ -151,7 +150,7 @@ export default function ShowForum(props: any) {
         }
         setShowAllTags(false);
     };
-    
+
 
     return (
         <div className='px-3'>
@@ -428,7 +427,7 @@ export default function ShowForum(props: any) {
                             }}
                         >
                             <motion.div
-                                className="forum-comment-modal rounded relative p-2 p-md-2 overflow-y-auto"
+                                className="forum-comment-modal rounded relative p-2 pt-md-0 p-md-2 overflow-y-auto"
                                 initial={{ y: 50, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 exit={{ y: 50, opacity: 0 }}

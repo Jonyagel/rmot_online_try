@@ -139,7 +139,7 @@ export default function AddQuestion(props: any) {
                             <Form.Control ref={descriptionRef} as="textarea" rows={3} required />
                         </Form.Group>
                         <div className="d-flex justify-content-between align-items-center">
-                            <Form.Group className="mb-3">
+                            {/* <Form.Group className="mb-3">
                                 <Form.Label>תמונה</Form.Label>
                                 <div className="d-flex align-items-center">
                                     <CldUploadButton
@@ -183,7 +183,7 @@ export default function AddQuestion(props: any) {
                                         </div>
                                     )}
                                 </div>
-                            </Form.Group>
+                            </Form.Group> */}
                             <div className='pt-3'>
                                 <Button type="submit" variant="primary">
                                     <i className="bi bi-send me-2"></i>

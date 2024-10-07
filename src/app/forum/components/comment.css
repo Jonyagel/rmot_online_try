@@ -1,3 +1,18 @@
+.header-container {
+  background-image: url('/images/background try2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+  padding: 20px;
+  color: white;
+  min-height: 120px;
+}
+
+.tittle-heeder{
+  font-size: 36px;
+}
+
 .hover-card {
     transition: all 0.3s ease;
   }
