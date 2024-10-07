@@ -105,7 +105,7 @@ export default function AddQuestion(props: any) {
     return (
         <div>
             <button
-                className="btn rounded border"
+                className="btn btn-add-forum rounded border"
                 onClick={checkSignIn}
                 style={{ maxHeight: '36px' }}>
                 הוסף פורום

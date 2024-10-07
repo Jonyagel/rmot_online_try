@@ -4,11 +4,12 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddQuestion from './addQuestion';
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Popover, OverlayTrigger, Dropdown, Form, InputGroup, Modal, Col, Row, Nav } from 'react-bootstrap';
+import { Card, Badge, Popover, OverlayTrigger, Button, Form, InputGroup, Modal, Col, Row, Nav } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import './showForum.css'
-import { FaChevronDown, FaSearch } from 'react-icons/fa';
+import { FaChevronDown, FaSearch, FaTimes } from 'react-icons/fa';
 import TagFilter from './tagFilter';
+import CommentById from './comment';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,12 +26,43 @@ export default function ShowForum(props: any) {
     const [lengthOfForum, setLengthOfForum] = useState(10);
     const [loading, setLoading] = useState(2);
     const [allTopics, setAllTopics] = useState(['']);
+    const [forumId, setForumId] = useState();
+    const [showComment, setShowComment] = useState(false);
+    const [dataComment, setDataComment] = useState([]);
+    const [dataForum, setDataForum] = useState();
 
     const saerchRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         getAllTags();
     }, []);
+
+    const doApiComment = async (id: any) => {
+        let urlGet = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${id}`
+        const respGet = await fetch(urlGet, { cache: 'no-store' });
+        const dataGet = await respGet.json();
+        let commentAr = dataGet;
+        setDataComment(commentAr)
+        console.log(dataGet);
+        return commentAr;
+    }
+
+    const doApiForum = async (id: any) => {
+        let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/${id}`
+        const resp = await fetch(url, { cache: 'no-store' });
+        const data = await resp.json();
+        const ForumAr = data;
+        setDataForum(ForumAr);
+        console.log(data);
+        return ForumAr;
+
+    }
+
+    const showCommentFunction = (id: any) => {
+        setForumId(id);
+
+        setShowComment(true);
+    }
 
     const getAllTags = async () => {
         let url = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/getAllTopic`;
@@ -119,6 +151,7 @@ export default function ShowForum(props: any) {
         }
         setShowAllTags(false);
     };
+    
 
     return (
         <div className='px-3'>
@@ -138,8 +171,8 @@ export default function ShowForum(props: any) {
                         // transition={{ duration: 0.5 }}
                         className='text-center'
                     >
-                        <div className="header-container text-white rounded-bottom shadow-sm">
-                            <h1 className='p-6' style={{fontSize:'30px'}}>פורום תושבי רמות</h1>
+                        <div className="header-container text-white my-auto rounded-bottom shadow-sm">
+                            <p className="tittle-heeder">פורום תושבי רמות</p>
                         </div>
                     </motion.div>
                     <motion.div
@@ -149,8 +182,8 @@ export default function ShowForum(props: any) {
                         transition={{ duration: 0.5 }}
                     >
                         <div className=''>
-                            <div className=''>
-                                <div className="search-bar-container bg-white shadow-sm  p-3 rounded-top align-items-center mx-auto">
+                            <div className='mt-3'>
+                                <div className="search-bar-container bg-white shadow-sm  p-3 rounded align-items-center mx-auto">
                                     <Row className="align-items-center">
                                         {/* <Col lg={3}>
                                            
@@ -176,11 +209,11 @@ export default function ShowForum(props: any) {
                                                     type="text"
                                                     ref={saerchRef}
                                                     placeholder="חיפוש בפורום"
-                                                    className=""
+                                                    className="search-text"
                                                 />
                                                 <InputGroup.Text
                                                     className="search-button custom-hover-effect"
-                                                    style={{cursor: 'pointer'}}
+                                                    style={{ cursor: 'pointer' }}
                                                     onClick={(e: any) => onSearchClick(e)}
                                                 >
                                                     <FaSearch />
@@ -232,35 +265,42 @@ export default function ShowForum(props: any) {
                                         exit={{ opacity: 0, scale: 0.9 }}
                                         transition={{ duration: 0.3 }}
                                     >
-                                        <Link href={`/forum/comment/${item._id}`} className='text-decoration-none'>
-                                            <Card className='forumCard shadow-sm hover-card position-relative' style={{ minHeight: '100px' }}>
-                                                <Card.Body className='forumCardBody'>
-                                                    <div className='d-flex justify-content-between align-items-start mb-3'>
-                                                        <div className='d-flex'>
-                                                            <OverlayTrigger
+                                        {/* <Link href={`/forum/comment/${item._id}`} className='text-decoration-none'> */}
+                                        <Card className='forumCard border-0 shadow-sm position-relative' style={{ minHeight: '100px' }}
+                                            onClick={() => {
+                                                doApiComment(item._id);
+                                                doApiForum(item._id);
+                                                showCommentFunction(item._id)
+                                                // setForumId(item._id)
+                                                // setShowComment(true)
+                                            }}>
+                                            <Card.Body className='forumCardBody'>
+                                                <div className='d-flex justify-content-between align-items-start mb-3'>
+                                                    <div className='d-flex'>
+                                                        {/* <OverlayTrigger
                                                                 trigger="hover"
                                                                 placement="top"
                                                                 overlay={popover(item.userName)}
-                                                            >
-                                                                <div className='text-center me-3'>
-                                                                    <div className='bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px' }}>
-                                                                        <h5 className='m-0'>{item.userName[0]}</h5>
-                                                                    </div>
-                                                                    <small className='text-muted'>{item.userName}</small>
-                                                                </div>
-                                                            </OverlayTrigger>
-                                                            <div className='d-flex flex-column justify-content-center'>
-                                                                <h5 className='mb-0 fw-bold'>{item.title}</h5>
-                                                                <Card.Text className='mt-2' style={{ whiteSpace: "pre-wrap" }}>
-                                                                    {item.description.length > 150
-                                                                        ? `${item.description.substring(0, 150)}...`
-                                                                        : item.description}
-                                                                </Card.Text>
+                                                            > */}
+                                                        <div className='text-center me-3'>
+                                                            <div className='bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px' }}>
+                                                                <h5 className='m-0'>{item.userName[0]}</h5>
                                                             </div>
+                                                            <small className='text-muted'>{item.userName}</small>
                                                         </div>
-                                                        <Badge bg='primary' className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute">{item.topic}</Badge>
+                                                        {/* </OverlayTrigger> */}
+                                                        <div className='d-flex flex-column justify-content-center'>
+                                                            <h5 className='mb-0 fw-bold'>{item.title}</h5>
+                                                            <Card.Text className='mt-2' style={{ whiteSpace: "pre-wrap" }}>
+                                                                {item.description.length > 150
+                                                                    ? `${item.description.substring(0, 150)}...`
+                                                                    : item.description}
+                                                            </Card.Text>
+                                                        </div>
                                                     </div>
-                                                    {/* {item.fileName && (
+                                                    <Badge className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute shadow-sm bg-primary">{item.topic}</Badge>
+                                                </div>
+                                                {/* {item.fileName && (
                                                         <div className="mb-3">
                                                             <CldImage
                                                                 src={item.fileName}
@@ -283,16 +323,16 @@ export default function ShowForum(props: any) {
                                                             />
                                                         </div>
                                                     )} */}
-                                                    <div className='d-flex justify-content-end align-items-center'>
-                                                        <small className='me-2 text-muted'>
-                                                            <i className="bi bi-chat me-2"></i>
-                                                            {item.numOfComments} תגובות
-                                                        </small>
-                                                        <small className='text-muted'><i className="bi bi-clock me-2"></i>{formatPostAgo(item.date)}</small>
-                                                    </div>
-                                                </Card.Body>
-                                            </Card>
-                                        </Link>
+                                                <div className='d-flex justify-content-end align-items-center'>
+                                                    <small className='me-2 text-muted'>
+                                                        <i className="bi bi-chat me-2"></i>
+                                                        {item.numOfComments} תגובות
+                                                    </small>
+                                                    <small className='text-muted'><i className="bi bi-clock me-2"></i>{formatPostAgo(item.date)}</small>
+                                                </div>
+                                            </Card.Body>
+                                        </Card>
+                                        {/* </Link> */}
                                     </motion.div>
                                     {(index + 1) % 6 === 0 && (
                                         <motion.div
@@ -374,6 +414,70 @@ export default function ShowForum(props: any) {
                     />
                 </Modal.Body>
             </Modal>
+
+            <AnimatePresence>
+                {showComment && (
+                    <Row className="m-0">
+                        <motion.div
+                            className="modal-overlay"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => {
+                                setShowComment(false);
+                            }}
+                        >
+                            <motion.div
+                                className="forum-comment-modal rounded relative p-2 p-md-2 overflow-y-auto"
+                                initial={{ y: 50, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: 50, opacity: 0 }}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <button
+                                    className="close-button"
+                                    onClick={() => {
+                                        setShowComment(false);
+                                    }}
+                                >
+                                    <FaTimes />
+                                </button>
+                                <CommentById idForum={forumId} commentAr={dataComment} forumData={dataForum} />
+                                <Button
+                                    variant="link"
+                                    className="scroll-button scroll-top-button"
+                                    onClick={() => {
+                                        const modal = document.querySelector(".forum-comment-modal");
+                                        if (modal) {
+                                            modal.scrollTo({
+                                                top: 0,
+                                                behavior: "smooth",
+                                            });
+                                        }
+                                    }}
+                                >
+                                    <i className="bi bi-chevron-up"></i>
+                                </Button>
+                                <Button
+                                    variant="link"
+                                    className="scroll-button scroll-bottom-button"
+                                    onClick={() => {
+                                        const modal = document.querySelector(".forum-comment-modal");
+                                        if (modal) {
+                                            modal.scrollTo({
+                                                top: modal.scrollHeight,
+                                                behavior: "smooth",
+                                            });
+                                        }
+                                    }}
+                                >
+                                    <i className="bi bi-chevron-down"></i>
+                                </Button>
+                            </motion.div>
+                        </motion.div>
+                    </Row>
+                )}
+            </AnimatePresence>
         </div >
     )
 }

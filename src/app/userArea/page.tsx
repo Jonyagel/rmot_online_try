@@ -8,6 +8,8 @@ import { CldImage } from 'next-cloudinary';
 import { motion, AnimatePresence } from 'framer-motion';
 import './userArea.css';
 import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useAppContext } from '../context/appContext';
 
 interface UserPost {
     id: string;
@@ -65,11 +67,34 @@ export default function UserArea() {
     const [currentEdit, setCurrentEdit] = useState<UserPost | null>(null);
     const [alertMessage, setAlertMessage] = useState('');
     const [activeTab, setActiveTab] = useState('nadlan');
-
+    const { isLogin, setIsLogin } = useAppContext();
+    const router = useRouter();
     useEffect(() => {
         fetchUserData();
         // fetchNadlanPosts();
     }, []);
+    useEffect(() => {
+        console.log(isLogin , session)
+        if (isLogin === false && session === null) {
+            router.push('/login');
+        }
+    }, [isLogin , session]);
+
+    const checkSignOut = async () => {
+        if (session) {
+            signOut()
+            setIsLogin(false);
+            router.push('/');
+        }
+        else {
+            const url = `${process.env.NEXT_PUBLIC_API_URL}/api/signOut`;
+            const resp = await fetch(url, { cache: 'no-store' });
+            const data = await resp.json();
+            console.log(data);
+            setIsLogin(false);
+            router.push('/');
+        }
+    }
 
     const fetchUserData = async () => {
         if (!session) {
@@ -189,7 +214,7 @@ export default function UserArea() {
                                                 <Button variant="outline-primary" className="me-2 mb-2">
                                                     <FontAwesomeIcon icon={faEdit} className="me-2" /> ערוך פרופיל
                                                 </Button>
-                                                <Button variant="outline-dark" className="mb-2" onClick={() => signOut()}>
+                                                <Button variant="outline-dark" className="mb-2" onClick={() => checkSignOut()}>
                                                     <FontAwesomeIcon icon={faSignOutAlt} className="me-2" /> התנתק מחשבון
                                                 </Button>
                                             </div>

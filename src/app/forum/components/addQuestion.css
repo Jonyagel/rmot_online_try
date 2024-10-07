@@ -10,6 +10,11 @@
   /* font-size: 16px; */
   /* margin-bottom: 20px; */
 /* } */
+
+.btn-add-forum{
+font-size: 13px;
+}
+
 .addForumModal .modal-content {
   border-radius: 20px;
   border: none;

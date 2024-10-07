@@ -1,0 +1,39 @@
+.hover-card {
+    transition: all 0.3s ease;
+  }
+  
+  .hover-card:hover {
+    transform: translateY(-3px);
+    /* box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important; */
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
+  body {
+    background-color: #f8f9fa;
+  }
+  
+  .card {
+    border: none;
+    /* border-radius: 15px; */
+  }
+  
+  .btn-outline-secondary {
+    transition: opacity 0.3s ease;
+  }
+  
+  .modal-content {
+    border: none;
+    border-radius: 15px;
+  }
+
+  .highlight {
+    animation: highlight 2s ease-out;
+  }
+  
+  @keyframes highlight {
+    0% { background-color: #99daff; }
+    100% { background-color: transparent; }
+  }

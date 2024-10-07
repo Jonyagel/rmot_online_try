@@ -1,0 +1,35 @@
+  .add-comment-forum-textarea {
+    resize: none;
+    overflow: hidden;
+  }
+  
+  .add-comment-forum {
+    border: none;
+  }
+
+  .send-comment-forum-btn:hover{
+    background: #0d6dfd26;
+  }
+  .add-file-comment-forum-btn:hover{
+    background: #0d6dfd26;
+  }
+  
+  
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #80bdff;
+  }
+
+  .add-comment-forum.bg-light {
+    transition: all 0.3s ease;
+  }
+  
+  .add-comment-forum.bg-light:hover {
+    background-color: #f8f9fa !important;
+  }
+  
+  .text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

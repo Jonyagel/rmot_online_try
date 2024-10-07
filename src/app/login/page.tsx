@@ -8,7 +8,6 @@ import { useSession } from 'next-auth/react';
 
 export const dynamic = 'auto';
 
-
 export default function LoginPage() {
     const { data: session } = useSession();
     const [signIn, setSignIn] = useState(false);
