@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export async function GET(req: any, route: any) {
     try {
         if (cookies().has("token")) {
-            // מחיקת העוגייה "token"
             cookies().delete("token");
 
             return NextResponse.json({ msg: "התנתקת בהצלחה", status: 200 }, { status: 200 });
