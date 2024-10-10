@@ -9,7 +9,7 @@
 }
 
 .card-header {
-    background-color: #0d6efd;
+    background-color: #00a35b;
     padding: 15px;
     text-align: center;
     color: white;
@@ -41,11 +41,11 @@
 }
 
 .groom-details {
-    border-right: 3px solid #0d6efd; /* קו דק להפרדה */
+    border-right: 3px solid #00a35b; /* קו דק להפרדה */
 }
 
 .bride-details {
-    border-left: 3px solid #0d6efd; /* קו דק להפרדה */
+    border-left: 3px solid #00a35b; /* קו דק להפרדה */
 }
 
 .person-details h3 {

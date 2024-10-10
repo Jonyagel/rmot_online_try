@@ -89,7 +89,7 @@
 }
 
 .weather-widget__icon--active {
-  color: #0d6efd;
+  color: #00a35b;
   transform: scale(1.2);
 }
 

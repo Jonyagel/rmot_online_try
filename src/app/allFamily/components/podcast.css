@@ -1,5 +1,5 @@
 .podcast-player {
-    border: 1px solid #0d6efd;
+    border: 1px solid #00a35b;
     border-radius: 15px;
     padding: 20px;
     display: flex;
@@ -85,7 +85,7 @@
     width: 15px;
     height: 15px;
     border-radius: 50%;
-    background: #0d6efd ;
+    background: #00a35b ;
     cursor: pointer;
 }
 
