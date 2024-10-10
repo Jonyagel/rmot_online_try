@@ -119,7 +119,7 @@ export default function Header() {
                     </nav>
 
                     <Link href="/" className="logo-link">
-                        <Image src='/images/לוגו לבד.svg' width={120} height={120} className="logo" alt="Logo" />
+                        <Image src='/images/לוגו ירוק.svg' width={120} height={120} className="logo" alt="Logo" />
                     </Link>
                 </div>
             </div>

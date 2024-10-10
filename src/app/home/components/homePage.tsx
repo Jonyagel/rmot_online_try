@@ -272,7 +272,7 @@ const HomePage: React.FC = () => {
                                                 <div className="info-card mt-3 mx-4 p-2 rounded shadow-sm">
                                                     {/* <div className="bg-danger"> */}
                                                     <div className="card-icon flex align-items-center mb-2">
-                                                        <i className={`bi bi-${card.icon} me-2`} style={{ color: '#0d6efd ' }}></i>
+                                                        <i className={`bi bi-${card.icon} me-2`} style={{ color: '#00a35b ' }}></i>
                                                         <h3>{card.title}</h3>
                                                     </div>
                                                     <div className="my-auto">

@@ -1,9 +1,9 @@
 .btn-add-shop:hover {
-  background-color: #0d6dfd26;
+  background-color: #d2f0e4;
 }
 
 .nav-link {
-  font-size: 13px;
+  font-size: 14px;
   color: #333;
   text-decoration: none;
   transition: color 0.2s ease;
@@ -12,11 +12,11 @@
 }
 
 .nav-link:hover {
-  color: #0d6efd;
+  color: #00a35b;
 }
 
 .nav-link.active {
-  color: #0d6efd;
+  color: #00a35b;
 }
 
 .nav-link::after {
@@ -26,7 +26,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #0d6efd;
+  background-color: #00a35b;
   transition: width 0.3s ease;
 }
 
@@ -36,7 +36,7 @@
 }
 
 .header-container {
-  background-image: url('/images/background try2.jpg');
+  background-image: url('/images/ירוק ללמעלה.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -44,6 +44,9 @@
   padding: 20px;
   color: white;
   min-height: 120px;
+}
+.tittle-heeder{
+  font-size: 36px;
 }
 
 .search-bar-container {
@@ -81,7 +84,7 @@
 .ad-card {
   display: flex;
   flex-direction: column;
-  height: 300px;
+  height: 320px;
   background-color: #ffffff;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -137,7 +140,7 @@
 }
 
 .shop-card p {
-  font-size: 13px;
+  font-size: 14px;
   color: #666666;
   margin-top: 3px;
 }
@@ -153,13 +156,13 @@
 
 .more-info-btn {
   padding: 6px 12px;
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .more-info-btn:hover {
-  background-color: #0d6dfd26;
+  background-color: #d2f0e4;
 }
 
 .shop-address {
@@ -173,7 +176,7 @@
 
 .shop-address svg {
   margin-right: 4px;
-  color: #0d6efd;
+  color: #00a35b;
   flex-shrink: 0;
 }
 
@@ -195,11 +198,11 @@
 }
 
 .shop-modal .upload-image:hover {
-  background-color: #0d6dfd26;
+  background-color: #d2f0e4;
 }
 
 .shop-modal .upload-logo:hover {
-  background-color: #0d6dfd26;
+  background-color: #d2f0e4;
 }
 
 
@@ -225,6 +228,28 @@
   max-height: 90vh;
   display: flex;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.close-button {
+  position: fixed;
+  background: rgba(255, 255, 255, 0.452);
+  border: none;
+  color: #333;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  margin: 5px;
+}
+
+.close-button:hover {
+  transform: rotate(90deg);
 }
 
 .ys-shop-image-slider .swiper-pagination-bullet {
@@ -283,7 +308,7 @@
 }
 
 .ys-shop-description {
-  font-size: 16px;
+  font-size: 14px;
   color: #666666;
   line-height: 1.6;
 }
@@ -313,7 +338,7 @@
 }
 
 .ys-info-item a:hover {
-  color: #0d6efd;
+  color: #00a35b;
 }
 
 .ys-close-button {
@@ -334,6 +359,12 @@
   top: 2px;
   right: 2px;
   /* margin: 5px; */
+}
+
+.shop-modal .form-control:focus {
+  box-shadow: 0 0 0 3px #00a35a5c;
+  border-color: #00a35b;
+  outline: none;
 }
 
 .ys-close-button:hover {
@@ -375,6 +406,10 @@
   flex: 1;
 }
 
+/* .time-input:focus {
+  border: 1px solid #00a35b;
+} */
+
 .separator {
   margin: 0 10px;
   color: #777;
@@ -387,7 +422,7 @@
 }
 
 .add-button:hover {
-  background-color: #0d6dfd26;
+  background-color: #d2f0e4;
 }
 
 .remove-button {
@@ -402,7 +437,7 @@
 }
 
 .add-shop-modal{
-  background-image: url('/images/background try2.jpg');
+  background-image: url('/images/ירוק ללמעלה.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -414,6 +449,17 @@
 .day-name {
   font-weight: bold;
   margin-right: 5px;
+}
+.map-popup {
+  max-width: 800px; /* הגבלת רוחב המודל */
+}
+
+.modal-body {
+  padding: 0; /* הסרת רווחים מיותרים */
+}
+.leaflet-container {
+  height: 100% !important; /* ודא שהגובה של המפה תופס את כל החלון */
+  width: 100% !important; /* ודא שהרוחב של המפה תופס את כל החלון */
 }
 
 @media (max-width: 768px) {

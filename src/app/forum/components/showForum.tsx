@@ -282,7 +282,7 @@ export default function ShowForum(props: any) {
                                                                 overlay={popover(item.userName)}
                                                             > */}
                                                         <div className='text-center me-3'>
-                                                            <div className='bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px' }}>
+                                                            <div className='text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px', background: '#00a35b' }}>
                                                                 <h5 className='m-0'>{item.userName[0]}</h5>
                                                             </div>
                                                             <small className='text-muted'>{item.userName}</small>
@@ -297,7 +297,7 @@ export default function ShowForum(props: any) {
                                                             </Card.Text>
                                                         </div>
                                                     </div>
-                                                    <Badge className="ms-2 align-self-start top-0 end-10 translate-middle position-absolute shadow-sm bg-primary">{item.topic}</Badge>
+                                                    <Badge className="badge-forum ms-2 align-self-start top-0 end-10 translate-middle position-absolute shadow-sm">{item.topic}</Badge>
                                                 </div>
                                                 {/* {item.fileName && (
                                                         <div className="mb-3">

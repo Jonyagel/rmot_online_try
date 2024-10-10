@@ -27,7 +27,7 @@
 
 .nav-link-forum {
   font-size: 14px;
-  color: #0d6efd;
+  color: #00a35b;
   text-decoration: none;
   /* font-size: 0.9rem; */
   /* font-weight: 500; */
@@ -43,12 +43,12 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: #0d6efd;
+  background-color: #00a35b;
   transition: width 0.3s ease;
 }
 
 .header-container {
-  background-image: url('/images/background try2.jpg');
+  background-image: url('/images/ירוק ללמעלה.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -75,7 +75,7 @@
   display: block;
   width: 50px;
   height: 3px;
-  background: #0d6efd;
+  background: #00a35b;
   margin: 10px auto;
 } */
 
@@ -96,7 +96,7 @@
 
 .search-bar-all{
   font-size: 14px;
-  /* border: 1px #0d6efd solid; */
+  /* border: 1px #00a35b solid; */
 }
 
 .search-bar-container .form-control {
@@ -118,7 +118,7 @@
   font-size: 14px;
   align-items: center;
   background-color: #ffffff;
-  /* border: #0d6efd 1px solid; */
+  /* border: #00a35b 1px solid; */
   /* border-radius: 20px; */
   /* padding: 3px; */
   /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); */
@@ -151,7 +151,7 @@
 }
 
 .sort-toggle span.active {
-  color: #007bff;
+  color: #00a35b;
 }
 
 .sort-toggle .slider {
@@ -160,7 +160,7 @@
   left: 0;
   height: 100%;
   width: 50%;
-  /* border: #0d6efd 1px solid; */
+  /* border: #00a35b 1px solid; */
   background-color: #ffffff;
   /* border-radius: 17px; */
   transition: all 0.3s ease;
@@ -201,12 +201,12 @@
 
 .search-container-forum .search-input:focus {
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
-  border-color: #007bff;
+  border-color: #00a35b;
   outline: none;
 }
 
 .search-container-forum .search-button {
-  background-color: #007bff;
+  background-color: #00a35b;
   color: #fff;
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
@@ -218,8 +218,8 @@
 }
 
 .search-container-forum .search-button:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
+  background-color: #00a35b;
+  border-color: #00a35b;
 }
 
 .search-container-forum .search-button .fa-search {
@@ -228,7 +228,7 @@
 
 .load-more-button {
   background-color: #ffffff;
-  color: #0d6efd;
+  color: #00a35b;
   font-size: 16px;
   font-weight: 600;
   border-radius: 30px;
@@ -240,7 +240,7 @@
 }
 
 .load-more-button:hover {
-  background-color: #0d6efd;
+  background-color: #00a35b;
   color: #ffffff;
 }
 
@@ -255,7 +255,7 @@
 
 .custom-hover-effect:hover {
   transform: scale(1.1);
-  color: #0d6efd;
+  color: #00a35b;
 }
 
 .modal-overlay {
@@ -338,6 +338,9 @@
   bottom: 110px;
   /* bottom: 20px;
   right: 20px; */
+}
+.badge-forum{
+  background-color: #00a35b;
 }
 
 @media (max-width: 768px) {

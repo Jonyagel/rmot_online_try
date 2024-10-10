@@ -25,7 +25,7 @@ const NotFoundAnimation = () => {
           cy="40"
           r="30"
           fill="none"
-          stroke="#4a69bd"
+          stroke="#00a35b"
           strokeWidth="6"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
@@ -36,7 +36,7 @@ const NotFoundAnimation = () => {
           y1="60"
           x2="85"
           y2="85"
-          stroke="#4a69bd"
+          stroke="#00a35b"
           strokeWidth="6"
           strokeLinecap="round"
           initial={{ pathLength: 0 }}
@@ -94,7 +94,7 @@ const NotFoundAnimation = () => {
         style={{
           fontSize: '28px',
           fontWeight: 'bold',
-          color: '#4a69bd',
+          color: '#00a35b',
           position: 'absolute',
           bottom: '25px',
           width: '100%',

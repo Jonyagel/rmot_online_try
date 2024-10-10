@@ -1,5 +1,5 @@
 .header-container {
-  background-image: url('/images/background try2.jpg');
+  background-image: url('/images/ירוק ללמעלה.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -25,7 +25,7 @@
   cursor: pointer;
 }
 .more-nadlan-info:hover {
-  background-color: #0d6dfd26;
+  background-color: #d2f0e4;
 }
 
 .nadlan-price {
@@ -128,11 +128,11 @@ font-size: 10px;
 }
 
 .nav-link-nadlan:hover {
-  color: #0d6efd;
+  color: #00a35b;
 }
 
 .nav-link-nadlan.active {
-  color: #0d6efd;
+  color: #00a35b;
 }
 
 .nav-link-nadlan::after {
@@ -142,7 +142,7 @@ font-size: 10px;
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #0d6efd;
+  background-color: #00a35b;
   transition: width 0.3s ease;
 }
 
@@ -171,7 +171,7 @@ font-size: 10px;
   display: block;
   width: 50px;
   height: 3px;
-  background: #0d6efd;
+  background: #00a35b;
   margin: 10px auto;
 }
 
@@ -180,7 +180,7 @@ font-size: 10px;
   align-items: center;
   justify-content: center;
   /* padding: 20px 20px; */
-  background-color: #0d6efd;
+  background-color: #00a35b;
   color: white;
   border: none;
   border-radius: 50%;
@@ -333,7 +333,7 @@ font-size: 10px;
 }
 
 .nadlan-contact-button {
-  background-color: #0d6efd;
+  background-color: #00a35b;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -526,7 +526,7 @@ textarea.form-control:focus {
 .nadlan-ar-price {
   font-size: 18px;
   font-weight: bolder;
-  color: #0d6efd;
+  color: #00a35b;
   margin-bottom: 8px;
 }
 
@@ -546,7 +546,7 @@ textarea.form-control:focus {
 
 .nadlan-ar-features svg {
   margin-left: 4px;
-  color: #0d6efd;
+  color: #00a35b;
   font-size: 15px;
 }
 
@@ -558,7 +558,7 @@ textarea.form-control:focus {
 .nadlan-ar-more-info-btn {
   width: 100%;
   padding: 6px 10px;
-  background-color: #0d6efd;
+  background-color: #00a35b;
   color: white;
   border: none;
   border-radius: 3px;

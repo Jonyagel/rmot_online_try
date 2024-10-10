@@ -10,7 +10,7 @@ const Footer = () => {
       <Container>
         <Row className="gx-5">
           <Col md={3} className="mb-2">
-            <h5 className="mb-3 text-primary fw-bold">ניווט מהיר</h5>
+            <h5 className="mb-3 fw-bold">ניווט מהיר</h5>
             <ul className="list-unstyled footer-links">
               <li><Link href="/forum" className="text-light text-decoration-none">פורומים</Link></li>
               <li><Link href="/nadlan" className="text-light text-decoration-none">נדל"ן</Link></li>
@@ -19,21 +19,21 @@ const Footer = () => {
             </ul>
           </Col>
           <Col md={3} className="mb-2">
-            <h5 className="mb-3 text-primary fw-bold">שירותים קהילתיים</h5>
+            <h5 className="mb-3 fw-bold">שירותים קהילתיים</h5>
             <ul className="list-unstyled footer-links">
-              <li><i className="bi bi-building me-2 text-primary"></i>זמני תפילה</li>
-              <li><i className="bi bi-book me-2 text-primary"></i>שיעורי תורה</li>
-              <li><i className="bi bi-people me-2 text-primary"></i>התנדבות</li>
-              <li><i className="bi bi-calendar-event me-2 text-primary"></i>לוח אירועים</li>
+              <li><i className="bi bi-building me-2"></i>זמני תפילה</li>
+              <li><i className="bi bi-book me-2"></i>שיעורי תורה</li>
+              <li><i className="bi bi-people me-2"></i>התנדבות</li>
+              <li><i className="bi bi-calendar-event me-2"></i>לוח אירועים</li>
             </ul>
           </Col>
           <Col md={3} className="mb-2">
-            <h5 className="mb-3 text-primary fw-bold">צור קשר</h5>
-            <p><i className="bi bi-telephone me-2 text-primary"></i>123-456-7890</p>
-            <p><i className="bi bi-envelope me-2 text-primary"></i>info@shchuna.co.il</p>
+            <h5 className="mb-3 fw-bold">צור קשר</h5>
+            <p><i className="bi bi-telephone me-2"></i>123-456-7890</p>
+            <p><i className="bi bi-envelope me-2"></i>info@shchuna.co.il</p>
           </Col>
           <Col md={3} className="mb-2">
-            <h5 className="mb-3 text-primary fw-bold">הצטרפו אלינו</h5>
+            <h5 className="mb-3 fw-bold">הצטרפו אלינו</h5>
             <p>הירשמו לניוזלטר שלנו לקבלת עדכונים שבועיים</p>
             <form>
               <div className="input-group mb-3" style={{direction:"ltr"}}>

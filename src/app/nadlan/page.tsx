@@ -372,7 +372,7 @@ export default function RealEstate() {
               >
                 <div className=''>
                   <div className='mt-3'>
-                    <div className="search-bar-container bg-white shadow-sm  p-3 rounded-top align-items-center mx-auto">
+                    <div className="search-bar-container bg-white shadow-sm  p-3 rounded align-items-center mx-auto">
                       <Row className="align-items-center">
                         <Col lg={3}>
                           <Nav>
@@ -474,7 +474,7 @@ export default function RealEstate() {
               {getFilteredProperties().map((item: any, index: number) => (
                 <div key={item._id} className='position-relative mt-2'>
                   <div
-                    className="rounded shadow-sm border overflow-hidden transition-all duration-300"
+                    className="rounded shadow-sm overflow-hidden transition-all duration-300 p-2"
                   // whileHover={{ y: -2, boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}
                   >
 
@@ -490,9 +490,10 @@ export default function RealEstate() {
                           loading='lazy'
                           format="auto"
                           quality="auto"
+                          className='rounded'
                         />
                       ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center" style={{ height: '150px' }}>
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded" style={{ height: '150px' }}>
                           <FontAwesomeIcon icon={faHome} size="2x" className="text-gray-400" />
                         </div>
                       )}

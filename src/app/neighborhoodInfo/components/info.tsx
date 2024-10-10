@@ -20,6 +20,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useSession } from 'next-auth/react';
+import Maps from './maps';
 
 
 
@@ -42,6 +43,8 @@ interface Card {
     images: string[];
     category: string;
     type: string;
+    ad: string;
+    adImage: string;
 }
 
 export default function ShopCards(props: any) {
@@ -50,6 +53,7 @@ export default function ShopCards(props: any) {
     const [selectedCard, setSelectedCard] = useState<Card | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false);
+    const [showMap, setShowMap] = useState(false);
     const [logo, setLogo] = useState('');
     const [image, setImage] = useState('');
     const [cardsAr, setCardsAr] = useState(props.shopsData);
@@ -231,7 +235,10 @@ export default function ShopCards(props: any) {
         }
     };
 
-    const notify = () => toast.error("אתה צריך להירשם");
+    const notify = () => toast.error("אתה צריך להירשם", {
+        position: 'top-left',
+        theme: 'light'
+    });
 
     const checkSignIn = async () => {
         if (session) {
@@ -288,6 +295,8 @@ export default function ShopCards(props: any) {
     };
 
     const handleShowModal = () => setShowModal(true);
+    const handleShowMap = () => setShowMap(true);
+    const handleCloseMap = () => setShowMap(false);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -530,7 +539,7 @@ export default function ShopCards(props: any) {
                         className='text-center'
                     >
                         <div className="header-container text-white my-auto rounded-bottom shadow-sm">
-                            <h1 className="display-6">מידע שכונתי</h1>
+                            <p className="tittle-heeder">מידע שכונתי</p>
                         </div>
                         <motion.div
                             className="mb-4"
@@ -716,7 +725,7 @@ export default function ShopCards(props: any) {
                                                     </div>
                                                 </div>
                                             </motion.div>
-                                            {(index + 1) % 6 === 0 && (
+                                            {(index + 1) % 7 === 0 && (
                                                 <motion.div
                                                     key={`ad-${index}`}
                                                     variants={itemVariants}
@@ -733,173 +742,174 @@ export default function ShopCards(props: any) {
 
                     <AnimatePresence>
                         {selectedCard && (
-                            <Row className="m-0">
+                            <motion.div
+                                className="ys-modal-overlay"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={closeModal}
+                            >
                                 <motion.div
-                                    className="ys-modal-overlay"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    onClick={closeModal}
+                                    className="bg-white rounded shadow-sm w-11/12 md:w-4/5 lg:w-3/5 max-h-[70vh] overflow-y-auto"
+                                    initial={{ y: 50, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: 50, opacity: 0 }}
+                                    onClick={(e) => e.stopPropagation()}
                                 >
-                                    <motion.div
-                                        className='ys-shop-detail-modal rounded relative p-2 p-md-2 overflow-y-auto'
-                                        initial={{ y: 50, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        exit={{ y: 50, opacity: 0 }}
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        <button className="ys-close-button" onClick={closeModal}>
-                                            <FaTimes />
-                                        </button>
-                                        <div className="w-100">
-                                            <Row className="g-3">
-                                                <Col xs={12} md={selectedCard.images[0] ? 5 : 0}>
-                                                    {selectedCard.images[0] && (
-                                                        <div className="h-100">
-                                                            <Swiper
-                                                                modules={[Pagination, Navigation]}
-                                                                spaceBetween={30}
-                                                                slidesPerView={1}
-                                                                navigation
-                                                                pagination={{ clickable: true }}
-                                                                className="ys-shop-image-slider h-100"
-                                                            >
-                                                                {selectedCard.images.map((image: any, index: any) => (
-                                                                    <SwiperSlide key={index}>
-                                                                        <CldImage
-                                                                            src={image}
-                                                                            width="300"
-                                                                            height="200"
-                                                                            crop="fill"
-                                                                            gravity="auto"
-                                                                            style={{
-                                                                                width: '100%',
-                                                                                height: '100%',
-                                                                                objectFit: 'cover',
-                                                                                objectPosition: 'center'
-                                                                            }}
-                                                                            className="ys-shop-detail-image rounded"
-                                                                            alt={`${selectedCard.name} - Image ${index + 1}`}
-                                                                            loading='lazy'
-                                                                            format="webp"
-                                                                            quality="auto"
-                                                                        />
-                                                                    </SwiperSlide>
-                                                                ))}
-                                                            </Swiper>
-                                                        </div>
-                                                    )}
-                                                </Col>
-                                                <Col xs={12} md={selectedCard.images[0] ? 7 : 12}>
-                                                    <div className="ys-shop-card-content px-1 px-md-0">
-                                                        <div className='d-flex align-items-center mb-1'>
-                                                            {selectedCard.logo && (
-                                                                <div className="ys-shop-logo me-3">
+                                    <button onClick={closeModal} className="close-button">
+                                        <FaTimes />
+                                    </button>
+                                    <div className="p-2" style={{ background: '#fafcf9' }}>
+                                        <div className="flex flex-col md:flex-row gap-8">
+                                            <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-0/2'}`}>
+                                                {selectedCard.images[0] && (
+                                                    <div className="mb-2 ys-shop-image-slider">
+                                                        <Swiper
+                                                            modules={[Pagination, Navigation]}
+                                                            spaceBetween={20}
+                                                            slidesPerView={1}
+                                                            navigation
+                                                            pagination={{ clickable: true }}
+                                                        >
+                                                            {selectedCard.images.map((image, index) => (
+                                                                <SwiperSlide key={index}>
                                                                     <CldImage
-                                                                        src={selectedCard.logo}
-                                                                        width="50"
-                                                                        height="50"
+                                                                        src={image}
+                                                                        width="600"
+                                                                        height="400"
                                                                         crop="fill"
-                                                                        className="ys-logo-image"
-                                                                        alt={`${selectedCard.name} logo`}
-                                                                        loading='lazy'
-                                                                        format="auto"
-                                                                        quality="auto"
+                                                                        gravity="auto"
+                                                                        className="w-full object-cover rounded"
+                                                                        alt={`${selectedCard.name} - תמונה ${index + 1}`}
+                                                                        loading="lazy"
                                                                     />
+                                                                </SwiperSlide>
+                                                            ))}
+                                                        </Swiper>
+                                                    </div>
+                                                )}
+                                                {selectedCard.ad && (
+                                                    <div className="">
+                                                        {selectedCard.adImage && (
+                                                            <div className="mb-2">
+                                                                <CldImage
+                                                                    src={selectedCard.adImage}
+                                                                    width="600"
+                                                                    height="700"
+                                                                    crop="fill"
+                                                                    gravity="auto"
+                                                                    className="object-contain rounded shadow-sm"
+                                                                    alt={`${selectedCard.name} - מודעה`}
+                                                                    loading="lazy"
+                                                                />
+                                                            </div>
+                                                        )}
+                                                        <p>{selectedCard.ad}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-full'}`}>
+                                                <div className="flex items-center gap-4 mb-6">
+                                                    {selectedCard.logo && (
+                                                        <CldImage
+                                                            src={selectedCard.logo}
+                                                            width="100"
+                                                            height="100"
+                                                            className="rounded-circle"
+                                                            alt={`${selectedCard.name} לוגו`}
+                                                        />
+                                                    )}
+                                                    <div>
+                                                        <h1 className="text-3xl font-bold mb-1">{selectedCard.name}</h1>
+                                                        <p className="text-gray-600">{selectedCard.description}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-6 bg-white rounded shadow-sm p-2">
+                                                    <div className="">
+                                                        <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                                            <i className="bi bi-info-circle text-green-500"></i>
+                                                            פרטי יצירת קשר
+                                                        </h3>
+                                                        <div className="space-y-3">
+                                                            <div className="flex gap-2">
+                                                                <i className="bi bi-geo-alt text-gray-600 mt-1"></i>
+                                                                {/* <a
+                                                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedCard.address)}`}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="hover:text-green-500"
+                                                                >
+                                                                    {selectedCard.address}
+                                                                </a> */}
+                                                                <p className="hover:text-green-500" style={{cursor: 'pointer'}} onClick={() => handleShowMap()}>{selectedCard.address}</p>
+                                                                <Modal show={showMap} onHide={() => handleCloseMap()}>
+                                                                    <Modal.Header closeButton onClick={() => handleCloseMap()}>{selectedCard.address}</Modal.Header>
+                                                                    <Modal.Body className='p-2'>
+                                                                        <Maps card={selectedCard} />
+                                                                    </Modal.Body>
+                                                                </Modal>
+                                                            </div>
+                                                            <div className="flex gap-2">
+                                                                <i className="bi bi-telephone text-gray-600 mt-1"></i>
+                                                                <Link href={`tel:${selectedCard.phone}`} className="hover:text-green-500">{selectedCard.phone}</Link>
+                                                            </div>
+                                                            <div className="flex gap-2">
+                                                                <i className="bi bi-envelope text-gray-600 mt-1"></i>
+                                                                <Link href={`mailto:${selectedCard.email}`} className="hover:text-green-500">{selectedCard.email}</Link>
+                                                            </div>
+                                                            {selectedCard.website && (
+                                                                <div className="flex gap-2">
+                                                                    <i className="bi bi-globe text-gray-600 mt-1"></i>
+                                                                    <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer" className="hover:text-green-500">
+                                                                        {selectedCard.website}
+                                                                    </Link>
                                                                 </div>
                                                             )}
-                                                            <h1 className="ys-shop-title mb-0">{selectedCard.name}</h1>
                                                         </div>
-                                                        <div className="ys-shop-description mb-1">
-                                                            <p>{selectedCard.description}</p>
-                                                        </div>
-                                                        <hr className='w-75 mx-auto my-3' style={{ color: 'gray' }} />
-                                                        <Row className="g-3">
-                                                            <Col xs={12} md={selectedCard.hours.sunday ? 6 : 12}>
-                                                                <div className="ys-info-list">
-                                                                    <div className="ys-info-item">
-                                                                        <i className="bi bi-geo-alt me-2 ys-info-icon"></i>
-                                                                        <p className='font-medium  mb-0'>{selectedCard.address}</p>
-                                                                    </div>
-                                                                    <div className="ys-info-item">
-                                                                        <i className="bi bi-telephone me-2 ys-info-icon"></i>
-                                                                        <p className='font-medium  mb-0'>
-                                                                            <Link href={`tel:${selectedCard.phone}`}>{selectedCard.phone}</Link>
-                                                                        </p>
-                                                                    </div>
-                                                                    <div className="ys-info-item">
-                                                                        <i className="bi bi-envelope me-2 ys-info-icon"></i>
-                                                                        <p className='font-medium mb-0'>
-                                                                            <Link href={`mailto:${selectedCard.email}`}>{selectedCard.email}</Link>
-                                                                        </p>
-                                                                    </div>
-                                                                    {selectedCard.website && (
-                                                                        <div className="ys-info-item">
-                                                                            <i className="bi bi-globe me-2 ys-info-icon"></i>
-                                                                            <p className='font-medium mb-0'>
-                                                                                <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer">
-                                                                                    {selectedCard.website}
-                                                                                </Link>
-                                                                            </p>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </Col>
-                                                            <Col xs={12} md={selectedCard.hours.sunday ? 6 : 0}>
-                                                                {selectedCard.hours.sunday && (
-                                                                    <div className="transition-all">
-                                                                        <div className="flex items-center mb-2" style={{ fontSize: '14px' }}>
-                                                                            <i className="bi bi-clock me-2"></i>
-                                                                            <p className="font-medium">שעות פעילות</p>
-                                                                        </div>
-                                                                        <div className="space-y-4">
-                                                                            <table className="w-75 text-sm">
-                                                                                <tbody>
-                                                                                    {renderGroupedHours(selectedCard.hours).map((row: any, index: any) => (
-                                                                                        <React.Fragment key={index}>
-                                                                                            <tr className={`${row.note ? '' : 'border-b'}`}>
-                                                                                                <td className="py-1 pe-2">{row.days}</td>
-                                                                                                <td className="py-1 whitespace-nowrap">{row.timeRange}</td>
-                                                                                            </tr>
-                                                                                            {row.note && (
-                                                                                                <tr className={`${row.note ? 'border-b' : ''}`}>
-                                                                                                    <td colSpan={2} className="pb-1 px-1">
-                                                                                                        <div className="bg-blue-50 text-blue-700 text-xs rounded p-1 mt-1 flex items-start">
-                                                                                                            <i className="bi bi-info-circle me-1"></i>
-                                                                                                            <span>{row.note}</span>
-                                                                                                        </div>
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            )}
-                                                                                        </React.Fragment>
-                                                                                    ))}
-                                                                                </tbody>
-                                                                            </table>
-                                                                            {selectedCard.hours.sunday && (
-                                                                                <div className="flex justify-start mt-2">
-                                                                                    {isOpenNow(selectedCard.hours) ? (
-                                                                                        <span className="bg-green-100 text-green-800 font-medium py-1 px-3 rounded text-sm inline-flex items-center">
-                                                                                            <i className="bi bi-check-circle me-1"></i> פתוח עכשיו
-                                                                                        </span>
-                                                                                    ) : (
-                                                                                        <span className="bg-red-100 text-red-800 font-medium py-1 px-3 rounded text-sm inline-flex items-center">
-                                                                                            <i className="bi bi-x-circle me-1"></i> סגור עכשיו
-                                                                                        </span>
-                                                                                    )}
-                                                                                </div>
-                                                                            )}
-                                                                        </div>
-                                                                    </div>
-                                                                )}
-                                                            </Col>
-                                                        </Row>
                                                     </div>
-                                                </Col>
-                                            </Row>
+                                                    {selectedCard.hours.sunday && (
+                                                        <div className="">
+                                                            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                                                <i className="bi bi-clock text-green-500"></i>
+                                                                שעות פעילות
+                                                            </h3>
+                                                            <table className="w-full text-gray-600">
+                                                                <tbody>
+                                                                    {renderGroupedHours(selectedCard.hours).map((row, index) => (
+                                                                        <React.Fragment key={index}>
+                                                                            <tr>
+                                                                                <td className="py-2 pr-4 font-medium">{row.days}</td>
+                                                                                <td className="py-2">{row.timeRange}</td>
+                                                                            </tr>
+                                                                            {row.note && (
+                                                                                <tr>
+                                                                                    <td colSpan={2} className="text-sm text-gray-500 pt-1 pb-2">{row.note}</td>
+                                                                                </tr>
+                                                                            )}
+                                                                        </React.Fragment>
+                                                                    ))}
+                                                                </tbody>
+                                                            </table>
+                                                            <div className="mt-4">
+                                                                {isOpenNow(selectedCard.hours) ? (
+                                                                    <span className="bg-green-100 text-green-800 px-3 py-1.5 rounded text-sm">
+                                                                        <i className="bi bi-check-circle mr-1.5"></i> פתוח עכשיו
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className="bg-red-100 text-red-800 px-3 py-1.5 rounded text-sm">
+                                                                        <i className="bi bi-x-circle mr-1.5"></i> סגור עכשיו
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
                                         </div>
-                                    </motion.div>
+                                    </div>
                                 </motion.div>
-                            </Row>
+                            </motion.div>
                         )}
                     </AnimatePresence>
 
@@ -1056,8 +1066,9 @@ export default function ShopCards(props: any) {
                                                             <div className="flex items-center justify-between mb-2">
                                                                 <span className="text-sm font-medium">{daysInHebrew[day]}</span>
                                                                 <button
-                                                                    className="text-xs bg-blue-500 text-white px-2 py-1 rounded"
+                                                                    className="text-xs text-white px-2 py-1 rounded"
                                                                     onClick={() => addTimeSlot(day)}
+                                                                    style={{ background: '#00a35b' }}
                                                                 >
                                                                     הוסף שעות
                                                                 </button>
@@ -1202,6 +1213,8 @@ export default function ShopCards(props: any) {
                                                 type="submit"
                                                 // variant=""
                                                 className="btn border rounded"
+                                                style={{ background: '#00a35b' }}
+
                                             >
                                                 שלח לאישור
                                             </Button>

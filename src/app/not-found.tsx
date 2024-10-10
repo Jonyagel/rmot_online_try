@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faMap, faSearch, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import NotFoundAnimation from './notFound/notFoundComps';
+import Image from 'next/image';
 
 const NotFoundPage: React.FC = () => {
     const router = useRouter();
@@ -22,7 +23,7 @@ const NotFoundPage: React.FC = () => {
                         transition={{ repeat: Infinity, duration: 2 }}
                         className="not-found-icon"
                     >
-                        <FontAwesomeIcon icon={faExclamationTriangle} size="4x" />
+                        <Image src='/images/Asset 2@1.5x.png' width={120} height={120} alt='logo'/>
                     </motion.div>
                     <h1>404</h1>
                     <h2>אופס! נראה שהלכת לאיבוד ברמות...</h2>

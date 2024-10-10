@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #0275d8;
+    --primary-color: #00a35b;
     /* הצבע הראשי של האתר - שנה לצבע הרצוי */
 }
 
@@ -101,7 +101,7 @@
 }
 
 .not-found-link:hover {
-    background-color: #2980b9;
+    background-color: #01694b;
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

@@ -135,7 +135,7 @@ width: 50%;
    display: block;
    width: 40px;
    height: 2px;
-   background-color: #0d6efd;
+   background-color: #00a35b;
    margin: 0.8rem auto 0;
  }
 
@@ -168,7 +168,7 @@ width: 50%;
    display: inline-block !important;
    border-radius: 0 !important;
    /* מבטל לחלוטין את העיגול */
-   background-color: #0d6efd !important;
+   background-color: #00a35b !important;
    margin: 0 5px !important;
    transition: all 0.3s ease;
  }
@@ -186,7 +186,7 @@ width: 50%;
  .custom-arrows-swiper .swiper-button-next:after,
  .custom-arrows-swiper .swiper-button-prev:after {
    font-size: 15px;
-   color: #0d6efd ;
+   color: #00a35b ;
  }
 
 
@@ -205,7 +205,7 @@ width: 50%;
 
  .card-icon {
    /* font-size: 2rem; */
-   /* color: #0d6efd; */
+   /* color: #00a35b; */
    /* margin-bottom: 1.2rem; */
    transition: all 0.3s ease;
  }
@@ -237,7 +237,7 @@ width: 50%;
  }
 
  .btn-link-home-card:hover {
-   background-color: #0d6dfd26;
+   background-color: #d2f0e4;
  }
 
  @media (max-width: 1024px) {
@@ -295,7 +295,7 @@ width: 50%;
    font-size: 2rem;
    margin-bottom: 20px;
    color: #2c3e50;
-   border-bottom: 2px solid #0d6efd;
+   border-bottom: 2px solid #00a35b;
    padding-bottom: 10px;
    font-family: 'Rubik', sans-serif;
  }
@@ -428,7 +428,7 @@ width: 50%;
  .hero-cta-button {
    display: inline-block;
    padding: 0.8rem 1.5rem;
-   background-color: #0d6efd;
+   background-color: #00a35b;
    color: white;
    text-decoration: none;
    border-radius: 5px;
@@ -437,5 +437,5 @@ width: 50%;
  }
 
  .hero-cta-button:hover {
-   background-color: #0b5ed7;
+   background-color: #01694b;
  }
