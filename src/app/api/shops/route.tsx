@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import { connectDb } from "../../db/connectDb";
-import { NadlanModel, validateNadlan } from "../../models/nadlanModel";
 import { UserModel } from "../../models/userModel";
 import jwt from 'jsonwebtoken';
 import { NextResponse } from "next/server";
