@@ -1,11 +1,12 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-geosearch/dist/geosearch.css';
 import './maPstyle.css';
 import { Icon } from "leaflet";
+import { CldImage } from 'next-cloudinary';
 
 const myIcon = new Icon({
     iconUrl: "/images/Asset 2@1.5x1.png",
@@ -17,6 +18,7 @@ const myIcon = new Icon({
 
 const Maps = (props: any) => {
     const [position, setPosition] = useState<[number, number] | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null); // מצב חדש להודעת שגיאה
 
     useEffect(() => {
         const provider = new OpenStreetMapProvider();
@@ -26,32 +28,51 @@ const Maps = (props: any) => {
             if (result.length > 0) {
                 const { y, x } = result[0]; // קואורדינטות
                 setPosition([y, x]); // עדכון המיקום
+                setErrorMessage(null); // נקה הודעת שגיאה אם נמצא מיקום
             } else {
-                console.error('לא נמצאו תוצאות עבור הכתובת');
+                setErrorMessage('לא נמצאו תוצאות עבור הכתובת'); // עדכון הודעת שגיאה
             }
         }).catch((error) => {
-            console.error('שגיאה בחיפוש:', error);
+            setErrorMessage('שגיאה בחיפוש: ' + error.message); // עדכון הודעת שגיאה במקרה של שגיאה
         });
     }, []);
 
     return (
         <div className="map-container">
-            {/* <h1 className="map-title">מפה עם חיפוש לפי כתובת</h1> */}
-            {position && (
-                <MapContainer center={position} zoom={16} style={{ height: '100%', width: '100%' }}>
-                    <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        maxZoom={19}
-                    />
-                    {position && (
+            {errorMessage ? (
+                <>
+                    <MapContainer center={[31.8175, 35.1942]} zoom={14} style={{ height: '100%', width: '100%' }}>
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            maxZoom={19}
+                        />
+                    </MapContainer>
+                    <div className="error-message">{errorMessage}</div> {/* הצגת הודעת שגיאה */}
+                </>
+            ) : (
+                position && (
+                    <MapContainer center={position} zoom={16} style={{ height: '100%', width: '100%' }}>
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            maxZoom={19}
+                        />
                         <Marker position={position} icon={myIcon}>
-                            <Popup>{props.card.address} - {props.card.name}</Popup>
-                            <Tooltip>
-                                {props.card.address}
-                            </Tooltip>
+                            <Popup>
+                                <CldImage
+                                    src={props.card.logo}
+                                    width="200"
+                                    height="200"
+                                    crop="fill"
+                                    gravity="auto"
+                                    className="w-full object-cover rounded"
+                                    alt={`${props.card.logo} - logo`}
+                                    loading="lazy"
+                                />
+                                {props.card.address} - {props.card.name}
+                            </Popup>
                         </Marker>
-                    )}
-                </MapContainer>
+                    </MapContainer>
+                )
             )}
         </div>
     );

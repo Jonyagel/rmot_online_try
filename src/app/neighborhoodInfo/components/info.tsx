@@ -53,6 +53,7 @@ export default function ShopCards(props: any) {
     const [selectedCard, setSelectedCard] = useState<Card | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [showModal, setShowModal] = useState(false);
+    const [showModalDetailShop, setShowModalDetailShop] = useState(false);
     const [showMap, setShowMap] = useState(false);
     const [logo, setLogo] = useState('');
     const [image, setImage] = useState('');
@@ -288,10 +289,12 @@ export default function ShopCards(props: any) {
 
     const handleShopClick = (card: Card) => {
         setSelectedCard(card);
+        setShowModalDetailShop(true)
     };
 
     const closeModal = () => {
         setSelectedCard(null);
+        setShowModalDetailShop(false)
     };
 
     const handleShowModal = () => setShowModal(true);
@@ -444,12 +447,12 @@ export default function ShopCards(props: any) {
 
 
     const daysInHebrew: { [key in Day]: string } = {
-        sunday: 'ראשון',
-        monday: 'שני',
-        tuesday: 'שלישי',
-        wednesday: 'רביעי',
-        thursday: 'חמישי',
-        friday: 'שישי',
+        sunday: 'א',
+        monday: 'ב',
+        tuesday: 'ג',
+        wednesday: 'ד',
+        thursday: 'ה',
+        friday: 'ו',
         saturday: 'שבת'
     };
 
@@ -740,100 +743,87 @@ export default function ShopCards(props: any) {
                                     ))}
                     </motion.div>
 
-                    <AnimatePresence>
-                        {selectedCard && (
-                            <motion.div
-                                className="ys-modal-overlay"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={closeModal}
-                            >
-                                <motion.div
-                                    className="bg-white rounded shadow-sm w-11/12 md:w-4/5 lg:w-3/5 max-h-[70vh] overflow-y-auto"
-                                    initial={{ y: 50, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    exit={{ y: 50, opacity: 0 }}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    <button onClick={closeModal} className="close-button">
-                                        <FaTimes />
-                                    </button>
-                                    <div className="p-2" style={{ background: '#fafcf9' }}>
-                                        <div className="flex flex-col md:flex-row gap-8">
-                                            <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-0/2'}`}>
-                                                {selectedCard.images[0] && (
-                                                    <div className="mb-2 ys-shop-image-slider">
-                                                        <Swiper
-                                                            modules={[Pagination, Navigation]}
-                                                            spaceBetween={20}
-                                                            slidesPerView={1}
-                                                            navigation
-                                                            pagination={{ clickable: true }}
-                                                        >
-                                                            {selectedCard.images.map((image, index) => (
-                                                                <SwiperSlide key={index}>
-                                                                    <CldImage
-                                                                        src={image}
-                                                                        width="600"
-                                                                        height="400"
-                                                                        crop="fill"
-                                                                        gravity="auto"
-                                                                        className="w-full object-cover rounded"
-                                                                        alt={`${selectedCard.name} - תמונה ${index + 1}`}
-                                                                        loading="lazy"
-                                                                    />
-                                                                </SwiperSlide>
-                                                            ))}
-                                                        </Swiper>
-                                                    </div>
-                                                )}
-                                                {selectedCard.ad && (
-                                                    <div className="">
-                                                        {selectedCard.adImage && (
-                                                            <div className="mb-2">
+                    <Modal show={showModalDetailShop} onHide={closeModal} size='xl' className='rounded overflow-y-auto p-0'>
+                        <Modal.Header closeButton className='header-modal-detail-shop'>
+                            {selectedCard && (
+                                <h2 className='text-3xl'>{selectedCard.name}</h2>
+                            )}
+                        </Modal.Header>
+                        <Modal.Body className='rounded'>
+                            {selectedCard && (
+                                <div className="p-2 rounded" style={{ background: '#fafcf9' }}>
+                                    <div className="flex flex-col md:flex-row gap-8">
+
+                                        <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-0/2'}`}>
+                                            {selectedCard.images[0] && (
+                                                <div className="mb-2 ys-shop-image-slider">
+                                                    <Swiper
+                                                        modules={[Pagination, Navigation]}
+                                                        spaceBetween={20}
+                                                        slidesPerView={1}
+                                                        navigation
+                                                        pagination={{ clickable: true }}
+                                                    >
+                                                        {selectedCard.images.map((image, index) => (
+                                                            <SwiperSlide key={index}>
                                                                 <CldImage
-                                                                    src={selectedCard.adImage}
+                                                                    src={image}
                                                                     width="600"
-                                                                    height="700"
+                                                                    height="400"
                                                                     crop="fill"
                                                                     gravity="auto"
-                                                                    className="object-contain rounded shadow-sm"
-                                                                    alt={`${selectedCard.name} - מודעה`}
+                                                                    className="w-full object-cover rounded"
+                                                                    alt={`${selectedCard.name} - תמונה ${index + 1}`}
                                                                     loading="lazy"
                                                                 />
-                                                            </div>
-                                                        )}
-                                                        <p>{selectedCard.ad}</p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-full'}`}>
-                                                <div className="flex items-center gap-4 mb-6">
+                                                            </SwiperSlide>
+                                                        ))}
+                                                    </Swiper>
+                                                </div>
+                                            )}
+                                            {selectedCard.ad && (
+                                                <div className="">
+                                                    {selectedCard.adImage && (
+                                                        <div className="mb-2">
+                                                            <CldImage
+                                                                src={selectedCard.adImage}
+                                                                width="600"
+                                                                height="700"
+                                                                crop="fill"
+                                                                gravity="auto"
+                                                                className="object-contain rounded shadow-sm"
+                                                                alt={`${selectedCard.name} - מודעה`}
+                                                                loading="lazy"
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-full'}`}>
+                                            <div className="p-2 pt-0">
+                                                <div className="flex items-center my-4">
                                                     {selectedCard.logo && (
                                                         <CldImage
                                                             src={selectedCard.logo}
-                                                            width="100"
-                                                            height="100"
+                                                            width="50"
+                                                            height="50"
                                                             className="rounded-circle"
                                                             alt={`${selectedCard.name} לוגו`}
                                                         />
                                                     )}
                                                     <div>
-                                                        <h1 className="text-3xl font-bold mb-1">{selectedCard.name}</h1>
-                                                        <p className="text-gray-600">{selectedCard.description}</p>
+                                                        <span className="font-bold ms-2">{selectedCard.name}</span>
+                                                        <p className="text-gray-600 ms-2">{selectedCard.description}</p>
                                                     </div>
                                                 </div>
-                                                <div className="space-y-6 bg-white rounded shadow-sm p-2">
+                                                <div className="">
                                                     <div className="">
-                                                        <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                                                            <i className="bi bi-info-circle text-green-500"></i>
-                                                            פרטי יצירת קשר
-                                                        </h3>
-                                                        <div className="space-y-3">
-                                                            <div className="flex gap-2">
-                                                                <i className="bi bi-geo-alt text-gray-600 mt-1"></i>
-                                                                {/* <a
+                                                        <div className="flex align-items-center">
+                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                                <i className="bi bi-geo-alt text-gray-600"></i>
+                                                            </div>
+                                                            {/* <a
                                                                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedCard.address)}`}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
@@ -841,77 +831,90 @@ export default function ShopCards(props: any) {
                                                                 >
                                                                     {selectedCard.address}
                                                                 </a> */}
-                                                                <p className="hover:text-green-500" style={{cursor: 'pointer'}} onClick={() => handleShowMap()}>{selectedCard.address}</p>
-                                                                <Modal show={showMap} onHide={() => handleCloseMap()}>
-                                                                    <Modal.Header closeButton onClick={() => handleCloseMap()}>{selectedCard.address}</Modal.Header>
-                                                                    <Modal.Body className='p-2'>
-                                                                        <Maps card={selectedCard} />
-                                                                    </Modal.Body>
-                                                                </Modal>
-                                                            </div>
-                                                            <div className="flex gap-2">
-                                                                <i className="bi bi-telephone text-gray-600 mt-1"></i>
-                                                                <Link href={`tel:${selectedCard.phone}`} className="hover:text-green-500">{selectedCard.phone}</Link>
-                                                            </div>
-                                                            <div className="flex gap-2">
-                                                                <i className="bi bi-envelope text-gray-600 mt-1"></i>
-                                                                <Link href={`mailto:${selectedCard.email}`} className="hover:text-green-500">{selectedCard.email}</Link>
-                                                            </div>
-                                                            {selectedCard.website && (
-                                                                <div className="flex gap-2">
-                                                                    <i className="bi bi-globe text-gray-600 mt-1"></i>
-                                                                    <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer" className="hover:text-green-500">
-                                                                        {selectedCard.website}
-                                                                    </Link>
-                                                                </div>
-                                                            )}
+                                                            <span className="hover:text-green-500 ms-2" style={{ cursor: 'pointer' }} onClick={() => handleShowMap()}>{selectedCard.address}</span>
+                                                            <Modal show={showMap} onHide={() => handleCloseMap()}>
+                                                                <Modal.Header closeButton onClick={() => handleCloseMap()}>{selectedCard.address}</Modal.Header>
+                                                                <Modal.Body className='p-2'>
+                                                                    <Maps card={selectedCard} />
+                                                                </Modal.Body>
+                                                            </Modal>
                                                         </div>
+                                                        <div className="flex align-items-center">
+                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                                <i className="bi bi-telephone text-gray-600"></i>
+                                                            </div>
+                                                            <Link href={`tel:${selectedCard.phone}`} className="hover:text-green-500 ms-2">{selectedCard.phone}</Link>
+                                                        </div>
+                                                        <div className="flex align-items-center ">
+                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                                <i className="bi bi-envelope text-gray-600"></i>
+                                                            </div>
+                                                            <Link href={`mailto:${selectedCard.email}`} className="hover:text-green-500 ms-2">{selectedCard.email}</Link>
+                                                        </div>
+                                                        {selectedCard.website && (
+                                                            <div className="flex align-items-center ">
+                                                                <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                                    <i className="bi bi-globe text-gray-600"></i>
+                                                                </div>
+                                                                <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer" className="hover:text-green-500  ms-2">
+                                                                    {selectedCard.website}
+                                                                </Link>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    {selectedCard.hours.sunday && (
-                                                        <div className="">
-                                                            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                                                                <i className="bi bi-clock text-green-500"></i>
-                                                                שעות פעילות
-                                                            </h3>
-                                                            <table className="w-full text-gray-600">
-                                                                <tbody>
-                                                                    {renderGroupedHours(selectedCard.hours).map((row, index) => (
-                                                                        <React.Fragment key={index}>
-                                                                            <tr>
-                                                                                <td className="py-2 pr-4 font-medium">{row.days}</td>
-                                                                                <td className="py-2">{row.timeRange}</td>
-                                                                            </tr>
-                                                                            {row.note && (
-                                                                                <tr>
-                                                                                    <td colSpan={2} className="text-sm text-gray-500 pt-1 pb-2">{row.note}</td>
-                                                                                </tr>
-                                                                            )}
-                                                                        </React.Fragment>
-                                                                    ))}
-                                                                </tbody>
-                                                            </table>
-                                                            <div className="mt-4">
+                                                </div>
+                                                {selectedCard.hours.sunday && (
+                                                    <div className="">
+                                                        <div className="flex align-items-center">
+                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                                <i className="bi bi-clock text-gray-600"></i>
+                                                            </div>
+                                                            <span className='ms-2'>שעות פעילות</span>
+                                                            <div className="ms-2 text-sm">
                                                                 {isOpenNow(selectedCard.hours) ? (
-                                                                    <span className="bg-green-100 text-green-800 px-3 py-1.5 rounded text-sm">
-                                                                        <i className="bi bi-check-circle mr-1.5"></i> פתוח עכשיו
+                                                                    <span className="bg-green-500 px-1 text-white rounded">
+                                                                        פתוח עכשיו
                                                                     </span>
                                                                 ) : (
-                                                                    <span className="bg-red-100 text-red-800 px-3 py-1.5 rounded text-sm">
-                                                                        <i className="bi bi-x-circle mr-1.5"></i> סגור עכשיו
+                                                                    <span className="bg-red-500 px-1 text-white rounded">
+                                                                        סגור עכשיו
                                                                     </span>
                                                                 )}
                                                             </div>
                                                         </div>
-                                                    )}
+                                                        <table className="md:w-50 text-gray-600">
+                                                            <tbody>
+                                                                {renderGroupedHours(selectedCard.hours).map((row, index) => (
+                                                                    <React.Fragment key={index}>
+                                                                        <tr>
+                                                                            <td style={{ width: '50px', height: '50px' }}></td>
+                                                                            <td className="ps-2 font-medium">{row.days}</td>
+                                                                            <td className="ms-2">{row.timeRange}</td>
+                                                                        </tr>
+                                                                        {row.note && (
+                                                                            <tr>
+                                                                                <td style={{ width: '50px', height: '50px' }}></td>
+                                                                                <td colSpan={2} className="text-sm text-gray-500 pb-1 ms-2">{row.note}</td>
+                                                                            </tr>
+                                                                        )}
+                                                                    </React.Fragment>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                )}
+                                                <div className='md:w-50' style={{maxHeight:'300px'}}>
+                                                <Maps card={selectedCard} />
                                                 </div>
                                             </div>
-
                                         </div>
+
                                     </div>
-                                </motion.div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                                </div>
+                            )}
+                        </Modal.Body>
+                        {/* // </motion.div> */}
+                    </Modal>
 
                 </Col >
                 <Col lg={2} className="d-none d-lg-block ">
