@@ -12,6 +12,13 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import Statistic from './statistic';
+import Lottie from './lottie';
+import infoLottie from "@/public/images/icon-logo/מידע לוטי 3.json";
+import forumLottie from "@/public/images/icon-logo/פורומים.json";
+import familyLottie from "@/public/images/icon-logo/קהילה.json";
+import nadlanLottie from "@/public/images/icon-logo/נדלן.json";
+import boardLottie from "@/public/images/icon-logo/לוח.json";
+
 
 interface InfoCardProps {
     icon: string;
@@ -24,12 +31,14 @@ interface InfoCardProps {
 
 const HomePage: React.FC = () => {
 
+
+
     const images = [
-        'Asset_5_1.5x_ltbaw3',
-        'Asset_6_1.5x_fjwvvo',
-        'Asset_7_1.5x_tutyuo',
-        'Asset_8_1.5x_yj5pm0',
-        'Asset_9_1.5x_feu4ow',
+        infoLottie,
+        forumLottie,
+        familyLottie,
+        nadlanLottie,
+        boardLottie,
     ];
 
     const neighborhoodInfo = [
@@ -157,6 +166,30 @@ const HomePage: React.FC = () => {
         'school_v0elcf',
     ];
 
+    const [isAnimationVisible, setIsAnimationVisible] = useState(false);
+    const animationRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsAnimationVisible(true);
+                    observer.unobserve(entry.target); // הסר את המאזין לאחר שהאנימציה הופעלה
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (animationRef.current) {
+            observer.observe(animationRef.current);
+        }
+
+        return () => {
+            if (animationRef.current) {
+                observer.unobserve(animationRef.current);
+            }
+        };
+    }, []);
 
     return (
         <Container fluid className="px-0 py-0">
@@ -312,17 +345,18 @@ const HomePage: React.FC = () => {
                                         <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
                                             <motion.div
                                                 className="image-container"
-                                                initial={{ opacity: 0, x: rowIndex % 2 === 0 ? -50 : 50 }}
-                                                whileInView={{ opacity: 1, x: 0 }}
-                                                transition={{ duration: 0.3 }}
+                                                // initial={{ opacity: 0, x: rowIndex % 2 === 0 ? -50 : 50 }}
+                                                // whileInView={{ opacity: 1, x: 0 }}
+                                                // transition={{ duration: 0.3 }}
                                             >
-                                                <CldImage
+                                                <Lottie lottieNmae={images[rowIndex]}/>
+                                                {/* <CldImage
                                                     src={images[rowIndex]}
                                                     width={500}
                                                     height={300}
                                                     alt={`Image ${rowIndex + 1}`}
                                                     className="mx-auto"
-                                                />
+                                                /> */}
                                             </motion.div>
                                             {neighborhoodInfo[rowIndex] && (
                                                 <motion.div
@@ -338,8 +372,7 @@ const HomePage: React.FC = () => {
                                         </div>
                                     ))}
                                 </section>
-
-
+                              {/* <Lottie lottieNmae={infoLottie}/> */}
                             </div>
                         </div>
                     </Col>
@@ -353,7 +386,6 @@ const HomePage: React.FC = () => {
                 </Row>
             </Container>
         </Container>
-        // </Container >
     );
 };
 

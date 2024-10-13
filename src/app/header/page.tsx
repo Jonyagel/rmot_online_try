@@ -70,7 +70,7 @@ export default function Header() {
         { href: '/', text: 'בית' },
         { href: '/neighborhoodInfo', text: 'מידע' },
         { href: '/forum', text: 'פורום' },
-        { href: '/allFamily', text: 'משפחה' },
+        { href: '/allFamily', text: 'קהילה' },
         { href: '/nadlan', text: 'נדל"ן' },
         { href: '/board', text: 'לוח' },
         { href: '/contactUs', text: 'צור קשר' },

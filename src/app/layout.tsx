@@ -57,12 +57,12 @@ export default function RootLayout({
             <Header />
             {children}
             <FooterNav />
-            <WeatherWidget />
+            {/* <WeatherWidget /> */}
             <Footer />
             <Analytics />
             <SpeedInsights />
             {/* <script src="./nagishli_beta.js"></script> */}
-            <script src="https://cdn.enable.co.il/licenses/enable-L29851bpdrqshwli-0824-62952/init.js"></script>
+            <script src="https://cdn.enable.co.il/licenses/enable-L29851bpdrqshwli-0824-64368/init.js"></script>
           </ContextProvider>
           {/* <ToastContainer position="top-right" autoClose={5000} /> */}
         </body>
