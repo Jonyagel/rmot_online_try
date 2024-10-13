@@ -13,6 +13,7 @@ import WeatherWidget from "./components/weatherWidget";
 import { ContextProvider } from './context/appContext';
 // import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import FooterNav from "./components/footerNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -55,6 +56,7 @@ export default function RootLayout({
           <ContextProvider>
             <Header />
             {children}
+            <FooterNav />
             <WeatherWidget />
             <Footer />
             <Analytics />
