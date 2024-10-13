@@ -4,7 +4,7 @@
   background-position: center;
   background-repeat: no-repeat;
   text-align: center;
-  padding: 20px;
+  /* padding: 20px; */
   color: white;
   min-height: 120px;
 }
@@ -49,6 +49,12 @@
   }
   
   @keyframes highlight {
-    0% { background-color: #99daff; }
+    0% { background-color: #d2f0e4; }
     100% { background-color: transparent; }
+  }
+
+  @media (max-width: 768px) {
+    .comment-card{
+      width: 100%;
+    }
   }

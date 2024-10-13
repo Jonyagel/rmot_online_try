@@ -165,9 +165,6 @@ export default function ShowForum(props: any) {
                 </Col>
                 <Col lg={8}>
                     <motion.div
-                        // initial={{ opacity: 0, y: -20 }}
-                        // animate={{ opacity: 1, y: 0 }}
-                        // transition={{ duration: 0.5 }}
                         className='text-center'
                     >
                         <div className="header-container text-white my-auto rounded-bottom shadow-sm">
@@ -184,10 +181,7 @@ export default function ShowForum(props: any) {
                             <div className='mt-3'>
                                 <div className="search-bar-container bg-white shadow-sm  p-3 rounded align-items-center mx-auto">
                                     <Row className="align-items-center">
-                                        {/* <Col lg={3}>
-                                           
-                                        </Col> */}
-                                        <Col lg={3}>
+                                        <Col sm={12} lg={3} className='flex justify-between'>
                                             <Nav>
                                                 <Nav.Item>
                                                     <Nav.Link className={'nav-link-forum me-4'}>פורומים</Nav.Link>
@@ -198,11 +192,11 @@ export default function ShowForum(props: any) {
                                                     selectedTopic={selectedTopic}
                                                 />
                                             </Nav>
+                                            <div className='d-block d-md-none'>
+                                            <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
+                                            </div>
                                         </Col>
-                                        {/* <Col lg={0}>
-                                           
-                                        </Col> */}
-                                        <Col lg={9} className='d-flex justify-content-end'>
+                                        <Col lg={9} className='d-flex justify-content-end mt-2'>
                                             <InputGroup className="search-bar-all border rounded w-50 me-1" style={{ maxHeight: '36px', maxWidth: '200px' }}>
                                                 <Form.Control
                                                     type="text"
@@ -240,7 +234,9 @@ export default function ShowForum(props: any) {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className='d-none d-md-block'>
                                             <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
+                                            </div>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -297,7 +293,7 @@ export default function ShowForum(props: any) {
                                                             </Card.Text>
                                                         </div>
                                                     </div>
-                                                    <Badge className="badge-forum ms-2 align-self-start top-0 end-10 translate-middle position-absolute shadow-sm">{item.topic}</Badge>
+                                                    <div className="badge-forum align-self-start end-5 position-absolute shadow-sm rounded px-1" style={{ background: '#d2f0e4', top: '-10px', fontSize: '13px' }}>{item.topic}</div>
                                                 </div>
                                                 {/* {item.fileName && (
                                                         <div className="mb-3">
@@ -414,69 +410,20 @@ export default function ShowForum(props: any) {
                 </Modal.Body>
             </Modal>
 
-            <AnimatePresence>
-                {showComment && (
-                    <Row className="m-0">
-                        <motion.div
-                            className="modal-overlay"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => {
-                                setShowComment(false);
-                            }}
-                        >
-                            <motion.div
-                                className="forum-comment-modal rounded relative p-2 pt-md-0 p-md-2 overflow-y-auto"
-                                initial={{ y: 50, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                exit={{ y: 50, opacity: 0 }}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                <button
-                                    className="close-button"
-                                    onClick={() => {
-                                        setShowComment(false);
-                                    }}
-                                >
-                                    <FaTimes />
-                                </button>
-                                <CommentById idForum={forumId} commentAr={dataComment} forumData={dataForum} />
-                                <Button
-                                    variant="link"
-                                    className="scroll-button scroll-top-button"
-                                    onClick={() => {
-                                        const modal = document.querySelector(".forum-comment-modal");
-                                        if (modal) {
-                                            modal.scrollTo({
-                                                top: 0,
-                                                behavior: "smooth",
-                                            });
-                                        }
-                                    }}
-                                >
-                                    <i className="bi bi-chevron-up"></i>
-                                </Button>
-                                <Button
-                                    variant="link"
-                                    className="scroll-button scroll-bottom-button"
-                                    onClick={() => {
-                                        const modal = document.querySelector(".forum-comment-modal");
-                                        if (modal) {
-                                            modal.scrollTo({
-                                                top: modal.scrollHeight,
-                                                behavior: "smooth",
-                                            });
-                                        }
-                                    }}
-                                >
-                                    <i className="bi bi-chevron-down"></i>
-                                </Button>
-                            </motion.div>
-                        </motion.div>
-                    </Row>
-                )}
-            </AnimatePresence>
+            <Modal size='lg' show={showComment} onHide={() => {
+                setShowComment(false);
+            }}
+                className='overflow-y-auto'
+            >
+                <Modal.Header closeButton className='modal-comment'>
+                    <h1 className='font-bold text-white text-3xl '>תגובות</h1>
+                </Modal.Header>
+                <Modal.Body className='p-0 pb-2 modal-comment-body' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+                    {showComment && (
+                        <CommentById idForum={forumId} commentAr={dataComment} forumData={dataForum} />
+                    )}
+                </Modal.Body>
+            </Modal>
         </div >
     )
 }

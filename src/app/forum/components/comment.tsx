@@ -76,13 +76,13 @@ export default function CommentById(props: any) {
 
   return (
     <div className='container'>
-      <motion.div
+      {/* <motion.div
         className='text-center'
-      >
-        <div className="header-container text-white my-auto rounded-bottom shadow-sm">
-          <p className="tittle-heeder">תגובות</p>
-        </div>
-      </motion.div>
+      > */}
+        {/* <div className="header-container text-white my-auto rounded-bottom shadow-sm"> */}
+          {/* <p className="tittle-heeder">תגובות</p> */}
+        {/* </div> */}
+      {/* </motion.div> */}
       {/* <Modal show={show} onHide={handleClose} centered size="lg">
         {dataForum && (
           <Modal.Body className="p-0">
@@ -105,13 +105,13 @@ export default function CommentById(props: any) {
       </Modal> */}
 
 
-      <Card className='shadow-sm mb-3 rounded mx-auto' style={{ width: '90%', marginTop: '-40px' }}>
+      <Card className='shadow-sm mb-3 mt-3 rounded mx-auto' style={{ width: '100%' }}>
         {dataForum && (
           <Card.Body>
             <div className='d-flex justify-content-between align-items-start mb-3'>
               <div className='d-flex'>
                 <div className='text-center me-3'>
-                  <div className='bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px' }}>
+                  <div className='text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px',background:'#00a35b' }}>
                     <h5 className='m-0'>{dataForum.userName[0]}</h5>
                   </div>
                   <small className='text-muted'>{dataForum.userName}</small>
@@ -123,7 +123,7 @@ export default function CommentById(props: any) {
                   </Card.Text>
                 </div>
               </div>
-              <Badge className="ms-2 align-self-start top-0 end-20 translate-middle position-absolute text-primary bg-white shadow-sm">{dataForum.topic}</Badge>
+              <div className="align-self-start end-5 position-absolute shadow-sm rounded px-1" style={{ background: '#d2f0e4', top: '-10px', fontSize: '13px' }}>{dataForum.topic}</div>
             </div>
             {/* {dataForum.fileName && (
               <div className="mb-3">
@@ -154,7 +154,7 @@ export default function CommentById(props: any) {
         )}
       </Card>
 
-      <div className="d-flex flex-column align-items-end mx-auto" style={{ width: '90%' }}>
+      <div className="d-flex flex-column align-items-end mx-auto comment-card" style={{ width: '100%' }}>
         {dataComment && dataComment.map((item: any) => (
           <Card
             key={item._id}

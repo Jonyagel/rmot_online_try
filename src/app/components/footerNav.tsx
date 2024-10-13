@@ -1,5 +1,7 @@
+'use client'
 import Link from 'next/link';
 import './footerNav.css';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
     { href: '/', text: 'בית', imgSrc: '/images/icon-logo/בית.png' },
@@ -12,11 +14,14 @@ const navLinks = [
 ];
 
 const FooterNav = () => {
+
+    const pathname = usePathname();
+
     return (
-        <div className="footer-nav">
+        <div className="footer-nav d-md-none">
             <nav className="footer-nav rounded-top-4">
                 {navLinks.map((link, index) => (
-                    <Link key={index} href={link.href} className="nav-link">
+                    <Link key={index} href={link.href} className={`nav-link ${pathname === link.href ? 'active' : ''}`}>
                         <div className="icon-container">
                             <img src={link.imgSrc} alt={link.text} className="nav-icon" />
                         </div>

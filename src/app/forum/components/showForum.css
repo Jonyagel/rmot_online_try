@@ -342,9 +342,17 @@
 .badge-forum{
   background-color: #00a35b;
 }
+.modal-comment{
+  background-image: url('/images/ירוק ללמעלה.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  text-align: center;
+}
+
 
 @media (max-width: 768px) {
-  .forum-comment-modal{
-    width: 90%;
+  .modal-comment-body{
+    max-height: 95%;
   }
 }

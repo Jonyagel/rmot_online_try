@@ -749,7 +749,7 @@ export default function ShopCards(props: any) {
                                 <h2 className='text-3xl'>{selectedCard.name}</h2>
                             )}
                         </Modal.Header>
-                        <Modal.Body className='rounded'>
+                        <Modal.Body className='rounded' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
                             {selectedCard && (
                                 <div className="p-2 rounded" style={{ background: '#fafcf9' }}>
                                     <div className="flex flex-col md:flex-row gap-8">

@@ -1,56 +1,103 @@
-@media (max-width: 768px) { /* הגדרות עבור מסכים קטנים (פלאפונים) */
+@media (max-width: 768px) {
+
+    /* הגדרות עבור מסכים קטנים (פלאפונים) */
     .footer-nav {
         display: flex;
-        justify-content: space-around; /* מסודר בשורה אחידה */
-        align-items: center; /* מרכז את האלמנטים אנכית */
-        background-color: #ffffff; /* צבע רקע בהיר */
+        justify-content: space-around;
+        /* מסודר בשורה אחידה */
+        align-items: center;
+        /* מרכז את האלמנטים אנכית */
+        background-color: #ffffff;
+        /* צבע רקע בהיר */
         padding: 0.5rem 0;
         position: fixed;
         bottom: 0;
         width: 100%;
-        border-top: 1px solid #e0e0e0; /* קו עליון עדין */
-        z-index: 1000; /* לוודא שה-footer מעל תוכן אחר */
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* הצללה עדינה */
+        border-top: 1px solid #e0e0e0;
+        /* קו עליון עדין */
+        z-index: 1000;
+        /* לוודא שה-footer מעל תוכן אחר */
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        /* הצללה עדינה */
     }
 
     .footer-nav .nav-link {
-        color: #333; /* צבע טקסט כהה */
+        color: #333;
+        /* צבע טקסט כהה */
         text-align: center;
-        flex: 1; /* כל קישור תופס מקום שווה */
-        position: relative; /* הכנה להוספת התמונה */
-        padding: 10px 0; /* רווחים סביב הקישור */
-        transition: color 0.3s ease; /* אנימציה חלקה */
+        flex: 1;
+        /* כל קישור תופס מקום שווה */
+        position: relative;
+        /* הכנה להוספת התמונה */
+        padding: 10px 0;
+        /* רווחים סביב הקישור */
+        transition: color 0.3s ease;
+        /* אנימציה חלקה */
+    }
+
+    .footer-nav:hover,
+    .footer-nav.active {
+        color: #00a35b;
+    }
+
+    .footer-nav::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: #00a35b;
+        transition: width 0.3s ease;
+    }
+
+    .footer-nav:hover::after,
+    .footer-nav.active::after {
+        width: 100%;
     }
 
     .footer-nav .nav-link img {
-        width: 30px; /* גודל התמונה */
-        height: auto; /* שמירה על יחס גובה-רוחב */
-        filter: grayscale(100%); /* שחור-לבן כברירת מחדל */
-        transition: filter 0.3s ease; /* אנימציה חלקה לשינוי צבע */
-        display: block; /* להבטיח שהתמונה תתפס את כל השורה */
-        margin: 3px auto; /* למרכז את התמונה */
+        width: 30px;
+        /* גודל התמונה */
+        height: auto;
+        /* שמירה על יחס גובה-רוחב */
+        filter: grayscale(100%);
+        /* שחור-לבן כברירת מחדל */
+        transition: filter 0.3s ease;
+        /* אנימציה חלקה לשינוי צבע */
+        display: block;
+        /* להבטיח שהתמונה תתפס את כל השורה */
+        margin: 3px auto;
+        /* למרכז את התמונה */
     }
 
     .footer-nav .nav-link:hover img,
-    .footer-nav .nav-link:focus img {
-        filter: grayscale(0%); /* צבע מלא כאשר הקישור פעיל */
+    .footer-nav .nav-link .active img {
+        filter: grayscale(0%);
+        /* צבע מלא כאשר הקישור פעיל */
     }
 
     .footer-nav .nav-link:hover {
-        color: #00a35b; /* צבע בעת ריחוף */
-        font-weight: 600; /* הדגשה בעת ריחוף */
+        color: #00a35b;
+        /* צבע בעת ריחוף */
+        font-weight: 600;
+        /* הדגשה בעת ריחוף */
     }
 
     .footer-nav .icon {
         display: block;
         margin: 0 auto;
-        font-size: 1.5rem; /* גודל אייקון */
-        color: #00a35b; /* צבע אייקון */
+        font-size: 1.5rem;
+        /* גודל אייקון */
+        color: #00a35b;
+        /* צבע אייקון */
     }
 
     .footer-nav span {
         display: block;
-        font-size: 0.8rem; /* גודל טקסט */
-        color: #6c757d; /* צבע טקסט עדין */
+        font-size: 0.8rem;
+        /* גודל טקסט */
+        /* color: #6c757d; */
+        /* צבע טקסט עדין */
     }
 }
