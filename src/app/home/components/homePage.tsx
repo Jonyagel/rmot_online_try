@@ -248,7 +248,7 @@ const HomePage: React.FC = () => {
                 <div className="video-container">
                     <video
                         ref={videoRef}
-                        src="/videos/videoHome.mp4"
+                        src="/videos/videoHome1.webm"
                         autoPlay
                         loop
                         muted
