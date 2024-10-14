@@ -86,7 +86,7 @@
   flex-direction: column;
   height: 320px;
   background-color: #ffffff;
-  overflow: hidden;
+  /* overflow: hidden; */
   transition: all 0.3s ease;
 }
 

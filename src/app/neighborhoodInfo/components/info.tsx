@@ -691,10 +691,22 @@ export default function ShopCards(props: any) {
                                 activeTab === 'mosads' ? filteredMosads :
                                     []).map((card: Card, index: number) => (
                                         <React.Fragment key={card.id}>
-                                            <motion.div variants={itemVariants}>
+                                            <motion.div variants={itemVariants} className=''>
+
                                                 <div
-                                                    className="shop-card shadow-sm rounded"
+                                                    className="shop-card shadow-sm rounded relative mb-2"
                                                 >
+                                                    <div className="align-self-start end-5 position-absolute" style={{ top: '-10px', fontSize: '13px' }}>
+                                                        {isOpenNow(card.hours) ? (
+                                                            <span className="bg-green-500 px-1 rounded shadow-sm" style={{background:'#d2f0e4'}}>
+                                                                פתוח
+                                                            </span>
+                                                        ) : (
+                                                            <span className="bg-red-500 px-1 rounded shadow-sm" style={{background:'#ff9393'}}>
+                                                                סגור
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                     <div className="shop-card-content" style={{ flex: 1 }}>
                                                         <div className="shop-card-header p-2">
                                                             {card.logo ? (
@@ -722,6 +734,7 @@ export default function ShopCards(props: any) {
                                                                     : card.description}
                                                             </p>
                                                         </div>
+
                                                     </div>
                                                     <div className="shop-card-footer mt-auto">
                                                         <button className="more-info-btn btn border w-100" onClick={() => handleShopClick(card)}>למידע נוסף</button>
@@ -903,8 +916,8 @@ export default function ShopCards(props: any) {
                                                         </table>
                                                     </div>
                                                 )}
-                                                <div className='md:w-50' style={{maxHeight:'300px'}}>
-                                                <Maps card={selectedCard} />
+                                                <div className='md:w-50' style={{ maxHeight: '300px' }}>
+                                                    <Maps card={selectedCard} />
                                                 </div>
                                             </div>
                                         </div>

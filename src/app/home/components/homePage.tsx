@@ -144,19 +144,19 @@ const HomePage: React.FC = () => {
         );
     };
 
-    const videoRef = useRef<HTMLVideoElement | null>(null);
-    const [isPlaying, setIsPlaying] = useState(true);
+    // const videoRef = useRef<HTMLVideoElement | null>(null);
+    // const [isPlaying, setIsPlaying] = useState(true);
 
-    const togglePlay = () => {
-        if (videoRef.current) {
-            if (isPlaying) {
-                videoRef.current.pause();
-            } else {
-                videoRef.current.play();
-            }
-            setIsPlaying(!isPlaying);
-        }
-    };
+    // const togglePlay = () => {
+    //     if (videoRef.current) {
+    //         if (isPlaying) {
+    //             videoRef.current.pause();
+    //         } else {
+    //             videoRef.current.play();
+    //         }
+    //         setIsPlaying(!isPlaying);
+    //     }
+    // };
 
     const heroImages = [
         'neighborhood1_wcwkgs',

@@ -81,11 +81,11 @@ export default function Header() {
             <div className="container">
                 <div className="header-content">
                     <div className="header-actions">
-                        <button className={`menu-toggle ${isNavOpen ? 'active' : ''}`} onClick={toggleNav}>
+                        {/* <button className={`menu-toggle ${isNavOpen ? 'active' : ''}`} onClick={toggleNav}>
                             <span></span>
                             <span></span>
                             <span></span>
-                        </button>
+                        </button> */}
                         {isLoggedIn && user ? (
                             <Link href="/userArea" className="avatar-link">
                                 {user.image ? (

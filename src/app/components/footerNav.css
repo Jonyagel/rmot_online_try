@@ -35,12 +35,12 @@
         /* אנימציה חלקה */
     }
 
-    .footer-nav:hover,
-    .footer-nav.active {
+    .footer-nav .nav-link:hover,
+    .footer-nav .nav-link.active {
         color: #00a35b;
     }
 
-    .footer-nav::after {
+    .footer-nav .nav-link::after {
         content: '';
         position: absolute;
         bottom: 0;
@@ -51,8 +51,8 @@
         transition: width 0.3s ease;
     }
 
-    .footer-nav:hover::after,
-    .footer-nav.active::after {
+    .footer-nav .nav-link:hover::after,
+    .footer-nav .nav-link.active::after {
         width: 100%;
     }
 
@@ -72,7 +72,7 @@
     }
 
     .footer-nav .nav-link:hover img,
-    .footer-nav .nav-link .active img {
+    .footer-nav .nav-link.active img {
         filter: grayscale(0%);
         /* צבע מלא כאשר הקישור פעיל */
     }
