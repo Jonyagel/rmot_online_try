@@ -9,7 +9,7 @@ function Lottie(props:any) {
         animationData: props.lottieNmae,
         autoplay: false,
     }
-    const lottieObj = useLottie(lottieOptions, { height: 400 })
+    const lottieObj = useLottie(lottieOptions, { height: 250 })
     const lottieAnimation = useLottieInteractivity({
         lottieObj,
         mode: 'scroll',

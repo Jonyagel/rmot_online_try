@@ -4,7 +4,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddQuestion from './addQuestion';
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Popover, OverlayTrigger, Button, Form, InputGroup, Modal, Col, Row, Nav } from 'react-bootstrap';
+import { Card, Badge, Popover, OverlayTrigger, Button, Form, InputGroup, Modal, Col, Row, Nav, Dropdown, DropdownButton } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import './showForum.css'
 import { FaChevronDown, FaSearch, FaTimes } from 'react-icons/fa';
@@ -193,10 +193,10 @@ export default function ShowForum(props: any) {
                                                 />
                                             </Nav>
                                             <div className='d-block d-md-none'>
-                                            <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
+                                                <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
                                             </div>
                                         </Col>
-                                        <Col lg={9} className='d-flex justify-content-end mt-2'>
+                                        <Col lg={9} className='d-flex justify-content-md-end justify-content-between mt-2'>
                                             <InputGroup className="search-bar-all border rounded w-50 me-1" style={{ maxHeight: '36px', maxWidth: '200px' }}>
                                                 <Form.Control
                                                     type="text"
@@ -212,7 +212,7 @@ export default function ShowForum(props: any) {
                                                     <FaSearch />
                                                 </InputGroup.Text>
                                             </InputGroup>
-                                            <div className='me-1' >
+                                            <div className='me-1 d-none d-md-block' >
                                                 <div className="sort-toggle rounded border" style={{ maxHeight: '36px' }}>
                                                     <span className="sort-icon">
                                                         <i className="bi bi-funnel"></i>
@@ -234,8 +234,22 @@ export default function ShowForum(props: any) {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className='d-md-none'>
+                                                <Dropdown className='bg-white'>
+                                                    <Dropdown.Toggle className='bg-white text-black flex align-items-center border'>
+                                                        <span className="sort-icon me-1">
+                                                            <i className="bi bi-funnel"></i>
+                                                        </span>
+                                                        <p>מיין לפי</p>
+                                                    </Dropdown.Toggle>
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item onClick={() => setSortBy('comments')} className={sortBy === 'comments' ? 'active' : ''}>תגובות</Dropdown.Item>
+                                                        <Dropdown.Item onClick={() => setSortBy('date')} className={sortBy === 'date' ? 'active' : ''}>תאריך</Dropdown.Item>
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+                                            </div>
                                             <div className='d-none d-md-block'>
-                                            <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
+                                                <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
                                             </div>
                                         </Col>
                                     </Row>

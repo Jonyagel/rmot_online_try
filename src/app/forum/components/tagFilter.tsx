@@ -1,11 +1,26 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { createRoot } from 'react-dom/client';
 import './tagFilter.css';
 
-const TagFilter = ({ getAllTags, handleTopicClick, selectedTopic, showAllQuestions }: any) => {
+// הוסף את ההגדרה של TagFilterProps
+interface TagFilterProps {
+  getAllTags: string[];
+  handleTopicClick: (tag: string) => void;
+  selectedTopic: string;
+  // showAllQuestions: boolean;
+}
+
+const TagFilter: React.FC<TagFilterProps> = ({
+  getAllTags,
+  handleTopicClick,
+  selectedTopic,
+  // showAllQuestions,
+}) => {
   const [showTags, setShowTags] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const tagsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const tagListContainer = document.getElementById('tagListContainer');
@@ -13,8 +28,8 @@ const TagFilter = ({ getAllTags, handleTopicClick, selectedTopic, showAllQuestio
       const root = createRoot(tagListContainer);
       root.render(
         <div className={`tag-list-container ${showTags ? 'show' : ''}`}>
-          <div className="tag-list">
-            {getAllTags.map((tag: any, index: number) => (
+          <div className="tag-list" ref={tagsRef}>
+            {getAllTags.slice(0, expanded ? getAllTags.length : 6).map((tag: any, index: number) => (
               <button
                 key={tag}
                 className={`category-tag rounded border ${selectedTopic === tag ? 'active' : ''}`}
@@ -25,6 +40,16 @@ const TagFilter = ({ getAllTags, handleTopicClick, selectedTopic, showAllQuestio
               </button>
             ))}
           </div>
+          {getAllTags.length > 6 && (
+            <button
+              className="expand-button rounded"
+              onClick={() => setExpanded(!expanded)}
+              aria-label={expanded ? "הצג פחות תגים" : "הצג עוד תגים"}
+            >
+              <span className="expand-text me-1">{expanded ? 'פחות' : 'עוד'}</span>
+              {expanded ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
+          )}
         </div>
       );
 
@@ -32,7 +57,7 @@ const TagFilter = ({ getAllTags, handleTopicClick, selectedTopic, showAllQuestio
         root.unmount();
       };
     }
-  }, [showTags, getAllTags, selectedTopic, handleTopicClick]);
+  }, [showTags, getAllTags, selectedTopic, handleTopicClick, expanded]);
 
   return (
     <div></div>

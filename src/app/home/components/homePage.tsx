@@ -18,6 +18,8 @@ import forumLottie from "@/public/images/icon-logo/פורומים.json";
 import familyLottie from "@/public/images/icon-logo/קהילה.json";
 import nadlanLottie from "@/public/images/icon-logo/נדלן.json";
 import boardLottie from "@/public/images/icon-logo/לוח.json";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 
 
 interface InfoCardProps {
@@ -68,7 +70,7 @@ const HomePage: React.FC = () => {
         {
             icon: 'house',
             title: "נדל\"ן חדש",
-            content: "פרויקט  חדשני ברמות ג' - דירות יוקרה עם נוף פנורמי לירושלים. הזדמנות להשקעה!",
+            content: "פרויקט  חדשני ברמות ג' - דירות יוקרה עם נוף פנורמי פרויקט  חדשנ יו   רושלים. הזדמנות להשקעה!",
             link: "/nadlan"
         },
         {
@@ -144,19 +146,19 @@ const HomePage: React.FC = () => {
         );
     };
 
-    // const videoRef = useRef<HTMLVideoElement | null>(null);
-    // const [isPlaying, setIsPlaying] = useState(true);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const [isPlaying, setIsPlaying] = useState(true);
 
-    // const togglePlay = () => {
-    //     if (videoRef.current) {
-    //         if (isPlaying) {
-    //             videoRef.current.pause();
-    //         } else {
-    //             videoRef.current.play();
-    //         }
-    //         setIsPlaying(!isPlaying);
-    //     }
-    // };
+    const togglePlay = () => {
+        if (videoRef.current) {
+            if (isPlaying) {
+                videoRef.current.pause();
+            } else {
+                videoRef.current.play();
+            }
+            setIsPlaying(!isPlaying);
+        }
+    };
 
     const heroImages = [
         'neighborhood1_wcwkgs',
@@ -194,7 +196,7 @@ const HomePage: React.FC = () => {
     return (
         <Container fluid className="px-0 py-0">
             <section className="hero-section">
-                <Swiper
+                {/* <Swiper
                     slidesPerView={1}
                     spaceBetween={0}
                     autoplay={{
@@ -242,15 +244,30 @@ const HomePage: React.FC = () => {
                             </div>
                         </SwiperSlide>
                     ))}
-                </Swiper>
+                </Swiper> */}
+                <div className="video-container">
+                    <video
+                        ref={videoRef}
+                        src="/videos/videoHome.mp4"
+                        autoPlay
+                        loop
+                        muted
+                        className="video-background"
+                    />
+                    <div className="video-overlay" />
+                </div>
                 <motion.div
                     className="hero-content"
                     initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h1 className="hero-title">ברוכים הבאים לקהילאפ</h1>
+                        <h1 className='' style={{ fontSize: '50px' }}>ברוכים הבאים</h1>
+                        <p className="hero-title font-extrabold" style={{background:'#00a35b'}}>רמות - רמת שלמה</p>
                 </motion.div>
+                <button onClick={togglePlay} className="video-control">
+                    <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+                </button>
             </section>
 
             <Container fluid className="content-container">
@@ -258,15 +275,20 @@ const HomePage: React.FC = () => {
                     <Col lg={2} className="d-none d-lg-block">
                         <div className="sticky-ad-container">
                             <div className="ad-space">
-                                <img src='/images/bookgif.webp' width="auto" height="auto" alt='ads-left' className='rounded' />
+                                <img src='/images/ads gif new 4.gif' width="auto" height="auto" alt='ads-left' className='rounded' />
                             </div>
                         </div>
                     </Col>
                     <Col lg={8}>
                         <div className='main-content-container rounded-t mx-auto'>
-                            <div className='main-content rounded-t'>
-                                <section className="info-cards-section rounded mb-5">
-                                    <h2 className="section-title mb-3">מה חדש ברמות?</h2>
+                            <div className='main-content'>
+                                {/* <div>
+                                    <svg width="100" height="100" viewBox="0 0 3493 3092" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3459.11 2716.15C3555.34 2882.81 3435.06 3091.15 3242.61 3091.15L251.103 3091.15C58.6527 3091.15 -61.6281 2882.81 34.597 2716.15L1530.35 125.428C1626.57 -41.2382 1867.14 -41.2378 1963.36 125.429L3459.11 2716.15Z" fill="#D9D9D9" />
+                                    </svg>
+                                </div> */}
+                                <section className="info-cards-section pb-0 rounded mb-5 mx-auto" style={{ width: '85%' }}>
+                                    {/* <h2 className="section-title text-white mb-3">מה חדש ברמות?</h2> */}
                                     <Swiper
                                         slidesPerView={3}
                                         spaceBetween={20}
@@ -274,112 +296,110 @@ const HomePage: React.FC = () => {
                                             delay: 5000,
                                             disableOnInteraction: false,
                                         }}
-                                        pagination={{
-                                            el: '.custom-pagination',
-                                            clickable: true,
-                                            type: 'bullets',
-                                            renderBullet: function (index, className) {
-                                                return '<span class="' + className + ' custom-bullet"></span>';
-                                            },
-                                        }}
-                                        navigation={true}
+                                        // pagination={{
+                                        //     el: '.custom-pagination',
+                                        //     clickable: true,
+                                        //     type: 'bullets',
+                                        //     renderBullet: function (index, className) {
+                                        //         return '<span class="' + className + ' custom-bullet"></span>';
+                                        //     },
+                                        // }}
+                                        // navigation={true}
                                         modules={[Autoplay, Pagination, Navigation]}
-                                        className="info-cards-slider pb-3 px-4 custom-arrows-swiper w-75"
+                                        className="info-cards-slider p-3 custom-arrows-swiper"
                                         breakpoints={{
                                             320: {
                                                 slidesPerView: 1,
-                                                spaceBetween: 10
+                                                // spaceBetween: 10
                                             },
                                             640: {
                                                 slidesPerView: 2,
-                                                spaceBetween: 15
+                                                // spaceBetween: 15
                                             },
                                             1225: {
                                                 slidesPerView: 3,
-                                                spaceBetween: 5
+                                                // spaceBetween: 5
                                             }
                                         }}
                                     >
                                         {infoCards.map((card, index) => (
                                             <SwiperSlide key={index}>
-                                                <div className="info-card mt-3 mx-4 p-2 rounded shadow-sm">
+                                                <div className="info-card p-4 rounded shadow-sm">
                                                     {/* <div className="bg-danger"> */}
-                                                    <div className="card-icon flex align-items-center mb-2">
-                                                        <i className={`bi bi-${card.icon} me-2`} style={{ color: '#00a35b ' }}></i>
-                                                        <h3>{card.title}</h3>
+                                                    <div className="card-icon flex align-items-center">
+                                                        {/* <i className={`bi bi-${card.icon} me-2`} style={{ color: '#00a35b ' }}></i> */}
+                                                        <h3 className='font-bold mb-2'>{card.title}</h3>
                                                     </div>
-                                                    <div className="my-auto">
+                                                    <div className="">
                                                         <p>{card.content}</p>
                                                     </div>
                                                     {/* </div> */}
-                                                    <div className="home-info-card-footer mt-auto my-2">
+                                                    {/* <div className="home-info-card-footer mt-auto">
                                                         <button className='btn btn-link-home-card w-75 border mx-auto my-auto'>
                                                             <Link href={card.link} className="link no-underline">
                                                                 גלה עוד
-                                                                {/* <FontAwesomeIcon icon={faArrowLeft} className="arrow-icon" /> */}
+                                                        
                                                             </Link>
                                                         </button>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </SwiperSlide>
                                         ))}
-                                        <div className="custom-pagination"></div>
+                                        {/* <div className="custom-pagination"></div> */}
                                     </Swiper>
                                 </section>
+                                {/* <div className="grid-container">
+                                    <div className="grid-item item1 rounded"><div className='inside1 rounded text-center'><i className='bi bi-car-front'></i>
+                                    <p>hfhbfchb</p>
+                                    </div></div>
+                                    <div className="grid-item item2">חיים טכנולוגיים</div>
+                                    <div className="grid-item item3">מעניין</div>
+                                    <div className="grid-item item4">אוטומטית</div>
+                                    <div className="grid-item item5">תוכן נוסף</div>
+                                </div> */}
                                 <div className="mobile-ad-space ad-space-2 d-md-none my-2">
                                     <img src='/images/saleAds.gif' alt='ads-phone' className='rounded' />
                                 </div>
                                 <section className="statistics-section">
-                                    <motion.h2
+                                    {/* <motion.h2
                                         initial={{ opacity: 0, y: 20 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.5 }}
                                         className="section-title"
                                     >
                                         שכונת רמות - נתונים ומידע
-                                    </motion.h2>
+                                    </motion.h2> */}
 
-                                    <Statistic />
+                                    {/* <Statistic /> */}
 
                                     {[0, 1, 2, 3, 4].map((rowIndex) => (
                                         <div key={rowIndex} className={`info-row ${rowIndex % 2 === 0 ? 'row-reverse' : ''}`}>
                                             <motion.div
                                                 className="image-container"
-                                                // initial={{ opacity: 0, x: rowIndex % 2 === 0 ? -50 : 50 }}
-                                                // whileInView={{ opacity: 1, x: 0 }}
-                                                // transition={{ duration: 0.3 }}
                                             >
-                                                <Lottie lottieNmae={images[rowIndex]}/>
-                                                {/* <CldImage
-                                                    src={images[rowIndex]}
-                                                    width={500}
-                                                    height={300}
-                                                    alt={`Image ${rowIndex + 1}`}
-                                                    className="mx-auto"
-                                                /> */}
+                                                <Lottie lottieNmae={images[rowIndex]} />
                                             </motion.div>
                                             {neighborhoodInfo[rowIndex] && (
-                                                <motion.div
+                                                <div
                                                     className="neighborhood-info rounded"
-                                                    initial={{ opacity: 0, y: 20 }}
-                                                    whileInView={{ opacity: 1, y: 0 }}
-                                                    transition={{ duration: 0.5 }}
+                                                // initial={{ opacity: 0, y: 20 }}
+                                                // whileInView={{ opacity: 1, y: 0 }}
+                                                // transition={{ duration: 0.5 }}
                                                 >
-                                                    <h3>{neighborhoodInfo[rowIndex].title}</h3>
+                                                    <h4 className='font-bold text-2xl'>{neighborhoodInfo[rowIndex].title}</h4>
                                                     <p>{neighborhoodInfo[rowIndex].description}</p>
-                                                </motion.div>
+                                                </div>
                                             )}
                                         </div>
                                     ))}
                                 </section>
-                              {/* <Lottie lottieNmae={infoLottie}/> */}
                             </div>
                         </div>
                     </Col>
                     <Col lg={2} className="d-none d-lg-block">
                         <div className="sticky-ad-container">
                             <div className="ad-space">
-                                <img src='/images/timegif.webp' width="auto" height="auto" alt='ads-right' className='rounded' />
+                                <img src='/images/ads gif new 3.gif' width="auto" height="auto" alt='ads-right' className='rounded' />
                             </div>
                         </div>
                     </Col>
