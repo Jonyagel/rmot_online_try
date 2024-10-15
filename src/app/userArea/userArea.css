@@ -103,7 +103,7 @@
 
 .user-avatar-placeholder {
   font-size: 3rem;
-  color: #0d6efd;
+  color: #00a35b;
 }
 
 .user-name {
@@ -125,7 +125,7 @@
 
 .user-info svg {
   margin-right: 0.5rem;
-  color: #0d6efd;
+  color: #00a35b;
 }
 
 .user-posts-title {
@@ -142,7 +142,7 @@
   display: block;
   width: 50px;
   height: 4px;
-  background: #0d6efd;
+  background: #00a35b;
   margin: 1rem auto 0;
   border-radius: 2px;
 }
@@ -230,7 +230,7 @@
 
 .nadlan-info svg {
   margin-right: 0.5rem;
-  color: #0d6efd;
+  color: #00a35b;
 }
 
 .post-meta {
@@ -269,7 +269,7 @@
 }
 
 .edit-post-modal .modal-header {
-  background: linear-gradient(135deg, #0d6efd 0%, #0099ff 100%);
+  background: linear-gradient(135deg, #00a35b 0%, #0099ff 100%);
   color: white;
   border: none;
 }
@@ -286,11 +286,11 @@
 
 .edit-post-modal .form-control:focus {
   box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-  border-color: #0d6efd;
+  border-color: #00a35b;
 }
 
 .edit-post-modal .btn-primary {
-  background: linear-gradient(135deg, #0d6efd 0%, #0099ff 100%);
+  background: linear-gradient(135deg, #00a35b 0%, #0099ff 100%);
   border: none;
   border-radius: 10px;
   padding: 0.5rem 1.5rem;

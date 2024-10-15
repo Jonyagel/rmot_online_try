@@ -9,12 +9,12 @@ function Lottie(props:any) {
         animationData: props.lottieNmae,
         autoplay: false,
     }
-    const lottieObj = useLottie(lottieOptions, { height: 250 })
+    const lottieObj = useLottie(lottieOptions, { height: window.innerWidth < 768 ? 130 : 250 })
     const lottieAnimation = useLottieInteractivity({
         lottieObj,
         mode: 'scroll',
         actions: [{
-            visibility: [0.2, 0.5],
+            visibility: [0.1, 0.5],
             type: 'seek',
             frames: [0, 25]
         }]

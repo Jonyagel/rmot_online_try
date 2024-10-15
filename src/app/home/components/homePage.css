@@ -27,18 +27,7 @@
    background: rgba(0, 0, 0, 0.4);
  } */
 
- /* .hero-content {
-   position: relative;
-   z-index: 2;
-   text-align: center;
-   color: white;
-   padding-top: 20vh;
- } */
 
- /* .hero-title {
-   font-size: 3rem;
-   margin-bottom: 1rem;
- } */
 
  /* .hero-subtitle {
    font-size: 1.5rem;
@@ -242,6 +231,10 @@ width: 50%;
  .btn-link-home-card:hover {
    background-color: #d2f0e4;
  }
+ .hero-title {
+  font-size: 65px;
+  line-height: 100%;
+}
 
  @media (max-width: 1024px) {
    .info-card {
@@ -340,14 +333,10 @@ width: 50%;
   padding-top: 20vh;
 }
 
-.hero-title {
-  font-size: 3rem;
-  /* margin-bottom: 1rem; */
-}
 
 .hero-subtitle {
   font-size: 1.5rem;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 .video-control {
@@ -383,17 +372,19 @@ width: 50%;
   justify-content: center;
   align-items: center;
 }
-
+.tittle-welcome{
+  font-size: 50px;
+ }
  @media (max-width: 768px) {
 
 
    .info-row {
-     flex-direction: column;
+     /* flex-direction: column; */
      /* במובייל, התוכן יתארגן בעמודה */
    }
 
    .row-reverse {
-     flex-direction: column;
+     /* flex-direction: column; */
      /* במובייל, התוכן יתארגן בעמודה גם כשהוא הפוך */
    }
 
@@ -401,6 +392,7 @@ width: 50%;
    .neighborhood-info {
      width: 100%;
      margin-bottom: 20px;
+     padding: 0;
    }
 
    .hero-section {
@@ -408,7 +400,7 @@ width: 50%;
    }
 
    .hero-title {
-     font-size: 2rem;
+     font-size: 40px;
    }
 
    .hero-subtitle {
@@ -417,6 +409,9 @@ width: 50%;
 
    .info-card {
      width: 100%;
+   }
+   .tittle-welcome{
+    font-size: 30px;
    }
  }
 
@@ -429,10 +424,6 @@ width: 50%;
  @media (max-width: 480px) {
    .hero-section {
      height: 50vh;
-   }
-
-   .hero-title {
-     font-size: 1.5rem;
    }
 
    .hero-subtitle {
@@ -485,20 +476,12 @@ width: 50%;
    text-align: center;
  }
 
- .hero-content {
-   color: white;
- }
 
- .hero-title {
-   font-size: 65px;
-   margin-bottom: 1rem;
-   line-height: 100%;
-   /* text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); */
- }
+
 
  .hero-subtitle {
    font-size: 1.5rem;
-   margin-bottom: 2rem;
+   /* margin-bottom: 2rem; */
    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
  }
 

@@ -262,7 +262,7 @@ const HomePage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                        <h1 className='' style={{ fontSize: '50px' }}>ברוכים הבאים</h1>
+                        <h1 className='tittle-welcome'>ברוכים הבאים</h1>
                         <p className="hero-title font-extrabold" style={{background:'#00a35b'}}>רמות - רמת שלמה</p>
                 </motion.div>
                 <button onClick={togglePlay} className="video-control">
@@ -273,7 +273,7 @@ const HomePage: React.FC = () => {
             <Container fluid className="content-container">
                 <Row>
                     <Col lg={2} className="d-none d-lg-block">
-                        <div className="sticky-ad-container">
+                        <div className="sticky-ad-container" style={{marginTop:'-200px'}}>
                             <div className="ad-space">
                                 <img src='/images/ads gif new 4.gif' width="auto" height="auto" alt='ads-left' className='rounded' />
                             </div>
@@ -324,6 +324,7 @@ const HomePage: React.FC = () => {
                                                 slidesPerView: 4,
                                                 // spaceBetween: 5
                                             }
+
                                         }}
                                     >
                                         {infoCards.map((card, index) => (
@@ -401,7 +402,7 @@ const HomePage: React.FC = () => {
                         </div>
                     </Col>
                     <Col lg={2} className="d-none d-lg-block">
-                        <div className="sticky-ad-container">
+                        <div className="sticky-ad-container" style={{marginTop:'-200px'}}>
                             <div className="ad-space">
                                 <img src='/images/ads gif new 3.gif' width="auto" height="auto" alt='ads-right' className='rounded' />
                             </div>
