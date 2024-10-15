@@ -7,7 +7,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Container, Row, Col } from 'react-bootstrap';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation, EffectCube, EffectFlip } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -262,8 +262,8 @@ const HomePage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                        <h1 className='tittle-welcome'>ברוכים הבאים</h1>
-                        <p className="hero-title font-extrabold" style={{background:'#00a35b'}}>רמות - רמת שלמה</p>
+                    <h1 className='tittle-welcome'>ברוכים הבאים</h1>
+                    <p className="hero-title font-extrabold" style={{ background: '#00a35b' }}>רמות - רמת שלמה</p>
                 </motion.div>
                 <button onClick={togglePlay} className="video-control">
                     <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
@@ -273,9 +273,24 @@ const HomePage: React.FC = () => {
             <Container fluid className="content-container">
                 <Row>
                     <Col lg={2} className="d-none d-lg-block">
-                        <div className="sticky-ad-container" style={{marginTop:'-200px'}}>
+                        <div className="sticky-ad-container" style={{ marginTop: '-200px' }}>
                             <div className="ad-space">
-                                <img src='/images/ads gif new 4.gif' width="auto" height="auto" alt='ads-left' className='rounded' />
+                                <Swiper
+                                    modules={[Autoplay, Pagination, Navigation]}
+                                    slidesPerView={1}
+                                    autoplay={{
+                                        delay: 5000,
+                                        disableOnInteraction: false,
+                                    }}
+                                    allowTouchMove={false}
+                                >
+                                    <SwiperSlide>
+                                        <img src='/images/ads gif new 4.gif' width="auto" height="auto" alt='ads-left' className='rounded' />
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <img src='/images/ads gif new 3.gif' width="auto" height="auto" alt='ads-left' className='rounded' />
+                                    </SwiperSlide>
+                                </Swiper>
                             </div>
                         </div>
                     </Col>
@@ -402,7 +417,7 @@ const HomePage: React.FC = () => {
                         </div>
                     </Col>
                     <Col lg={2} className="d-none d-lg-block">
-                        <div className="sticky-ad-container" style={{marginTop:'-200px'}}>
+                        <div className="sticky-ad-container" style={{ marginTop: '-200px' }}>
                             <div className="ad-space">
                                 <img src='/images/ads gif new 3.gif' width="auto" height="auto" alt='ads-right' className='rounded' />
                             </div>

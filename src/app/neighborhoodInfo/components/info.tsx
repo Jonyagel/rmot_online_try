@@ -15,7 +15,7 @@ import { FaTshirt, FaLaptop, FaBook, FaCouch, FaUtensils } from 'react-icons/fa'
 import CategorySlider from './CategoryTags';
 import { FaSynagogue, FaUniversity, FaLandmark, FaChild, FaUserFriends, FaHandsHelping, FaSwimmer, FaTheaterMasks, FaMusic, FaBusAlt, FaStore, FaGavel } from 'react-icons/fa';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation } from 'swiper/modules';
+import { Pagination, Navigation, FreeMode, Thumbs } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -74,6 +74,7 @@ export default function ShopCards(props: any) {
         friday: '',
         saturday: '',
     });
+    const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
 
 
@@ -694,19 +695,8 @@ export default function ShopCards(props: any) {
                                             <motion.div variants={itemVariants} className=''>
 
                                                 <div
-                                                    className="shop-card shadow-sm rounded relative mb-2"
+                                                    className="shop-card shadow-sm rounded mb-2"
                                                 >
-                                                    <div className="align-self-start end-5 position-absolute" style={{ top: '-10px', fontSize: '13px' }}>
-                                                        {isOpenNow(card.hours) ? (
-                                                            <span className="bg-green-500 px-1 rounded shadow-sm" style={{background:'#d2f0e4'}}>
-                                                                פתוח
-                                                            </span>
-                                                        ) : (
-                                                            <span className="bg-red-500 px-1 rounded shadow-sm" style={{background:'#ff9393'}}>
-                                                                סגור
-                                                            </span>
-                                                        )}
-                                                    </div>
                                                     <div className="shop-card-content" style={{ flex: 1 }}>
                                                         <div className="shop-card-header p-2">
                                                             {card.logo ? (
@@ -727,7 +717,20 @@ export default function ShopCards(props: any) {
                                                             )}
                                                         </div>
                                                         <div className="shop-description px-2">
-                                                            <h3 className='font-bold'>{card.name}</h3>
+                                                            <div className='flex justify-content-between'>
+                                                                <h3 className='font-bold'>{card.name}</h3>
+                                                                <div className="align-self-start" style={{ top: '-10px', fontSize: '13px' }}>
+                                                                    {isOpenNow(card.hours) ? (
+                                                                        <span className="bg-green-500 px-1 rounded shadow-sm" style={{ background: '#d2f0e4', fontSize: '10px' }}>
+                                                                            פתוח
+                                                                        </span>
+                                                                    ) : (
+                                                                        <span className="bg-red-500 px-1 rounded  shadow-sm" style={{ background: '#f78d8d', fontSize: '10px' }}>
+                                                                            סגור
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
                                                             <p>
                                                                 {card.description.length > 100
                                                                     ? `${card.description.substring(0, 100)}...`
@@ -756,7 +759,7 @@ export default function ShopCards(props: any) {
                                     ))}
                     </motion.div>
 
-                    <Modal show={showModalDetailShop} onHide={closeModal} size='xl' className='rounded overflow-y-auto p-0'>
+                    <Modal show={showModalDetailShop} onHide={closeModal} size='lg' className='rounded overflow-y-auto p-0'>
                         <Modal.Header closeButton className='header-modal-detail-shop'>
                             {selectedCard && (
                                 <h2 className='text-3xl'>{selectedCard.name}</h2>
@@ -765,15 +768,15 @@ export default function ShopCards(props: any) {
                         <Modal.Body className='rounded' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
                             {selectedCard && (
                                 <div className="p-2 rounded" style={{ background: '#fafcf9' }}>
-                                    <div className="flex flex-col md:flex-row gap-8">
+                                    <div className="flex flex-col md:flex-row">
 
-                                        <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-0/2'}`}>
-                                            {selectedCard.images[0] && (
+                                        <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-1/2'}`}>
+                                            {/* {selectedCard.images[0] && (
                                                 <div className="mb-2 ys-shop-image-slider">
                                                     <Swiper
                                                         modules={[Pagination, Navigation]}
                                                         spaceBetween={20}
-                                                        slidesPerView={1}
+                                                        slidesPerView={2}
                                                         navigation
                                                         pagination={{ clickable: true }}
                                                     >
@@ -785,7 +788,7 @@ export default function ShopCards(props: any) {
                                                                     height="400"
                                                                     crop="fill"
                                                                     gravity="auto"
-                                                                    className="w-full object-cover rounded"
+                                                                    className="w-full object-cover rounded shadow-sm"
                                                                     alt={`${selectedCard.name} - תמונה ${index + 1}`}
                                                                     loading="lazy"
                                                                 />
@@ -793,11 +796,29 @@ export default function ShopCards(props: any) {
                                                         ))}
                                                     </Swiper>
                                                 </div>
-                                            )}
+                                            )} */}
                                             {selectedCard.ad && (
                                                 <div className="">
                                                     {selectedCard.adImage && (
-                                                        <div className="mb-2">
+                                                        <>
+                                                          <Swiper
+                                                        //   modules={[Pagination, Navigation]}
+                                                        //   spaceBetween={20}
+                                                          slidesPerView={1}
+                                                          style={{
+                                                            // '--swiper-navigation-color': '#fff',
+                                                            // '--swiper-pagination-color': '#fff',
+                                                          }}
+                                                          loop={true}
+                                                          spaceBetween={10}
+                                                        //   navigation={true}
+                                                          thumbs={{ swiper: thumbsSwiper }}
+                                                          modules={[FreeMode, Navigation, Thumbs]}
+                                                          className="mySwiper2"
+                                                        //   navigation
+                                                        //   pagination={{ clickable: true }}
+                                                      >
+                                                        {/* <div className="mb-2">
                                                             <CldImage
                                                                 src={selectedCard.adImage}
                                                                 width="600"
@@ -808,12 +829,56 @@ export default function ShopCards(props: any) {
                                                                 alt={`${selectedCard.name} - מודעה`}
                                                                 loading="lazy"
                                                             />
-                                                        </div>
+                                                        </div> */}
+                                                        {selectedCard.images.map((image, index) => (
+                                                            <SwiperSlide key={index}>
+                                                                <CldImage
+                                                                    src={image}
+                                                                    width="600"
+                                                                    height="700"
+                                                                    crop="fill"
+                                                                    gravity="auto"
+                                                                    className="object-contain rounded shadow-sm"
+                                                                    alt={`${selectedCard.name} - תמונה ${index + 1}`}
+                                                                    loading="lazy"
+                                                                />
+                                                            </SwiperSlide>
+                                                        ))}
+                                                    </Swiper>
+                                                      <Swiper
+                                                      onSwiper={setThumbsSwiper}
+                                                      loop={true}
+                                                      spaceBetween={10}
+                                                      slidesPerView={4}
+                                                      freeMode={true}
+                                                      watchSlidesProgress={true}
+                                                      modules={[FreeMode, Navigation, Thumbs]}
+                                                      className="mySwiper py-2"
+                                                    >
+                                                      {selectedCard.images.map((image, index) => (
+                                                             <SwiperSlide key={index}>
+                                                                 <CldImage
+                                                                     src={image}
+                                                                     width="600"
+                                                                     height="700"
+                                                                     crop="fill"
+                                                                     gravity="auto"
+                                                                     className="object-contain rounded shadow-sm"
+                                                                     alt={`${selectedCard.name} - תמונה ${index + 1}`}
+                                                                     loading="lazy"
+                                                                 />
+                                                             </SwiperSlide>
+                                                         ))}
+                                                     </Swiper>
+                                                </>
                                                     )}
                                                 </div>
                                             )}
+                                            <div className=''>
+                                                <Maps card={selectedCard} />
+                                            </div>
                                         </div>
-                                        <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-full'}`}>
+                                        <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-1/2'}`}>
                                             <div className="p-2 pt-0">
                                                 <div className="flex items-center my-4">
                                                     {selectedCard.logo && (
@@ -833,7 +898,7 @@ export default function ShopCards(props: any) {
                                                 <div className="">
                                                     <div className="">
                                                         <div className="flex align-items-center">
-                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
                                                                 <i className="bi bi-geo-alt text-gray-600"></i>
                                                             </div>
                                                             {/* <a
@@ -844,29 +909,29 @@ export default function ShopCards(props: any) {
                                                                 >
                                                                     {selectedCard.address}
                                                                 </a> */}
-                                                            <span className="hover:text-green-500 ms-2" style={{ cursor: 'pointer' }} onClick={() => handleShowMap()}>{selectedCard.address}</span>
-                                                            <Modal show={showMap} onHide={() => handleCloseMap()}>
+                                                            <span className="hover:text-green-500 ms-2">{selectedCard.address}</span>
+                                                            {/* <Modal show={showMap} onHide={() => handleCloseMap()}>
                                                                 <Modal.Header closeButton onClick={() => handleCloseMap()}>{selectedCard.address}</Modal.Header>
                                                                 <Modal.Body className='p-2'>
                                                                     <Maps card={selectedCard} />
                                                                 </Modal.Body>
-                                                            </Modal>
+                                                            </Modal> */}
                                                         </div>
                                                         <div className="flex align-items-center">
-                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
                                                                 <i className="bi bi-telephone text-gray-600"></i>
                                                             </div>
                                                             <Link href={`tel:${selectedCard.phone}`} className="hover:text-green-500 ms-2">{selectedCard.phone}</Link>
                                                         </div>
                                                         <div className="flex align-items-center ">
-                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
                                                                 <i className="bi bi-envelope text-gray-600"></i>
                                                             </div>
                                                             <Link href={`mailto:${selectedCard.email}`} className="hover:text-green-500 ms-2">{selectedCard.email}</Link>
                                                         </div>
                                                         {selectedCard.website && (
                                                             <div className="flex align-items-center ">
-                                                                <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                                <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
                                                                     <i className="bi bi-globe text-gray-600"></i>
                                                                 </div>
                                                                 <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer" className="hover:text-green-500  ms-2">
@@ -879,7 +944,7 @@ export default function ShopCards(props: any) {
                                                 {selectedCard.hours.sunday && (
                                                     <div className="">
                                                         <div className="flex align-items-center">
-                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '50px' }}>
+                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
                                                                 <i className="bi bi-clock text-gray-600"></i>
                                                             </div>
                                                             <span className='ms-2'>שעות פעילות</span>
@@ -900,13 +965,13 @@ export default function ShopCards(props: any) {
                                                                 {renderGroupedHours(selectedCard.hours).map((row, index) => (
                                                                     <React.Fragment key={index}>
                                                                         <tr>
-                                                                            <td style={{ width: '50px', height: '50px' }}></td>
-                                                                            <td className="ps-2 font-medium">{row.days}</td>
+                                                                            <td style={{ width: '50px', height: '30px' }}></td>
+                                                                            <td className="px-2 font-medium">{row.days}</td>
                                                                             <td className="ms-2">{row.timeRange}</td>
                                                                         </tr>
                                                                         {row.note && (
                                                                             <tr>
-                                                                                <td style={{ width: '50px', height: '50px' }}></td>
+                                                                                <td style={{ width: '50px', height: '30px' }}></td>
                                                                                 <td colSpan={2} className="text-sm text-gray-500 pb-1 ms-2">{row.note}</td>
                                                                             </tr>
                                                                         )}
@@ -917,7 +982,7 @@ export default function ShopCards(props: any) {
                                                     </div>
                                                 )}
                                                 <div className='md:w-50' style={{ maxHeight: '300px' }}>
-                                                    <Maps card={selectedCard} />
+                                                    {/* <Maps card={selectedCard} /> */}
                                                 </div>
                                             </div>
                                         </div>
@@ -926,7 +991,6 @@ export default function ShopCards(props: any) {
                                 </div>
                             )}
                         </Modal.Body>
-                        {/* // </motion.div> */}
                     </Modal>
 
                 </Col >
