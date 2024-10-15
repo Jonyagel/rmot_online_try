@@ -846,7 +846,7 @@ export default function ShopCards(props: any) {
                                                         ))}
                                                     </Swiper>
                                                       <Swiper
-                                                      onSwiper={setThumbsSwiper}
+                                                      onSwiper={(swiper: any) => setThumbsSwiper(swiper)}
                                                       loop={true}
                                                       spaceBetween={10}
                                                       slidesPerView={4}
