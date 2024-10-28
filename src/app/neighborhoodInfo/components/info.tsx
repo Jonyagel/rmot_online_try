@@ -2,25 +2,25 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaSearch, FaMedkit, FaGlassCheers, FaMoneyBillWave, FaBabyCarriage, FaTools, FaAppleAlt, FaScroll, FaHandHoldingUsd, FaWheelchair, FaRing } from 'react-icons/fa';
-import { Button, Modal, Form, InputGroup, Col, Row, Nav, Card } from 'react-bootstrap';
+import { Button, Modal, Form, InputGroup, Col, Row, Nav, Card, Accordion, Carousel, CloseButton } from 'react-bootstrap';
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './infoStyle.css';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { faFontAwesome, faImage } from '@fortawesome/free-solid-svg-icons';
+import { faFontAwesome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FaTshirt, FaLaptop, FaBook, FaCouch, FaUtensils } from 'react-icons/fa';
 import CategorySlider from './CategoryTags';
 import { FaSynagogue, FaUniversity, FaLandmark, FaChild, FaUserFriends, FaHandsHelping, FaSwimmer, FaTheaterMasks, FaMusic, FaBusAlt, FaStore, FaGavel } from 'react-icons/fa';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation, FreeMode, Thumbs } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { useSession } from 'next-auth/react';
 import Maps from './maps';
+import { useMediaQuery } from 'react-responsive';
+import { FaPlus } from 'react-icons/fa';
 
 
 
@@ -65,18 +65,22 @@ export default function ShopCards(props: any) {
     const [inputValue, setInputValue] = useState('');
     const [errors, setErrors] = useState<any>({});
     const [signIn, setSignIn] = useState(false);
-    const [customTextHours, setCustomTextHours] = useState<{ [key in Day]: string }>({
-        sunday: '',
-        monday: '',
-        tuesday: '',
-        wednesday: '',
-        thursday: '',
-        friday: '',
-        saturday: '',
-    });
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const isMobile = useMediaQuery({ maxWidth: 767 });
 
+    useEffect(() => {
+        if (!isMobile) {
+            setIsSearchOpen(true);
+        }
+    }, [isMobile]);
 
+    const handleSearch = () => {
+        setSearchTerm(inputValue);
+        if (isMobile) {
+            setIsSearchOpen(false);
+        }
+    };
 
     const nameRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -161,7 +165,6 @@ export default function ShopCards(props: any) {
         const resp = await fetch(url, { cache: 'no-store' })
         const data = await resp.json();
         console.log(data);
-        // setCardsAr(data)
         setGmachAr(data);
         console.log(`Fetching Gmach data for category: ${subCategory}`);
     }
@@ -171,7 +174,6 @@ export default function ShopCards(props: any) {
         const resp = await fetch(url, { cache: 'no-store' })
         const data = await resp.json();
         console.log(data);
-        // setCardsAr(data)
         setMosadsAr(data);
         console.log(`Fetching mosads data for category: ${subCategory}`);
     }
@@ -252,7 +254,6 @@ export default function ShopCards(props: any) {
                 const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
                 const data = await resp.json();
                 if (data.status === 401) {
-                    // console.log(session);
                     notify();
                     setSignIn(false);
                 } else if (data.status === 200) {
@@ -299,8 +300,6 @@ export default function ShopCards(props: any) {
     };
 
     const handleShowModal = () => setShowModal(true);
-    const handleShowMap = () => setShowMap(true);
-    const handleCloseMap = () => setShowMap(false);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -320,7 +319,6 @@ export default function ShopCards(props: any) {
         const name = nameRef.current?.value;
         const description = descriptionRef.current?.value;
         const address = addressRef.current?.value;
-        // const hours = hoursRef.current?.value;
         const phone = phoneRef.current?.value;
         const email = emailRef.current?.value;
         const website = websiteRef.current?.value;
@@ -554,8 +552,8 @@ export default function ShopCards(props: any) {
                             <div className=''>
                                 <div className='mt-3'>
                                     <div className="search-bar-container bg-white shadow-sm  p-3 rounded-top align-items-center mx-auto">
-                                        <Row className="flex-column-reverse flex-lg-row">
-                                            <Col xs={12} lg={6} className='d-flex justify-content-center justify-content-lg-start mt-3 mt-lg-0'>
+                                        <Row className=" flex-row">
+                                            <Col xs={8} lg={6} className='d-flex justify-content-start mt-0'>
                                                 <Nav
                                                     activeKey={activeTab}
                                                     onSelect={(k: any) => {
@@ -585,39 +583,59 @@ export default function ShopCards(props: any) {
                                                     </Nav.Item>
                                                 </Nav>
                                             </Col>
-                                            <Col xs={12} lg={6} className='d-flex justify-content-center justify-content-lg-end align-items-center'>
-                                                <div className="d-flex">
-                                                    <InputGroup className="border rounded" style={{ maxHeight: '36px', maxWidth: '200px' }}>
-                                                        <Form.Control
-                                                            type="text"
-                                                            placeholder="חיפוש חנויות..."
-                                                            value={inputValue}
-                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
-                                                            onKeyDown={(e: any) => {
-                                                                if (e.key === 'Enter') {
-                                                                    e.preventDefault();
-                                                                    setSearchTerm(inputValue);
-                                                                }
+                                            <Col xs={4} lg={6} className='d-flex justify-content-end align-items-center'>
+                                                <div className="search-container">
+                                                    {(!isMobile || isSearchOpen) && (
+                                                        <InputGroup className="border rounded" style={{ maxHeight: '36px', maxWidth: '200px' }}>
+                                                            <Form.Control
+                                                                type="text"
+                                                                placeholder="חיפוש חנויות..."
+                                                                value={inputValue}
+                                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+                                                                onKeyDown={(e: React.KeyboardEvent) => {
+                                                                    if (e.key === 'Enter') {
+                                                                        e.preventDefault();
+                                                                        handleSearch();
+                                                                    }
+                                                                }}
+                                                            />
+                                                            <InputGroup.Text
+                                                                className="search-button"
+                                                                onClick={handleSearch}
+                                                                style={{ cursor: 'pointer' }}
+                                                            >
+                                                                <FaSearch />
+                                                            </InputGroup.Text>
+                                                        </InputGroup>
+                                                    )}
+                                                    {isMobile && !isSearchOpen && (
+                                                        <button 
+                                                            onClick={() => setIsSearchOpen(true)}
+                                                            className="search-icon-button border btn"
+                                                            style={{ 
+                                                                height: '36px', 
+                                                                fontSize: '13px', 
+                                                                whiteSpace: 'nowrap',
+                                                                width: isMobile ? '36px' : 'auto'
                                                             }}
-                                                        />
-                                                        <InputGroup.Text
-                                                            className="search-button"
-                                                            onClick={() => {
-                                                                setSearchTerm(inputValue);
-                                                            }}
-                                                            style={{ cursor: 'pointer' }}
                                                         >
                                                             <FaSearch />
-                                                        </InputGroup.Text>
-                                                    </InputGroup>
-                                                    <button
-                                                        className="btn btn-add-shop rounded border ms-2"
-                                                        onClick={checkSignIn}
-                                                        style={{ maxHeight: '36px', fontSize: '13px', whiteSpace: 'nowrap' }}
-                                                    >
-                                                        הוסף חנות
-                                                    </button>
+                                                        </button>
+                                                    )}
                                                 </div>
+                                                <button
+                                                    className="btn btn-add-shop rounded border ms-2 d-flex align-items-center justify-content-center"
+                                                    onClick={checkSignIn}
+                                                    style={{ 
+                                                        height: '36px', 
+                                                        fontSize: '13px', 
+                                                        whiteSpace: 'nowrap',
+                                                        width: isMobile ? '36px' : 'auto'
+                                                    }}
+                                                >
+                                                    <FaPlus style={{ marginLeft: isMobile ? '0' : '5px' }} />
+                                                    {!isMobile && <span>הוסף חנות</span>}
+                                                </button>
                                             </Col>
                                         </Row>
                                     </div>
@@ -696,6 +714,7 @@ export default function ShopCards(props: any) {
 
                                                 <div
                                                     className="shop-card shadow-sm rounded mb-2"
+                                                    onClick={() => handleShopClick(card)}
                                                 >
                                                     <div className="shop-card-content" style={{ flex: 1 }}>
                                                         <div className="shop-card-header p-2">
@@ -721,11 +740,11 @@ export default function ShopCards(props: any) {
                                                                 <h3 className='font-bold'>{card.name}</h3>
                                                                 <div className="align-self-start" style={{ top: '-10px', fontSize: '13px' }}>
                                                                     {isOpenNow(card.hours) ? (
-                                                                        <span className="bg-green-500 px-1 rounded shadow-sm" style={{ background: '#d2f0e4', fontSize: '10px' }}>
+                                                                        <span className="font-bold px-1  " style={{ color: '#00a35b', fontSize: '10px' }}>
                                                                             פתוח
                                                                         </span>
                                                                     ) : (
-                                                                        <span className="bg-red-500 px-1 rounded  shadow-sm" style={{ background: '#f78d8d', fontSize: '10px' }}>
+                                                                        <span className="font-bold px-1" style={{ color: '#f78d8d', fontSize: '10px' }}>
                                                                             סגור
                                                                         </span>
                                                                     )}
@@ -759,79 +778,23 @@ export default function ShopCards(props: any) {
                                     ))}
                     </motion.div>
 
-                    <Modal show={showModalDetailShop} onHide={closeModal} size='lg' className='rounded overflow-y-auto p-0'>
-                        <Modal.Header closeButton className='header-modal-detail-shop'>
+                    <Modal show={showModalDetailShop} onHide={closeModal} className='rounded overflow-y-auto p-0'>
+                        {/* <Modal.Header closeButton className='header-modal-detail-shop'>
                             {selectedCard && (
                                 <h2 className='text-3xl'>{selectedCard.name}</h2>
                             )}
-                        </Modal.Header>
+                        </Modal.Header> */}
                         <Modal.Body className='rounded' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+                           <CloseButton className='closeModal' onClick={closeModal}/>
                             {selectedCard && (
                                 <div className="p-2 rounded" style={{ background: '#fafcf9' }}>
-                                    <div className="flex flex-col md:flex-row">
-
-                                        <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-1/2'}`}>
-                                            {/* {selectedCard.images[0] && (
-                                                <div className="mb-2 ys-shop-image-slider">
-                                                    <Swiper
-                                                        modules={[Pagination, Navigation]}
-                                                        spaceBetween={20}
-                                                        slidesPerView={2}
-                                                        navigation
-                                                        pagination={{ clickable: true }}
-                                                    >
-                                                        {selectedCard.images.map((image, index) => (
-                                                            <SwiperSlide key={index}>
-                                                                <CldImage
-                                                                    src={image}
-                                                                    width="600"
-                                                                    height="400"
-                                                                    crop="fill"
-                                                                    gravity="auto"
-                                                                    className="w-full object-cover rounded shadow-sm"
-                                                                    alt={`${selectedCard.name} - תמונה ${index + 1}`}
-                                                                    loading="lazy"
-                                                                />
-                                                            </SwiperSlide>
-                                                        ))}
-                                                    </Swiper>
-                                                </div>
-                                            )} */}
-                                            {selectedCard.ad && (
+                                    <div className="flex flex-col md:flex-col">
+                                        <div>
+                                            {selectedCard.images[0] && (
                                                 <div className="">
-                                                    {selectedCard.adImage && (
-                                                        <>
-                                                          <Swiper
-                                                        //   modules={[Pagination, Navigation]}
-                                                        //   spaceBetween={20}
-                                                          slidesPerView={1}
-                                                          style={{
-                                                            // '--swiper-navigation-color': '#fff',
-                                                            // '--swiper-pagination-color': '#fff',
-                                                          }}
-                                                          loop={true}
-                                                          spaceBetween={10}
-                                                        //   navigation={true}
-                                                          thumbs={{ swiper: thumbsSwiper }}
-                                                          modules={[FreeMode, Navigation, Thumbs]}
-                                                          className="mySwiper2"
-                                                        //   navigation
-                                                        //   pagination={{ clickable: true }}
-                                                      >
-                                                        {/* <div className="mb-2">
-                                                            <CldImage
-                                                                src={selectedCard.adImage}
-                                                                width="600"
-                                                                height="700"
-                                                                crop="fill"
-                                                                gravity="auto"
-                                                                className="object-contain rounded shadow-sm"
-                                                                alt={`${selectedCard.name} - מודעה`}
-                                                                loading="lazy"
-                                                            />
-                                                        </div> */}
+                                                    <Carousel className="custom-carousel" touch={true}>
                                                         {selectedCard.images.map((image, index) => (
-                                                            <SwiperSlide key={index}>
+                                                            <Carousel.Item key={index}>
                                                                 <CldImage
                                                                     src={image}
                                                                     width="600"
@@ -841,44 +804,15 @@ export default function ShopCards(props: any) {
                                                                     className="object-contain rounded shadow-sm"
                                                                     alt={`${selectedCard.name} - תמונה ${index + 1}`}
                                                                     loading="lazy"
+                                                                    style={{ height: '40vh' }}
                                                                 />
-                                                            </SwiperSlide>
+                                                            </Carousel.Item>
                                                         ))}
-                                                    </Swiper>
-                                                      <Swiper
-                                                      onSwiper={(swiper: any) => setThumbsSwiper(swiper)}
-                                                      loop={true}
-                                                      spaceBetween={10}
-                                                      slidesPerView={4}
-                                                      freeMode={true}
-                                                      watchSlidesProgress={true}
-                                                      modules={[FreeMode, Navigation, Thumbs]}
-                                                      className="mySwiper py-2"
-                                                    >
-                                                      {selectedCard.images.map((image, index) => (
-                                                             <SwiperSlide key={index}>
-                                                                 <CldImage
-                                                                     src={image}
-                                                                     width="600"
-                                                                     height="700"
-                                                                     crop="fill"
-                                                                     gravity="auto"
-                                                                     className="object-contain rounded shadow-sm"
-                                                                     alt={`${selectedCard.name} - תמונה ${index + 1}`}
-                                                                     loading="lazy"
-                                                                 />
-                                                             </SwiperSlide>
-                                                         ))}
-                                                     </Swiper>
-                                                </>
-                                                    )}
+                                                    </Carousel>
                                                 </div>
                                             )}
-                                            <div className=''>
-                                                <Maps card={selectedCard} />
-                                            </div>
                                         </div>
-                                        <div className={`${selectedCard.images[0] ? 'md:w-1/2' : 'md:w-1/2'}`}>
+                                        <div>
                                             <div className="p-2 pt-0">
                                                 <div className="flex items-center my-4">
                                                     {selectedCard.logo && (
@@ -895,95 +829,93 @@ export default function ShopCards(props: any) {
                                                         <p className="text-gray-600 ms-2">{selectedCard.description}</p>
                                                     </div>
                                                 </div>
-                                                <div className="">
-                                                    <div className="">
-                                                        <div className="flex align-items-center">
+                                                <Accordion>
+                                                    <Accordion.Item eventKey='0' className='border-0'>
+                                                        <Accordion.Header
+                                                            className="flex align-items-center"
+                                                            onClick={() => setIsAccordionOpen(!isAccordionOpen)}
+                                                        >
                                                             <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
                                                                 <i className="bi bi-geo-alt text-gray-600"></i>
                                                             </div>
-                                                            {/* <a
-                                                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedCard.address)}`}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="hover:text-green-500"
-                                                                >
-                                                                    {selectedCard.address}
-                                                                </a> */}
                                                             <span className="hover:text-green-500 ms-2">{selectedCard.address}</span>
-                                                            {/* <Modal show={showMap} onHide={() => handleCloseMap()}>
-                                                                <Modal.Header closeButton onClick={() => handleCloseMap()}>{selectedCard.address}</Modal.Header>
-                                                                <Modal.Body className='p-2'>
-                                                                    <Maps card={selectedCard} />
-                                                                </Modal.Body>
-                                                            </Modal> */}
-                                                        </div>
-                                                        <div className="flex align-items-center">
-                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
-                                                                <i className="bi bi-telephone text-gray-600"></i>
+                                                        </Accordion.Header>
+                                                        <Accordion.Body style={{ background: '#fafcf9' }}>
+                                                            <div className=''>
+                                                                {isAccordionOpen && <Maps card={selectedCard} />}
                                                             </div>
-                                                            <Link href={`tel:${selectedCard.phone}`} className="hover:text-green-500 ms-2">{selectedCard.phone}</Link>
-                                                        </div>
-                                                        <div className="flex align-items-center ">
-                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
-                                                                <i className="bi bi-envelope text-gray-600"></i>
-                                                            </div>
-                                                            <Link href={`mailto:${selectedCard.email}`} className="hover:text-green-500 ms-2">{selectedCard.email}</Link>
-                                                        </div>
-                                                        {selectedCard.website && (
-                                                            <div className="flex align-items-center ">
-                                                                <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
-                                                                    <i className="bi bi-globe text-gray-600"></i>
-                                                                </div>
-                                                                <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer" className="hover:text-green-500  ms-2">
-                                                                    {selectedCard.website}
-                                                                </Link>
-                                                            </div>
-                                                        )}
+                                                        </Accordion.Body>
+                                                    </Accordion.Item>
+                                                </Accordion>
+                                                <div className="flex align-items-center">
+                                                    <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
+                                                        <i className="bi bi-telephone text-gray-600"></i>
                                                     </div>
+                                                    <Link href={`tel:${selectedCard.phone}`} className="hover:text-green-500 ms-2">{selectedCard.phone}</Link>
                                                 </div>
-                                                {selectedCard.hours.sunday && (
-                                                    <div className="">
-                                                        <div className="flex align-items-center">
-                                                            <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
-                                                                <i className="bi bi-clock text-gray-600"></i>
-                                                            </div>
-                                                            <span className='ms-2'>שעות פעילות</span>
-                                                            <div className="ms-2 text-sm">
-                                                                {isOpenNow(selectedCard.hours) ? (
-                                                                    <span className="bg-green-500 px-1 text-white rounded">
-                                                                        פתוח עכשיו
-                                                                    </span>
-                                                                ) : (
-                                                                    <span className="bg-red-500 px-1 text-white rounded">
-                                                                        סגור עכשיו
-                                                                    </span>
-                                                                )}
-                                                            </div>
+                                                <div className="flex align-items-center ">
+                                                    <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
+                                                        <i className="bi bi-envelope text-gray-600"></i>
+                                                    </div>
+                                                    <Link href={`mailto:${selectedCard.email}`} className="hover:text-green-500 ms-2">{selectedCard.email}</Link>
+                                                </div>
+                                                {selectedCard.website && (
+                                                    <div className="flex align-items-center ">
+                                                        <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
+                                                            <i className="bi bi-globe text-gray-600"></i>
                                                         </div>
-                                                        <table className="md:w-50 text-gray-600">
-                                                            <tbody>
-                                                                {renderGroupedHours(selectedCard.hours).map((row, index) => (
-                                                                    <React.Fragment key={index}>
-                                                                        <tr>
-                                                                            <td style={{ width: '50px', height: '30px' }}></td>
-                                                                            <td className="px-2 font-medium">{row.days}</td>
-                                                                            <td className="ms-2">{row.timeRange}</td>
-                                                                        </tr>
-                                                                        {row.note && (
-                                                                            <tr>
-                                                                                <td style={{ width: '50px', height: '30px' }}></td>
-                                                                                <td colSpan={2} className="text-sm text-gray-500 pb-1 ms-2">{row.note}</td>
-                                                                            </tr>
-                                                                        )}
-                                                                    </React.Fragment>
-                                                                ))}
-                                                            </tbody>
-                                                        </table>
+                                                        <Link href={selectedCard.website} target="_blank" rel="noopener noreferrer" className="hover:text-green-500  ms-2">
+                                                            {selectedCard.website}
+                                                        </Link>
                                                     </div>
                                                 )}
-                                                <div className='md:w-50' style={{ maxHeight: '300px' }}>
-                                                    {/* <Maps card={selectedCard} /> */}
-                                                </div>
+                                                {selectedCard.hours.sunday && (
+                                                    <Accordion className="acordion-time" style={{ background: '#fafcf9' }}>
+                                                        <Accordion.Item eventKey='0' className='border-0' style={{ background: '#fafcf9' }}>
+                                                            <Accordion.Header className="flex align-items-center" style={{ background: '#fafcf9' }}>
+                                                                <div className='flex justify-content-center align-items-center' style={{ width: '50px', height: '40px' }}>
+                                                                    <i className="bi bi-clock text-gray-600"></i>
+                                                                </div>
+                                                                <span className='ms-2'>שעות פעילות</span>
+                                                                <div className="ms-2 text-sm">
+                                                                    {isOpenNow(selectedCard.hours) ? (
+                                                                        <span className="px-1 rounded" style={{ color: '#00a35b' }}>
+                                                                            פתוח עכשיו
+                                                                        </span>
+                                                                    ) : (
+                                                                        <span className="px-1 rounded" style={{ color: '#f78d8d' }}>
+                                                                            סגור עכשיו
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            </Accordion.Header>
+                                                            <Accordion.Body style={{ background: '#fafcf9' }}>
+                                                                <table className="md:w-50 text-gray-600">
+                                                                    <tbody>
+                                                                        {renderGroupedHours(selectedCard.hours).map((row, index) => (
+                                                                            <React.Fragment key={index}>
+                                                                                <tr>
+                                                                                    <td style={{ width: '50px', height: '30px' }}></td>
+                                                                                    <td className="px-2 font-medium">{row.days}</td>
+                                                                                    <td className="ms-2">{row.timeRange}</td>
+                                                                                </tr>
+                                                                                {row.note && (
+                                                                                    <tr>
+                                                                                        <td style={{ width: '50px', height: '30px' }}></td>
+                                                                                        <td colSpan={2} className="text-sm text-gray-500 pb-1 ms-2">{row.note}</td>
+                                                                                    </tr>
+                                                                                )}
+                                                                            </React.Fragment>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            </Accordion.Body>
+                                                        </Accordion.Item>
+                                                    </Accordion>
+                                                )}
+                                                {/* <div className="shop-card-footer mt-auto">
+                                                    <button className="more-info-btn btn border w-100" onClick={closeModal}>סגור</button>
+                                                </div> */}
                                             </div>
                                         </div>
 

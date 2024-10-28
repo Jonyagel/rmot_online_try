@@ -17,6 +17,14 @@ interface User {
     image?: string | null;
 }
 
+const announcements = [
+    { text: "חדש! שכונת גני אביב נפתחה להרשמה", link: "/neighborhoods/gane-aviv" },
+    { text: "עדכון: שינויים בתנאי הזכאות לדיור בר השגה", link: "/eligibility" },
+    { text: "הזדמנות אחרונה: נותרו 5 דירות אחרונות בפרויקט נווה שמש", link: "/projects/neve-shemesh" },
+    { text: "סדנת מידע בנושא משכנתאות תתקיים ביום שלישי הקרוב", link: "/events/mortgage-workshop" },
+    { text: "פתיחת הרשמה לתוכנית 'בית ראשון' לזוגות צעירים", link: "/programs/first-home" },
+];
+
 export default function Header() {
     const { data: session, status } = useSession();
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -119,13 +127,22 @@ export default function Header() {
                     </nav>
 
                     <Link href="/" className="logo-link">
-                        <Image src='/images/לוגו ירוק.svg' width={120} height={120} className="logo" alt="Logo" />
+                        <Image src='/images/לוגו ירוק.svg' priority={true} width={120} height={120} className="logo" alt="Logo" style={{
+                            width: 'auto',
+                            height: '50px'
+                        }}
+                        />
                     </Link>
                 </div>
             </div>
             <div className='marquee-container'>
                 <Marquee className="marquee" pauseOnHover={true} direction='right' speed={50} gradient={false} autoFill={true} style={{ direction: 'ltr' }}>
-                    הודעות חשובות למשתמשים יופיעו כאן
+                    {announcements.map((announcement, index) => (
+                        <Link key={index} href={announcement.link} className="announcement-link">
+                            <span className="announcement-text">{announcement.text}</span>
+                            <span className="announcement-separator">|</span>
+                        </Link>
+                    ))}
                 </Marquee>
             </div>
         </header>

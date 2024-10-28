@@ -78,11 +78,15 @@
 
 @media (max-width: 768px) {
   .category-tags {
-    gap: 6px;
+    gap: 2px;
   }
   
-  .category-tag, .expand-button {
+  .category-tag {
     padding: 4px 10px;
+    font-size: 12px;
+  }
+  .expand-button {
+    padding: 4px 2px;
     font-size: 12px;
   }
 }

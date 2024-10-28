@@ -45,7 +45,8 @@
   color: white;
   min-height: 120px;
 }
-.tittle-heeder{
+
+.tittle-heeder {
   font-size: 36px;
 }
 
@@ -64,6 +65,53 @@
 .search-bar-container .input-group-text {
   background: none;
   border: none;
+}
+
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+
+@media (max-width: 767px) {
+  .search-container {
+      position: relative;
+  }
+
+  .search-icon-button {
+    color: #000000;
+    background: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .InputGroup {
+      position: absolute;
+      right: 0;
+      top: 100%;
+      width: 100%;
+      z-index: 1000;
+  }
+}
+.btn-add-shop {
+  transition: all 0.3s ease;
+}
+
+/* .btn-add-shop:hover {
+  background-color: #00a35b;
+  color: white;
+} */
+
+@media (max-width: 767px) {
+  .btn-add-shop {
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
 }
 
 .subcategory-container {
@@ -88,6 +136,10 @@
   background-color: #ffffff;
   /* overflow: hidden; */
   transition: all 0.3s ease;
+}
+
+.shop-card {
+  cursor: pointer;
 }
 
 .shop-card:hover,
@@ -188,7 +240,7 @@
   justify-content: center;
 }
 
-.header-modal-detail-shop{
+.header-modal-detail-shop {
   background-image: url('/images/ירוק ללמעלה.png');
   background-size: cover;
   background-position: center;
@@ -444,7 +496,7 @@
   background-color: #c82333;
 }
 
-.add-shop-modal{
+.add-shop-modal {
   background-image: url('/images/ירוק ללמעלה.png');
   background-size: cover;
   background-position: center;
@@ -454,41 +506,49 @@
 .day-hours {
   margin-bottom: 5px;
 }
+
 .day-name {
   font-weight: bold;
   margin-right: 5px;
 }
+
 .map-popup {
-  max-width: 800px; /* הגבלת רוחב המודל */
+  max-width: 800px;
+  /* הגבלת רוחב המודל */
 }
 
 .modal-body {
-  padding: 0; /* הסרת רווחים מיותרים */
+  padding: 0;
+  /* הסרת רווחים מיותרים */
 }
+
 .leaflet-container {
-  height: 100% !important; /* ודא שהגובה של המפה תופס את כל החלון */
-  width: 100% !important; /* ודא שהרוחב של המפה תופס את כל החלון */
+  height: 100% !important;
+  /* ודא שהגובה של המפה תופס את כל החלון */
+  width: 100% !important;
+  /* ודא שהרוחב של המפה תופס את כל החלון */
 }
 
 @media (max-width: 768px) {
   .shop-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
+
   .ys-shop-detail-modal {
     max-width: 90%;
     width: auto;
     height: auto;
     max-height: 90vh;
-}
+  }
 
 
-.ys-shop-title {
+  .ys-shop-title {
     font-size: 1.5rem;
-}
+  }
 
-.ys-info-item {
+  .ys-info-item {
     margin-bottom: 10px;
-} 
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
@@ -496,6 +556,7 @@
     width: 60%;
   }
 }
+
 .mySwiper {
   height: 20%;
   box-sizing: border-box;
@@ -517,4 +578,77 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.accordion-button {
+  padding: 0;
+  background-color: #fafcf9 !important;
+  padding-left: 10px;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+}
+
+.custom-carousel .carousel-control-prev,
+.custom-carousel .carousel-control-next {
+  width: 5%;
+}
+
+.custom-carousel .carousel-control-prev-icon,
+.custom-carousel .carousel-control-next-icon {
+  background-image: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-carousel .carousel-control-prev-icon::after,
+.custom-carousel .carousel-control-next-icon::after {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: solid #00a35b;
+  border-width: 0 3px 3px 0;
+}
+
+.custom-carousel .carousel-control-prev-icon::after {
+  transform: rotate(-45deg);
+  margin-left: -5px;
+}
+
+.custom-carousel .carousel-control-next-icon::after {
+  transform: rotate(135deg);
+  margin-right: -5px;
+}
+
+.custom-carousel .carousel-indicators button {
+  width: 10px;
+  margin-top: 20px;
+  margin-bottom: -40px;
+  background-color: #63bd57;
+  transition: width 0.3s ease;
+}
+
+.custom-carousel .carousel-indicators button.active {
+  width: 30px;
+  background-color: #00a35b;
+}
+
+.closeModal {
+  position: fixed;
+  color: #333;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.closeModal:hover {
+  transform: rotate(90deg);
 }
