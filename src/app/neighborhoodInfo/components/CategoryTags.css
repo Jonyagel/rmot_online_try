@@ -38,9 +38,12 @@
 }
 
 .category-icon {
-  /* color: #339af0; */
+  color: #00a35b;
   font-size: 16px;
   margin-left: 6px;
+}
+.category-tag.active .category-icon {
+  color: #ffffff;
 }
 
 .category-name {

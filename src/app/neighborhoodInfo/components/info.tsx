@@ -21,6 +21,7 @@ import { useSession } from 'next-auth/react';
 import Maps from './maps';
 import { useMediaQuery } from 'react-responsive';
 import { FaPlus } from 'react-icons/fa';
+import { useSearchParams } from 'next/navigation';
 
 
 
@@ -68,6 +69,33 @@ export default function ShopCards(props: any) {
     const [isAccordionOpen, setIsAccordionOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const isMobile = useMediaQuery({ maxWidth: 767 });
+
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const cardId = searchParams.get('cardId');
+
+        if (cardId) {
+            // מחפש בכל המערכים
+            const foundCard = [...cardsAr, ...gmachAr, ...mosadsAr].find(
+                (card: any) => card._id === cardId
+            );
+
+            if (foundCard) {
+                setSelectedCard(foundCard);
+                setShowModalDetailShop(true);
+
+                // קובע את הטאב הנכון בהתאם לסוג הכרטיס
+                if (cardsAr.some((card: Card) => card.id === cardId)) {
+                    setActiveTab('shop');
+                } else if (gmachAr.some((card: Card) => card.id === cardId)) {
+                    setActiveTab('gmach');
+                } else if (mosadsAr.some((card: Card) => card.id === cardId)) {
+                    setActiveTab('mosads');
+                }
+            }
+        }
+    }, [searchParams, cardsAr, gmachAr, mosadsAr]);
 
     useEffect(() => {
         if (!isMobile) {
@@ -289,14 +317,22 @@ export default function ShopCards(props: any) {
 
 
 
-    const handleShopClick = (card: Card) => {
+    const handleShopClick = (card:any) => {
         setSelectedCard(card);
         setShowModalDetailShop(true)
+            // עדכון ה-URL בלי לטעון מחדש את הדף
+            const url = new URL(window.location.href);
+            url.searchParams.set('cardId', card._id);
+            window.history.pushState({}, '', url.toString());
     };
 
     const closeModal = () => {
         setSelectedCard(null);
         setShowModalDetailShop(false)
+        // הסרת הפרמטר מה-URL בסגירת המודל
+        const url = new URL(window.location.href);
+        url.searchParams.delete('cardId');
+        window.history.pushState({}, '', url.toString());
     };
 
     const handleShowModal = () => setShowModal(true);
@@ -609,12 +645,12 @@ export default function ShopCards(props: any) {
                                                         </InputGroup>
                                                     )}
                                                     {isMobile && !isSearchOpen && (
-                                                        <button 
+                                                        <button
                                                             onClick={() => setIsSearchOpen(true)}
                                                             className="search-icon-button border btn"
-                                                            style={{ 
-                                                                height: '36px', 
-                                                                fontSize: '13px', 
+                                                            style={{
+                                                                height: '36px',
+                                                                fontSize: '13px',
                                                                 whiteSpace: 'nowrap',
                                                                 width: isMobile ? '36px' : 'auto'
                                                             }}
@@ -626,9 +662,9 @@ export default function ShopCards(props: any) {
                                                 <button
                                                     className="btn btn-add-shop rounded border ms-2 d-flex align-items-center justify-content-center"
                                                     onClick={checkSignIn}
-                                                    style={{ 
-                                                        height: '36px', 
-                                                        fontSize: '13px', 
+                                                    style={{
+                                                        height: '36px',
+                                                        fontSize: '13px',
                                                         whiteSpace: 'nowrap',
                                                         width: isMobile ? '36px' : 'auto'
                                                     }}
@@ -779,13 +815,8 @@ export default function ShopCards(props: any) {
                     </motion.div>
 
                     <Modal show={showModalDetailShop} onHide={closeModal} className='rounded overflow-y-auto p-0'>
-                        {/* <Modal.Header closeButton className='header-modal-detail-shop'>
-                            {selectedCard && (
-                                <h2 className='text-3xl'>{selectedCard.name}</h2>
-                            )}
-                        </Modal.Header> */}
                         <Modal.Body className='rounded' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
-                           <CloseButton className='closeModal' onClick={closeModal}/>
+                            <CloseButton className='closeModal' onClick={closeModal} />
                             {selectedCard && (
                                 <div className="p-2 rounded" style={{ background: '#fafcf9' }}>
                                     <div className="flex flex-col md:flex-col">

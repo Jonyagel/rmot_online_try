@@ -7,7 +7,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Container, Row, Col } from 'react-bootstrap';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation, EffectCube, EffectFlip } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation, EffectCube, EffectFlip, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -276,13 +276,15 @@ const HomePage: React.FC = () => {
                         <div className="sticky-ad-container" style={{ marginTop: '-200px' }}>
                             <div className="ad-space">
                                 <Swiper
-                                    modules={[Autoplay, Pagination, Navigation]}
+                                    effect='fade'
+                                    modules={[Autoplay, EffectFade]}
                                     slidesPerView={1}
                                     autoplay={{
                                         delay: 5000,
                                         disableOnInteraction: false,
                                     }}
                                     allowTouchMove={false}
+                                    loop={true}
                                 >
                                     <SwiperSlide>
                                         <img src='/images/ads gif new 4.gif' width="auto" height="auto" alt='ads-left' className='rounded' />

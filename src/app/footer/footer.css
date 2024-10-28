@@ -3,7 +3,7 @@ footer {
   z-index: 1;
   background: linear-gradient(to right, #1a1a1a, #2c2c2c);
 }
-footer h5, i{
+footer h5 {
 color: #00a35b;
 }
 
