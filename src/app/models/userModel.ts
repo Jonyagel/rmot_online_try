@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
   password:String,
   role:{
     type:String, default:"user"
-  }
+  },
+  favoriteShope:[String]
 },{timestamps:true})
 
 export const UserModel = mongoose.models["users"] || mongoose.model("users",userSchema);
@@ -27,6 +28,7 @@ export const validateLogin = (_body:any) => {
   const joiSchema = Joi.object({
     email:Joi.string().min(2).max(100).email().required(),
     password:Joi.string().min(3).max(100).required(),
+    favoriteShope: Joi.array().items(Joi.string().min(0).max(200)).allow(null, '').optional(),
   })
   return joiSchema.validate(_body)
 }

@@ -1,7 +1,7 @@
 "use client"
-import React, { useState, useMemo, useRef, useEffect } from 'react'
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaTimes, FaSearch, FaMedkit, FaGlassCheers, FaMoneyBillWave, FaBabyCarriage, FaTools, FaAppleAlt, FaScroll, FaHandHoldingUsd, FaWheelchair, FaRing } from 'react-icons/fa';
+import { FaTimes, FaSearch, FaMedkit, FaGlassCheers, FaMoneyBillWave, FaBabyCarriage, FaTools, FaAppleAlt, FaScroll, FaHandHoldingUsd, FaWheelchair, FaRing, FaArrowUp, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { Button, Modal, Form, InputGroup, Col, Row, Nav, Card, Accordion, Carousel, CloseButton } from 'react-bootstrap';
 import { CldImage, CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
@@ -22,6 +22,25 @@ import Maps from './maps';
 import { useMediaQuery } from 'react-responsive';
 import { FaPlus } from 'react-icons/fa';
 import { useSearchParams } from 'next/navigation';
+import { IoShareSocialOutline } from "react-icons/io5";
+import { useInView } from 'react-intersection-observer';
+import { Metadata } from 'next';
+import LoadingSkeleton from './loading-skeleton';
+import Loading from '../loading';
+import SearchSuggestions from './SearchSuggestions';
+import ShopCardsLove from './ShopCardsLove';
+// import { trackEvent } from '../../../lib/analytics';
+// import { analyticsEvents } from '@/src/lib/analytics';
+
+export const metadata: Metadata = {
+    title: 'רמות - רמת שלמה - חנויות ועסקים',
+    description: 'רשימת העסקים, החנויות והשירותים בשכונה',
+    openGraph: {
+        title: 'רמות - רמת שלמה - חנויות ועסקים',
+        description: 'גלו את כל העסקים בשכונה',
+        images: ['/path-to-og-image.jpg'],
+    }
+};
 
 
 
@@ -32,7 +51,7 @@ type TimeSlot = { open: string; close: string; note?: string };
 type Day = 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
 type OpeningHours = { [key in Day]: TimeSlot[] };
 interface Card {
-    id: string;
+    _id: string;
     name: string;
     description: string;
     logo?: string;
@@ -47,7 +66,24 @@ interface Card {
     ad: string;
     adImage: string;
 }
+type Filters = {
+    isOpen: boolean;
+    minRating: number;
+    categories: string[];
+};
+const getCurrentDay = (): Day => {
+    const days: { [key: string]: Day } = {
+        'sunday': 'sunday',
+        'monday': 'monday',
+        'tuesday': 'tuesday',
+        'wednesday': 'wednesday',
+        'thursday': 'thursday',
+        'friday': 'friday',
+        'saturday': 'saturday'
+    };
 
+    return days[new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()] || 'sunday';
+};
 export default function ShopCards(props: any) {
     const router = useRouter();
     const { data: session } = useSession();
@@ -69,6 +105,92 @@ export default function ShopCards(props: any) {
     const [isAccordionOpen, setIsAccordionOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const isMobile = useMediaQuery({ maxWidth: 767 });
+    const [isLoading, setIsLoading] = useState(false);
+    const [itemsToShow, setItemsToShow] = useState(20); // מספר פריטים להצגה ראשונית
+    const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
+    const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(null); // מצב לבחירה
+    const [favorites, setFavorites] = useState<string[]>(() => {
+        if (typeof window !== 'undefined') {
+            return JSON.parse(localStorage.getItem('favorites') || '[]');
+        }
+        return [];
+    });
+
+    // טעינה הדרגתית בגלילה
+    const loadMore = useCallback(() => {
+        setItemsToShow(prev => prev + 12);
+    }, []);
+
+    // שימוש ב-Intersection Observer לטעינה אוטומטית
+    const { ref, inView } = useInView({
+        threshold: 0,
+        triggerOnce: false
+    });
+
+    useEffect(() => {
+        if (inView) {
+            loadMore();
+        }
+    }, [inView, loadMore]);
+
+
+    useEffect(() => {
+        if (itemsToShow === 20) {
+            scrollToTop();
+        }
+    }, []);
+
+
+    useEffect(() => {
+        scrollToTop();
+        setItemsToShow(20); // איפוס מספר הפריטים בשינוי טאב
+    }, [activeTab]);
+
+    useEffect(() => {
+        if (searchTerm) {
+            scrollToTop();
+            setItemsToShow(20);
+        }
+    }, [searchTerm]);
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    const isBusinessOpen = (hours: OpeningHours): boolean => {
+        const now = new Date();
+        const currentDay = getCurrentDay();
+        const currentTime = now.toLocaleTimeString('he-IL', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+
+        if (!hours || !hours[currentDay]) return false;
+
+        return hours[currentDay].some(slot => {
+            return currentTime >= slot.open && currentTime <= slot.close;
+        });
+    };
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value)
+        setIsSuggestionsOpen(true);
+        if (e.target.value === '') {
+            setSelectedSuggestion(null); // נקה את הבחירה אם השדה ריק
+        }
+    };
+
+    const handleSuggestionSelect = (suggestion: string) => {
+        setSearchTerm(suggestion);
+        setSelectedSuggestion(suggestion);
+        setIsSuggestionsOpen(false); // סגור את ההצעות לאחר בחירה
+        // כאן תוכל להוסיף לוגיקה לחיפוש או ניווט
+    };
+
 
     const searchParams = useSearchParams();
 
@@ -86,11 +208,11 @@ export default function ShopCards(props: any) {
                 setShowModalDetailShop(true);
 
                 // קובע את הטאב הנכון בהתאם לסוג הכרטיס
-                if (cardsAr.some((card: Card) => card.id === cardId)) {
+                if (cardsAr.some((card: Card) => card._id === cardId)) {
                     setActiveTab('shop');
-                } else if (gmachAr.some((card: Card) => card.id === cardId)) {
+                } else if (gmachAr.some((card: Card) => card._id === cardId)) {
                     setActiveTab('gmach');
-                } else if (mosadsAr.some((card: Card) => card.id === cardId)) {
+                } else if (mosadsAr.some((card: Card) => card._id === cardId)) {
                     setActiveTab('mosads');
                 }
             }
@@ -109,6 +231,21 @@ export default function ShopCards(props: any) {
             setIsSearchOpen(false);
         }
     };
+
+    useEffect(() => {
+        const fetchFavorites = async () => {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/favorite`);
+            if (response.ok) {
+                const data = await response.json();
+                setFavorites(data.favorites); // עדכון המצב עם המועדפים מהשרת
+                localStorage.setItem('favorites', JSON.stringify(data.favorites)); // שמירה ב-localStorage
+            } else {
+                console.error('Error fetching favorites from server:', await response.json());
+            }
+        };
+    
+        fetchFavorites();
+    }, []);
 
     const nameRef = useRef<HTMLInputElement>(null);
     const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -295,38 +432,55 @@ export default function ShopCards(props: any) {
     }
 
     const filteredCards = useMemo(() => {
-        return cardsAr.filter((card: any) =>
-        (card.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            card.description.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-    }, [searchTerm, cardsAr]);
+        const filtered = cardsAr
+            .filter((card: any) => (
+                card.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                card.description.toLowerCase().includes(searchTerm.toLowerCase())
+            ))
+            .map((card: any) => ({
+                ...card,
+                isOpen: isBusinessOpen(card.hours)
+            }))
+            .sort((a: any, b: any) => {
+                // מיון: קודם פתוחים, אחר כך סגורים
+                if (a.isOpen && !b.isOpen) return -1;
+                if (!a.isOpen && b.isOpen) return 1;
+                // אם שניהם באותו סטטוס, מיין לפי שם
+                return a.name.localeCompare(b.name);
+            });
+
+        return filtered.slice(0, itemsToShow);
+    }, [searchTerm, cardsAr, itemsToShow]);
 
     const filteredGmach = useMemo(() => {
-        return gmachAr.filter((card: any) =>
+        const gmachFiltered = gmachAr.filter((card: any) =>
         (card.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             card.description.toLowerCase().includes(searchTerm.toLowerCase()))
         );
-    }, [searchTerm, gmachAr]);
+        return gmachFiltered.slice(0, itemsToShow);
+    }, [searchTerm, gmachAr, itemsToShow]);
 
     const filteredMosads = useMemo(() => {
-        return mosadsAr.filter((card: any) =>
+        const mosadFiltered = mosadsAr.filter((card: any) =>
         (card.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             card.description.toLowerCase().includes(searchTerm.toLowerCase()))
         );
-    }, [searchTerm, mosadsAr]);
+        return mosadFiltered.slice(0, itemsToShow);
+    }, [searchTerm, mosadsAr, itemsToShow]);
 
 
 
-    const handleShopClick = (card:any) => {
+    const handleShopClick = (card: any) => {
         setSelectedCard(card);
         setShowModalDetailShop(true)
-            // עדכון ה-URL בלי לטעון מחדש את הדף
-            const url = new URL(window.location.href);
-            url.searchParams.set('cardId', card._id);
-            window.history.pushState({}, '', url.toString());
+        // עדכון ה-URL בלי לטעון מחדש את הדף
+        const url = new URL(window.location.href);
+        url.searchParams.set('cardId', card._id);
+        window.history.pushState({}, '', url.toString());
     };
 
     const closeModal = () => {
+        setIsAccordionOpen(false)
         setSelectedCard(null);
         setShowModalDetailShop(false)
         // הסרת הפרמטר מה-URL בסגירת המודל
@@ -562,6 +716,80 @@ export default function ShopCards(props: any) {
         }
     };
 
+    // כפתור חזרה לראש העמוד
+    const ScrollToTopButton = () => {
+        const [isVisible, setIsVisible] = useState(false);
+
+        useEffect(() => {
+            const toggleVisibility = () => {
+                setIsVisible(window.pageYOffset > 500);
+            };
+            window.addEventListener('scroll', toggleVisibility);
+            return () => window.removeEventListener('scroll', toggleVisibility);
+        }, []);
+
+        return isVisible ? (
+            <motion.button
+                className="fixed bottom-4 right-4 rounded-full p-3 shadow-sm"
+                whileHover={{ scale: 1.1 }}
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                style={{ border: '#63bd57 2px solid', color: '#63bd57' }}
+            >
+                <FaArrowUp />
+            </motion.button>
+        ) : null;
+    };
+
+    const handleShare = async (cardId: string, cardName: string) => {
+        const url = `${window.location.origin}${window.location.pathname}?cardId=${cardId}`;
+
+        if (navigator.share) {
+            // שיתוף דרך Web Share API אם זמין (בעיקר במובייל)
+            try {
+                await navigator.share({
+                    title: cardName,
+                    text: `בוא לראות את ${cardName}`,
+                    url: url
+                });
+            } catch (err) {
+                console.log('Error sharing:', err);
+            }
+        } else {
+            // העתקה ללוח אם Web Share API לא זמין
+            navigator.clipboard.writeText(url).then(() => {
+                alert('הקישור הועתק ללוח');
+            });
+        }
+    };
+
+    const toggleFavorite = async (e: React.MouseEvent, shopId: string) => {
+        e.stopPropagation();
+    
+        const isFavorite = favorites.includes(shopId);
+        const method = isFavorite ? 'DELETE' : 'PUT'; // אם החנות במועדפים, נבצע DELETE, אחרת PUT
+    
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/favorite`, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ shopId }), // שליחת ה-ID של החנות
+        });
+    
+        if (response.ok) {
+            // אם הבקשה הצליחה, עדכן את המצב המקומי
+            setFavorites(prev => {
+                const newFavorites = isFavorite
+                    ? prev.filter(id => id !== shopId) // הסרה מהמועדפים
+                    : [...prev, shopId]; // הוספה למועדפים
+                localStorage.setItem('favorites', JSON.stringify(newFavorites));
+                return newFavorites;
+            });
+        } else {
+            console.error('Error updating favorites on server:', await response.json());
+        }
+    };
+
     return (
         <div className="px-3" style={{ minHeight: '100vh' }}>
             <Row>
@@ -576,6 +804,7 @@ export default function ShopCards(props: any) {
                     <motion.div
                         className='text-center'
                     >
+                        <ScrollToTopButton />
                         <div className="header-container text-white my-auto rounded-bottom shadow-sm">
                             <p className="tittle-heeder">מידע שכונתי</p>
                         </div>
@@ -627,14 +856,29 @@ export default function ShopCards(props: any) {
                                                                 type="text"
                                                                 placeholder="חיפוש חנויות..."
                                                                 value={inputValue}
-                                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+                                                                onChange={handleSearchChange}
                                                                 onKeyDown={(e: React.KeyboardEvent) => {
                                                                     if (e.key === 'Enter') {
                                                                         e.preventDefault();
                                                                         handleSearch();
                                                                     }
                                                                 }}
+                                                                onFocus={() => {
+                                                                    if (searchTerm) {
+                                                                        setIsSuggestionsOpen(true); // פתח את ההצעות כאשר הקלט מקבל פוקוס
+                                                                    }
+                                                                }}
                                                             />
+                                                            {/* {cardsAr && ( */}
+                                                            <SearchSuggestions
+                                                                searchTerm={inputValue}
+                                                                onSelect={handleSuggestionSelect}
+                                                                isOpen={isSuggestionsOpen}
+                                                                setIsOpen={setIsSuggestionsOpen}
+                                                                selectedSuggestion={selectedSuggestion}
+                                                                dataBusiness={props.shopsData} // העבר את הבחירה לקומפוננטה
+                                                            />
+                                                            {/* )} */}
                                                             <InputGroup.Text
                                                                 className="search-button"
                                                                 onClick={handleSearch}
@@ -745,14 +989,13 @@ export default function ShopCards(props: any) {
                             activeTab === 'gmach' ? filteredGmach :
                                 activeTab === 'mosads' ? filteredMosads :
                                     []).map((card: Card, index: number) => (
-                                        <React.Fragment key={card.id}>
+                                        <React.Fragment key={card._id}>
                                             <motion.div variants={itemVariants} className=''>
-
                                                 <div
                                                     className="shop-card shadow-sm rounded mb-2"
                                                     onClick={() => handleShopClick(card)}
                                                 >
-                                                    <div className="shop-card-content" style={{ flex: 1 }}>
+                                                    <div className="shop-card-content relative" style={{ flex: 1 }}>
                                                         <div className="shop-card-header p-2">
                                                             {card.logo ? (
                                                                 <CldImage
@@ -772,18 +1015,35 @@ export default function ShopCards(props: any) {
                                                             )}
                                                         </div>
                                                         <div className="shop-description px-2">
-                                                            <div className='flex justify-content-between'>
+                                                            <div className='flex justify-content-between items-center'>
                                                                 <h3 className='font-bold'>{card.name}</h3>
-                                                                <div className="align-self-start" style={{ top: '-10px', fontSize: '13px' }}>
-                                                                    {isOpenNow(card.hours) ? (
-                                                                        <span className="font-bold px-1  " style={{ color: '#00a35b', fontSize: '10px' }}>
-                                                                            פתוח
-                                                                        </span>
-                                                                    ) : (
-                                                                        <span className="font-bold px-1" style={{ color: '#f78d8d', fontSize: '10px' }}>
-                                                                            סגור
-                                                                        </span>
-                                                                    )}
+                                                                <div className='top-3 left-3 absolute rounded'>
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation(); // מונע פתיחת המודל בלחיצה על כפתור השיתוף
+                                                                            handleShare(card._id, card.name);
+                                                                        }}
+                                                                        className="text-gray-600 hover:text-gray-800 transition-colors me-1"
+                                                                        title="שתף"
+                                                                    >
+                                                                        <IoShareSocialOutline size={16} />
+                                                                    </button>
+                                                                    <button onClick={(e: any) => toggleFavorite(e, card._id)}>
+                                                                        {favorites.includes(card._id) ? <i className="bi bi-heart-fill text-red-500"></i> : <i className="bi bi-heart"></i>}
+                                                                    </button>
+                                                                </div>
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="align-self-start" style={{ fontSize: '13px' }}>
+                                                                        {isOpenNow(card.hours) ? (
+                                                                            <span className="font-bold px-1" style={{ color: '#00a35b', fontSize: '10px' }}>
+                                                                                פתוח
+                                                                            </span>
+                                                                        ) : (
+                                                                            <span className="font-bold px-1" style={{ color: '#f78d8d', fontSize: '10px' }}>
+                                                                                סגור
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <p>
@@ -813,6 +1073,26 @@ export default function ShopCards(props: any) {
                                         </React.Fragment>
                                     ))}
                     </motion.div>
+
+
+                    {/* טעינה הדרגתית בהתאם לטאב הפעיל */}
+                    {activeTab === 'shop' && filteredCards.length < cardsAr.length && (
+                        <div ref={ref} className="loading-trigger py-4 text-center">
+                            <Loading />
+                        </div>
+                    )}
+
+                    {activeTab === 'gmach' && filteredGmach.length < gmachAr.length && (
+                        <div ref={ref} className="loading-trigger py-4 text-center">
+                            <Loading />
+                        </div>
+                    )}
+
+                    {activeTab === 'mosads' && filteredMosads.length < mosadsAr.length && (
+                        <div ref={ref} className="loading-trigger py-4 text-center">
+                            <Loading />
+                        </div>
+                    )}
 
                     <Modal show={showModalDetailShop} onHide={closeModal} className='rounded overflow-y-auto p-0'>
                         <Modal.Body className='rounded' style={{ maxHeight: '85vh', overflowY: 'auto' }}>
@@ -944,9 +1224,6 @@ export default function ShopCards(props: any) {
                                                         </Accordion.Item>
                                                     </Accordion>
                                                 )}
-                                                {/* <div className="shop-card-footer mt-auto">
-                                                    <button className="more-info-btn btn border w-100" onClick={closeModal}>סגור</button>
-                                                </div> */}
                                             </div>
                                         </div>
 

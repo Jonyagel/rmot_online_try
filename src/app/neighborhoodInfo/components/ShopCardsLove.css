@@ -1,0 +1,20 @@
+/* styles.css */
+.shop-list {
+    margin-top: 20px;
+}
+
+.shop-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.shop-item button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin-left: 10px; /* רווח בין הכפתורים */
+}

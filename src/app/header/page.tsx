@@ -18,7 +18,7 @@ interface User {
 }
 
 const announcements = [
-    { text: "חדש! שכונת גני אביב נפתחה להרשמה", link: "/neighborhoods/gane-aviv" },
+    { text: "חדש! שכונת גני אביב נפתחה להרשמה", link: "/neighborhoodInfo?cardId=66ca4a63ee088d74f9217d0b" },
     { text: "עדכון: שינויים בתנאי הזכאות לדיור בר השגה", link: "/eligibility" },
     { text: "הזדמנות אחרונה: נותרו 5 דירות אחרונות בפרויקט נווה שמש", link: "/projects/neve-shemesh" },
     { text: "סדנת מידע בנושא משכנתאות תתקיים ביום שלישי הקרוב", link: "/events/mortgage-workshop" },
