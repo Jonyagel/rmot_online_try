@@ -9,18 +9,20 @@ export async function PUT(req: any) {
     if (!cookies().has("token")) {
         return NextResponse.json({ msg: "You need to send a token" }, { status: 401 });
     }
-    
+
     try {
         await connectDb();
         const token: any = cookies().get("token")?.value;
         const decodeToken: any = jwt.verify(token, "jonySecret");
         const user = await UserModel.findOne({ _id: decodeToken._id }, { password: 0 });
 
-        // עדכון הערך favoriteShope
+        // עדכון הערך favoriteShope או favoriteForum בהתאם לסוג המועד
         const updatedUser = await UserModel.findByIdAndUpdate(
-            user._id, // מזהה המשתמש שצריך לעדכן
-            { $addToSet: { favoriteShope: bodyData.shopId } }, // הוספת ה-ID של החנות למערך
-            { new: true } // מחזיר את המסמך המעודכן
+            user._id,
+            {
+                $addToSet: bodyData.type === 'shop' ? { favoriteShope: bodyData.shopId } : { favoriteForum: bodyData.forumId }
+            },
+            { new: true }
         );
 
         return NextResponse.json(updatedUser, { status: 200 });
@@ -42,10 +44,12 @@ export async function DELETE(req: any) {
         const decodeToken: any = jwt.verify(token, "jonySecret");
         const user = await UserModel.findOne({ _id: decodeToken._id }, { password: 0 });
 
-        // עדכון הערך favoriteShope
+        // עדכון הערך favoriteShope או favoriteForum בהתאם לסוג המועד
         const updatedUser = await UserModel.findByIdAndUpdate(
             user._id,
-            { $pull: { favoriteShope: bodyData.shopId } }, // הסרת ה-ID של החנות מהמועדפים
+            bodyData.type === 'shop'
+                ? { $pull: { favoriteShope: bodyData.shopId } } // הסרת ה-ID של החנות מהמועדפים
+                : { $pull: { favoriteForum: bodyData.forumId } }, // הסרת ה-ID של הפורום מהמועדפים
             { new: true }
         );
 
