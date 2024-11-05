@@ -2,9 +2,8 @@ import React from 'react'
 import AcordionShops from './components/info'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Head from 'next/head';
-import { GetStaticProps } from 'next';
 
-export const getStaticProps: GetStaticProps = async () => {
+const fetchData = async () => {
     const doApi = async (endpoint: string) => {
         const url = `${process.env.NEXT_PUBLIC_API_URL}/api/${endpoint}`;
         const resp = await fetch(url, { cache: 'no-store' });
@@ -16,17 +15,14 @@ export const getStaticProps: GetStaticProps = async () => {
     const initialDataGmach = await doApi('gmach');
     const initialDataMosads = await doApi('mosads');
 
-    return {
-        props: {
-            initialDataShop,
-            initialDataGmach,
-            initialDataMosads,
-        },
-        revalidate: 86400, // עדכון כל 24 שעות (86400 שניות)
-    };
+    return { initialDataShop, initialDataGmach, initialDataMosads };
 };
 
-export default function NeighborhoodInfo({ initialDataShop, initialDataGmach, initialDataMosads }:any) {
+export const dynamic = 'force-dynamic';
+
+export default async function NeighborhoodInfo() {
+    const data = await fetchData();
+
     return (
         <>
             <Head>
@@ -41,8 +37,10 @@ export default function NeighborhoodInfo({ initialDataShop, initialDataGmach, in
                 <meta property="og:image" content="https://asset.cloudinary.com/dglbrzbi1/52834b06603fe25209ec481073d6b5aa" />
             </Head>
             <div className='' style={{ minHeight: '100vh' }}>
-                <AcordionShops shopsData={initialDataShop} gmachData={initialDataGmach} MosadsData={initialDataMosads} />
+                <AcordionShops shopsData={data.initialDataShop} gmachData={data.initialDataGmach} MosadsData={data.initialDataMosads} />
             </div>
         </>
     );
 }
+
+export const revalidate = 86400;
