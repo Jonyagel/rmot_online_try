@@ -17,10 +17,10 @@ import FooterNav from "./components/footerNav";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// export const metadata: Metadata = {
-//   title: "קהילאפ",
-//   description: "הבית לקהילה שלי",
-// };
+export const metadata: Metadata = {
+  title: "קהילאפ",
+  description: "הבית לקהילה שלי",
+};
 
 
 
