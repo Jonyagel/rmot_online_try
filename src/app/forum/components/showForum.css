@@ -58,7 +58,7 @@
   min-height: 120px;
 }
 
-.tittle-heeder{
+.tittle-heeder {
   font-size: 36px;
 }
 
@@ -79,7 +79,7 @@
   margin: 10px auto;
 } */
 
-.search-text{
+.search-text {
   font-size: 14px;
 }
 
@@ -94,7 +94,7 @@
   /* justify-content: space-between; */
 }
 
-.search-bar-all{
+.search-bar-all {
   font-size: 14px;
   /* border: 1px #00a35b solid; */
 }
@@ -180,6 +180,7 @@
 .forumCard:hover {
   transform: translateY(-3px);
 }
+
 .forumCardBody && .forumModalBody {
   background-color: #f8f9fa;
   /* font-family: 'Rubik', sans-serif; */
@@ -272,7 +273,7 @@
   backdrop-filter: blur(8px);
 }
 
-.forum-comment-modal{
+.forum-comment-modal {
   background-color: #f9fcff;
   width: 80%;
   /* max-width: 90%; */
@@ -298,7 +299,7 @@
   transition: all 0.3s ease;
   z-index: 10;
   margin: 10px;
-   /* top: 2px; */
+  /* top: 2px; */
   /* right: 2px;  */
   /* margin: 5px; */
 }
@@ -339,10 +340,12 @@
   /* bottom: 20px;
   right: 20px; */
 }
-.badge-forum{
+
+.badge-forum {
   background-color: #00a35b;
 }
-.modal-comment{
+
+.modal-comment {
   background-image: url('/images/ירוק ללמעלה.png');
   background-size: cover;
   background-position: center;
@@ -352,7 +355,39 @@
 
 
 @media (max-width: 768px) {
-  .modal-comment-body{
+  .modal-comment-body {
     max-height: 95%;
   }
+}
+
+.dots {
+  width: 33.6px;
+  height: 30.9px;
+  --c: radial-gradient(farthest-side,#00a35b 90%,#0000);
+  background: var(--c) 50%  0,
+       var(--c) 0    100%,
+       var(--c) 100% 100%;
+  background-size: 13.4px 13.4px;
+  background-repeat: no-repeat;
+  position: relative;
+  animation: dots-p4ro8i 1s infinite;
+}
+
+@keyframes dots-p4ro8i {
+  50%, 100% {
+     background-position: 100% 100%,50% 0,0 100%;
+  }
+}
+.closeModal {
+  position: fixed;
+  color: #333;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.closeModal:hover {
+  transform: rotate(90deg);
 }

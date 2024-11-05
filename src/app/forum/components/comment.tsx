@@ -59,15 +59,13 @@ export default function CommentById(props: any) {
     if (hoursAgo < 24) return `לפני ${hoursAgo} שעות`;
     const daysAgo = Math.floor(hoursAgo / 24);
     if (daysAgo < 30) return `לפני ${daysAgo} ימים`;
-
-    const dateTest = new Date(date);
     const formatter = new Intl.DateTimeFormat('he-IL', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit'
     });
 
-    return formatter.format(dateTest);
+    return formatter.format(date);
   }
 
   const handleCommentReply = (dataComment: any, userComment: any, commentId: any) => {
@@ -79,9 +77,9 @@ export default function CommentById(props: any) {
       {/* <motion.div
         className='text-center'
       > */}
-        {/* <div className="header-container text-white my-auto rounded-bottom shadow-sm"> */}
-          {/* <p className="tittle-heeder">תגובות</p> */}
-        {/* </div> */}
+      {/* <div className="header-container text-white my-auto rounded-bottom shadow-sm"> */}
+      {/* <p className="tittle-heeder">תגובות</p> */}
+      {/* </div> */}
       {/* </motion.div> */}
       {/* <Modal show={show} onHide={handleClose} centered size="lg">
         {dataForum && (
@@ -110,8 +108,8 @@ export default function CommentById(props: any) {
           <Card.Body>
             <div className='d-flex justify-content-between align-items-start mb-3'>
               <div className='d-flex'>
-                <div className='text-center me-3'>
-                  <div className='text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px',background:'#00a35b' }}>
+                <div className='text-center me-3' style={{ width: '70px' }}>
+                  <div className='text-white font-extrabold rounded-circle mx-auto d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px', background: '#00a35b' }}>
                     <h5 className='m-0'>{dataForum.userName[0]}</h5>
                   </div>
                   <small className='text-muted'>{dataForum.userName}</small>
@@ -123,7 +121,7 @@ export default function CommentById(props: any) {
                   </Card.Text>
                 </div>
               </div>
-              <div className="align-self-start end-5 position-absolute shadow-sm rounded px-1" style={{ background: '#d2f0e4', top: '-10px', fontSize: '13px' }}>{dataForum.topic}</div>
+              <div className="badge-forum align-self-start end-4 top-4 position-absolute shadow-sm rounded px-1 border" style={{ color: '#00a35b', background: '#ffffff', fontSize: '13px' }}>{dataForum.topic}</div>
             </div>
             {/* {dataForum.fileName && (
               <div className="mb-3">

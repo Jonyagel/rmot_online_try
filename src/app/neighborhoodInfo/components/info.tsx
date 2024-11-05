@@ -25,12 +25,8 @@ import { useSearchParams } from 'next/navigation';
 import { IoShareSocialOutline } from "react-icons/io5";
 import { useInView } from 'react-intersection-observer';
 import { Metadata } from 'next';
-import LoadingSkeleton from './loading-skeleton';
 import Loading from '../loading';
 import SearchSuggestions from './SearchSuggestions';
-import ShopCardsLove from './ShopCardsLove';
-// import { trackEvent } from '../../../lib/analytics';
-// import { analyticsEvents } from '@/src/lib/analytics';
 
 export const metadata: Metadata = {
     title: 'רמות - רמת שלמה - חנויות ועסקים',
@@ -243,7 +239,7 @@ export default function ShopCards(props: any) {
                 console.error('Error fetching favorites from server:', await response.json());
             }
         };
-    
+
         fetchFavorites();
     }, []);
 
@@ -764,18 +760,21 @@ export default function ShopCards(props: any) {
 
     const toggleFavorite = async (e: React.MouseEvent, shopId: string) => {
         e.stopPropagation();
-    
+
         const isFavorite = favorites.includes(shopId);
         const method = isFavorite ? 'DELETE' : 'PUT'; // אם החנות במועדפים, נבצע DELETE, אחרת PUT
-    
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/favorite`, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ shopId }), // שליחת ה-ID של החנות
+            body: JSON.stringify({
+                shopId, // שליחת ה-ID של החנות
+                type: 'shop' // הוספת סוג המועד
+            }),
         });
-    
+
         if (response.ok) {
             // אם הבקשה הצליחה, עדכן את המצב המקומי
             setFavorites(prev => {
@@ -786,6 +785,7 @@ export default function ShopCards(props: any) {
                 return newFavorites;
             });
         } else {
+            notify();
             console.error('Error updating favorites on server:', await response.json());
         }
     };

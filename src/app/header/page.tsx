@@ -6,7 +6,7 @@ import Marquee from 'react-fast-marquee'
 import './style.css'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { FaUser } from 'react-icons/fa'
 import { useSession } from 'next-auth/react'
 import { useAppContext } from '../context/appContext';
@@ -78,7 +78,7 @@ export default function Header() {
         { href: '/', text: 'בית' },
         { href: '/neighborhoodInfo', text: 'מידע' },
         { href: '/forum', text: 'פורום' },
-        { href: '/allFamily', text: 'קהילה' },
+        // { href: '/allFamily', text: 'קהילה' },
         { href: '/nadlan', text: 'נדל"ן' },
         { href: '/board', text: 'לוח' },
         { href: '/contactUs', text: 'צור קשר' },

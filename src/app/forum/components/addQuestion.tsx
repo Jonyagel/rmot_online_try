@@ -2,14 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { CldUploadButton } from 'next-cloudinary';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './addQuestion.css'
-import { FaPlus } from 'react-icons/fa';
 import { useSession } from 'next-auth/react';
 
 export const dynamic = 'auto';
@@ -25,7 +22,10 @@ export default function AddQuestion(props: any) {
     const [fileName, setFileName] = useState("");
     const [uploadedImageUrl, setUploadedImageUrl] = useState("");
 
-    const notify = () => toast.error("אתה צריך להירשם");
+    const notify = () => toast.error("אתה צריך להירשם", {
+        position: 'top-left',
+        theme: 'light'
+    });
 
     const doApi = async (e: React.FormEvent) => {
         e.preventDefault();

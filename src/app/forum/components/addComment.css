@@ -8,7 +8,9 @@
   }
 
   .send-comment-forum-btn:hover{
-    background: #d2f0e4;
+    /* background: #d2f0e4; */
+    color: #00a35b;
+    border: #00a35b 1px solid;
   }
   .add-file-comment-forum-btn:hover{
     background: #d2f0e4;

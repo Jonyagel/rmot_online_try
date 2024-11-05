@@ -4,12 +4,15 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddQuestion from './addQuestion';
 import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Popover, OverlayTrigger, Button, Form, InputGroup, Modal, Col, Row, Nav, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Card, Badge, Popover, OverlayTrigger, Button, Form, InputGroup, Modal, Col, Row, Nav, Dropdown, DropdownButton, CloseButton } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import './showForum.css'
-import { FaChevronDown, FaSearch, FaTimes } from 'react-icons/fa';
+import { FaChevronDown, FaSearch, FaSpinner, FaTimes } from 'react-icons/fa';
 import TagFilter from './tagFilter';
 import CommentById from './comment';
+import { toast } from 'react-toastify';
+import { IoShareSocialOutline } from "react-icons/io5";
+import { useSearchParams } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,6 +33,13 @@ export default function ShowForum(props: any) {
     const [showComment, setShowComment] = useState(false);
     const [dataComment, setDataComment] = useState([]);
     const [dataForum, setDataForum] = useState();
+    const [favorites, setFavorites] = useState<string[]>(() => {
+        if (typeof window !== 'undefined') {
+            return JSON.parse(localStorage.getItem('favorites') || '[]');
+        }
+        return [];
+    });
+    const [loadingComments, setLoadingComments] = useState(true);
 
     const saerchRef = useRef<HTMLInputElement>(null);
 
@@ -37,14 +47,65 @@ export default function ShowForum(props: any) {
         getAllTags();
     }, []);
 
+    useEffect(() => {
+        const fetchFavorites = async () => {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/favorite`);
+            if (response.ok) {
+                const data = await response.json();
+                setFavorites(data.favorites); // עדכון המצב עם המועדפים מהשרת
+                localStorage.setItem('favorites', JSON.stringify(data.favorites)); // שמירה ב-localStorage
+            } else {
+                // הדפס את הסטטוס ואת הטקסט של התגובה כדי להבין מה קרה
+                const errorText = await response.text(); // קרא את הטקסט של התגובה
+                console.error('Error fetching favorites from server:', response.status, errorText);
+            }
+        };
+
+        fetchFavorites();
+    }, []);
+
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const forumId = searchParams.get('forumId'); // שינוי מ-cardId ל-forumId
+    
+        if (forumId) {
+            // מחפש בפורומים
+            const foundForum = forum_ar.find((forum: any) => forum._id === forumId);
+    
+            if (foundForum) {
+                doApiComment(forumId);
+                showCommentFunction(forumId)
+                // setDataForum(foundForum); // עדכון הפורום הנבחר
+                setShowComment(true); // הצגת המודל לפרטי הפורום
+            }
+        }
+    }, [searchParams]);
+
+    const notify = () => toast.error("אתה צריך להירשם", {
+        position: 'top-left',
+        theme: 'light'
+    });
+
     const doApiComment = async (id: any) => {
-        let urlGet = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${id}`
-        const respGet = await fetch(urlGet, { cache: 'no-store' });
-        const dataGet = await respGet.json();
-        let commentAr = dataGet;
-        setDataComment(commentAr)
-        console.log(dataGet);
-        return commentAr;
+        setLoadingComments(true); // התחלת טעינה
+        try {
+            // כאן תבצע את הקריאה ל-API כדי לטעון את התגובות
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${id}`);
+            const data = await response.json();
+            setDataComment(data); // עדכון הנתונים
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        } finally {
+            setLoadingComments(false); // סיום טעינה
+        }
+        // let urlGet = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${id}`
+        // const respGet = await fetch(urlGet, { cache: 'no-store' });
+        // const dataGet = await respGet.json();
+        // let commentAr = dataGet;
+        // setDataComment(commentAr)
+        // console.log(dataGet);
+        // return commentAr;
     }
 
     const doApiForum = async (id: any) => {
@@ -55,12 +116,15 @@ export default function ShowForum(props: any) {
         setDataForum(ForumAr);
         console.log(data);
         return ForumAr;
-
     }
 
     const showCommentFunction = (id: any) => {
         setForumId(id);
         setShowComment(true);
+        // עדכון ה-URL בלי לטעון מחדש את הדף
+        const url = new URL(window.location.href);
+        url.searchParams.set('forumId', id);
+        window.history.pushState({}, '', url.toString());
     }
 
     const getAllTags = async () => {
@@ -151,6 +215,59 @@ export default function ShowForum(props: any) {
         setShowAllTags(false);
     };
 
+    const handleShare = async (forumId: string, forumTitle: string) => {
+        const url = `${window.location.origin}${window.location.pathname}?forumId=${forumId}`;
+
+        if (navigator.share) {
+            // שיתוף דרך Web Share API אם זמין (בעיקר במובייל)
+            try {
+                await navigator.share({
+                    title: forumTitle,
+                    text: `בוא לראות את ${forumTitle}`,
+                    url: url
+                });
+            } catch (err) {
+                console.log('Error sharing:', err);
+            }
+        } else {
+            // העתקה ללוח אם Web Share API לא זמין
+            navigator.clipboard.writeText(url).then(() => {
+                alert('הקישור הועתק ללוח');
+            });
+        }
+    };
+
+    const toggleFavorite = async (e: React.MouseEvent, forumId: string) => {
+        e.stopPropagation();
+
+        const isFavorite = favorites.includes(forumId);
+        const method = isFavorite ? 'DELETE' : 'PUT'; // אם הפורום במועדפים, נבצע DELETE, אחרת PUT
+
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/favorite`, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                forumId, // שליחת ה-ID של הפורום
+                type: 'forum' // הוספת סוג המועד
+            }),
+        });
+
+        if (response.ok) {
+            // אם הבקשה הצליחה, עדכן את המצב המקומי
+            setFavorites(prev => {
+                const newFavorites = isFavorite
+                    ? prev.filter(id => id !== forumId) // הסרה מהמועדפים
+                    : [...prev, forumId]; // הוספה למועדפים
+                localStorage.setItem('favorites', JSON.stringify(newFavorites));
+                return newFavorites;
+            });
+        } else {
+            notify()
+            console.error('Error updating favorites on server:', await response.json());
+        }
+    };
 
     return (
         <div className='px-3'>
@@ -186,11 +303,6 @@ export default function ShowForum(props: any) {
                                                 <Nav.Item>
                                                     <Nav.Link className={'nav-link-forum me-4'}>פורומים</Nav.Link>
                                                 </Nav.Item>
-                                                <TagFilter
-                                                    getAllTags={allTopics}
-                                                    handleTopicClick={handleTopicClick}
-                                                    selectedTopic={selectedTopic}
-                                                />
                                             </Nav>
                                             <div className='d-block d-md-none'>
                                                 <AddQuestion setAddForum={setAddForum} addForum={addForum} doApi={doApi} />
@@ -255,7 +367,13 @@ export default function ShowForum(props: any) {
                                     </Row>
                                     <Row>
                                         <Col className='mt-2'>
-                                            <div id="tagListContainer"></div>
+                                            <div id="tagListContainer">
+                                                <TagFilter
+                                                    getAllTags={allTopics}
+                                                    handleTopicClick={handleTopicClick}
+                                                    selectedTopic={selectedTopic}
+                                                />
+                                            </div>
                                         </Col>
                                     </Row>
                                 </div>
@@ -274,30 +392,21 @@ export default function ShowForum(props: any) {
                                         exit={{ opacity: 0, scale: 0.9 }}
                                         transition={{ duration: 0.3 }}
                                     >
-                                        {/* <Link href={`/forum/comment/${item._id}`} className='text-decoration-none'> */}
                                         <Card className='forumCard border-0 shadow-sm position-relative' style={{ minHeight: '100px' }}
                                             onClick={() => {
                                                 doApiComment(item._id);
-                                                doApiForum(item._id);
+                                                // doApiForum(item._id);
                                                 showCommentFunction(item._id)
-                                                // setForumId(item._id)
-                                                // setShowComment(true)
                                             }}>
                                             <Card.Body className='forumCardBody'>
                                                 <div className='d-flex justify-content-between align-items-start mb-3'>
                                                     <div className='d-flex'>
-                                                        {/* <OverlayTrigger
-                                                                trigger="hover"
-                                                                placement="top"
-                                                                overlay={popover(item.userName)}
-                                                            > */}
-                                                        <div className='text-center me-3'>
-                                                            <div className='text-white rounded-circle d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px', background: '#00a35b' }}>
+                                                        <div className='text-center me-3' style={{ width: '70px' }}>
+                                                            <div className='text-white font-extrabold rounded-circle mx-auto d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px', background: '#00a35b' }}>
                                                                 <h5 className='m-0'>{item.userName[0]}</h5>
                                                             </div>
                                                             <small className='text-muted'>{item.userName}</small>
                                                         </div>
-                                                        {/* </OverlayTrigger> */}
                                                         <div className='d-flex flex-column justify-content-center'>
                                                             <h5 className='mb-0 fw-bold'>{item.title}</h5>
                                                             <Card.Text className='mt-2' style={{ whiteSpace: "pre-wrap" }}>
@@ -307,7 +416,22 @@ export default function ShowForum(props: any) {
                                                             </Card.Text>
                                                         </div>
                                                     </div>
-                                                    <div className="badge-forum align-self-start end-5 position-absolute shadow-sm rounded px-1" style={{ background: '#d2f0e4', top: '-10px', fontSize: '13px' }}>{item.topic}</div>
+                                                    <div className="badge-forum align-self-start end-4 top-4 position-absolute shadow-sm rounded px-1 border" style={{ color: '#00a35b', background: '#ffffff', fontSize: '13px' }}>{item.topic}</div>
+                                                    <div className='top-10 left-4 absolute rounded'>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation(); // מונע פתיחת המודל בלחיצה על כפתור השיתוף
+                                                                handleShare(item._id, item.title);
+                                                            }}
+                                                            className="text-gray-600 hover:text-gray-800 transition-colors me-1"
+                                                            title="שתף"
+                                                        >
+                                                            <IoShareSocialOutline size={16} />
+                                                        </button>
+                                                        <button onClick={(e: any) => toggleFavorite(e, item._id)}>
+                                                            {favorites.includes(item._id) ? <i className="bi bi-heart-fill text-red-500"></i> : <i className="bi bi-heart"></i>}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                                 {/* {item.fileName && (
                                                         <div className="mb-3">
@@ -341,7 +465,6 @@ export default function ShowForum(props: any) {
                                                 </div>
                                             </Card.Body>
                                         </Card>
-                                        {/* </Link> */}
                                     </motion.div>
                                     {(index + 1) % 6 === 0 && (
                                         <motion.div
@@ -392,11 +515,9 @@ export default function ShowForum(props: any) {
                     )}
                 </Col >
                 <Col lg={2} className="d-none d-lg-block ">
-                    {/* אזור פרסומות ימני */}
                     <div className="ad-container">
                         <div className="ad-space">
                             <img src='/images/timegif.webp' className='rounded' />
-                            {/* כאן תוכל להוסיף את קוד הפרסומת שלך */}
                         </div>
                     </div>
                 </Col>
@@ -426,16 +547,28 @@ export default function ShowForum(props: any) {
 
             <Modal size='lg' show={showComment} onHide={() => {
                 setShowComment(false);
+                // הסרת הפרמטר מה-URL בסגירת המודל
+                const url = new URL(window.location.href);
+                url.searchParams.delete('forumId');
+                window.history.pushState({}, '', url.toString());
             }}
                 className='overflow-y-auto'
             >
-                <Modal.Header closeButton className='modal-comment'>
-                    <h1 className='font-bold text-white text-3xl '>תגובות</h1>
-                </Modal.Header>
                 <Modal.Body className='p-0 pb-2 modal-comment-body' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-                    {showComment && (
-                        <CommentById idForum={forumId} commentAr={dataComment} forumData={dataForum} />
-                    )}
+                <CloseButton className='closeModal' onClick={() => {
+                setShowComment(false);
+                // הסרת הפרמטר מה-URL בסגירת המודל
+                const url = new URL(window.location.href);
+                url.searchParams.delete('forumId');
+                window.history.pushState({}, '', url.toString());
+            }} />
+                    {/* {loadingComments ? (
+                        <div className="dots mx-auto my-5"></div>
+                    ) : ( */}
+                        {showComment && (
+                            <CommentById idForum={forumId} commentAr={dataComment} forumData={dataForum} />
+                        )}
+                    {/* )} */}
                 </Modal.Body>
             </Modal>
         </div >
