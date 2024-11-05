@@ -48,7 +48,7 @@ export default async function NeighborhoodInfo() {
                 <meta property="og:title" content="רמות - רמת שלמה - חנויות ועסקים" />
                 <meta property="og:description" content="רשימת העסקים, החנויות והשירותים בשכונה" />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content={window.location.href} />
+                <meta property="og:url" content="https://ramot-online-try.vercel.app/neighborhoodInfo" />
                 <meta property="og:image" content="https://asset.cloudinary.com/dglbrzbi1/52834b06603fe25209ec481073d6b5aa" />
                 {/* הוספת תגיות נוספות */}
             </Head>
