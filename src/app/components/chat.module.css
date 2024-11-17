@@ -42,4 +42,79 @@
     align-items: center;
     color: black;
     }
-    
+
+/* In ChatBot.module.css */
+.noResults {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+}
+
+.noResults i {
+    font-size: 24px;
+    margin-bottom: 10px;
+    opacity: 0.7;
+}
+
+.noResults p {
+    margin: 0;
+}
+
+/* Add to ChatBot.module.css */
+.noResultsMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.noResultsMessage i {
+  font-size: 24px;
+  color: #6c757d;
+  margin-bottom: 10px;
+}
+
+.noResultsSubtext {
+  color: #6c757d;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+.messageContent {
+  width: 100%;
+  padding: 8px;
+}
+/* Add to ChatBot.module.css */
+.messageText {
+    margin-bottom: 10px;
+  }
+  
+  .noResultsMessage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .noResultsMessage i {
+    font-size: 24px;
+    color: #6c757d;
+    margin-bottom: 8px;
+  }
+  
+  .noResultsSubtext {
+    color: #6c757d;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }

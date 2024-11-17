@@ -19,6 +19,7 @@ export default function AddComment(props: any) {
   const [fileName, setFileName] = useState("");
   const [signIn, setSignIn] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
+  const [anonymous, setAnonymous] = useState(false);
 
   const onEmojiSelect = (emoji: any) => {
     commentRef.current.value += emoji.emoji;
@@ -52,6 +53,7 @@ export default function AddComment(props: any) {
         commentReplayId: props.commentReplying.commentId,
         commentReplayContent: props.commentReplying.dataComment,
         commentReplayUserName: props.commentReplying.userComment,
+        anonymous
       }),
     });
     const data = await resp.json();
@@ -99,16 +101,6 @@ export default function AddComment(props: any) {
     }
   }
 
-  const handleUpload = (result: any) => {
-    if (result.event === 'success') {
-      const publicId = result.info.public_id;
-      const fileName = publicId.split('/').pop();
-      console.log('Uploaded file name:', fileName);
-      setFileName(fileName);
-      toast.success(`הקובץ ${fileName} הועלה בהצלחה`);
-    }
-  };
-
   const checkSignIn = async () => {
     try {
       const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
@@ -155,7 +147,12 @@ export default function AddComment(props: any) {
   });
 
   return (
-    <div className='sticky-bottom my-4'>
+    <div className='sticky-bottom mt-4 py-2'
+      style={{
+        background: "#fafcf9",
+        boxShadow: "0px -10px 2px -1px #fafcf9, -10px 0 2px -1px #fafcf9, 10px 0 2px -1px #fafcf9"
+      }}
+    >
       <Card className='shadow-sm rounded add-comment-forum'>
         <Card.Body className='p-2'>
           {props.replay && (
@@ -177,26 +174,6 @@ export default function AddComment(props: any) {
           )}
           <div className='d-flex justify-content-between flex-column'>
             <div className='d-flex'>
-              {/* <div className='d-flex align-items-center'>
-                <CldUploadButton
-                  className='btn add-file-comment-forum-btn me-1'
-                  uploadPreset="my_upload_test"
-                  onSuccess={handleUpload}
-                  onError={(error) => {
-                    console.error('Upload error:', error);
-                    toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
-                  }}
-                  options={{
-                    sources: ['local'],
-                    maxFileSize: 5000000,
-                    maxImageWidth: 2000,
-                    maxImageHeight: 2000,
-                    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-                  }}
-                >
-                  <i className="bi bi-paperclip"></i>
-                </CldUploadButton>
-              </div> */}
               <div className='flex-grow-1'>
                 <textarea
                   ref={commentRef}
@@ -216,14 +193,17 @@ export default function AddComment(props: any) {
                 </button>
               </div>
             </div>
-            {/* {fileName && (
-              <div className="mt-2">
-                <small className="text-muted">
-                  <i className="bi bi-file-earmark-image me-md-1"></i>
-                  קובץ מצורף: {fileName}
-                </small>
-              </div>
-            )} */}
+            {/* <div className="form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="anonymousCheck"
+                  onChange={(e) => setAnonymous(e.target.checked)}
+                />
+                <label className="form-check-label" htmlFor="anonymousCheck">
+                  <small> העלה כאנונימי </small>
+                </label>
+              </div> */}
           </div>
         </Card.Body>
       </Card>
@@ -231,12 +211,3 @@ export default function AddComment(props: any) {
     </div>
   )
 }
-
-
-
-
-{/* <OverlayTrigger trigger="click" placement="top" overlay={popover} show={showEmoji}>
-                  <Button variant="btn btn-outline-primary border-0" className='ms-md-1' onClick={() => setShowEmoji(!showEmoji)}>
-                    <i className="bi bi-emoji-smile"></i>
-                  </Button>
-                </OverlayTrigger> */}

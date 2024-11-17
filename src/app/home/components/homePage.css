@@ -4,67 +4,6 @@
    overflow: hidden;
  }
 
- /* .video-container {
-   position: fixed;
-   top: 0;
-   left: 0;
-   width: 100%;
-   height: 100%;
- }
-
- .video-background {
-   object-fit: cover;
-   width: 100%;
-   height: 100%;
- }
-
- .video-overlay {
-   position: absolute;
-   top: 0;
-   left: 0;
-   width: 100%;
-   height: 100%;
-   background: rgba(0, 0, 0, 0.4);
- } */
-
-
-
- /* .hero-subtitle {
-   font-size: 1.5rem;
-   margin-bottom: 2rem;
- }
-
- .video-control {
-   position: absolute;
-   right: 20px;
-   top: 20px;
-   background: rgba(255, 255, 255, 0.2);
-   border: none;
-   color: white;
-   padding: 10px;
-   border-radius: 50%;
-   cursor: pointer;
-   transition: background 0.3s ease, transform 0.3s ease;
-   z-index: 10;
-   font-size: 16px;
-   width: 40px;
-   height: 40px;
-   display: flex;
-   justify-content: center;
-   align-items: center;
- }
-
- .video-control:hover {
-   background: rgba(255, 255, 255, 0.3);
-   transform: scale(1.1);
- }
-
- .video-control .fa-icon {
-   display: flex;
-   justify-content: center;
-   align-items: center;
- } */
-
 
  .content-container {
    position: relative;
@@ -74,9 +13,6 @@
  }
 
  .main-content-container {
-   /* width: 90%; */
-   /* max-width: 1100px; */
-   /* margin-top: -100px; */
    z-index: 1;
  }
 
@@ -85,8 +21,6 @@ width: 50%;
 }
 
  .main-content {
-   /* background: #f9fcff; */
-   /* padding: 3rem; */
    padding-top: 0;
    position: relative;
    z-index: 1;
@@ -115,8 +49,6 @@ width: 50%;
    font-size: 20px;
    font-weight: 600;
    text-align: center;
-   /* margin-bottom: 2.5rem; */
-   /* color: #34495e; */
  }
 
  .section-title::after {
@@ -130,97 +62,37 @@ width: 50%;
 
  .info-cards-section {
   margin-top: -100px;
-   /* background-image: url('/images/ירוק ללמעלה.png');
-   background-size: cover;
-   background-position: center;
-   background-repeat: no-repeat; */
-   /* background-color: #ffffff; */
  }
 
  .info-cards-slider {
-   /* padding: 30px; */
    max-width: 1100px;
    margin: 0 auto;
  }
-
- /* .custom-pagination {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   gap: 2px;
-   margin-top: 20px;
- } */
-
- /* .swiper-pagination {
-   bottom: 10px !important;
- } */
-
- /* .custom-bullet {
-   width: 30px !important;
-   height: 3px !important;
-   display: inline-block !important;
-   border-radius: 0 !important;
-   background-color: #00a35b !important;
-   margin: 0 5px !important;
-   transition: all 0.3s ease;
- } */
 
  .custom-bullet-active {
    background-color: rgb(219, 46, 46) !important;
  }
 
- .custom-arrows-swiper .swiper-button-next,
- .custom-arrows-swiper .swiper-button-prev {
-   /* width: 10px; */
-   /* height: 40px ; */
- }
-
- /* .custom-arrows-swiper .swiper-button-next:after,
- .custom-arrows-swiper .swiper-button-prev:after {
-   font-size: 15px;
-   color: #00a35b ;
- } */
-
 
  .info-card {
    background: #ffffff;
-   /* border-radius: 8px; */
-   /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); */
-   /* padding: 1.8rem; */
    height: 140px;
    display: flex;
    flex-direction: column;
-   /* justify-content: space-between; */
    transition: all 0.3s ease;
-   /* border: 1px solid #f0f0f0; */
  }
 
  .card-icon {
-   /* font-size: 2rem; */
-   /* color: #00a35b; */
-   /* margin-bottom: 12px; */
    transition: all 0.3s ease;
- }
-
- .info-card h3 {
-   /* font-size: 1.3rem; */
-   /* color: #34495e; */
-   /* margin-bottom: 0.8rem; */
-   /* font-weight: bold; */
  }
  .info-card p {
    font-size: 13px;
    color: #5d6d7e;
-   /* line-height: 1.5; */
-   /* margin-bottom: 1.2rem; */
  }
 
  .home-info-card-footer {
-  /* padding: 12px 18px; */
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
-  /* border-top: 1px solid #f0f0f0; */
   margin-top: auto;
 }
 
@@ -265,9 +137,7 @@ width: 50%;
    flex: 1;
    position: relative;
    overflow: hidden;
-   /* border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; */
    transition: all 0.3s ease;
-   /* box-shadow: 0 10px 20px rgba(0,0,0,0.1); */
  }
 
  .image-container img {
@@ -280,27 +150,21 @@ width: 50%;
  .neighborhood-info {
    flex: 1;
    padding: 0 50px;
-   /* border-radius: 15px; */
-   /* background-color: #ffffff; */
    transition: all 0.3s ease;
  }
 
 
- .neighborhood-info h4 {
+ .neighborhood-info h2 {
    width: 25%;
-   /* font-size: 2rem; */
-   margin-bottom: 20px;
+   margin-bottom: 10px;
    color: #2c3e50;
-   border-bottom: 2px solid #00a35b;
-   padding-bottom: 5px;
+   /* border-bottom: 2px solid #00a35b; */
+   /* padding-bottom: 5px; */
  }
 
  .neighborhood-info p {
-   /* font-size: 1.1rem; */
-   /* line-height: 1.8; */
    color: #34495e;
    text-align: justify;
-   /* font-family: 'Assistant', sans-serif; */
  }
 
  .video-container {
@@ -336,7 +200,6 @@ width: 50%;
 
 .hero-subtitle {
   font-size: 1.5rem;
-  /* margin-bottom: 2rem; */
 }
 
 .video-control {
@@ -352,11 +215,8 @@ width: 50%;
   transition: background 0.3s ease, transform 0.3s ease;
   z-index: 10;
   font-size: 16px;
-  /* התאם לפי הצורך */
   width: 40px;
-  /* התאם לפי הצורך */
   height: 40px;
-  /* התאם לפי הצורך */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -379,13 +239,12 @@ width: 50%;
 
 
    .info-row {
-     /* flex-direction: column; */
-     /* במובייל, התוכן יתארגן בעמודה */
+     flex-direction: column;
+
    }
 
    .row-reverse {
-     /* flex-direction: column; */
-     /* במובייל, התוכן יתארגן בעמודה גם כשהוא הפוך */
+     flex-direction: column;
    }
 
    .image-container,

@@ -2,10 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddComment from './addComment';
-import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Button, Modal } from 'react-bootstrap';
+import { Card, Badge, Button } from 'react-bootstrap';
 import './commentById.css'
-import Link from 'next/link';
 
 export const dynamic = 'auto';
 
@@ -16,9 +14,6 @@ export default function CommentById(props: any) {
   const [commentReplying, setCommentReplying] = useState({});
   const [replay, setReplay] = useState(false);
   const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -75,26 +70,6 @@ export default function CommentById(props: any) {
 
   return (
     <div className='container mt-5'>
-      <Modal show={show} onHide={handleClose} centered size="lg">
-        <Modal.Body className="p-0">
-          <button onClick={handleClose} className="btn-close position-absolute top-0 end-0 m-3 z-3" aria-label="Close"></button>
-          <CldImage
-            src={dataForum.fileName}
-            width="900"
-            height="900"
-            sizes="100vw"
-            crop={{
-              type: 'fill',
-              source: true
-            }}
-            className="rounded"
-            alt='Forum Image'
-            priority
-          />
-        </Modal.Body>
-      </Modal>
-
-
         <Card className='shadow-sm hover-card mb-3 rounded'>
           <Card.Body>
             <div className='d-flex justify-content-between align-items-start mb-3'>
@@ -114,23 +89,6 @@ export default function CommentById(props: any) {
               </div>
               <Badge bg='primary' className="ms-2 align-self-start top-0 end-20 translate-middle position-absolute">{dataForum.topic}</Badge>
             </div>
-            {dataForum.fileName && (
-              <div className="mb-3">
-                <CldImage
-                  src={dataForum.fileName}
-                  width="100"
-                  height="100"
-                  sizes="100vw"
-                  crop={{
-                    type: 'fill',
-                    source: true
-                  }}
-                  className="rounded"
-                  alt='תמונה מצורפת'
-                  priority
-                />
-              </div>
-            )}
             <div className='d-flex justify-content-between align-items-center'>
               <div >
                 <i className="bi bi-chat-dots me-2"></i>
@@ -161,7 +119,7 @@ export default function CommentById(props: any) {
                     <div className="d-flex align-items-center">
                       <div className="me-2">
                         <div className='bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center' style={{ width: '30px', height: '30px' }}>
-                          <h6 className='m-0'>{item.commentReplayUserName[0]}</h6>
+                          <h6 className='m-0'>{item.anonymous ? '?' : item.commentReplayUserName[0]}</h6>
                         </div>
                       </div>
                       <div>
@@ -181,23 +139,6 @@ export default function CommentById(props: any) {
                 <div className="flex-grow-1">
                   <h6 className="mb-1 font-bold">{item.userName}</h6>
                   <p className="mb-1" style={{ whiteSpace: "pre-wrap" }}>{item.comment}</p>
-                  {item.fileName && (
-                    <div className="mt-2 mb-2">
-                      <CldImage
-                        src={item.fileName}
-                        width="200"
-                        height="200"
-                        sizes="100vw"
-                        crop={{
-                          type: 'fill',
-                          source: true
-                        }}
-                        className="rounded cursor-pointer"
-                        alt='Comment Image'
-                        onClick={handleShow}
-                      />
-                    </div>
-                  )}
                 </div>
                 <div>
                   <small className="text-muted">

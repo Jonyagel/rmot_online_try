@@ -18,8 +18,6 @@ export default function CommentById(props: any) {
   const [replay, setReplay] = useState(false);
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   useEffect(() => {
     window.scrollTo(0, 0)

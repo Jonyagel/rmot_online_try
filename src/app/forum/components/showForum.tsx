@@ -2,17 +2,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import AddQuestion from './addQuestion';
-import Link from 'next/link';
 import { CldImage } from 'next-cloudinary';
-import { Card, Badge, Popover, OverlayTrigger, Button, Form, InputGroup, Modal, Col, Row, Nav, Dropdown, DropdownButton, CloseButton } from 'react-bootstrap';
+import { Card, Popover, Form, InputGroup, Modal, Col, Row, Nav, Dropdown, DropdownButton, CloseButton } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
 import './showForum.css'
-import { FaChevronDown, FaSearch, FaSpinner, FaTimes } from 'react-icons/fa';
+import { FaChevronDown, FaSearch, } from 'react-icons/fa';
 import TagFilter from './tagFilter';
 import CommentById from './comment';
 import { toast } from 'react-toastify';
 import { IoShareSocialOutline } from "react-icons/io5";
 import { useSearchParams } from 'next/navigation';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 export const dynamic = 'force-dynamic';
 
@@ -68,15 +72,14 @@ export default function ShowForum(props: any) {
 
     useEffect(() => {
         const forumId = searchParams.get('forumId'); // שינוי מ-cardId ל-forumId
-    
+
         if (forumId) {
             // מחפש בפורומים
             const foundForum = forum_ar.find((forum: any) => forum._id === forumId);
-    
+
             if (foundForum) {
                 doApiComment(forumId);
                 showCommentFunction(forumId)
-                // setDataForum(foundForum); // עדכון הפורום הנבחר
                 setShowComment(true); // הצגת המודל לפרטי הפורום
             }
         }
@@ -99,13 +102,6 @@ export default function ShowForum(props: any) {
         } finally {
             setLoadingComments(false); // סיום טעינה
         }
-        // let urlGet = `${process.env.NEXT_PUBLIC_API_URL}/api/forum/comment/${id}`
-        // const respGet = await fetch(urlGet, { cache: 'no-store' });
-        // const dataGet = await respGet.json();
-        // let commentAr = dataGet;
-        // setDataComment(commentAr)
-        // console.log(dataGet);
-        // return commentAr;
     }
 
     const doApiForum = async (id: any) => {
@@ -168,15 +164,6 @@ export default function ShowForum(props: any) {
 
         return formatter.format(date);
     }
-
-    const popover = (userName: any) => {
-        return (
-            <Popover id="popover-basic" className='p-2'>
-                <Popover.Header></Popover.Header>
-                <h2>{userName}</h2>
-            </Popover>
-        )
-    };
 
     const sortPosts = (posts: any, sortType: any) => {
         if (sortType === 'date') {
@@ -382,6 +369,99 @@ export default function ShowForum(props: any) {
                     </motion.div>
 
                     <div className='row' >
+                        <div className='flex'>
+                            <div className='CardsContainerForum w-50 p-3'>
+                                <Swiper
+                                    direction={'horizontal'}
+                                    pagination={{
+                                        clickable: true,
+                                    }}
+                                    slidesPerView={1}
+                                    loop={true}
+                                    modules={[Autoplay]}
+                                    className="mySwiper"
+                                >
+                                    <SwiperSlide>
+                                        <div className='meurasimCard'>
+                                            <div className='d-flex justify-content-between align-items-center mb-2'>
+                                                <div className='w-50'>
+                                                    <p className='font-bold'>ישראל ישראלי</p>
+                                                    <p>ב"ר יעקב יוסף שליט"א</p>
+                                                    <p>ישיבת אור שלמה וולבה</p>
+                                                    <p>בני ברק</p>
+                                                </div>
+                                                <div className='w-50 text-end'>
+                                                    <p className='font-bold'>נחמה נחמוני</p>
+                                                    <p>ב"ר ישעיהו אריה שליט"א</p>
+                                                    <p>סמינר מעלות</p>
+                                                    <p>ירושלים</p>
+                                                </div>
+                                            </div>
+                                            <div className='text-center'>
+                                                <h3>מאורסים</h3>
+                                                <small>אור לי"ט כסליו תשפ"ג</small>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+
+                                    <SwiperSlide>
+                                        <div className='meurasimCard'>
+                                            <div className='d-flex justify-content-between align-items-center mb-2'>
+                                                <div className='w-50'>
+                                                    <p className='font-bold'>משה כהן</p>
+                                                    <p>ב"ר אברהם דוד שליט"א</p>
+                                                    <p>ישיבת חברון</p>
+                                                    <p>ירושלים</p>
+                                                </div>
+                                                <div className='w-50 text-end'>
+                                                    <p className='font-bold'>שרה לוי</p>
+                                                    <p>ב"ר יצחק מאיר שליט"א</p>
+                                                    <p>סמינר בית יעקב</p>
+                                                    <p>בני ברק</p>
+                                                </div>
+                                            </div>
+                                            <div className='text-center'>
+                                                <h3>מאורסים</h3>
+                                                <small>אור לכ״ב טבת תשפ״ד</small>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+                                    <SwiperSlide>
+                                        <div className='meurasimCard'>
+                                            <div className='d-flex justify-content-between align-items-center mb-2'>
+                                                <div className='w-50'>
+                                                    <p className='font-bold'>דוד פרידמן</p>
+                                                    <p>ב"ר שמואל חיים שליט"א</p>
+                                                    <p>ישיבת מיר</p>
+                                                    <p>ירושלים</p>
+                                                </div>
+                                                <div className='w-50 text-end'>
+                                                    <p className='font-bold'>רחל גולדברג</p>
+                                                    <p>ב"ר משה אהרון שליט"א</p>
+                                                    <p>סמינר וולף</p>
+                                                    <p>ירושלים</p>
+                                                </div>
+                                            </div>
+                                            <div className='text-center'>
+                                                <h3>מאורסים</h3>
+                                                <small>אור לכ״ה טבת תשפ״ד</small>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+                                </Swiper>
+                            </div>
+                            <div className='CardsContainerForum w-50 p-3'>
+                                <div className='halchaCard'>
+                                    <div className='flex justify-content-between'>
+                                        <p className='font-bold'>"כל השונה הלכות בכל יום מובטח לו..."</p>
+                                        <p className='font-bold'>ט"ו חשוון תשפ"ה</p>
+                                    </div>
+                                    <div>
+                                    </div>
+                                    <p>"בברכת המזון אם שכח ולא אמר רצה בשבת, ונזכר לאחר שסיים הברכה הרביעית - אינו חוזר, אפילו לא התחיל עדיין לאכול סעודה אחרת, וכן הדין ביום טוב. אבל אם נזכר קודם שסיים הברכה..."</p>
+                                </div>
+                            </div>
+                        </div>
                         <AnimatePresence>
                             {sortedAndFilteredPosts.map((item: any, index: number) => (
                                 <React.Fragment key={item._id}>
@@ -395,7 +475,6 @@ export default function ShowForum(props: any) {
                                         <Card className='forumCard border-0 shadow-sm position-relative' style={{ minHeight: '100px' }}
                                             onClick={() => {
                                                 doApiComment(item._id);
-                                                // doApiForum(item._id);
                                                 showCommentFunction(item._id)
                                             }}>
                                             <Card.Body className='forumCardBody'>
@@ -403,9 +482,9 @@ export default function ShowForum(props: any) {
                                                     <div className='d-flex'>
                                                         <div className='text-center me-3' style={{ width: '70px' }}>
                                                             <div className='text-white font-extrabold rounded-circle mx-auto d-flex align-items-center justify-content-center mb-1' style={{ width: '40px', height: '40px', background: '#00a35b' }}>
-                                                                <h5 className='m-0'>{item.userName[0]}</h5>
+                                                                <h5 className='m-0'>{item.anonymous ? '?' : item.userName[0]}</h5>
                                                             </div>
-                                                            <small className='text-muted'>{item.userName}</small>
+                                                            <small className='text-muted'>{item.anonymous ? 'אנונימי' : item.userName}</small>
                                                         </div>
                                                         <div className='d-flex flex-column justify-content-center'>
                                                             <h5 className='mb-0 fw-bold'>{item.title}</h5>
@@ -433,29 +512,6 @@ export default function ShowForum(props: any) {
                                                         </button>
                                                     </div>
                                                 </div>
-                                                {/* {item.fileName && (
-                                                        <div className="mb-3">
-                                                            <CldImage
-                                                                src={item.fileName}
-                                                                width="100"
-                                                                height="100"
-                                                                sizes="100vw"
-                                                                crop="fill"
-                                                                className="rounded cursor-pointer"
-                                                                alt='תמונה מצורפת'
-                                                                placeholder="blur"
-                                                                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-                                                                loading='lazy'
-                                                                format="auto"
-                                                                quality="auto"
-                                                                onClick={(e) => {
-                                                                    e.preventDefault(); // מונע ניווט ללינק
-                                                                    setSelectedImage(item.fileName);
-                                                                    setShowImageModal(true);
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    )} */}
                                                 <div className='d-flex justify-content-end align-items-center'>
                                                     <small className='me-2 text-muted'>
                                                         <i className="bi bi-chat me-2"></i>
@@ -523,28 +579,6 @@ export default function ShowForum(props: any) {
                 </Col>
             </Row >
 
-            <Modal show={showImageModal} onHide={() => setShowImageModal(false)} size="lg" centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>תמונה מצורפת</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <CldImage
-                        src={selectedImage}
-                        width="800"
-                        height="600"
-                        sizes="100vw"
-                        crop="fit"
-                        className="img-fluid"
-                        alt='תמונה מצורפת בגדול'
-                        placeholder="blur"
-                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg=="
-                        loading='lazy'
-                        format="auto"
-                        quality="auto"
-                    />
-                </Modal.Body>
-            </Modal>
-
             <Modal size='lg' show={showComment} onHide={() => {
                 setShowComment(false);
                 // הסרת הפרמטר מה-URL בסגירת המודל
@@ -554,21 +588,16 @@ export default function ShowForum(props: any) {
             }}
                 className='overflow-y-auto'
             >
-                <Modal.Body className='p-0 pb-2 modal-comment-body' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-                <CloseButton className='closeModal' onClick={() => {
-                setShowComment(false);
-                // הסרת הפרמטר מה-URL בסגירת המודל
-                const url = new URL(window.location.href);
-                url.searchParams.delete('forumId');
-                window.history.pushState({}, '', url.toString());
-            }} />
-                    {/* {loadingComments ? (
-                        <div className="dots mx-auto my-5"></div>
-                    ) : ( */}
-                        {showComment && (
-                            <CommentById idForum={forumId} commentAr={dataComment} forumData={dataForum} />
-                        )}
-                    {/* )} */}
+                <Modal.Body className='p-0  modal-comment-body rounded' style={{ maxHeight: '80vh', overflowY: 'auto', background:"#fafcf9" }}>
+                    <CloseButton className='closeModal p-2 fixed z-3' onClick={() => {
+                        setShowComment(false);
+                        const url = new URL(window.location.href);
+                        url.searchParams.delete('forumId');
+                        window.history.pushState({}, '', url.toString());
+                    }} />
+                    {showComment && (
+                        <CommentById idForum={forumId} commentAr={dataComment} forumData={dataForum} />
+                    )}
                 </Modal.Body>
             </Modal>
         </div >

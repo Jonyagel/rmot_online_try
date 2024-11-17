@@ -1,59 +1,36 @@
-'use client'
-import React, { useEffect, useState } from 'react'
+"use client"
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../context/AuthContext';
 import LoginForm from './components/loginForm';
-// import { cookies } from 'next/headers'
-import Signup from './components/signup';
-import { useSession } from 'next-auth/react';
-
-
-export const dynamic = 'auto';
+import Link from 'next/link';
+import './login.css';
 
 export default function LoginPage() {
-    const { data: session } = useSession();
-    const [signIn, setSignIn] = useState(false);
-    const [googleUser, setGoogleUser] = useState();
-    useEffect(() => {
-        // doApiGoogle();
-        checkSignIn();
-    }, []);
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
 
-    const checkSignIn = async () => {
-        try {
-            const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
-            const data = await resp.json();
-            if (data.status === 401) {
-                // notify();
-                setSignIn(false);
-            } else {
-                setSignIn(true);
-                // handleShow();
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/profile');
     }
+  }, [isAuthenticated, router]);
 
+  return (
+    <div className="login-container min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="login-form max-w-md w-full bg-white shadow-xl rounded-xl p-8">
+        <h2 className="text-center text-3xl font-bold mb-2">ברוכים הבאים!</h2>
+        <p className="text-center text-gray-600 mb-6">התחבר לחשבונך</p>
+        
+        <LoginForm />
 
-    // let googleUser;
-    // const doApiGoogle = async () => {
-    //     const url = `${process.env.NEXT_PUBLIC_API_URL}/api/getAuthUser`;
-    //     const resp = await fetch(url, { cache: 'no-store' });
-    //     const data = await resp.json();
-    //     console.log(data);
-    //     // googleUser = data.user
-    //     setGoogleUser(data);
-    // }
-    // let isCookies: any = false
-
-    // if (cookies().has("token")) {
-    //     isCookies = true
-    // }
-
-    return (
-        <div className=''>
-                { signIn=== true || session ? <LoginForm /> : <Signup />
-            }
-            {/* <LoginForm /> */}
-        </div>
-    )
+        <p className="text-center mt-6">
+          עדיין אין לך חשבון?{' '}
+          <Link href="/signup" className="text-blue-600 hover:text-blue-800 font-medium">
+            הירשם כאן
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 }

@@ -1,71 +1,138 @@
 "use client"
-
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import './loginForm.css'; // CSS מותאם אישית
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useAuth } from '../../context/AuthContext';
+import { toast } from 'react-hot-toast';
 import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/react';
+import styles from '../../auth/styles/auth.module.css';
 
-export const dynamic = 'auto';
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+}
 
-export default function LoginForm() {
-
-  const { data: session } = useSession();
+export default function SignupForm() {
+  const { login } = useAuth();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<Partial<FormData>>({});
 
-  const emailRef: any = useRef();
-  const passRef: any = useRef();
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passRef = useRef<HTMLInputElement>(null);
 
-  const doApi = async (e: any) => {
+  const validateForm = (): boolean => {
+    const newErrors: Partial<FormData> = {};
+    let isValid = true;
+
+    if (!nameRef.current?.value || nameRef.current.value.length < 2) {
+      newErrors.name = 'שם חייב להכיל לפחות 2 תווים';
+      isValid = false;
+    }
+
+    if (!emailRef.current?.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailRef.current.value)) {
+      newErrors.email = 'כתובת אימייל לא תקינה';
+      isValid = false;
+    }
+
+    if (!passRef.current?.value || passRef.current.value.length < 6) {
+      newErrors.password = 'סיסמה חייבת להכיל לפחות 6 תווים';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
 
-    const email: any = emailRef.current.value;
-    const password: any = passRef.current.value;
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: nameRef.current?.value,
+          email: emailRef.current?.value,
+          password: passRef.current?.value
+        })
+      });
 
-    const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login`, {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: {
-        'Content-Type': 'application/json'
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.message || 'שגיאה בהרשמה');
       }
-    });
-    const data = await resp.json();
-    console.log(data);
-    router.push('/');
-  }
+
+      login(data.token, data.user);
+      toast.success('נרשמת בהצלחה!');
+      router.push('/profile');
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className='login-container'>
-      <div className='login-form bg-light shadow p-5 rounded'>
-        {session ? (
-          <h2 className='text-center mb-2'>ברוכים השבים! {session.user?.name}</h2>
-        ) : (
-          <h2 className='text-center mb-2'>ברוכים השבים!</h2>
-        )
-        }
-        <p className='text-center mb-4'>אנא הכנס את פרטיך</p>
-        <form onSubmit={doApi}>
-          <div className='mb-3'>
-            <label className='form-label'>מייל</label>
-            <input ref={emailRef} className='form-control' type='email' placeholder='הכנס שם...' required />
+    <div className={styles.authContainer}>
+      <div className={styles.authForm}>
+        <h2 className={styles.authTitle}>הרשמה</h2>
+        <form onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
+            <label htmlFor="name" className={styles.label}>שם מלא</label>
+            <input
+              id="name"
+              ref={nameRef}
+              type="text"
+              className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
+              placeholder="הכנס שם מלא"
+            />
+            {errors.name && <span className={styles.errorText}>{errors.name}</span>}
           </div>
-          <div className='mb-3'>
-            <label className='form-label'>סיסמא</label>
-            <input ref={passRef} className='form-control' type='password' placeholder='סיסמא...' required />
+
+          <div className={styles.formGroup}>
+            <label htmlFor="email" className={styles.label}>אימייל</label>
+            <input
+              id="email"
+              ref={emailRef}
+              type="email"
+              className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+              placeholder="name@example.com"
+            />
+            {errors.email && <span className={styles.errorText}>{errors.email}</span>}
           </div>
-          <div className='text-end mb-3'>
-            <Link href='#' className='text-decoration-none'>שכחת סיסמא?</Link>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="password" className={styles.label}>סיסמה</label>
+            <input
+              id="password"
+              ref={passRef}
+              type="password"
+              className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
+              placeholder="הכנס סיסמה"
+            />
+            {errors.password && <span className={styles.errorText}>{errors.password}</span>}
           </div>
-          <button className='loginBtn btn btn-primary w-100 mb-3' type='submit'>הכנס</button>
-          <button className='btn btn-outline-dark w-100 block' onClick={() => {
-            signOut()
-          }}>
-            <i className="bi bi-google"></i>
-            <p className='m-0'>התנתק מחשבון גוגל</p>
+
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={isLoading}
+          >
+            {isLoading ? 'מתבצעת הרשמה...' : 'הרשמה'}
           </button>
         </form>
-        <p className='text-center mt-3'>
-          עדיין אין לך חשבון? <Link href='#' className='text-decoration-none'>הירשם בחינם</Link>
+
+        <p className={styles.authLink}>
+          יש לך כבר חשבון?{' '}
+          <Link href="/auth/login">התחבר כאן</Link>
         </p>
       </div>
     </div>

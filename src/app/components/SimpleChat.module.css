@@ -1,0 +1,87 @@
+/* src/components/SimpleChat.module.css */
+.chatContainer {
+  max-width: 800px;
+  margin: 2rem auto;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  direction: rtl;
+}
+
+.messages {
+  height: 500px;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.message {
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border-radius: 12px;
+  max-width: 80%;
+  line-height: 1.5;
+}
+
+.bot {
+  background: #f0f7ff;
+  margin-right: auto;
+}
+
+.user {
+  background: #e3f2fd;
+  margin-left: auto;
+  text-align: right;
+}
+
+.inputForm {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  gap: 0.5rem;
+}
+
+.inputForm input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.inputForm button {
+  padding: 0.75rem 1.5rem;
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.inputForm button:disabled {
+  background: #ccc;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1rem;
+}
+
+.loading span {
+  width: 8px;
+  height: 8px;
+  background: #1976d2;
+  border-radius: 50%;
+  animation: bounce 1.4s infinite;
+}
+
+.loading span:nth-child(2) { animation-delay: 0.2s; }
+.loading span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}

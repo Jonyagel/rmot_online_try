@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useRef, useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, CloseButton, Form, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -21,6 +21,7 @@ export default function AddQuestion(props: any) {
     const [showModal, setShowModal] = useState(false);
     const [fileName, setFileName] = useState("");
     const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+    const [anonymous, setAnonymous] = useState(false);
 
     const notify = () => toast.error("אתה צריך להירשם", {
         position: 'top-left',
@@ -38,7 +39,7 @@ export default function AddQuestion(props: any) {
         try {
             const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forum`, {
                 method: 'POST',
-                body: JSON.stringify({ topic, title, description, numOfComments, fileName }),
+                body: JSON.stringify({ topic, title, description, numOfComments, anonymous }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -67,7 +68,6 @@ export default function AddQuestion(props: any) {
                 const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkLogin`);
                 const data = await resp.json();
                 if (data.status === 401) {
-                    // console.log(session);
                     notify();
                     setSignIn(false);
                 } else if (data.status === 200) {
@@ -79,25 +79,6 @@ export default function AddQuestion(props: any) {
             }
         }
     }
-
-    const handleUploadTwo = (result: any) => {
-        if (result.event === 'success') {
-            const publicId = result.info.public_id;
-            const fileName = publicId.split('/').pop();
-            setFileName(fileName);
-            setUploadedImageUrl(result.info.secure_url); // שמירת ה-URL של התמונה שהועלתה
-            toast.success('התמונה הועלתה בהצלחה');
-        }
-    };
-
-    const handleUpload = (result: any) => {
-        if (result.event === 'success') {
-            const publicId = result.info.public_id;
-            const fileName = publicId.split('/').pop();
-            setFileName(fileName);
-            toast.success('התמונה הועלתה בהצלחה');
-        }
-    };
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -111,12 +92,10 @@ export default function AddQuestion(props: any) {
                 הוסף פורום
             </button>
             <Modal show={showModal} onHide={handleClose} centered className='addForumModal'>
-                <Modal.Header className=" bg-primary text-white">
-                    <div className="w-100 d-flex justify-content-between align-items-start">
-                        <Modal.Title>הוספת שאלה חדשה</Modal.Title>
-                        <Button variant="link" onClick={handleClose} className="close-button p-0">
-                            <i className="bi bi-x-lg"></i>
-                        </Button>
+                <Modal.Header className="">
+                    <div className="w-100 d-flex justify-content-between align-items-center">
+                        <Modal.Title>הוספת פורום</Modal.Title>                     
+                        <CloseButton className='closeModal' onClick={handleClose} />
                     </div>
                 </Modal.Header>
                 <Modal.Body>
@@ -138,55 +117,33 @@ export default function AddQuestion(props: any) {
                             <Form.Label>תוכן</Form.Label>
                             <Form.Control ref={descriptionRef} as="textarea" rows={3} required />
                         </Form.Group>
+                        <div></div>
+                        <Form.Group className="mb-3">
+                            <div className="d-flex align-items-center">
+                                <Form.Check
+                                    type="checkbox"
+                                    label="העלה כאנונימי"
+                                    id="anonymousCheck"
+                                    onChange={(e) => setAnonymous(e.target.checked)}
+                                />
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={
+                                        <Tooltip className="custom-tooltip">
+                                            <p> השם שלך יוצג כאנונימי למשתמשים אחרים, אך ישמר במערכת</p>
+                                        </Tooltip>
+                                    }
+                                >
+                                    <i className="bi bi-info-circle ms-2" style={{ cursor: 'pointer' }}></i>
+                                </OverlayTrigger>
+                            </div>
+                        </Form.Group>
                         <div className="d-flex justify-content-between align-items-center">
-                            {/* <Form.Group className="mb-3">
-                                <Form.Label>תמונה</Form.Label>
-                                <div className="d-flex align-items-center">
-                                    <CldUploadButton
-                                        className='btn btn-outline-secondary me-2'
-                                        uploadPreset="my_upload_test"
-                                        onSuccess={handleUploadTwo}
-                                        onError={(error) => {
-                                            console.error('Upload error:', error);
-                                            toast.error('העלאה נכשלה. ייתכן שהקובץ גדול מדי או בפורמט לא נתמך.');
-                                        }}
-                                        options={{
-                                            sources: ['local'],
-                                            maxFileSize: 5000000,
-                                            maxImageWidth: 2000,
-                                            maxImageHeight: 2000,
-                                            clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp'],
-                                        }}
-                                    >
-                                        <i className="bi bi-image me-2"></i>
-                                        העלאת תמונה
-                                    </CldUploadButton>
-                                    {uploadedImageUrl && (
-                                        <div className="position-relative ms-2">
-                                            <img
-                                                src={uploadedImageUrl}
-                                                alt="תמונה שהועלתה"
-                                                className="img-thumbnail"
-                                                style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                                            />
-                                            <Button
-                                                variant="danger"
-                                                size="sm"
-                                                className="position-absolute top-0 start-100 translate-middle rounded-circle p-1"
-                                                onClick={() => {
-                                                    setUploadedImageUrl("");
-                                                    setFileName("");
-                                                }}
-                                            >
-                                                <i className="bi bi-x-lg"></i>
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-                            </Form.Group> */}
-                            <div className='pt-3'>
-                                <Button type="submit" variant="primary">
-                                    <i className="bi bi-send me-2"></i>
+                            <div className='pt-3 ms-auto'>
+                                <Button onClick={handleClose} className="me-2 border bg-light text-black py-2 px-3">
+                                    ביטול
+                                </Button>
+                                <Button type="submit" className='py-2 px-3'>
                                     שלח
                                 </Button>
                             </div>

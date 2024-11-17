@@ -9,7 +9,8 @@ import { Icon } from "leaflet";
 import { CldImage } from 'next-cloudinary';
 
 const myIcon = new Icon({
-    iconUrl: "/images/icon-logo/מיקום.png",
+    // iconUrl: "/images/icon-logo/מיקום.png",
+    iconUrl: "/images/geo-alt-fill.svg",
     iconSize: [40, 40],
     iconAnchor: [20, 45],
     popupAnchor: [0, -40],

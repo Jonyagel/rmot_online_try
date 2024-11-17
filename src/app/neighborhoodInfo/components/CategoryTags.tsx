@@ -13,7 +13,8 @@ interface CategoryTagsProps {
   categories: Category[];
   activeSubcategory: string;
   setActiveSubcategory: (category: string) => void;
-  doApi: (category: string | null) => void;
+  doApi: (endpoint: string, category: string | null) => void;
+  activeTab:string;
 }
 
 const CategoryTags: React.FC<CategoryTagsProps> = ({
@@ -21,6 +22,7 @@ const CategoryTags: React.FC<CategoryTagsProps> = ({
   activeSubcategory,
   setActiveSubcategory,
   doApi,
+  activeTab,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: 767 }); // מזהה אם המכשיר הוא טלפון נייד
@@ -30,10 +32,10 @@ const CategoryTags: React.FC<CategoryTagsProps> = ({
   const handleCategoryClick = (categoryName: string) => {
     if (activeSubcategory === categoryName) {
       setActiveSubcategory('');
-      doApi(null);
+      doApi(activeTab,null);
     } else {
       setActiveSubcategory(categoryName);
-      doApi(categoryName);
+      doApi(activeTab,categoryName);
     }
   };
 

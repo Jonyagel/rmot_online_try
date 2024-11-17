@@ -1,88 +1,182 @@
 "use client"
 
 import React, { useRef, useState } from 'react';
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { useAppContext } from '../../context/appContext';
-import './signup.css';
 import Link from 'next/link';
-
-export const dynamic = 'auto';
+import { toast } from 'react-hot-toast';
+import './signup.css';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Signup() {
-
   const { data: session } = useSession();
-
   const router = useRouter();
   const { setIsLogin } = useAppContext();
+  const { login } = useAuth();
 
-  const nameRef: any = useRef();
-  const emailRef: any = useRef();
-  const passRef: any = useRef();
-  const [googleUser, setGoogleUser] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
 
-  const doApi = async (e: any) => {
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passRef = useRef<HTMLInputElement>(null);
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = { name: '', email: '', password: '' };
+
+    if (!nameRef.current?.value || nameRef.current.value.length < 2) {
+      newErrors.name = 'שם חייב להכיל לפחות 2 תווים';
+      isValid = false;
+    }
+
+    if (!emailRef.current?.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailRef.current.value)) {
+      newErrors.email = 'כתובת אימייל לא תקינה';
+      isValid = false;
+    }
+
+    if (!passRef.current?.value || passRef.current.value.length < 6) {
+      newErrors.password = 'סיסמה חייבת להכיל לפחות 6 תווים';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const doApi = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
+    try {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
+        method: 'POST',
+        body: JSON.stringify({
+          name: nameRef.current?.value,
+          email: emailRef.current?.value,
+          password: passRef.current?.value
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-    const name = nameRef.current.value;
-    const email = emailRef.current.value;
-    const password = passRef.current.value;
-
-
-    const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
-      method: 'POST',
-      body: JSON.stringify({ name, email, password }),
-      headers: {
-        'Content-Type': 'application/json'
+      const data = await resp.json();
+      
+      if (!resp.ok) {
+        throw new Error(data.message || 'שגיאה בהרשמה');
       }
-    });
-    const data = await resp.json();
-    console.log(data);
-    setIsLogin(true);
-    router.push('/');
-  }
+
+      login(data.token, data.user);
+      toast.success('נרשמת בהצלחה!');
+      router.push('/userArea');
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signIn("google", { callbackUrl: '/' });
+    } catch (error) {
+      toast.error('שגיאה בהתחברות עם Google');
+    }
+  };
 
   return (
-    <div className='signup-container'>
-      <div className='signup-form bg-light shadow p-5 rounded'>
-        <h2 className='text-center mb-2'>הצטרף אלינו היום</h2>
-        <p className='text-center mb-4'>אנא הכנס את פרטיך כדי ליצור חשבון</p>
-        <form onSubmit={doApi}>
-          <div className='mb-3'>
-            <label className='form-label'>שם</label>
-            <input ref={nameRef} className='form-control' type='text' placeholder='הכנס שם...' required />
+    <div className="signup-container min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="signup-form max-w-md w-full bg-white shadow-xl rounded-xl p-8">
+        <h2 className="text-center text-3xl font-bold mb-2">הצטרף אלינו היום</h2>
+        <p className="text-center text-gray-600 mb-6">אנא הכנס את פרטיך כדי ליצור חשבון</p>
+        
+        <form onSubmit={doApi} className="space-y-6">
+          <div>
+            <label className="block text-gray-700 font-bold mb-2">שם מלא</label>
+            <input
+              ref={nameRef}
+              className={`form-control ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+              type="text"
+              placeholder="הכנס שם מלא..."
+              required
+            />
+            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
           </div>
-          <div className='mb-3'>
-            <label className='form-label'>מייל</label>
-            <input ref={emailRef} className='form-control' type='email' placeholder='הכנס אימייל...' required />
+
+          <div>
+            <label className="block text-gray-700 font-bold mb-2">אימייל</label>
+            <input
+              ref={emailRef}
+              className={`form-control ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+              type="email"
+              placeholder="name@example.com"
+              required
+            />
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
           </div>
-          <div className='mb-3'>
-            <label className='form-label'>סיסמא</label>
-            <input ref={passRef} className='form-control' type='password' placeholder='סיסמא...' required />
+
+          <div>
+            <label className="block text-gray-700 font-bold mb-2">סיסמה</label>
+            <div className="relative">
+              <input
+                ref={passRef}
+                className={`form-control ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                type={showPassword ? "text" : "password"}
+                placeholder="הכנס סיסמה..."
+                required
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 px-3 flex items-center"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                <i className={`bi bi-eye${showPassword ? '-slash' : ''}`}></i>
+              </button>
+            </div>
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
           </div>
-          <button className='signupBtn btn btn-primary w-100 mb-3' type='submit'>הירשם</button>
-          <button className='btn btn-outline-dark w-100 block' type='button' onClick={() => {
-            signIn("google")
-          }}>
-            <i className="bi bi-google"></i>
-            <p className='m-0'>הירשם עם גוגל</p>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full btn btn-primary py-3 font-bold relative"
+          >
+            {isLoading ? (
+              <span className="flex items-center justify-center">
+                <span className="spinner-border spinner-border-sm me-2"></span>
+                טוען...
+              </span>
+            ) : (
+              'הרשמה'
+            )}
           </button>
-          {/* {session ? (
-            <button
-              onClick={() => signOut()}
-              className="border border-black rounded-lg bg-red-400 px-5 py-1"
-            >
-              Sign Out
-            </button>
-          ) : (
-            <div></div>
-          )} */}
+
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            className="w-full btn btn-outline-dark py-3 flex items-center justify-center gap-2"
+          >
+            <i className="bi bi-google"></i>
+            הירשם עם Google
+          </button>
         </form>
-        <p className='text-center mt-3'>
-          כבר יש לך חשבון? <Link href='/login' className='text-decoration-none'>הכנס פה</Link>
+
+        <p className="text-center mt-6">
+          כבר יש לך חשבון?{' '}
+          <Link href="/login" className="text-blue-600 hover:text-blue-800 font-medium">
+            התחבר כאן
+          </Link>
         </p>
       </div>
     </div>
   );
 }
-

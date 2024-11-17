@@ -1,7 +1,5 @@
 // "use client"
-
 import React, { useState } from 'react';
-import ForumInComment from './components/forumInComment';
 import CommentById from './components/commentById';
 
 
@@ -25,7 +23,6 @@ const doApi = async () => {
     const resp = await fetch(url, { cache: 'no-store' });
     const data = await resp.json();
     const ForumAr = data;
-    // setDataForum(ForumAr);
     console.log(data);
     return ForumAr;
 

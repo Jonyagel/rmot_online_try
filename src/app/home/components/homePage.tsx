@@ -5,12 +5,12 @@ import { motion } from 'framer-motion';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination, Navigation, EffectCube, EffectFlip, EffectFade } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import Lottie from './lottie';
-import infoLottie from "@/public/images/icon-logo/מידע לוטי 3.json";
+import infoLottie from "@/public/images/icon-logo/מידע לוטי.json";
 import forumLottie from "@/public/images/icon-logo/פורומים.json";
 import familyLottie from "@/public/images/icon-logo/קהילה.json";
 import nadlanLottie from "@/public/images/icon-logo/נדלן.json";
@@ -157,14 +157,6 @@ const HomePage: React.FC = () => {
         }
     };
 
-    const heroImages = [
-        'neighborhood1_wcwkgs',
-        'neighborhood2_irtkau',
-        'sport_m04xaa',
-        'work_street_mo1w1b',
-        'school_v0elcf',
-    ];
-
     const [isAnimationVisible, setIsAnimationVisible] = useState(false);
     const animationRef = useRef<HTMLDivElement | null>(null);
 
@@ -196,7 +188,7 @@ const HomePage: React.FC = () => {
                 <div className="video-container">
                     <video
                         ref={videoRef}
-                        src="/videos/videoHome1.webm"
+                        src="/videos/videoHome1low.mp4"
                         autoPlay
                         loop
                         muted
@@ -247,7 +239,7 @@ const HomePage: React.FC = () => {
                     <Col lg={8}>
                         <div className='main-content-container rounded-t mx-auto'>
                             <div className='main-content'>
-                                <section className="info-cards-section pb-0 rounded mb-5 mx-auto" style={{ width: '85%' }}>
+                                <section className="info-cards-section pb-0 rounded mx-auto" style={{ width: '85%' }}>
                                     <Swiper
                                         slidesPerView={3}
                                         spaceBetween={20}
@@ -287,7 +279,7 @@ const HomePage: React.FC = () => {
                                         ))}
                                     </Swiper>
                                 </section>
-                                <div className="mobile-ad-space ad-space-2 d-md-none my-2">
+                                <div className="d-md-none mb-4">
                                     <img src='/images/saleAds.gif' alt='ads-phone' className='rounded' />
                                 </div>
                                 <section className="statistics-section">
@@ -302,7 +294,7 @@ const HomePage: React.FC = () => {
                                                 <div
                                                     className="neighborhood-info rounded"
                                                 >
-                                                    <h4 className='font-bold text-2xl'>{neighborhoodInfo[rowIndex].title}</h4>
+                                                    <h2 className='font-bold text-2xl'>{neighborhoodInfo[rowIndex].title}</h2>
                                                     <p>{neighborhoodInfo[rowIndex].description}</p>
                                                 </div>
                                             )}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { businesses } from '../data/businesses'; // ייבוא הנתונים
 import './SearchSuggestions.css'
 import { FaPlus } from 'react-icons/fa';
 
