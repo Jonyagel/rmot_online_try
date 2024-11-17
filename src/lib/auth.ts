@@ -129,14 +129,14 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user?: ExtendedUser }) {
+    async jwt({ token, user }: { token: any; user?: any }) {
       if (user) {
         token.role = user.role;
         token.stats = user.stats;
       }
       return token;
     },
-    async session({ session, token }: { session: ExtendedSession; token: JWT }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (session.user) {
         session.user.role = token.role as string;
         session.user.stats = token.stats as UserStats;
