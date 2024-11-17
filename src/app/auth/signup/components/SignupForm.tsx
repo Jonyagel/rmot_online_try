@@ -102,27 +102,8 @@ export default function SignupForm() {
     }
   };
 
-  const handleGoogleSignIn = async () => {
-    try {
-      setIsGoogleLoading(true);
-      const result = await signIn('google', {
-        callbackUrl: '/profile',
-        redirect: false,
-      });
-      
-      if (result?.error) {
-        throw new Error(result.error);
-      }
-
-      if (result?.ok) {
-        router.push('/profile');
-        toast.success('התחברת בהצלחה!');
-      }
-    } catch (error: any) {
-      toast.error('שגיאה בהתחברות עם Google');
-    } finally {
-      setIsGoogleLoading(false);
-    }
+  const handleGoogleSignIn = () => {
+    window.location.href = '/api/auth/signin/google';
   };
 
   return (
@@ -191,4 +172,5 @@ export default function SignupForm() {
       </div>
     </div>
   );
+}
 }
