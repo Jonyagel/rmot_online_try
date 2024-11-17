@@ -1,7 +1,7 @@
 // src/app/auth/reset-password/page.tsx
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import styles from '../styles/auth.module.css';
@@ -9,7 +9,7 @@ import styles from '../styles/auth.module.css';
 // סימון הדף כדינמי
 export const dynamic = 'force-dynamic';
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -17,11 +17,12 @@ export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
-  if (!token) {
-    router.push('/auth/login');
-    toast.error('קישור לא תקין');
-    return null;
-  }
+  useEffect(() => {
+    if (!token) {
+      router.push('/auth/login');
+      toast.error('קישור לא תקין');
+    }
+  }, [token, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,9 +38,8 @@ export default function ResetPasswordPage() {
     }
 
     setIsLoading(true);
-    
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/reset-password`, {
+      const response = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, password }),
@@ -60,50 +60,52 @@ export default function ResetPasswordPage() {
     }
   };
 
+  if (!token) return null;
+
   return (
     <div className={styles.authContainer}>
       <div className={styles.authForm}>
-        <h2 className={styles.authTitle}>איפוס סיסמה</h2>
-        <p className={styles.authDescription}>
-          אנא הזן את הסיסמה החדשה שלך
-        </p>
-        
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <h2>איפוס סיסמה</h2>
+        <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
-            <label className={styles.label}>סיסמה חדשה</label>
+            <label>סיסמה חדשה</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={styles.input}
-              placeholder="הכנס סיסמה חדשה..."
               required
               minLength={6}
+              placeholder="הכנס סיסמה חדשה"
             />
           </div>
-
           <div className={styles.formGroup}>
-            <label className={styles.label}>אימות סיסמה</label>
+            <label>אימות סיסמה</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className={styles.input}
-              placeholder="הכנס שוב את הסיסמה..."
               required
               minLength={6}
+              placeholder="הכנס שוב את הסיסמה"
             />
           </div>
-
           <button
             type="submit"
-            disabled={isLoading}
             className={styles.submitButton}
+            disabled={isLoading}
           >
-            {isLoading ? 'מאפס...' : 'איפוס סיסמה'}
+            {isLoading ? 'מאפס...' : 'אפס סיסמה'}
           </button>
         </form>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>טוען...</div>}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
