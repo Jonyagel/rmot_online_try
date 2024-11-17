@@ -1,0 +1,238 @@
+/* Update CSS variables for a minimalist palette */
+:root {
+  /* Updated CSS variables to match the neighborhoodInfo style */
+  --primary-color: #4caf50;
+  --background-color: #f9f9f9;
+  --text-color: #222222;
+  --border-radius: 4px;
+  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ad-manager-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+  }
+  
+  .ad-manager-title {
+    color: var(--primary-color);
+    font-size: 1.75rem;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .ad-manager-message {
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+    border-radius: 12px;
+    text-align: center;
+    background: rgba(25, 118, 210, 0.1);
+    color: #1976d2;
+    font-weight: 500;
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  /* Filter Section */
+  .filter-container {
+    display: flex;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  
+  .filter-select,
+  .filter-input {
+    padding: 0.875rem 1.25rem;
+    border: 1px solid #cccccc;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    min-width: 220px;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+  }
+  
+  .filter-select:hover,
+  .filter-input:hover {
+    border-color: #90cdf4;
+  }
+  
+  .filter-select:focus,
+  .filter-input:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+  }
+  
+  /* Form Styling */
+  .ad-form,
+  .edit-ad-form {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    margin-bottom: 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .ad-input {
+    padding: 0.875rem 1.25rem;
+    border: 1px solid #cccccc;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+  }
+  
+  .ad-input:hover {
+    border-color: #90cdf4;
+  }
+  
+  .ad-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2);
+  }
+  
+  .ad-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.875rem 1.75rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.5px;
+  }
+  
+  .ad-button:hover {
+    background-color: #1a242f;
+  }
+  
+  .ad-button:active {
+    transform: translateY(0);
+  }
+  
+  /* Ad List Styling */
+  .ad-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+  
+  .ad-list-item {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: transform 0.2s ease;
+    border: 1px solid #e2e8f0;
+  }
+  
+  .ad-list-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ad-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .ad-details {
+    padding: 1.75rem;
+  }
+  
+  .ad-details p {
+    margin: 0.75rem 0;
+    color: #4a5568;
+    font-size: 0.95rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .ad-actions {
+    padding: 1.25rem;
+    background: #f8fafc;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  /* Edit Form Specific */
+  .edit-ad-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    z-index: 1000;
+    width: 90%;
+    max-width: 700px;
+    backdrop-filter: none;
+  }
+  
+  .edit-ad-form h3 {
+    margin-bottom: 2rem;
+    color: #1a365d;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  
+  /* Animations */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .ad-manager-container {
+      padding: 1rem;
+      margin: 1rem;
+    }
+  
+    .filter-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .ad-form,
+    .edit-ad-form {
+      grid-template-columns: 1fr;
+      padding: 1.5rem;
+    }
+  
+    .ad-list {
+      grid-template-columns: 1fr;
+    }
+    
+    .ad-manager-title {
+      font-size: 1.5rem;
+    }
+  }
