@@ -12,32 +12,7 @@ const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
 
-interface UserStats {
-  posts: number;
-  comments: number;
-  likes: number;
-  activityPoints: number;
-}
 
-// Define base user interface without role
-interface BaseUser {
-  id: string;
-  email?: string | null;
-  name?: string | null;
-  image?: string | null;
-}
-
-// Define our extended user type
-interface ExtendedUser extends BaseUser {
-  role: string;
-  stats: UserStats;
-}
-
-interface ExtendedSession extends Session {
-  user?: ExtendedUser;
-}
-
-// Create JWT token for password reset
 export function createResetToken(userId: string): string {
   return jwt.sign(
     { userId, purpose: 'password-reset' },
