@@ -19,13 +19,18 @@ interface UserStats {
   activityPoints: number;
 }
 
-interface ExtendedUser extends Omit<User, 'role'> {
+// Define base user interface without role
+interface BaseUser {
+  id: string;
+  email?: string | null;
+  name?: string | null;
+  image?: string | null;
+}
+
+// Define our extended user type
+interface ExtendedUser extends BaseUser {
   role: string;
   stats: UserStats;
-  id?: string;
-  email?: string | null;
-  image?: string | null;
-  name?: string | null;
 }
 
 interface ExtendedSession extends Session {
@@ -42,7 +47,7 @@ export function createResetToken(userId: string): string {
 }
 
 // Verify reset token
-export function verifyResetToken(token: string) {
+export function verifyResetToken(token: string): string {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as {
       userId: string;
@@ -116,119 +121,27 @@ export async function sendResetEmail(email: string, token: string) {
   }
 }
 
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-
-  secret: process.env.NEXTAUTH_SECRET,
-
-  session: {
-    strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-
-  pages: {
-    signIn: '/auth/login',
-    signOut: '/auth/signout',
-    error: '/auth/error',
-  },
-
   callbacks: {
-    async signIn({ user, account, profile }) {
-      if (account?.provider === "google") {
-        try {
-          await connectDb();
-
-          const existingUser = await UserModel.findOne({ email: user.email });
-
-          if (!existingUser) {
-            // יצירת משתמש חדש
-            const newUser = await UserModel.create({
-              email: user.email,
-              name: user.name,
-              image: user.image,
-              provider: account.provider,
-              role: 'user',
-              favorites: [],
-              stats: {
-                posts: 0,
-                comments: 0,
-                likes: 0,
-                activityPoints: 0
-              },
-              lastLogin: new Date(),
-            });
-            return true;
-          }
-
-          // עדכון פרטי התחברות אחרונה
-          await UserModel.findByIdAndUpdate(existingUser._id, {
-            lastLogin: new Date(),
-            image: user.image, // עדכון תמונת פרופיל במקרה של שינוי
-          });
-
-          return true;
-        } catch (error) {
-          console.error('Error in signIn callback:', error);
-          return false;
-        }
-      }
-      return true;
-    },
-
-    async session({ session, token }): Promise<ExtendedSession> {
-      try {
-        await connectDb();
-        const user = await UserModel.findOne({ email: session?.user?.email });
-
-        if (user && session.user) {
-          session.user = {
-            ...session.user,
-            id: user._id.toString(),
-            role: user.role as string,
-            favorites: user.favorites,
-            stats: {
-              posts: user.stats.posts,
-              comments: user.stats.comments,
-              likes: user.stats.likes,
-              activityPoints: user.stats.activityPoints,
-            },
-          };
-        }
-
-        return session;
-      } catch (error) {
-        console.error('Error in session callback:', error);
-        return session;
-      }
-    },
-
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }: { token: JWT; user?: ExtendedUser }) {
       if (user) {
         token.role = user.role;
-        token.id = user.id;
+        token.stats = user.stats;
       }
       return token;
     },
-  },
-
-  events: {
-    async signOut(message) {
-      try {
-        await connectDb();
-        if (message?.token?.email) {
-          await UserModel.findOneAndUpdate(
-            { email: message.token.email },
-            { lastLogout: new Date() }
-          );
-        }
-      } catch (error) {
-        console.error('Error in signOut event:', error);
+    async session({ session, token }: { session: ExtendedSession; token: JWT }) {
+      if (session.user) {
+        session.user.role = token.role as string;
+        session.user.stats = token.stats as UserStats;
       }
-    },
-  },
+      return session;
+    }
+  }
 };
