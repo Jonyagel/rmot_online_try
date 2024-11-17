@@ -10,12 +10,10 @@ const forumSchema = new mongoose.Schema({
     numOfComments:{ 
        type: Number, default:0
     },
-    fileName:{ 
-       type: String, default:""
-    },
     topic:{
         type:String, default:"---"
-      }
+      },
+      anonymous: Boolean,
 }, { timestamps: true })
 
 export const ForumModel = mongoose.models["forums"] || mongoose.model("forums", forumSchema);

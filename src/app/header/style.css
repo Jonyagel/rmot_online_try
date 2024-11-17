@@ -142,16 +142,6 @@
     transform: rotate(45deg);
 }
 
-/* .marquee-container {
-    background-color: #000000;
-    padding: 0.3rem 0;
-}
-
-.marquee {
-    color: #ffffff;
-    font-size: 0.85rem;
-} */
-
 .marquee-container {
     background-color: #000000;
     padding: 5px 0;
@@ -169,13 +159,9 @@
   font-weight: 600;
 }
 
-/* .announcement-text {
-    font-size: 16px;
-} */
 
 .announcement-separator {
     margin-right: 20px;
-    /* color: #999; */
 }
 
 @media (max-width: 768px) {

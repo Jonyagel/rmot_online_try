@@ -1,0 +1,234 @@
+.authForm {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .inputGroup {
+    margin-bottom: 1rem;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+  }
+  
+  .input:focus {
+    outline: none;
+    border-color: #00a35b;
+    box-shadow: 0 0 0 2px rgba(0, 163, 91, 0.1);
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: 0.75rem;
+    background: #00a35b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .submitButton:hover:not(:disabled) {
+    background: #008f4e;
+    transform: translateY(-2px);
+  }
+  
+  .submitButton:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+
+/* src/app/auth/styles/auth.module.css */
+.authContainer {
+  background-image: url('/images/ירוק ללמעלה.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.authForm {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 2.5rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.authTitle {
+  color: #00a35b;
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.input {
+  width: 100%;
+  padding: 0.875rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #00a35b;
+  box-shadow: 0 0 0 3px rgba(0, 163, 91, 0.1);
+}
+
+.inputError {
+  border-color: #dc2626;
+}
+
+.errorText {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem;
+  background: #00a35b;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #008f4e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 163, 91, 0.2);
+}
+
+.submitButton:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.googleButton {
+  width: 100%;
+  padding: 1rem;
+  background: white;
+  color: #333;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.googleButton:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  color: #64748b;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.divider span {
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}
+
+.authLinks {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #64748b;
+}
+
+.authLinks a {
+  color: #00a35b;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.authLinks a:hover {
+  color: #008f4e;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .authContainer {
+    padding: 1rem;
+  }
+
+  .authForm {
+    padding: 2rem;
+  }
+
+  .authTitle {
+    font-size: 1.75rem;
+  }
+}
+
+.forgotPassword {
+  display: block;
+  text-align: left;
+  margin-top: 0.5rem;
+  color: #00a35b;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.forgotPassword:hover {
+  text-decoration: underline;
+}
+
+.authDescription {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+}

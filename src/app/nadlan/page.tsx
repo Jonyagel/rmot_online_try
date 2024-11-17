@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import emailjs from '@emailjs/browser';
-import './style.css'
+import './nadlanStyle.css'
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBed, FaBuilding, FaCalendarAlt, FaCar, FaCompass, FaHome, FaPlus, FaRulerCombined, FaSearch, FaTimes } from 'react-icons/fa';
 

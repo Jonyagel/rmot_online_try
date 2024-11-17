@@ -11,9 +11,9 @@ export default function CronTestPage() {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch('/api/cronTest', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/cronTest`, {
                 headers: {
-                    'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`
+                    'Authorization': `Bearer ${process.env.CRON_SECRET}`
                 }
             });
             if (!response.ok) {

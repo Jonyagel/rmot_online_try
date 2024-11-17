@@ -1,6 +1,6 @@
 :root {
-  --primary-color: #0d6efd ;
-  --secondary-color: #0d6dfd26;
+  --primary-color: #00a35b ;
+  --secondary-color: #d2f0e4;
   --background-color: #E5DDD5;
   --own-message-color: #DCF8C6;
   --other-message-color: #FFFFFF;
@@ -281,7 +281,7 @@
   margin-top: 0;
   margin-bottom: 0.5rem;
   font-size: 1rem;
-  color: var(--primary-color);
+  color: black;
 }
 
 .user-list ul {
@@ -293,4 +293,5 @@
 .user-list li {
   padding: 0.3rem 0;
   font-size: 0.9rem;
+  color: black;
 }

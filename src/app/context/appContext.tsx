@@ -7,6 +7,8 @@ interface AppContextType {
   setComments_ar: React.Dispatch<React.SetStateAction<any[]>>;
   isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  openModalFromChat: boolean;
+  setOpenModalFromChat: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -18,9 +20,10 @@ interface ContextProviderProps {
 export function ContextProvider({ children }: ContextProviderProps) {
   const [comments_ar, setComments_ar] = useState<any[]>([]);
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [openModalFromChat, setOpenModalFromChat] = useState<boolean>(false);
 
   return (
-    <AppContext.Provider value={{ comments_ar, setComments_ar, isLogin, setIsLogin }}>
+    <AppContext.Provider value={{ comments_ar, setComments_ar, isLogin, setIsLogin, openModalFromChat ,setOpenModalFromChat }}>
       {children}
     </AppContext.Provider>
   );

@@ -9,17 +9,19 @@ import Footer from "./footer/page";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import SessionWrapper from "@/components/SessionWrapper";
 import { GoogleAnalytics } from '@next/third-parties/google'
-import WeatherWidget from "./components/weatherWidget";
 import { ContextProvider } from './context/appContext';
-// import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import FooterNav from "./components/footerNav";
+import { Toaster } from "react-hot-toast";
+import { AuthProvider } from './context/AuthContext';
+import ChatBot from './components/ChatBot/ChatBot';
+
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "קהילאפ",
-  description: "הבית לקהילה שלי",
+  title: "על המקום",
+  description: "על המקום היא פלטפורמה לקידום והכרת המקום בו אתם חיים וגרים. כאן תוכלו למצוא מידע על השכונה שלכם, על המקומות המעניינים בה, ועל האנשים שחיים בה.",
 };
 
 
@@ -53,18 +55,19 @@ export default function RootLayout({
     <SessionWrapper>
       <html lang="he" dir="rtl" className={assistantFont.className} >
         <body className={inter.className}>
-          <ContextProvider>
-            <Header />
-            {children}
-            <FooterNav />
-            {/* <WeatherWidget /> */}
-            <Footer />
-            <Analytics />
-            <SpeedInsights />
-            {/* <script src="./nagishli_beta.js"></script> */}
-            <script src="https://cdn.enable.co.il/licenses/enable-L29851bpdrqshwli-0824-64368/init.js"></script>
-          </ContextProvider>
-          {/* <ToastContainer position="top-right" autoClose={5000} /> */}
+            <ContextProvider>
+            <AuthProvider>
+            <Toaster position="top-center" />
+              <Header />
+              {children}
+              <FooterNav />
+              <Footer />
+              {/* <ChatBot /> */}
+              </AuthProvider>
+              <Analytics />
+              <SpeedInsights />
+              <script src="https://cdn.enable.co.il/licenses/enable-L29851bpdrqshwli-0824-64368/init.js"></script>
+            </ContextProvider>
         </body>
         <GoogleAnalytics gaId="G-7P3W0FCXJ2" />
       </html>

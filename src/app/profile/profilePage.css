@@ -1,0 +1,259 @@
+/* Additional styles for new components */
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.stat-card h3 {
+  color: #00a35b;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  color: #333;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #00a35b;
+}
+
+.notifications-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.timeline {
+  position: relative;
+  padding: 1rem;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #00a35b;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+} */
+
+/* profilePage.css */
+.ysp-profile-header {
+  background: linear-gradient(120deg, #00a35b 0%, #006e3d 100%);
+  padding: 3rem 2rem;
+  border-radius: 0 0 30px 30px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.ysp-profile-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, transparent 60%);
+}
+
+.ysp-header-inner {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ysp-avatar-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1.5rem;
+}
+
+.ysp-avatar-image {
+  border-radius: 50%;
+  border: 4px solid rgba(255,255,255,0.9);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.ysp-avatar-image:hover {
+  transform: scale(1.05);
+}
+
+.ysp-avatar-edit {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00a35b;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ysp-avatar-edit:hover {
+  transform: scale(1.1);
+  background: #00a35b;
+  color: white;
+}
+
+.ysp-user-name {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.ysp-user-email {
+  color: rgba(255,255,255,0.9);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.ysp-stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(255,255,255,0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+}
+
+.ysp-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ysp-stat-number {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.ysp-stat-label {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.9);
+}
+
+.ysp-tab-nav {
+  background: white;
+  margin: -25px auto 2rem;
+  padding: 0.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  position: relative;
+  max-width: 600px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.ysp-tab-link {
+  color: #555;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.ysp-tab-link:hover,
+.ysp-tab-link.active {
+  background: #00a35b;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,163,91,0.2);
+}
+
+.ysp-content-section {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  padding: 2rem;
+  min-height: 400px;
+  margin: 0 auto;
+  max-width: 1000px;
+}
+
+@media (max-width: 768px) {
+  .ysp-profile-header {
+    padding: 2rem 1rem;
+    border-radius: 0 0 20px 20px;
+  }
+  
+  .ysp-stats-bar {
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .ysp-tab-nav {
+    margin: -20px 1rem 1.5rem;
+    padding: 0.3rem;
+  }
+  
+  .ysp-tab-link {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}

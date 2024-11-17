@@ -3,8 +3,23 @@ import React from 'react';
 import Link from 'next/link';
 import { Container, Row, Col } from 'react-bootstrap';
 import './footer.css'
+import { useMemo } from 'react';
 
 const Footer = () => {
+  const quickLinks = useMemo(() => [
+    { href: "/forum", text: "פורומים" },
+    { href: "/nadlan", text: "נדל\"ן" },
+    { href: "/board", text: "גמח\"ים" },
+    { href: "/board", text: "אבידות ומציאות" },
+  ], []);
+
+  const communityServices = useMemo(() => [
+    { icon: "bi-building", text: "זמני תפילה" },
+    { icon: "bi-book", text: "שיעורי תורה" },
+    { icon: "bi-people", text: "התנדבות" },
+    { icon: "bi-calendar-event", text: "לוח אירועים" },
+  ], []);
+
   return (
     <footer className="bg-dark text-light p-3 pt-5 pb-3">
       <Container>
@@ -12,19 +27,23 @@ const Footer = () => {
           <Col md={3} className="mb-2">
             <h5 className="mb-3 fw-bold">ניווט מהיר</h5>
             <ul className="list-unstyled footer-links">
-              <li><Link href="/forum" className="text-light text-decoration-none">פורומים</Link></li>
-              <li><Link href="/nadlan" className="text-light text-decoration-none">נדל"ן</Link></li>
-              <li><Link href="/board" className="text-light text-decoration-none">גמח"ים</Link></li>
-              <li><Link href="/board" className="text-light text-decoration-none">אבידות ומציאות</Link></li>
+              {quickLinks.map(link => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-light text-decoration-none" aria-label={link.text}>
+                    {link.text}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </Col>
           <Col md={3} className="mb-2">
             <h5 className="mb-3 fw-bold">שירותים קהילתיים</h5>
             <ul className="list-unstyled footer-links">
-              <li><i className="bi bi-building me-2"></i>זמני תפילה</li>
-              <li><i className="bi bi-book me-2"></i>שיעורי תורה</li>
-              <li><i className="bi bi-people me-2"></i>התנדבות</li>
-              <li><i className="bi bi-calendar-event me-2"></i>לוח אירועים</li>
+              {communityServices.map(service => (
+                <li key={service.text}>
+                  <i className={`bi ${service.icon} me-2`}></i>{service.text}
+                </li>
+              ))}
             </ul>
           </Col>
           <Col md={3} className="mb-2">
@@ -36,9 +55,9 @@ const Footer = () => {
             <h5 className="mb-3 fw-bold">הצטרפו אלינו</h5>
             <p>הירשמו לניוזלטר שלנו לקבלת עדכונים שבועיים</p>
             <form>
-              <div className="input-group mb-3" style={{direction:"ltr"}}>
-                <input type="email" className="form-control" placeholder="אימייל" aria-label="אימייל" />
-                <button className="btn btn-primary" type="button">הרשמה</button>
+              <div className="input-group mb-3" style={{ direction: "ltr" }}>
+                <input type="email" className="form-control" placeholder="אימייל" aria-label="אימייל" required />
+                <button className="btn btn-primary" type="submit">הרשמה</button>
               </div>
             </form>
           </Col>

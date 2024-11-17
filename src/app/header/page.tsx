@@ -1,29 +1,21 @@
 "use client"
 
 import Link from 'next/link'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import Marquee from 'react-fast-marquee'
 import './style.css'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { FaUser } from 'react-icons/fa'
 import { useSession } from 'next-auth/react'
 import { useAppContext } from '../context/appContext';
+import { useRouter } from 'next/navigation'
 
 interface User {
     name?: string | null;
     email?: string | null;
     image?: string | null;
 }
-
-const announcements = [
-    { text: "חדש! שכונת גני אביב נפתחה להרשמה", link: "/neighborhoodInfo?cardId=66ca4a63ee088d74f9217d0b" },
-    { text: "עדכון: שינויים בתנאי הזכאות לדיור בר השגה", link: "/eligibility" },
-    { text: "הזדמנות אחרונה: נותרו 5 דירות אחרונות בפרויקט נווה שמש", link: "/projects/neve-shemesh" },
-    { text: "סדנת מידע בנושא משכנתאות תתקיים ביום שלישי הקרוב", link: "/events/mortgage-workshop" },
-    { text: "פתיחת הרשמה לתוכנית 'בית ראשון' לזוגות צעירים", link: "/programs/first-home" },
-];
 
 export default function Header() {
     const { data: session, status } = useSession();
@@ -32,10 +24,25 @@ export default function Header() {
     const pathname = usePathname();
     const [user, setUser] = useState<User | null>(null);
     const { isLogin } = useAppContext();
+    const router = useRouter();
 
     useEffect(() => {
         checkSignIn();
     }, [isLogin]);
+
+    useEffect(() => {
+        const checkAuthAndFetch = async () => {
+          const token = localStorage.getItem('token');
+          if (session || token) {
+            setIsLoggedIn(true);
+          } else if (status !== 'loading') {
+            setIsLoggedIn(false);
+            router.push('/auth/login');
+          }
+        };
+        
+        checkAuthAndFetch();
+      }, [session, status]);
 
     const checkSignIn = async () => {
         try {
@@ -65,37 +72,37 @@ export default function Header() {
                 image: session.user.image ?? null
             });
         } else {
-            // setIsLoggedIn(false);
-            // setUser(null);
         }
     }, [session, status]);
 
-    const toggleNav = () => {
-        setIsNavOpen(!isNavOpen);
-    };
+    const toggleNav = useCallback(() => {
+        setIsNavOpen(prev => !prev);
+    }, []);
 
-    const navLinks = [
+    const navLinks = useMemo(() => [
         { href: '/', text: 'בית' },
         { href: '/neighborhoodInfo', text: 'מידע' },
         { href: '/forum', text: 'פורום' },
-        // { href: '/allFamily', text: 'קהילה' },
         { href: '/nadlan', text: 'נדל"ן' },
         { href: '/board', text: 'לוח' },
         { href: '/contactUs', text: 'צור קשר' },
-    ];
+    ], []);
+
+    const announcements = useMemo(() => [
+        { text: "חדש! שכונת גני אביב נפתחה להרשמה", link: "/neighborhoodInfo?cardId=66ca4a63ee088d74f9217d0b" },
+        { text: "עדכון: שינויים בתנאי הזכאות לדיור בר השגה", link: "/eligibility" },
+        { text: "הזדמנות אחרונה: נותרו 5 דירות אחרונות בפרויקט נווה שמש", link: "/projects/neve-shemesh" },
+        { text: "סדנת מידע בנושא משכנתאות תתקיים ביום שלישי הקרוב", link: "/events/mortgage-workshop" },
+        { text: "פתיחת הרשמה לתוכנית 'בית ראשון' לזוגות צעירים", link: "/programs/first-home" },
+    ], []);
 
     return (
         <header className="header">
             <div className="container">
                 <div className="header-content">
                     <div className="header-actions">
-                        {/* <button className={`menu-toggle ${isNavOpen ? 'active' : ''}`} onClick={toggleNav}>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </button> */}
                         {isLoggedIn && user ? (
-                            <Link href="/userArea" className="avatar-link">
+                            <Link href="/profile" className="avatar-link">
                                 {user.image ? (
                                     <img src={user.image} width={40} height={40} className="avatar" alt="User Avatar" />
                                 ) : (
@@ -105,7 +112,7 @@ export default function Header() {
                                 )}
                             </Link>
                         ) : (
-                            <Link href="/login" className="login-link">כניסה/הרשמה</Link>
+                              <Link href="/auth/login" className="login-link">כניסה/הרשמה</Link>
                         )}
                     </div>
 
@@ -114,9 +121,9 @@ export default function Header() {
                             setIsNavOpen(false);
                         }
                     }}>
-                        {navLinks.map((link, index) => (
+                        {navLinks.map((link) => (
                             <Link
-                                key={index}
+                                key={link.href}
                                 className={`nav-linkHeader ${pathname === link.href ? 'active' : ''}`}
                                 href={link.href}
                                 onClick={toggleNav}
@@ -137,8 +144,8 @@ export default function Header() {
             </div>
             <div className='marquee-container'>
                 <Marquee className="marquee" pauseOnHover={true} direction='right' speed={50} gradient={false} autoFill={true} style={{ direction: 'ltr' }}>
-                    {announcements.map((announcement, index) => (
-                        <Link key={index} href={announcement.link} className="announcement-link">
+                    {announcements.map((announcement) => (
+                        <Link key={announcement.link} href={announcement.link} className="announcement-link" aria-label={announcement.text}>
                             <span className="announcement-text">{announcement.text}</span>
                             <span className="announcement-separator">|</span>
                         </Link>

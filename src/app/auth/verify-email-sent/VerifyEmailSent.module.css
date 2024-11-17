@@ -1,0 +1,112 @@
+/* src/app/auth/verify-email-sent/VerifyEmailSent.module.css */
+.verifyEmailContainer {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 20px;
+  }
+  
+  .verifyEmailCard {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    max-width: 450px;
+    width: 100%;
+    animation: verifyEmailFadeIn 0.5s ease;
+  }
+  
+  .verifyEmailIconWrapper {
+    background-color: #e6f4ef;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+  }
+  
+  .verifyEmailIcon {
+    color: #00a35b;
+    font-size: 36px;
+    animation: verifyEmailBounce 2s infinite;
+  }
+  
+  .verifyEmailTitle {
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+  
+  .verifyEmailContent {
+    color: #666;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  
+  .verifyEmailContent p {
+    margin: 8px 0;
+  }
+  
+  .verifyEmailButton {
+    background-color: #00a35b;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .verifyEmailButton:hover {
+    background-color: #008f4f;
+    transform: translateY(-2px);
+  }
+  
+  @keyframes verifyEmailFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes verifyEmailBounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .verifyEmailCard {
+      padding: 24px;
+    }
+    
+    .verifyEmailIconWrapper {
+      width: 60px;
+      height: 60px;
+    }
+    
+    .verifyEmailIcon {
+      font-size: 28px;
+    }
+    
+    .verifyEmailTitle {
+      font-size: 20px;
+    }
+  }

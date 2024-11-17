@@ -80,7 +80,9 @@ p{
 }
 
 ::-webkit-scrollbar-track {
-  background-color: transparent;
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+  background-color: #fafcf9;
 }
 
 ::-webkit-scrollbar-thumb {
