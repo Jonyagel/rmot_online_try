@@ -1,61 +1,103 @@
-import { cookies } from "next/headers";
-import { connectDb } from "../../../db/connectDb";
-import { UserModel } from "../../../models/userModel";
-import jwt from 'jsonwebtoken';
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
+import { connectDb } from '../../../db/connectDb';
+import { UserModel } from "../../../models/userModel";
 
-export async function PUT(req: any) {
-    const bodyData = await req.json();
+const favoriteFields = {
+  shops: 'favoriteShops',
+  forum: 'favoriteForums',
+  board: 'favoriteBoards'
+};
+
+export async function PUT(req: Request) {
     if (!cookies().has("token")) {
-        return NextResponse.json({ msg: "You need to send a token" }, { status: 401 });
+        return NextResponse.json({ error: "נדרשת הרשאה" }, { status: 401 });
     }
 
     try {
-        await connectDb();
-        const token: any = cookies().get("token")?.value;
-        const decodeToken: any = jwt.verify(token, "jonySecret");
-        const user = await UserModel.findOne({ _id: decodeToken._id }, { password: 0 });
+        const { type, itemId } = await req.json();
+        
+        if (!type || !itemId || !favoriteFields[type as keyof typeof favoriteFields]) {
+            return NextResponse.json({ error: "נתונים לא תקינים" }, { status: 400 });
+        }
 
-        // עדכון הערך favoriteShope או favoriteForum בהתאם לסוג המועד
+        await connectDb();
+        
+        const token:any = cookies().get("token")?.value;
+        const decoded:any = jwt.verify(token!, process.env.JWT_SECRET!);
+        
+        const field = favoriteFields[type as keyof typeof favoriteFields];
+        
         const updatedUser = await UserModel.findByIdAndUpdate(
-            user._id,
-            {
-                $addToSet: bodyData.type === 'shop' ? { favoriteShope: bodyData.shopId } : { favoriteForum: bodyData.forumId }
-            },
-            { new: true }
+            decoded.userId,
+            { $addToSet: { [field]: itemId } },
+            { 
+                new: true,
+                select: 'favoriteShops favoriteForums favoriteBoards'
+            }
         );
 
-        return NextResponse.json(updatedUser, { status: 200 });
-    } catch (err: any) {
-        console.log(err);
-        return NextResponse.json({ err, msg: "There was a problem, try again later" }, { status: 502 });
+        if (!updatedUser) {
+            return NextResponse.json({ error: "משתמש לא נמצא" }, { status: 404 });
+        }
+
+        const favorites = {
+            shops: updatedUser.favoriteShops || [],
+            forum: updatedUser.favoriteForums || [],
+            board: updatedUser.favoriteBoards || []
+        };
+
+        return NextResponse.json({ favorites });
+
+    } catch (err) {
+        console.error('Favorite update error:', err);
+        return NextResponse.json({ error: "שגיאה בעדכון המועדפים" }, { status: 500 });
     }
 }
 
-export async function DELETE(req: any) {
-    const bodyData = await req.json();
+export async function DELETE(req: Request) {
     if (!cookies().has("token")) {
-        return NextResponse.json({ msg: "You need to send a token" }, { status: 401 });
+        return NextResponse.json({ error: "נדרשת הרשאה" }, { status: 401 });
     }
 
     try {
-        await connectDb();
-        const token: any = cookies().get("token")?.value;
-        const decodeToken: any = jwt.verify(token, "jonySecret");
-        const user = await UserModel.findOne({ _id: decodeToken._id }, { password: 0 });
+        const { type, itemId } = await req.json();
+        
+        if (!type || !itemId || !favoriteFields[type as keyof typeof favoriteFields]) {
+            return NextResponse.json({ error: "נתונים לא תקינים" }, { status: 400 });
+        }
 
-        // עדכון הערך favoriteShope או favoriteForum בהתאם לסוג המועד
+        await connectDb();
+        
+        const token:any = cookies().get("token")?.value;
+        const decoded:any = jwt.verify(token!, process.env.JWT_SECRET!);
+        
+        const field = favoriteFields[type as keyof typeof favoriteFields];
+        
         const updatedUser = await UserModel.findByIdAndUpdate(
-            user._id,
-            bodyData.type === 'shop'
-                ? { $pull: { favoriteShope: bodyData.shopId } } // הסרת ה-ID של החנות מהמועדפים
-                : { $pull: { favoriteForum: bodyData.forumId } }, // הסרת ה-ID של הפורום מהמועדפים
-            { new: true }
+            decoded.userId,
+            { $pull: { [field]: itemId } },
+            { 
+                new: true,
+                select: 'favoriteShops favoriteForums favoriteBoards'
+            }
         );
 
-        return NextResponse.json(updatedUser, { status: 200 });
-    } catch (err: any) {
-        console.log(err);
-        return NextResponse.json({ err, msg: "There was a problem, try again later" }, { status: 502 });
+        if (!updatedUser) {
+            return NextResponse.json({ error: "משתמש לא נמצא" }, { status: 404 });
+        }
+
+        const favorites = {
+            shops: updatedUser.favoriteShops || [],
+            forum: updatedUser.favoriteForums || [],
+            board: updatedUser.favoriteBoards || []
+        };
+
+        return NextResponse.json({ favorites });
+
+    } catch (err) {
+        console.error('Favorite delete error:', err);
+        return NextResponse.json({ error: "שגיאה בהסרה מהמועדפים" }, { status: 500 });
     }
 }

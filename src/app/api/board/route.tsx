@@ -39,13 +39,13 @@ export async function POST(req: any, route: any) {
         const token: any = cookies().get("token")?.value;
         const decodeToken: any = jwt.verify(token, "jonySecret")
         const user = await UserModel.findOne({ _id: decodeToken._id }, { password: 0 });
-        const forum = new BoardModel(bodyData);
-        forum.userId = user._id;
-        forum.userName = user.name;
-        forum.date = Date.now();
-        await forum.save();
+        const board = new BoardModel(bodyData);
+        board.userId = user._id;
+        board.userName = user.name;
+        board.date = Date.now();
+        await board.save();
 
-        return NextResponse.json(forum, { status: 201 })
+        return NextResponse.json(board, { status: 201 })
     }
     catch (err: any) {
         if (err.code == 11000) {

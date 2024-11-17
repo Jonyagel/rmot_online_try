@@ -4,7 +4,6 @@ import { ForumModel, validateForum } from "@/src/app/models/forumModel";
 import { cookies } from "next/headers";
 import { UserModel } from "@/src/app/models/userModel";
 import jwt from 'jsonwebtoken';
-import { CommentsForumModel } from "../../models/commentForumModel";
 
 
 export const dynamic = 'auto';
