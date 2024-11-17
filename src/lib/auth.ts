@@ -1,7 +1,6 @@
 // src/lib/auth.ts
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
-import { NextAuthOptions } from 'next-auth';
 import type { Session, User } from 'next-auth';
 import type { JWT } from 'next-auth/jwt';
 import GoogleProvider from 'next-auth/providers/google';
@@ -13,14 +12,20 @@ const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
 
-interface ExtendedUser extends User {
-  role?: string;
-  stats?: {
-    posts: number;
-    comments: number;
-    likes: number;
-    activityPoints: number;
-  };
+interface UserStats {
+  posts: number;
+  comments: number;
+  likes: number;
+  activityPoints: number;
+}
+
+interface ExtendedUser extends Omit<User, 'role'> {
+  role: string;
+  stats: UserStats;
+  id?: string;
+  email?: string | null;
+  image?: string | null;
+  name?: string | null;
 }
 
 interface ExtendedSession extends Session {
