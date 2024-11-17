@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    experimental: {
+        appDir: true,
+    },
     images: {
         remotePatterns: [
             {
@@ -7,6 +10,7 @@ const nextConfig = {
                 hostname: 'lh3.googleusercontent.com',
             },
         ],
+        domains: ['lh3.googleusercontent.com', 'res.cloudinary.com'],
     },
     reactStrictMode: false,
     async headers() {
@@ -28,4 +32,4 @@ const nextConfig = {
     }
 };
 
-export default nextConfig;
+module.exports = nextConfig;
