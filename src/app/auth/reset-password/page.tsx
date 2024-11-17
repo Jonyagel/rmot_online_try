@@ -1,15 +1,15 @@
 // src/app/auth/reset-password/page.tsx
-"use client"
+'use client'
+
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import styles from '../styles/auth.module.css';
 
-export default function ResetPasswordPage() {
+export default function ResetPassword() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -88,7 +88,7 @@ export default function ResetPasswordPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={styles.input}
-              placeholder="הכנס סיסמה חדשה..."
+              placeholder="הכנס סיס��ה חדשה..."
               required
               minLength={6}
             />
