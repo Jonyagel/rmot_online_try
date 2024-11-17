@@ -23,7 +23,7 @@ export default function SignupForm() {
 
   const validateForm = () => {
     if (!nameRef.current?.value || nameRef.current.value.length < 2) {
-      toast.error('שם חייב להכיל לפחות 2 תווים');
+      toast.error('שם ��ייב להכיל לפחות 2 תווים');
       return false;
     }
 
@@ -104,15 +104,9 @@ export default function SignupForm() {
 
   const handleGoogleSignIn = async () => {
     try {
-      setIsGoogleLoading(true);
-      await signIn('google', {
-        callbackUrl: '/profile',
-        redirect: true // שינוי ל-true
-      });
+      window.location.href = '/api/auth/signin/google';
     } catch (error) {
       toast.error('שגיאה בהתחברות עם Google');
-    } finally {
-      setIsGoogleLoading(false);
     }
   };
 
