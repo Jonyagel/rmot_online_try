@@ -1,23 +1,24 @@
-// src/app/api/auth/signup/route.tsx
+// src/app/api/auth/signup/route.ts
 import { NextResponse } from 'next/server';
 import { connectDb } from '../../../db/connectDb';
 import { UserModel } from "../../../models/userModel";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { signIn } from 'next-auth/react';
 
 export async function POST(req: Request): Promise<Response> {
   try {
     const { name, email, password, provider } = await req.json();
     
-    // אם המשתמש מנסה להתחבר עם גוגל
     if (provider === 'google') {
-      // מעביר את המשתמש לדף ההתחברות של גוגל
-      return NextResponse.redirect(new URL('/api/auth/signin/google', req.url));
+      return await signIn('google', { 
+        callbackUrl: '/prfile'
+      });
     }
     
     await connectDb();
 
-    // בודק אם המשתמש קיים
+    // בדיקה אם המשתמש קיים
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
@@ -26,17 +27,17 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // מצפין את הסיסמה
+    // הצפנת הסיסמה
     const hashedPassword = await bcrypt.hash(password, 12);
     
-    // יוצר טוקן אימות
+    // יצירת טוקן אימות
     const verificationToken = jwt.sign(
       { email },
       process.env.JWT_SECRET!,
       { expiresIn: '24h' }
     );
 
-    // יוצר משתמש חדש
+    // יצירת משתמש חדש
     const user = await UserModel.create({
       name,
       email,
@@ -45,9 +46,16 @@ export async function POST(req: Request): Promise<Response> {
       verificationToken
     });
 
-    return NextResponse.json({ 
+    // Return token with response for email sending
+    return NextResponse.json({
+      success: true,
       message: 'User created successfully',
-      token: verificationToken 
+      token: verificationToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
     });
 
   } catch (error) {
