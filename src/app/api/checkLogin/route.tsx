@@ -1,17 +1,31 @@
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
+// סימון הנתיב כדינמי - חשוב!
+export const dynamic = 'force-dynamic';
 
-export async function GET(req: any, route: any) {
-    try {
-        if (cookies().has("token")) {
-            const token: any = cookies().get("token")?.value;
-            return NextResponse.json({ msg: "you login success",token, status: 200 }, { status: 200 })
-        }
-        return NextResponse.json({ msg: "You need send token", status: 401 }, { status: 401 })
+export async function GET(req: Request) {
+  try {
+    const cookieStore = cookies();
+    const token = cookieStore.get('token');
+
+    if (!token) {
+      return NextResponse.json(
+        { message: "לא נמצא טוקן" },
+        { status: 401 }
+      );
     }
-    catch (err) {
-        console.log(err);
-        return NextResponse.json({ err, msg: "There problem try again later" }, { status: 502 })
-    }
+
+    return NextResponse.json(
+      { isLoggedIn: true },
+      { status: 200 }
+    );
+
+  } catch (error) {
+    console.error('Check login error:', error);
+    return NextResponse.json(
+      { message: "שגיאת שרת" },
+      { status: 500 }
+    );
+  }
 }

@@ -1,5 +1,8 @@
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+// src/app/api/signOut/route.ts
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: any, route: any) {
     try {
