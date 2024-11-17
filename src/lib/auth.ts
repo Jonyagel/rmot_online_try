@@ -2,6 +2,8 @@
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import { NextAuthOptions } from 'next-auth';
+import type { Session, User } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
 import GoogleProvider from 'next-auth/providers/google';
 import { connectDb } from '../app/db/connectDb';
 import { UserModel } from '../app/models/userModel';
@@ -10,6 +12,20 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASS = process.env.EMAIL_PASS;
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL;
+
+interface ExtendedUser extends User {
+  role?: string;
+  stats?: {
+    posts: number;
+    comments: number;
+    likes: number;
+    activityPoints: number;
+  };
+}
+
+interface ExtendedSession extends Session {
+  user?: ExtendedUser;
+}
 
 // Create JWT token for password reset
 export function createResetToken(userId: string): string {
@@ -75,7 +91,7 @@ export async function sendResetEmail(email: string, token: string) {
         >
           איפוס סיסמה
         </a>
-        <p>או העתק את הקישור הב��:</p>
+        <p>או העתק את הקישור הבא:</p>
         <p style="color: #666;">${resetLink}</p>
         <p>הקישור תקף לשעה אחת בלבד.</p>
         <p>אם לא ביקשת לאפס את הסיסמה, אנא התעלם ממייל זה.</p>
@@ -111,7 +127,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   pages: {
-    signIn: '/auth/signin',
+    signIn: '/auth/login',
     signOut: '/auth/signout',
     error: '/auth/error',
   },
@@ -159,7 +175,7 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
-    async session({ session, token }): Promise<Session> {
+    async session({ session, token }): Promise<ExtendedSession> {
       try {
         await connectDb();
         const user = await UserModel.findOne({ email: session?.user?.email });
