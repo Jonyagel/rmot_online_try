@@ -5,8 +5,10 @@ import { connectDb } from '../../../db/connectDb';
 import { UserModel } from "../../../models/userModel";
 import jwt from "jsonwebtoken";
 
+// Mark route as dynamic to handle cookies
+export const dynamic = 'force-dynamic';
+
 interface JwtPayload {
-  userId(userId: any): unknown;
   _id: string;
   email: string;
 }
@@ -18,7 +20,7 @@ interface ErrorResponse {
 
 export async function GET(req: NextRequest) {
   try {
-    // 1. בדיקת טוקן
+    // 1. Check token
     const tokenCookie = cookies().get("token");
     
     if (!tokenCookie?.value) {
@@ -28,46 +30,29 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // 2. התחברות למסד נתונים
+    // 2. Connect to DB
     await connectDb();
 
-    // 3. אימות הטוקן
-    let decoded: JwtPayload;
-    try {
-      decoded = jwt.verify(
-        tokenCookie.value, 
-        process.env.JWT_SECRET || "jonySecret"
-      ) as JwtPayload;
-    } catch (jwtError) {
-      console.error("JWT Verification failed:", jwtError);
-      return NextResponse.json<ErrorResponse>(
-        { error: "טוקן לא תקין או פג תוקף" },
-        { status: 403 }
-      );
-    }
-
-    // 4. שליפת נתוני משתמש
-    const user = await UserModel.findById(decoded.userId)
-    //   .select('-password -resetToken -resetTokenExpiry')
-    //   .lean();
-
+    // 3. Verify token
+    const decoded = jwt.verify(tokenCookie.value, process.env.JWT_SECRET!) as JwtPayload;
+    
+    // 4. Get user data
+    const user = await UserModel.findOne({ _id: decoded._id }, { password: 0 });
+    
     if (!user) {
       return NextResponse.json<ErrorResponse>(
-        { error: "משתמש לא נמצא במערכת" , details: decoded },
+        { error: "משתמש לא נמצא" },
         { status: 404 }
       );
     }
 
-    // 5. החזרת המידע
     return NextResponse.json(user);
 
   } catch (error) {
-    // 6. טיפול בשגיאות
     console.error("Server error:", error);
-    
     return NextResponse.json<ErrorResponse>(
       { 
-        error: "שגיאת שרת", 
+        error: "שגיאת שרת",
         details: process.env.NODE_ENV === 'development' ? error : undefined 
       },
       { status: 500 }
