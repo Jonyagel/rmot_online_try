@@ -1,32 +1,35 @@
-// src/app/auth/reset-password/page.tsx
 'use client'
 
 import { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import styles from '../styles/auth.module.css';
 
-// סימון הדף כדינמי
+type Props = {
+  params: {
+    token: string;
+  };
+};
+
 export const dynamic = 'force-dynamic';
 
-function ResetPasswordForm() {
+function ResetPasswordForm({ params }: Props) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get('token');
+  const token = params.token;
 
- // useEffect(() => {
- //   if (!token) {
- //     router.push('/auth/login');
-  //    toast.error('קישור לא תקין');
- //   }
-//  }, [token, router]);
+  useEffect(() => {
+    if (!token) {
+      router.push('/auth/login');
+      toast.error('קישור לא תקין');
+    }
+  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
       toast.error('הסיסמאות אינן תואמות');
       return;
@@ -60,7 +63,7 @@ function ResetPasswordForm() {
     }
   };
 
-  // if (!token) return null;
+  if (!token) return null;
 
   return (
     <div className={styles.authContainer}>
@@ -102,10 +105,10 @@ function ResetPasswordForm() {
   );
 }
 
-export default function ResetPasswordPage() {
+export default function ResetPasswordPage({ params }: Props) {
   return (
     <Suspense fallback={<div>טוען...</div>}>
-      <ResetPasswordForm />
+      <ResetPasswordForm params={params} />
     </Suspense>
   );
 }
