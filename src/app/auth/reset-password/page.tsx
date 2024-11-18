@@ -13,7 +13,7 @@ type Props = {
 
 export const dynamic = 'force-dynamic';
 
-function ResetPasswordForm({ params }: Props) {
+export default function ResetPasswordForm({ params }: Props) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -102,13 +102,5 @@ function ResetPasswordForm({ params }: Props) {
         </form>
       </div>
     </div>
-  );
-}
-
-export default function ResetPasswordPage({ params }: Props) {
-  return (
-    <Suspense fallback={<div>טוען...</div>}>
-      <ResetPasswordForm params={params} />
-    </Suspense>
   );
 }
