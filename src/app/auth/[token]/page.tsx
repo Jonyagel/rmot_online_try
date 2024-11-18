@@ -110,7 +110,7 @@ function ResetPasswordForm({ params }: Props) {
 export default function ResetPasswordPage() {
   return (
     <Suspense fallback={<div>טוען...</div>}>
-      <ResetPasswordForm />
+      <ResetPasswordForm params={params} />
     </Suspense>
   );
 }
