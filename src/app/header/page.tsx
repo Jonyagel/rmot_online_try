@@ -30,19 +30,19 @@ export default function Header() {
         checkSignIn();
     }, [isLogin]);
 
-    useEffect(() => {
-        const checkAuthAndFetch = async () => {
-          const token = localStorage.getItem('token');
-          if (session || token) {
-            setIsLoggedIn(true);
-          } else if (status !== 'loading') {
-            setIsLoggedIn(false);
-            router.push('/auth/login');
-          }
-        };
-        
-        checkAuthAndFetch();
-      }, [session, status]);
+   // useEffect(() => {
+   //     const checkAuthAndFetch = async () => {
+   //       const token = localStorage.getItem('token');
+   //       if (session || token) {
+   //         setIsLoggedIn(true);
+   //       } else if (status !== 'loading') {
+    //        setIsLoggedIn(false);
+   //         router.push('/auth/login');
+    //      }
+    //    };
+   //     
+   //     checkAuthAndFetch();
+   //   }, [session, status]);
 
     const checkSignIn = async () => {
         try {
