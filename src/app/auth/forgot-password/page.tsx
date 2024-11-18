@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
           {
             to_email: email,
             user_name: 'משתמש יקר',
-            reset_link: `${window.location.origin}/auth/${data.resetToken}`
+            reset_link: `${window.location.origin}/auth/reset-password?token=${data.resetToken}`
           }
         );
 
