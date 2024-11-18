@@ -20,12 +20,12 @@ function ResetPasswordForm({ params }: Props) {
   const router = useRouter();
   const token = params.token;
 
-  useEffect(() => {
-    if (!token) {
-      router.push('/auth/login');
-      toast.error('קישור לא תקין');
-    }
-  }, [token]);
+ // useEffect(() => {
+  //  if (!token) {
+  //    router.push('/auth/login');
+  //    toast.error('קישור לא תקין');
+ //   }
+//  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +63,7 @@ function ResetPasswordForm({ params }: Props) {
     }
   };
 
-  if (!token) return null;
+//  if (!token) return null;
 
   return (
     <div className={styles.authContainer}>
