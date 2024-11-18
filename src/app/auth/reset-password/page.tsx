@@ -7,7 +7,7 @@ import styles from '../styles/auth.module.css';
 
 export const dynamic = 'force-dynamic';
 
-function ResetPasswordForm() {
+export default function ResetPasswordForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
