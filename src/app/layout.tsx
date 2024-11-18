@@ -20,7 +20,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "על המקום",
-  description: "על המקום היא פלטפורמה לקידום והכרת המקום בו אתם חיים וגרים. כאן תוכלו למצוא מידע על השכונה שלכם, על המ�[...] 
+  description: "על המקום היא פלטפורמה לקידום והכרת המקום בו אתם חיים וגרים. כאן תוכלו למצוא מידע על השכונה שלכם, על המ�[...]
 };
 
 const assistantFont = localFont({
