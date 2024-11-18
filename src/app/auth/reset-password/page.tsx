@@ -1,24 +1,19 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import styles from '../styles/auth.module.css';
 
-type Props = {
-  params: {
-    token: string;
-  };
-};
-
 export const dynamic = 'force-dynamic';
 
-export default function ResetPasswordForm({ params }: Props) {
+function ResetPasswordForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const token = params.token;
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
 
  // useEffect(() => {
   //  if (!token) {
