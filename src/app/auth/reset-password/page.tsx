@@ -7,7 +7,7 @@ import styles from '../styles/auth.module.css';
 
 export const dynamic = 'force-dynamic';
 
-export default function ResetPasswordForm() {
+function ResetPasswordForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -97,5 +97,13 @@ export default function ResetPasswordForm() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div>טוען...</div>}>
+      <ResetPasswordForm />
+    </Suspense>
   );
 }
