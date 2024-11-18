@@ -60,7 +60,7 @@ function ResetPasswordForm() {
     }
   };
 
-  if (!token) return null;
+  // if (!token) return null;
 
   return (
     <div className={styles.authContainer}>
